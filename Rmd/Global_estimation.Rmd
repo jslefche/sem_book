@@ -493,3 +493,34 @@ Users should take caution when exploring these techniques as to avoid dredging t
 
 ## 1.6 Model Fitting Using *lavaan*
 
+We now have all the pieces necessary to fit an SEM using a covariance-based approach. The package to do so is called *lavaan*:
+
+```{r}
+library(lavaan)
+```
+
+To demonstrate the functionality of this package, let's use the data from Grace & Keeley (2005), which is included in the *piecewiseSEM* package:
+```{r}
+library(piecewiseSEM)
+
+data(keeley)
+```
+
+We wish to fit the following model:
+
+![keeley sem](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_full_mediation_sem.png)
+
+describe data
+fit the model
+inspect output
+get indirect and total effects
+modify model
+re-fit
+test using chi-squared difference
+test using AIC
+
+## 1.7 Testing Mediation
+
+
+
+

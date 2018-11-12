@@ -1,7 +1,7 @@
 ---
 title: "Multigroup Analysis"
 author: "Jon Lefcheck"
-date: "November 6, 2018"
+date: "November 12, 2018"
 output: html_document
 ---
 
@@ -17,7 +17,7 @@ Historically, such a goal would be captured through the application of a statist
 
   $$biomass = pesticide * location$$
   
-Here, a significant interaction between pesticide * location would indicate that the effect of pesticide applicaiton on invertebrate biomass varies by location. It would of course then be up to the author to use their knowledge of the system to speculate why this is.
+Here, a significant interaction between $pesticide \times location$ would indicate that the effect of pesticide applicaiton on invertebrate biomass varies by location. It would of course then be up to the author to use their knowledge of the system to speculate why this is.
 
 In the event that the interaction is not statistically significant, then the author would conclude that the effect of pesticide is invariant to location, and could go on to interpret the main effect of pesticide. In this situation, they are able to generalize the effects of pesticide such that it is expected to have the same magnitude of effect regardless of where it is applied.
 
@@ -35,7 +35,8 @@ Multigroup modeling using global estimation begins with the estimation of two mo
 
 If the two models are not significantly different, and the latter fits the data well, then one can assume there is no variation in the path coefficients by group and multigroup approach is not necessary. If they are, then the exercise shifts towards understanding which paths are the same and which are different. This is achieved by sequentially constraining the coefficients of each path and re-fitting the model.
 
-Let's illustrate this procedure using a random example using three variables (x, y, and z) in two groups ("a" and "b"):
+Let's illustrate this procedure using a random example using three variables ($x$, $y$, and $z$) in two groups ("a" and "b"):
+
 ```{r}
 set.seed(111)
 
@@ -46,9 +47,11 @@ dat$y <- dat$x + runif(100)
 dat$z <- dat$y + runif(100)
 
 ```
-In this example, we suppose a simple mediation model: x -> y -> z, and that all three variables are correlated to some degree so that this path model makes sense.
+
+In this example, we suppose a simple mediation model: $x -> y -> z$, and that all three variables are correlated to some degree so that this path model makes sense.
 
 We can use *lavaan* to fit the "free" model. The key is allowing the coefficients to vary by specifying the `group =` argument.
+
 ```{r echo = T, results = 'hide'}
 multigroup.model <- '
 y ~ x
@@ -60,29 +63,37 @@ library(lavaan)
 multigroup1 <- sem(multigroup.model, dat, group = "group") 
 
 ```
+
 We can then obtain the summary of the multigroup analysis:
+
 ```{r}
 summary(multigroup1)
 ```
-Note that, unlike the typical *lavaan* output, the printout is now organized by group, with separate coefficients for each path in each group. Because this model is allowed to vary, the coefficient for the x -> y path in group "a" is different, for example, from that reported for group "b".
+
+Note that, unlike the typical *lavaan* output, the printout is now organized by group, with separate coefficients for each path in each group. Because this model is allowed to vary, the coefficient for the $x -> y$ path in group "a" is different, for example, from that reported for group "b".
 
 Next, we fit the constrained model by specifying the additional argument `group.equal = c("intercepts", "regressions")`. This argument fixes both the intercepts and path coefficients in each groups to be the same.
+
 ```{r}
 multigroup1.constrained <- sem(multigroup.model, dat, group = "group", group.equal = c("intercepts", "regressions"))
 
 summary(multigroup1.constrained)
 ```
-This output is slightly different from the first: the coefficients are reported by group, but they are now the same between groups (x -> y in group "a" = x -> y in group "b"). The constrained paths are indicated by a parenthetical next to the path (e.g., `(.p1.)` for path 1).
+
+This output is slightly different from the first: the coefficients are reported by group, but they are now the same between groups ($x -> y$ in group "a" = $x -> y$ in group "b"). The constrained paths are indicated by a parenthetical next to the path (e.g., `(.p1.)` for path 1).
 
 Both the constrained and unconstrainted models fit the data well based on the Chi-squared statistic, and we can formally compare the two models using a Chi-squared difference test:
+
 ```{r}
 anova(multigroup1, multigroup1.constrained)
 ```
-The significant P-value implies that the free and constrained models are significantly different. In other words, some paths vary while others do not. If the models were *not* significantly different, then one would conclude that the constrained model is equivalent to the free model. In other words, the coefficients would not vary by group and it would be fair to analyze the pooled data in a single model.
 
-However, this is the not the case for this example, and we can now undergo the processing of introducing and releasing constraints to try and identify which path varies between groups. In this simplified example, we have two choices: x -> y, and y -> z. Let's focus on x -> y first.
+The significant *P*-value implies that the free and constrained models are significantly different. In other words, some paths vary while others do not. If the models were *not* significantly different, then one would conclude that the constrained model is equivalent to the free model. In other words, the coefficients would not vary by group and it would be fair to analyze the pooled data in a single model.
+
+However, this is the not the case for this example, and we can now undergo the processing of introducing and releasing constraints to try and identify which path varies between groups. In this simplified example, we have two choices: $x -> y$, and $y -> z$. Let's focus on $x -> y$ first.
 
 We can introduce a single constraint by modifying the model formula and re-fitting the model:
+
 ```{r}
 multigroup.model2 <- '
 y ~ c("b1", "b1") * x
@@ -92,16 +103,19 @@ z ~ y
 multigroup2 <- sem(multigroup.model2, dat, group = "group")
 
 ```
+
 The string `c("b1", "b1")` gives the path the name `b1` and ensures the coefficient is equal between the two groups (hence the two entries).
 
 If we use a Chi-squared difference test as before:
+
 ```{r}
 anova(multigroup1, multigroup2)
 ```
 
-We find that the models are still significantly different, imypling that the path between x -> y should not be constrained, and that it should be left to vary among groups.
+We find that the models are still significantly different, imypling that the path between $x -> y$ should not be constrained, and that it should be left to vary among groups.
 
-We can repeat this exercise with the second path, y -> z:
+We can repeat this exercise with the second path, $y -> z$:
+
 ```{r}
 multigroup.model3 <- '
 y ~ x
@@ -114,9 +128,10 @@ summary(multigroup3)
 
 anova(multigroup1, multigroup3)
 ```
-In this case, there is *not* a significant difference between the two models, implying that this constraint is valid. 
 
-Thus, if we were to select a model from which to draw inference, we would select the third model in which x -> y is allowed to vary and y -> z is constrained among groups. It is key to note that this model also fits the data well based on the Chi-squared statistic; if not, then like all poor-fitting path models (multigroup or otherwise), it would be unwise to present and draw conclusions from it.
+In this case, there is *not* a significant difference between the two models, implying that the is no difference in the fit of the constrained model and the unstrained model, and that this constraint is valid. 
+
+Thus, if we were to select a model from which to draw inference, we would select the third model in which $x -> y$ is allowed to vary and $y -> z$ is constrained among groups. It is key to note that this model also fits the data well based on the $\chi^2$ statistic; if not, then like all poor-fitting path models (multigroup or otherwise), it would be unwise to present and draw conclusions from it.
 
 This exercise of relaxing and imposing constraints is potentially very exploratory and could become exhaustive with more complicated models (i.e., one with lots of paths to potentially constrain/relax). Users should refrain from constraining and relaxing all paths and then choosing the most parsimonious model. Instead, choosing which paths to constrain should be motivated by the question: for example, we might expect some effects to be universal (e.g., temperature on metabolic rate) but not others (e.g., the effect of pesticide may vary depending on the history of application at various sites).
 
@@ -132,21 +147,24 @@ The upside is that the arduous and somewhat cumbersome process of specifying con
 
 The first step in the local estimation process is to implement a model-wide interaction. In other words, every term in the model interacts with the grouping variable. If the interaction is significant, then the path varies by group; if not, then the path takes on the estimate from the global model. In this way, the piecewise multigroup procedure breaks down into a series of classical interaction terms.
 
-Consider our previous example: x -> y -> z and the groups "a" and "b".
+Consider our previous example: $x -> y -> z$ and the groups "a" and "b".
 
-In a piecewise approach, we would first model the interaction between x and group, and between y and group:
+In a piecewise approach, we would first model the interaction between $x \times group$, and between $y \times group$:
+
 ```{r}
 anova(lm(y ~ x * group, dat))
 ```
 
-In this case, the first interaction between x and group in predicting y is significant, indicating the effect of x on y depends on group. We would then estimate the effect of x and y for each subset of the data, and report the coefficients separately. This situation is analogous to allowing the path to vary freely by group.
+In this case, the first interaction between $x \times group$ in predicting $y$ is significant, indicating the effect of $x$ on $y$ depends on $group$. We would then estimate the effect of $x$ and $y$ for each subset of the data, and report the coefficients separately. This situation is analogous to allowing the path to vary freely by group.
 
 ```{r}
 anova(lm(z ~ y * group, dat))
 ```
-The second interaction between y and group in predicting z is non-significant, indicating that the effect of y on z does *not* depend on group. We would then estimate the effect of y on z given the entire dataset, and report that single coefficient for each group.
+
+The second interaction between $y \times group$ in predicting $z$ is non-significant, indicating that the effect of $y$ on $z$ does *not* depend on $group$ We would then estimate the effect of $y$ on $z$ given the entire dataset, and report that single coefficient across all groups.
 
 The implementation of this approach in *piecewiseSEM* is very straightforward: first, build the model using `psem`, then use the function `multigroup` to perform the multigroup analysis:
+
 ```{r echo = T, results = 'hide'}
 library(piecewiseSEM)
 
@@ -155,32 +173,36 @@ pmodel <- psem(
   lm(z ~ y, dat)
 )
 ```
+
 The `multigroup` function has an argument `group =` which, as in *lavaan*, accepts the column name of the grouping factor:
+
 ```{r}
 (pmultigroup <- multigroup(pmodel, group = "group"))
 ```
+
 If we examine the output, we see the output table of model-wide interactions. Its important to note that the package uses `car::Anova` with `type = "III"` sums-of-squares to estimate the interactions by default, but other types (e.g., type II) are accepted using the `test.type = ` argument.
 
 As above, only the path from x -> y is significantly different among groups. In this case, the function explicitly reports that the path `y -> z constrained to the global model`.
 
-Next, as in *lavaan*, are the coefficient tables for each group. Values that have been constrained are the same between the two models, while the unconstrained path from x -> y is different between groups "a" and "b".
+Next, as in *lavaan*, are the coefficient tables for each group. Values that have been constrained are the same between the two models, while the unconstrained path from $x -> y$ is different between groups "a" and "b".
 
 Its important to note that the standardized coefficients *do* differ for each group even though the paths are constrained. Again, this is because the variance differs between groups. Thus the standardization:
 
-    $$\beta_{std} = \beta*\left( \frac{sd_x}{sd_y} \right)$$
+    $$\beta_{std} = \beta*\left( \frac{sd_{x}}{sd_{y}} \right)$$
     
-must consider only the standard deviation of x and y from their respective groups, even though $\beta*\$ is derived from the entire dataset.
+must consider only the standard deviation of x and y from their respective groups, even though $\beta$ is derived from the entire dataset.
 
-Finally, near the top is the global goodness-of-fit test based on Fisher's C. In this case, global constraints have been added as offset to the tests of directed separation.
+Finally, near the top is the global goodness-of-fit test based on Fisher's *C*. In this case, global constraints have been added as offset to the tests of directed separation.
 
 For comparison's sake, let's look at the output from the *lavaan* multigroup model and the *piecewiseSEM* one:
+
 ```{r}
 multigroup3
 
 pmultigroup$group.coefs
 ```
 
-You'll note that the outputs are roughly equivalent (owing to slight differences in the estimation procedures for each package). Critically, the coefficient for the path from x -> y is the same in both groups.
+You'll note that the outputs are roughly equivalent (owing to slight differences in the estimation procedures for each package). Critically, the coefficient for the path from $x -> y$ is the same in both groups.
 
 ## 1.4 Grace & Jutila (1999): A Worked Example
 
@@ -193,11 +215,13 @@ In their study, the authors were interested in the controls of on plant species'
 Moreover, they repeated their observations in two treatments: grazed and ungrazed meadows. Grazing will serve as the grouping variable for our multigroup analysis.
 
 The data are included in *piecewiseSEM* so let's load it:
+
 ```{r}
 data(meadows)
 ```
 
 First, let's construct the "free" model in *lavaan*:
+
 ```{r}
 jutila_model <- '
 rich ~ elev + mass
@@ -212,6 +236,7 @@ summary(jutila_lavaan)
 In this example, the model fit can't be determined because the model is saturated (df = 0). This is key moving forward because constraining paths will free up degrees of freedom with which to evaluate model fit.
 
 Let's begin by constraining all paths:
+
 ```{r}
 jutila_lavaan2 <- sem(jutila_model, meadows, group = "grazed", group.equal = c("intercepts", "regressions"))
 
@@ -219,9 +244,11 @@ summary(jutila_lavaan2)
 
 anova(jutila_lavaan2)
 ```
+
 The model is significantly different from the unconstrained model we fit previously, implying that some paths could be constrained. Moreover, by constraining the coefficients, we now have 5 degrees of freedom to evaluate model fit. However, it is a poor fit, implying that some path coefficients must vary among groups.
 
 The next step is to sequentially relax and constrain paths:
+
 ```{r}
 jutila_model2 <- '
 rich ~ elev + mass
@@ -232,9 +259,11 @@ jutila_lavaan3 <- sem(jutila_model2, meadows, group = "grazed")
 
 anova(jutila_lavaan, jutila_lavaan3)
 ```
-The model is still a poor fit, and it is significantly different from the "free" model. In this case, we would conclude that the elev -> mass path should not be constrained.
+
+The model is still a poor fit, and it is significantly different from the "free" model. In this case, we would conclude that the $elev -> mass$ path should not be constrained.
 
 Let's repeat for the next two paths:
+
 ```{r}
 # elev -> rich
 jutila_model3 <- '
@@ -256,15 +285,19 @@ jutila_lavaan5 <- sem(jutila_model4, meadows, group = "grazed")
 
 anova(jutila_lavaan, jutila_lavaan5)
 ```
-Of these two paths, it seems the first: elev -> rich, is not significantly different from the "free" model, implying that this path could be constrained. Oppositely, it seems the significant difference between the "free" model and one in which the mass -> rich path is constrained is not ideal.
 
-Let's check the fit of the model with the one constrait on elev -> rich:
+Of these two paths, it seems the first: $elev -> rich$, is not significantly different from the "free" model, implying that this path could be constrained. Oppositely, it seems the significant difference between the "free" model and one in which the $mass -> rich$ path is constrained is not supported
+
+Let's check the fit of the model with the one constrait on $elev -> rich$:
+
 ```{r}
 summary(jutila_lavaan4)
 ```
-Now the model fits the data well (P = 0.330), and we have, through an iterative procedure of imposing and relaxing constraints, determined which paths differ among groups (elev -> mass, mass -> rich) and which do *not* (elev -> rich).
+
+Now the model fits the data well ($P = 0.330$), and we have, through an iterative procedure of imposing and relaxing constraints, determined which paths differ among groups ($elev -> mass$, $mass -> rich$) and which do *not* ($elev -> rich$).
 
 Now let's confirm this by fitting the model in *piecewiseSEM*:
+
 ```{r}
 jutila_psem <- psem(
   lm(rich ~ elev + mass, meadows),
@@ -274,11 +307,11 @@ jutila_psem <- psem(
 multigroup(jutila_psem, group = "grazed")
 ```
 
-As in our analysis in *lavaan*, the `multigroup` function has identified the elev -> rich path as the only one in which coefficients do not differ among groups. Thus, in the output, that coefficient is the same between groups; otherwise, the coefficients vary depending on whether the meadows is grazed or ungrazed. Moreover, it seems some of the paths differ in their statistical significance: the rich -> mass is not significant in the grazed meadows, but is in the ungrazed meadows. So not only do the coefficients differ, but the model structure as well!
+As in our analysis in *lavaan*, the `multigroup` function has identified the $elev -> rich$ path as the only one in which coefficients do not differ among groups. Thus, in the output, that coefficient is the same between groups; otherwise, the coefficients vary depending on whether the meadows is grazed or ungrazed. Moreover, it seems some of the paths differ in their statistical significance: the $rich -> mass$ is not significant in the grazed meadows, but is significant in the ungrazed meadows. So not only do the coefficients differ, but the model structure as well!
 
-You'll note that the *piecewiseSEM* output does not return a goodness-of-fit test because the model is saturated (i.e., no missing paths). While constraints are incorporated in terms of offsets (i.e., fixing model coefficients), unlike global estimation, this does not provide information with which to test goodness-of-fit. This is a limitation of local estimation that extends beyond multigroup modeling to any piecewise model.
+You'll note that the *piecewiseSEM* output does not return a goodness-of-fit test because the model is saturated (i.e., no missing paths). While constraints are incorporated in terms of offsets (i.e., fixing model coefficients), unlike global estimation, this does not provide new information with which to test goodness-of-fit. This is a limitation of local estimation that extends beyond multigroup modeling to any piecewise model.
 
-To draw inference about the study system, we would say that two paths differ among groups and one path does not. We would then report the two path models parameterized using the coefficient output (with the elev -> rich path having the same coefficient in both groups). We would report that richness is affected by elevation and biomass under ungrazed conditions, but not under grazed conditions, where only elevation directly influences richness.
+To draw inference about the study system, we would say that two paths differ among groups and one path does not. We would then report the two path models parameterized using the coefficient output (with the $elev -> rich$ path having the same coefficient in both groups). We would report that richness is affected by elevation and biomass under ungrazed conditions, but not under grazed conditions, where only elevation directly influences richness.
 
 ## References
 Grace, J. B., & Jutila, H. (1999). The relationship between species density and community biomass in grazed and ungrazed coastal meadows. Oikos, 398-408.

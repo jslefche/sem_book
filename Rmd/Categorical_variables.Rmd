@@ -1,0 +1,185 @@
+---
+title: "Categorical Variables"
+author: "Jon Lefcheck"
+date: "November 6, 2018"
+output: html_document
+---
+
+## 1.1 Introduction to Exogenous Categorical Variables
+
+While most examples using SEM consider continuous variables, it is often the case that the variables are discrete. These include binary (yes/no, failure/success, etc.), nominal (site 1, site 2), or ordinal levels (small < medium < large). There are two cases: categorical variables as exogenous or as endogenous. We will deal with the simpler case of exogenous categorical variables first, as they pose not so much of a computational issue, but a conceptual one.
+
+A linear regression predicting y has the following standard form:
+
+  $$y = \alpha + \beta_{1}*x_{1} + \epsilon$$
+
+where $\alpha$ is the intercept, $\beta_{1}$ is the slope of the effect of x on y, and $\epsilon$ is the residual error.
+
+When x is continuous, the intercept $\alpha$ is intepreted as the value of y when x = 0. All good.
+
+For categorical factors, the intercept $\alpha$ has a different interpretation. Consider a value of x with *k* levels. Since the levels of x are discrete and can never assume a value of 0, $\alpha$ is instead the mean value of y at the 'reference' level of x. (In R, the reference level is the first level alphabetically, although this can be set manually.) The regression coefficients $\beta_{k}$ are therefore the effect of each other level *relative* to the reference level. So for *k* levels, there are *k* - 1 coefficients estimated with the additional $\alpha$ term reflecting the *k*th level.
+
+Another way to think about this phenomenon is using so-called 'dummy' variables. Imagine each level was broken into a separate variable with a value of 0 or 1: a two-level factor with levels "a" and "b" would then become two factors "a" and "b" each with the levels 0 or 1. (In R, this would mean transposing rows as columns.) 
+
+Now imagine setting all the values of these dummy variables to 0 to estimate the intercept: this would imply the total absence of the factor, which is not a state. Another way of thinking about this is that the dummy variables are linearly dependent: if "a = 1" then by definition "b = 0" as the response variable cannot occupy the two states simultaneously. Hence the need to set one level as the reference, so that the effect of "a" can be interpreted relative to the absence of "b".
+
+This behavior present a challenge for path diagrams: there is not a single coefficient for the path from x -> y, nor are there enough coefficients to populate a separate arrow for each level of x (because one level must serve as the reference). 
+
+There are a few potential solutions:
+
+* for binary variables, set the values as 0 or 1 and model as numeric, which would yield a single coefficient.
+
+* for ordinal varaibles, set the values depending on the order of the factor, e.g., small = 1 < medium = 2 < large = 3, and then model as numeric, which would yield a single coefficient.
+
+For both of these approaches, the coefficients will be interpreted as moving from one state (0) to another (1), or from one level (1) to the next (2). 
+
+* create dummary variables for each level: this is procedurally the same as above (splitting levels into *k* - 1 separate variables that occupy 0/1). The key here is not to create *k* variables, to avoid the issue raised above about dependence among predictors. 
+
+This approach becomes prohibitive with large number of categories and can greatly increase model complexity. Moreover, each level is treated as an independent variable in tests of direct separation, and thus will inflate the degrees of freedom for the test.
+
+* for suspected interactions with categorical variables, a multigroup analysis is required. In this case, the same model is fit for each level of the factor, with potentially different coefficients (see: Multigroup Models).
+
+* test for the effect of the categorical variable using ANOVA, but do not report a coefficient. This approach would indicate whether a factor is important, but omits important information about the direction and magnitude of change. For example, does a significant treatment effect imply an increase or decrease in the response, and by how much? For this reason, such an approach is not ideal.
+
+A alternate approach draws on this final point, and involves testing and reporting the model-estimated, or marginal, means.
+
+## 1.3 Exogenous Categorical Variables as Marginal Means
+
+All models can be used for prediction. In multiple regression, the predicted values of one variable are often computed while holding the values of other variables at their mean. Marginal means are the mean of these predicted values. In other words, it is the expected value of one variable given the other variables in the model.
+
+For categorical variables, marginal means are particularly useful because they provide an estimated mean for each level of each factor.
+
+Consider a simple example with a single response and two groups "a" and "b":
+```{r}
+set.seed(111)
+
+dat <- data.frame(y = runif(100), group = letters[1:2])
+
+model <- lm(y ~ group, dat)
+
+summary(model)
+```
+Note that the summary output gives a simple coefficient, which is the effect of group "b" on y in the absence of group "a". The intercept is simply the average of y in group "a":
+
+```{r}
+summary(model)$coefficients[1, 1]
+
+mean(subset(dat, group == "a")$y)
+```
+The marginal means are the expected value of y in group "a" or group "b".
+
+```{r}
+predict(model, data.frame(group = "a"))
+
+predict(model, data.frame(group = "b"))
+```
+
+Because this is a simple linear regression, these values are simply the means of the two subsets of the data, because they are not controlling for other covariates:
+```{r}
+mean(subset(dat, group == "a")$y)
+
+mean(subset(dat, group == "b")$y)
+```
+
+Let's see what happens we add a continuous covariate:
+```{r}
+dat$x <- runif(100)
+
+model <- update(model, . ~ . + x)
+```
+
+Here, the marginal mean must be evaluated while holding the covariate x at its mean value:
+```{r}
+predict(model, data.frame(group = "a", x = mean(dat$x)))
+
+mean(subset(dat, group == "a")$y)
+```
+
+You'll note that this value is now different than the mean of the subset of the data because, again, it controls for the presence of x.
+
+This procedure gets increasingly complicated with both the number of factor levels and the number of covariates. The *emmeans* package provides an automated way to compute marginal means:
+```{r}
+library(emmeans)
+
+emmeans(model, specs = "group") # where specs is the variable or list of variables whose means are to be estimated
+```
+
+You'll note that the output value gives the same as using the `predict` function above, but also returns the marginal mean for group "b" while also controlling for x:
+```{r}
+predict(model, data.frame(group = "b", x = mean(dat$x)))
+```
+
+And so is a handy wrapper for complex models.
+
+Coupled with ANOVA to test for the significance of the categorical variable, the marginal means provide key information that is otherwise lacking, namely *how* the response value changes based on the factor level. In does not, however, allow for prediction in the same way a model coefficient does.
+
+The *emmeans* package provides additional functionality by conducting post-hoc tests of differences among the means of each factor level:
+```{r}
+emmeans(model, list(pairwise ~ group))
+```
+You'll note a second output which is the pairwise contrast between the means of groups "a" and "b" with an associated significance test. 
+
+These pairwise Tukey tests provide the final level of information, which is whether the response in each level varies significantly from the other levels.
+
+The `coefs` function in *piecewiseSEM* adopts a two-tiered approach by first computing the significance of the categorical variable using ANOVA, and then reports the marginal means and post-hoc tests:
+```{r}
+library(piecewiseSEM)
+
+coefs(model)
+```
+In this output, the significance test from the ANOVA is reported in the row corresponding to the group effect, and below that are the marginal means for each level of the grouping factor. Finally, the results of the post-hoc test are given using letters at the end of the rows reporting the marginal means. In this case, the same letter indicates no significant difference among the group levels.
+
+This solution provides a measure of whether the path between the exogenous categorical variable and the respones is significant, as well as parameters for each level in the form of the model-estimated marginal means.
+
+## 1.3 Exogenous Categorical Variables as Marginal Means: A Worked Example
+
+Let's consider an example from Bowen et al. (2017). In this study, the authors were interested in how different microbiomes of the salt marsh plant *Phragmites australis* drive ecosystem functioning, and ultimately the production of aboveground biomass. In this case, they considered three microbial communities: those from a native North American lineage, from Gulf Coast lineage, and an introduced lineage. There were additional genotypes within each community type, necessitating the application of random effects to account for intraspecific variation.
+
+We will fit a simplified version of their full path diagram, focusing only on aboveground biomass (although they also test the effect on belowground biomass).
+
+![bowen_sem](https://raw.githubusercontent.com/jslefche/jslefche.github.io/master/sem_img/bowen_sem.png)
+
+In this case, the variable "*Phragmites* status" corresponds to the three community types, and can't be represented using a single coefficient. Thus, the marginal-means approach is ideal to elucidate the effect of each community type on both proximate and ultimate ecosystem properties.
+
+Let's read in the data and construct the model:
+
+```{r}
+bowen <- read.csv("bowen.csv")
+
+bowen <- na.omit(bowen)
+
+library(nlme)
+
+bowen_sem <- psem(
+  lme(observed_otus ~ status, random = ~1|Genotype, data = bowen, method = "ML"),
+  lme(RNA.DNA ~ status + observed_otus, random = ~1|Genotype, data = bowen, method = "ML"), 
+  lme(below.C ~ observed_otus + status, random = ~1|Genotype, data = bowen, method = "ML"), 
+  lme(abovebiomass_g ~ RNA.DNA + observed_otus + belowCN + status, random = ~1|Genotype, data = bowen, method = "ML"),
+  data = bowen
+)
+```
+
+And let's retrieve the output:
+```{r}
+summary(bowen_sem, .progressBar = F)
+```
+In this case, it appears that the model fits the data well enough (P = 0.057). The linkage between microbial community type (status) and richness is non-significant, but the other paths are significant. Examination of the marginal means indicates microbial activity (RNA/DNA) and belowground carbon are generally highest in *Phragmites* with native microbial communities based on the post-hoc tests. However, none of these properties appear to influence the ultimate production of biomass. Rather, that property appears to be entirely controlled by the plant microbiome: those with the introduced microbial community have significantly higher aboveground biomass based on the post-hoc tests after controlling for microbial activity and soil nutrients. (In the full article, they draw the same inference for belowground biomass.)
+
+Thus, despite a multi-level categorical predictor (microbiome status), the two-step procedure of ANOVA and calculation of marginal means reveals a mechanistic understanding of the drivers of plant biomass in this species.
+
+## 1.3 Endogenous Categorical Variables
+
+Endogenous categorical variables are far trickier, and at the moment, are not implemented in *piecewiseSEM*.
+
+In the case of endogenous categorical variables in a piecewise framework, there are really only two solutions:
+
+* for binary variables, set the values as 0 or 1 and model as numeric, which would yield a single coefficient.
+
+* for ordinal variables, set the values depending on the order of the factor, e.g., small = 1 < medium = 2 < large = 3, and then model as numeric, which would yield a single coefficient.
+
+Nominal variables (i.e., levels are not ordered) cannot be modeled at this time.  One could approach this through the application of multinomial regression. 
+
+*lavaan* provides a robust alternative in the form of confirmatory factor analysis (see [http://lavaan.ugent.be/tutorial/cat.html](http://lavaan.ugent.be/tutorial/cat.html)).
+
+## References
+Bowen, J. L., Kearns, P. J., Byrnes, J. E., Wigginton, S., Allen, W. J., Greenwood, M., ... & Meyerson, L. A. (2017). Lineage overwhelms environmental conditions in determining rhizosphere bacterial community structure in a cosmopolitan invasive plant. Nature communications, 8(1), 433.

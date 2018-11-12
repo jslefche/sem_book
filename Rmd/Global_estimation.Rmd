@@ -1,0 +1,323 @@
+---
+title: "Global Estimation"
+author: "Jon Lefcheck"
+date: "November 11, 2018"
+output: html_document
+---
+
+## 1.1 What is (Co)variance?
+
+The building block of the global estimation procedure for SEM is variance, specifically the covariance between  variables. Before we delve into the specifics of this procedure, its worth reviewing the basics of variance and covariance.
+
+Variance is the degree of spread in a set of data. Formally, it captures the deviation of each point from the mean value across all points. Consider the variable $x$. The variance of $x$ is calculated as:
+
+  $$VAR_{x} = \frac{\sum(x_{i} - \overline{x})^2}{n-1}$$
+  
+where $x_{i}$ is each sample value, $\overline{x}$ is the sample mean, and $n$ is the sample size.
+
+Similarly, for the response $y$:
+
+  $$VAR_{y} = \frac{\sum(y_{i} - \overline{y})^2}{n-1}$$
+  
+Note that, regardless of the actual values of the variables, variance are always positive (due to the squared term). The larger the variance, the more spread out the data are from the mean.
+
+Covariance is a measure of the dependency between two variables. Covariance can be formalized as:
+
+  $$COV_{xy} = \frac{\sum(x_{i} - \overline{x}) (y_{i} - \overline{y})}{n - 1}$$
+
+If variation in $x$ tends to track variation in $y$, then the numerator is large and covariance is high. In this case, the two variables are then said to co-vary.
+
+Consider a simple example. In R, the function `var` computes variance, and `cov` the covariance.
+```{r}
+
+x <- c(1, 2, 3, 4)
+
+y <- c(2, 3, 4, 5)
+
+# variance in x
+sum((x - mean(x))^2)/(length(x) - 1) == var(x)
+
+# variance in y
+sum((y - mean(y))^2)/(length(y) - 1) == var(y)
+
+# covariance
+sum((x - mean(x)) * (y - mean(y)))/(length(x) - 1) == cov(x, y)
+```
+
+The variance and covariance depend on the magnitude of the units. If the units of $x$ are much larger than $y$, then the covariance will also be large:
+```{r}
+x <- x * 1000
+
+cov(x, y)
+```
+
+This property can make the interpretation and comparison of (co)variances potentially misleading if the units are very different between variables. To solve this issue, we can standardize the variables to have a mean of 0 and a variance of 1. This standardization is achieved by subtracting the mean from each observation, and dividing by the standard deviation (the square-root of the variance). This procedure is also known as the Z-transformation.
+
+```{r} 
+zx <- (x - mean(x)) / sd(x)
+
+zy <- (y - mean(y)) / sd(y)
+
+# can also be obtained using the function `?scale`
+```
+Replacing the values of x and y with the standardized versions in our calculation of covariance yields the Pearson product moment correlation, $r$. Correlations are in units of standard deviations of the mean, and thus can be fairly compared regardless of the magnitude of the original variables. The function to compute the correlation is `cor`:
+
+```{r}
+sum(zx * zy)/(length(zx) - 1) == cor(x, y)
+```
+In our example, the two variables are prefectly correlated, so $r = 1$.
+
+Incidentally, this is the same as dividing the covariance of $x$ and $y$ by the product of their standard deviations, which omits the need for the Z-transformation step but achieves the same outcome:
+```{r}
+(cov(x, y) / (sd(x) * sd(y))) == cor(x, y)
+```
+
+Now that we have reviewed these basic concepts, we can begin to consider them within the context of SEM.
+
+## 1.2 Regression Coefficients
+
+The inferential heart of structural equation modeling are regression (or path) coefficients. These values mathematically quantify the linear dependence of one variable on another (or lack thereof). This verbage should sound familiar because that is what we have alreday established is the goal of covariance/correlation. In this section, we will demonstrate how path coefficients can be derived from correlation coefficients and explore the 8 "rules of path coefficients."
+
+First, we must define the important distinction between a regression (path) coefficient and a correlation coefficient.
+
+In a simple linear regression, one variable $y$ is the response and another $x$ is the predictor. The association between the two variables is used to generator the predictor $\hat{y}$:
+
+  $$\hat{y} = bx + a$$
+  
+where $b$ is the regression coefficient and $a$ is the intercept. Its important to note that $b$ implies a linear relationship, i.e., the relatoinship between $x$ and $y$ can be captured by a straight line.
+
+The regression coefficient between $x$ and $y$ can be related to the correlation coefficient through the following equation:
+
+  $$b_{xy} = r_{xy} (SD_{y}/SD_{x})$$
+  
+If the variables have been Z-transformed, then the $SD_{x} = SD_{y} = 1$ and $b_{xy} = r_{xy}$.
+
+This brings us to our first key point: when the variables have been scaled to mean = 0 and variance = 1, then the regression coefficient *is* the correlation coefficient. For multiple regression, they are the partial correlation coefficients. We refer to these as *standardized coefficients*.
+
+*Unstandardized coefficients*, then, are reported in their raw units. As with variance, then, their values depend on the unit of measure. In fact, the unstandardized coefficient can be related to the variance through the following equation:
+
+  $$b_{xy} = \frac{COV_{xy}}{VAR_{x}}$$
+  
+In mathematical terms, then, the unstandardized coefficients are scaled by the variance of the predictor, while the standardized variance by the cross-product of the standard deviations of both $x$ and $y$.
+
+We can demonstrate these principles using a simple example:
+```{r}
+set.seed(111)
+
+data <- data.frame(y1 = runif(100))
+
+data$x1 <- data$y1 + runif(100)
+
+unstd.model <- lm(y ~ x1, data)
+
+# get unstandardized coefficient
+summary(unstd.model)$coefficients[2, 1]
+
+# now using covariance
+(cov(data$y1, data$x1) / var(data$x))
+
+# repeat with scaled data
+std.model <- lm(y1 ~ x1, as.data.frame(apply(data, 2, scale)))
+
+# get standardized coefficient
+summary(std.model)$coefficients[2, 1]
+
+# now using correlation
+cor(data$y1, data$x1)
+```
+
+The concepts of variance, covariance, and correlation therefore directly inform the calculation of unstandardized and standardized regression coefficients, and lend them their unique properties that we will now cover as the 8 "rules of path coefficients."
+
+### Rule 1: Unspecified relationships among exogenous variables are simply their bivariate correlations.
+
+Variables that only have paths emanating from them (i.e., do not have arrows going into them) are called *exogenous* variables. If there is not a directed path between two exogenous variables, then their relationship can be expressed by a the simple correlation between them. This is sometimes, but not necessarily, indicated by a double-headed arrow. So $x1 <-> x2 == cor(x1, x2)$.
+
+### Rule 2: When two variables are connected by a single path, the coefficient of that path is the regression coefficient.
+
+For this rule, we will expand upon our earlier example to construct a simple path diagram: $x1 -> y1 -> y2$
+
+![sem_model]()
+
+```{r}
+data$y2 <- data$y1 + runif(100)
+```
+
+In this case, the path coefficient connecting $x1 -> y1$ *is* the regression coefficient of $y ~ x$. Similarly, the path coefficient connecting $y1 -> y2$ is the regression coefficient of $y2 ~ y1$. If the data are standardized, then the regression coefficient is the correlation coefficient.
+
+```{r}
+(pathx1_y1 <- summary(lm(y1 ~ x1, as.data.frame(apply(data, 2, scale))))$coefficients[2, 1])
+
+cor(data$y1, data$x1)
+
+(pathy1_y2 <- summary(lm(y2 ~ y1, as.data.frame(apply(data, 2, scale))))$coefficients[2, 1])
+
+cor(data$y2, data$y1)
+
+```
+
+### Rule 3: The strength of a compound path (one that includes multiple links) is the product of the individual coefficients.
+
+One of the strengths of SEM is being able to quantify indirect or cascading linkages. This is accomplished by simply multiplying the path coefficients. So the effect of $x1$ on $y2$ is the product of the coefficient of the path $x1 -> y1$ and $y1 -> y2$:
+```{r}
+pathx1_y1 * pathy1_y2
+```
+
+By our earlier logic, this value should equal the correlation between $x1$ and $y2$:
+```{r}
+cor(data$y2, data$x1)
+```
+
+But wait! The correlations are not the same. This result implies that the relationship between $x1$ and $y2$ cannot be fully explained by the indirect path through $y1$. Rather, we require additional information to solve this problem, and it comes in the form of the missing link between $x1 -> y2$, which we can add to the model:
+
+![path_coefficients_sem1]()
+
+Introducing this path raises a new issue: the relationship between $y1$ and $y2$ now arises from two sources. The first is their direct link, the second is from the indirect effect of $x1$ on both of them. We require a new approach to be able to compute the independent effects of each variable on the others, which comes in the form of the 'partial' regression coefficient.
+
+### Rule 4. When variables are connected by more than one pathway, each pathway is the 'partial' regression coefficient.
+
+A partial regression coefficient accounts for the joint influence of more than one variable on the response. In other words, the coefficient for one predictor controls for the influence of other predictors in the model. In this new model, $y2$ is affected by two variables: $x1$ and $y1$.
+
+Procedurally, this involve removing the shared variance between $x1$ and $y1$ so that their effects can be independently derived. 
+
+We can calculate this relationship through the following equation:
+
+  $$b_{y2x1} = \frac{r_{x1y2} - (r_{x1y1} \times r_{y1y2})}{1 - r_{x1y1}^2}$$
+which removes the joint influence of $y1$ and $x1$ on $y2$, and scales this effect by the shared variance between $x1$ and $y1$. The result is the partial effect of $x1$ on $y2$.
+
+```{r}
+(partialx1 <- (cor(data$x1, data$y2) - (cor(data$x1, data$y1) * cor(data$y1, data$y2))) / (1 - cor(data$x1, data$y1)^2))
+```
+
+Similarly, the partial effect of $y1$ on $y2$ is given by:
+
+  $$b_{y2y1} = \frac{r_{y2y1} - (r_{y2x1} \times r_{y1x1})}{1 - r_{x1y1}^2}$$
+```{r}
+(partialy1 <- (cor(data$y2, data$y1) - (cor(data$y2, data$x1) * cor(data$y1, data$x1))) / (1 - cor(data$x1, data$y1)^2))
+```
+
+We can arrive at the same answer by looking at the (standardized) coefficients obtained through a multiple regression:
+```{r}
+summary(lm(y2 ~ x1 + y1, as.data.frame(apply(data, 2, scale))))$coefficients[2:3, 1]
+
+partialx1; partialy1
+```
+
+Another way of looking at this is by removing the variance $x1$ explained by $y1$, then regressing those values against $y2$. In other words, we can extract the residuals (i.e., unexplained variance) in $x1$ by $y1$ and use those to predict $x2$. 
+```{r}
+residsx1 <- residuals(lm(x1 ~ y1, as.data.frame(apply(data, 2, scale))))
+
+summary(lm(scale(data$y2) ~ residsx1))$coefficients[2, 1]
+
+partialx1
+```
+Indeed, this procedure gives us the same value as the former equation or the multiple regression.
+
+However, this raises the interesting notion of residual error. The second equation still has variance $y2$ that is unexplained by the residuals of $x1$. In other words, the model does not perfectly predict $y2$ (if it did, it would be useless). The idea of residual (unexplained) variance leads us the fifth rule of path coefficients.
+
+## Rule 5: Errors on exogenous variables relate the unexplained correlations or variances arising from unmeasured variables.
+
+If the variance explained by the model is captured by the $R^2$ statistics, then the unexplained or residual variance is $1 - R^2$. 
+
+For example, the error variance on $y2$ is:
+```{r}
+1 - summary(lm(y2 ~ y1 + x1, as.data.frame(apply(data, 2, scale))))$r.squared
+```
+
+These values capture the other (unknown) sources that cause the correlation between $y2$ and the other variables to deviate from 1. In other words, if we measured all the influences on $y2$ then the prediction error would be 0 because we would have explained everything that affects variance in $y2$.
+
+This idea is nicely illustrated with the simple relationship between $x1$ and $y1$, where the square-root of variance explained is simply the square of the correlation coefficient:
+```{r}
+sqrt(summary(lm(y1 ~ x1, as.data.frame(apply(data, 2, scale))))$r.squared)
+
+cor(data$y1, data$x1)
+```
+Thus, we often represent the error correlation of $y1$ as $\sqrt(1 - r^2)$. 
+
+### Rule 6: Unanalyzed (residual) correlations among two endogenous variables are their partial correlations.
+
+Variables that have paths entering them (regardless of whether they also have paths emanating from them) are called *endogenous* variables.
+
+Imagine we remove the path from $y1 -> y2$:
+
+![path_coefficients_model2]()
+
+Both variables are endogenous and their relationship can still be quantified, just not in a directed way. If they were exogenous variables, the relationship would be their bivariate correlation (Rule #1), but in this case, we have to remove the effects of $x1$ on both variables.
+
+  $$r_{y1y2\bullet x1} = \frac{r_{y1y2} - (r_{x1y1} \times r_{x1y2})}{\sqrt((1 - r_{x1y1}^2)(1 - r_{x1y2}^2))}$$
+  
+This equation removes the effect $x1$ and scales by the shared variance between $x1$ and both endogenous variables.
+
+```{r}
+(errory1y2 <- (cor(data$y1, data$y2) - (cor(data$x1, data$y1) * cor(data$x1, data$y2))) / sqrt((1 - cor(data$x1, data$y1)^2) * (1 - cor(data$x1, data$y2)^2)))
+
+```
+
+This is the same as the correlation between the residuals of the two models:
+```{r}
+(cor(
+  resid(lm(y1 ~ x1, as.data.frame(apply(data, 2, scale)))),
+  resid(lm(y2 ~ x1, as.data.frame(apply(data, 2, scale))))
+))
+
+errory1y2
+```
+Hence these are known as *correlated errors* and are represented by double-headed arrows between the errors of two endogenous variables. (Often the errors are omitted, and the graph simply depicts a double-headed arrow between the variables themselves, but the correlation is truly among their errors.)
+
+If the presence of $x1$ explains all of the variation in $y1$ and $y2$, then their partial correlation will be 0. In this case, the two endogenous variables are said to be *conditionally independent*, or that they are independent conditional on the joint influence of $x1$. If the two are conditionally independent, then the correlation between $y1$ and $y2$ is the product of the correlations between $y1$ and $x1$, and $y2$ and $x1$.
+
+  $$r_{y1y2} = r_{y1x1} \times r_{y2x1}$$
+  
+(If we replace this term in the previous equation, the numerator becomes 0 and so does the partial correlation.)
+
+Let's calculate this value:
+```{r}
+cor(data$y1, data$x1) * cor(data$y2, data$x1)
+```
+Ah, but the two are very different, implying that $y1$ and $y2$ are *not* conditionally independent given the joint influence of $x1$. In other words, there are other, unmeasured sources of variance that are influencing the relationship between these two variables.
+
+The concept of conditional independence is critical in the implementation of local estimation, principally in the tests of directed separation that form the basis of the goodness-of-fit statistic.
+
+Now that we have derived all the quantities related to direct, indirect, and error variances/correlations, we have all the information necessary to calculate total effects.
+
+### Rule 7: The total effect one variable has another is the sum of its direct and indirect effects.
+
+If we return to out previous path model, which reinstates the path between $y1 -> y2$, the total effect of $x1$ on $y2$ includes the direct effect, as well as the indirect effect mediated by $y1$. 
+```{r}
+(totalx1 <- partialx1 + cor(data$y1, data$x1) * partialy1)
+```
+
+This value can be used to demonstrate the final rule.
+
+### Rule 8: The total effect (including undirected paths) is equivalent to the total correlation.
+
+We can test this easily:
+```{r}
+totalx1 == cor(data$y2, data$x1)
+```
+Indeed, the total effect equals the correlation!
+
+If we consider the path model without the directed link between $y1$ and $y2$, the correlation between $y1$ and $y2$ considers the total effect *and* undirected effects (i.e., correlated errors):
+```{r}
+(totaly1y2 <- cor(data$y1, data$x1) * cor(data$y2, data$x1) + errory1y2 * sqrt(1 - summary(lm(y1 ~ x1, data))$r.squared) * sqrt(1 - summary(lm(y2 ~ x1, data))$r.squared))
+
+totaly1y2 == cor(data$y1, data$y2)
+```
+
+This example closes our discussion of path coefficients. The major points to remember are:
+
+  - standardized coefficients reflect (partial) correlations
+  - the indirect effect of one variable on another is obtained by multiplying the individual path coefficients
+  - the total effect is the sum of direct and indirect paths
+  - the bivariate correlation is the total effect, plus any undirected paths
+  
+An understanding of covariances and correlations is essential to understanding the solutions provided by a global estimation approach to SEM.
+
+## 1.3 Variance-based Structural Equation Modeling
+
+observed vs expected
+
+Fml
+
+
+
+## Evaluating model fit

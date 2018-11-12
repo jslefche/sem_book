@@ -359,15 +359,10 @@ The most common tool is *maximum-likelihood estimation*, which iteratively searc
 The maximum-likelihood fitting function can be expressed as:
 
   $$F_{ML} = log|\hat{\Sigma}| + tr(S\hat{\Sigma}^{-1}) - log|S| - (p + q)$$
+  
 where $\Sigma$ is the modeled covariance matrix, $S$ is the observed covariance matrix, $p$ is the number of endogenous variables, and $q$ is the number of exogenous variables. $tr$ is the trace of the matrix (sum of the diagonal) and the $^{-1}$ is the inverse of the matrix. 
 
 Maximum-likelihood estimators have a few desireable properties, principally that they provide unbiased estimates with a sufficiently large sample size and they are invariant to the scales of the variables.
-
-Most importantly, $F_{ML}$ is $\Chi^2$-distributed such that:
-
-  $$\Chi^2 = (n - 1)F_{ML}$$
-  
-which allows us to arrive at estimates of model fit, which we will get to later.
 
 A number of assumptions accompany maximum-likelihood fitting:
   - variables must exhibit multivariate normality. Oftentimes this is the not case: dummy variables, interactions and other product terms have non-normal distrbutions. However, $F_{ML}$ is fairly robust to violations of multinormality, especially as the sample size grows large.
@@ -459,8 +454,35 @@ Identifiability and replication are key in not only providing an actual solution
 
 ## 1.5 Goodness-of-fit Measures
 
-As we have established, the purpose of covariance-based SEM is to reproduce the global observed variance-covariance matrix. However, given that our hypothesized relationships may not actually match the data, we must be prepared to evaluate how well the model-estimated variance-covariance matrix matches the observed variance-covariance matrix.
+As we have established, the purpose of covariance-based SEM is to reproduce the global observed variance-covariance matrix. However, given that our hypothesized relationships may not actually match the data, we must be prepared to evaluate how well the model-estimated variance-covariance matrix matches the observed variance-covariance matrix. 
 
+Recall that in the section on Path Coefficients, we evaluated the error variance/correlation as reflecting outside sources of variation uncaptured by our measured variables. High error variances would lead to less accurate estimates of the relationships among variables, and thus a high level of disagreement among the observed and model-implied variance-covariance matrix.
+
+Also recall our formula for the maximum-likelihood fitting function:
+
+  $$F_{ML} = log|\hat{\Sigma}| + tr(S\hat{\Sigma}^{-1}) - log|S| - (p + q)$$
+  
+where $\Sigma$ is the modeled covariance matrix, $S$ is the observed covariance matrix, $p$ is the number of endogenous variables, and $q$ is the number of exogenous variables. $tr$ is the trace of the matrix (sum of the diagonal) and the $^{-1}$ is the inverse of the matrix. 
+
+In the event that $\Sigma = S$, then the first two terms would equal 0, and similarly for the second two terms. Thus a model where $F_{ML} = 0$ implies perfect fit because the observed covariance matrix has been *exactly* reproduced.
+
+Oppositely, a large value of $F_{ML}$ would imply increasing discrepancy between the observed and model-implied variance-covariance matrices. This could be interpreted as a 'poor fit' for the model. 
+
+In fact, $F_{ML}$ is $\chi^2$-distributed such that:
+
+  $$\chi^2 = (n - 1)F_{ML}$$
+  
+which allows us to actually quantify model fit. We can then formally compare the $\chi^2$ statistic to the $\chi^2$-distribution with $n - 1$ degrees of freedom. Failing to reject the null hypothesis that the $\chi^2$ statistic is different from 0 (perfect fit) implies a generally good representation of the data (*P* > 0.05). Alternately, rejecting the null implies that the $\chi^2$ statistic is large, as is the discrepancy between the observed and modeled variance-covariance matrices, thus implying a poor fit to the data (*P* < 0.05). Interpreting the outcome of the significance test is often tricky, as a significant *P*-value indicates *poor* fit, so be careful.
+
+RMSEA
+
+CFI
+
+SRMR
+
+What happens if the model doesn't fit?
+
+Model comparison (AIC/BIC)
 
 
 ## 1.6 Model Fitting Using *lavaan*

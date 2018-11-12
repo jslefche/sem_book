@@ -1,7 +1,7 @@
 ---
 title: "Global Estimation"
 author: "Jon Lefcheck"
-date: "November 11, 2018"
+date: "November 12, 2018"
 output: html_document
 ---
 
@@ -114,7 +114,7 @@ data <- data.frame(y1 = runif(100))
 
 data$x1 <- data$y1 + runif(100)
 
-unstd.model <- lm(y ~ x1, data)
+unstd.model <- lm(y1 ~ x1, data)
 
 # get unstandardized coefficient
 summary(unstd.model)$coefficients[2, 1]
@@ -336,10 +336,48 @@ An understanding of covariances and correlations is essential to understanding t
 
 ## 1.3 Variance-based Structural Equation Modeling
 
-observed vs expected
+The classical approach to SEM is based on the the idea of variance and covariances. With >2 variables, you can construct a variance-covariance matrix, where the diagonals are the variances of each variable and the off-diagonals are the covariances between each pair. Consider our last example:
 
-Fml
+```{r}
+cov(data)
+```
 
+returns the variance-covariance matrix for the three variables $x1$, $y1$, and $y2$. We would call this the *observed global* variance-covariance matrix.
 
+The entire machinary behind covariance-based SEM is to reproduce that global variance-covariance matrix. In fact, all of covariance-based SEM can be boiled down into a simple equation:
 
-## Evaluating model fit
+  $$\Sigma = \Sigma(\Phi)$$
+  
+where $\Sigma$ is the observed variance-covariance matrix, and $\Sigma(\Phi)$ is the model-estimated covariance matrix expressed in terms of $\Phi$, the matrix of model-estimated parameters (i.e., coefficients).
+
+In other words, this equation shows that the observed covariances can be understood in terms of statistical parameters that can be used to predict these same covariances. We have already shown that linear regression can be expressed in terms of these same principles, and so it follows that covariance-based SEM is simply a multivariate approach to regression.
+
+The question is: how do we arrive at $\Sigma(\Phi)$, or more relevantly, how do we estimate the matrix of model parameters $\Phi$ that lead to the estimated variance-covariance matrix?
+
+The most common tool is *maximum-likelihood estimation*, which iteratively searches parameter space and continually refines estimates of parameter values such that the differences between the observed and expected variance-covariance matrices.
+
+The maximum-likelihood fitting function can be expressed as:
+
+  $$F_{ML} = log|\hat{\Sigma}| + tr(S\hat{\Sigma}^{-1}) - log|S| - (p + q)$$
+where $\Sigma$ is the modeled covariance matrix, $S$ is the observed covariance matrix, $p$ is the number of endogenous variables, and $q$ is the number of exogenous variables. $tr$ is the trace of the matrix (sum of the diagonal) and the $^{-1}$ is the inverse of the matrix. 
+
+Maximum-likelihood estimators have a few desireable properties, principally that they provide unbiased estimates with a sufficiently large sample size and they are invariant to the scales of the variables.
+
+Most importantly, $F_{ML}$ is $\Chi^2$-distributed such that:
+
+  $$\Chi^2 = (n - 1)F_{ML}$$
+  
+which allows us to arrive at estimates of model fit, which we will get to later.
+
+A number of assumptions accompany maximum-likelihood fitting:
+  - variables must exhibit multivariate normality. Oftentimes this is the not case: dummy variables, interactions and other product terms have non-normal distrbutions. However, $F_{ML}$ is fairly robust to violations of multinormality, especially as the sample size grows large.
+  - the observed matrix $S$ must be positive-definite. This means there are no negative variances, an implied correlation > 1.0, or redundant variables (one row is a linear function of another).
+  - finally, $F_{ML}$ assumes sufficiently large sample size.
+  
+The notion of sample size is a good one: as models become increasingly complex, they require more data to fit. The issue of model 'identifiability' and sufficient sample size is dealt with in the next section.
+
+## 1.4 Model Identifiability
+
+## 1.5 Model Fitting Using *lavaan*
+
+## 1.6 Goodness-of-fit Measures

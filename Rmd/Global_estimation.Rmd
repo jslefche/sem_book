@@ -474,16 +474,22 @@ In fact, $F_{ML}$ is $\chi^2$-distributed such that:
   
 which allows us to actually quantify model fit. We can then formally compare the $\chi^2$ statistic to the $\chi^2$-distribution with $n - 1$ degrees of freedom. Failing to reject the null hypothesis that the $\chi^2$ statistic is different from 0 (perfect fit) implies a generally good representation of the data (*P* > 0.05). Alternately, rejecting the null implies that the $\chi^2$ statistic is large, as is the discrepancy between the observed and modeled variance-covariance matrices, thus implying a poor fit to the data (*P* < 0.05). Interpreting the outcome of the significance test is often tricky, as a significant *P*-value indicates *poor* fit, so be careful.
 
-RMSEA
+The $\chi^2$ index also provides a way to gauge the relative fit of two models, one of which is nested within the other. The *$\chi^2$ difference test* is simply the difference in $\chi^2$ values between the two models, with the degrees of freedom being the difference in the degrees of freedom between the two models. The resulting statistic can then be compared to a $\chi^2$ table to yield a significance value. Again, this test is for *nested* models. For non-nested models, other statistics allow for model comparisons, including AIC and BIC. An AIC or BIC score $\geq$2 is generally considered to indicate significant differneces among models, with smaller values indicating equivalency between the two models.
 
-CFI
+$\chi^2$ tests tend to be affected by sample size, with larger samples more likely to generate poor fit due to small absolute deviations. As a reuslt, there are several other fit indices for covariance-based SEM that attempt to correct for this problem:
+  
+  - *Root-mean squared error of approximation* (RMSEA): this statistic penalizes models based on sample size. An acceptable value is generally <0.10 and a good value is anything <0.8.
+  - *Comparative fit index* (CFI): this statistic considers the deviation from a 'null' model. In most cases, the null estimates all variances but sets the covariances to 0. A value >0.9 is considered good.
+  - *Standardized root-mean squared residual* (SRMR): the standardized difference between the observed and predicted correlations. A value <0.08 is considered good.
 
-SRMR
+There are a number of other fit statistics that have been developed which you may run across. This [website](http://davidakenny.net/cm/fit.htm) has a fairly comprehensive overview.
 
-What happens if the model doesn't fit?
-
-Model comparison (AIC/BIC)
-
+What happens if the model doesn't fit? Depending on the goals of your analysis (e.g., exploratory) you may wish to see which parts of your model have failed to be reproduced by the model-implied variance-covariance matrix. This can be achieved in two ways:
+  
+  - examination of model residuals: parameters with large residuals (difference between observed and expected) could suggest missing information or linkages.
+  - *modification indices*, or the expected decrease in the $\chi^2$ if a missing path were to be included in the model. A high value of a modification index would suggest the missing path should be included. (Tests of directed separation, which we cover in the chapter on Local Estimation, provide similar insight and are returned automatically by *piecewiseSEM*.)
+  
+Users should take caution when exploring these techniques as to avoid dredging the model. SEM is a technique that relies heavily on informed model specification: adding paths in that are suggested by the data but not anticipated by the user to achieve adequate fit, or comparing all sub-models using AIC, for example, might be appropriate in other applications, but ignore the basic philosophy behind SEM.
 
 ## 1.6 Model Fitting Using *lavaan*
 

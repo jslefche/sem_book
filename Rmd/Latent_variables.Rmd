@@ -7,7 +7,7 @@ output: html_document
 
 ## 1.1 Introduction to Latent Variable Modeling
 
-*Latent variables* are variables that are unobserved, but whose influence can be summarized through one or more *indicator variables*. They are useful for capturing complex or conceptual properties of a system that are difficult to quantify or measure directly. Early applications of latent variables, for example, focused on modeling the effects of 'general intelligence,' which is an abstract concept that is impossible to measure, but can be approximated using scores from different tests of cognitive performance (e.g., memory, verbal, spatial, etc.).
+*Latent variables* are variables that are unobserved, but whose influence can be summarized through one or more *indicator variables*. They are useful for capturing complex or conceptual properties of a system that are difficult to quantify or measure directly. Early applications of latent variables, for example, focused on modeling the effects of 'general intelligence,' which is an abstract concept that is impossible to actually measure, but can be approximated using scores from different tests of cognitive performance (e.g., memory, verbal, spatial, etc.).
 
 Consider the following simple example of a latent variable:
 
@@ -17,24 +17,43 @@ Here, the latent variable is indicated by the circle with the quantity $\xi$. Th
 
 First, the direction of causality is reversed from what you might expect: *from* the latent variables *to* the observed variable. This is because the indicator variable is simply an emergent manifestion of the underlying phenomenon represented by the latent variable.
 
-Second, there is an error $\delta$ associated with the indicator. This implies that the indicator is an imperfect approximation of the latent construct. 
+Second, there is an error $\delta$ associated with the indicator. This implies that the indicator is an imperfect approximation of the latent construct. In other words, there are other emergent properties of the latent variable that affect the obsered indicator variables.
 
-Thus, the latent variable can be related in the following equation:
+The latent variable can be related to the indicator variable using the following equation:
 
   $$x = \lambda \xi + \delta_{x}$$
   
-In other words, the values of $x$ are the result of the latent variable proportional to $\lambda$ (its effect on $x$) plus some error $\delta_{x}$.
+In words, the values of $x$ are the result of the latent variable proportional to $\lambda$ (its effect on $x$) plus some error $\delta_{x}$.
   
 A simple example of a latent-indicator relationship would be body size (latent) and body mass (indicator). There are obviously many aspects to body size that may be difficult to quanify, such as shape, volume, complexity, and so on. However, body mass is a simple, measurable consequence of these unmeasured characteristics, and thus can be thought to latently indicate body size. However, because we cannot perfectly measure body mass (there will always be some error associated with observed variables), we must incorporate that measurement error into our model of body size.
 
 This example reinforces the point that latent variables often are used to represent concepts. Body size is often invoked in lots of ecological theory (e.g., metabolic theory, Bergmann's rule), but is almost always represented as some easily measurable quantity such as body mass rather than the complex, multidimensional construct that it is in reality. Latent variable modeling allows us to better approach that multidimensional construct by integrating a series of indicator variables that arise from the general concept of body size (e.g., mass, length, width, etc.). It therefore is a powerful tool that is better positioned to integrate theory and observation than past approaches.
 
-However, some care should be taken when constructing latent variables. Just because we call a latent variable something does not always mean it *is* that thing For example, the latent variable body size as indicated by total abundance might appear legitimate--high abundances may constrain body sizes under limited resources--but is abundance *really* an indicator of this phenomenon? Can we go on to evaluate ecological theory about metabolic scaling on the basis of abundances? Probably not. So care should be taken when selecting latent variables and identifying appropriate indicators.
+However, some care should be taken when constructing latent variables. Just because we call a latent variable something does not always mean it *is* that thing For example, the latent variable body size as indicated by total abundance might appear legitimate--high abundances may constrain body sizes under limited resources--but is abundance *really* an indicator of this phenomenon? Can we go on to evaluate ecological theory about metabolic scaling on the basis of abundances? Probably not. So care should be taken when selecting/naming latent variables and identifying appropriate indicators. *Be sure the latent variable reflects the actual properties captured by the indicator variables!* The degree to which the indicators represent the phenomenon captured by the latent variable is termed *validity* and is often a qualitative approach to justifying the latent construct.
+
+In contrast, *reliability* of the latent variable provides quantitative values with which to gauge how well an indicator reflects the latent variable. Reliability implies that the same values of the indicator would be obtained if they were continually resampled again and again. In other words, reliable indicators approach the true population mean that is the (theoretical) product of the latent variable: a perfect indicator would generate the same values every time so they would have a correlation $r = 1$. Of course, rarely do we sample the entire population or so well, and there will inevitably be some differences among our samples leading to deviations in this value away from 1. 
+
+From this correlation, we can obtain a path coefficient from the latent to the indicator variable. Recall from the "Rules of Path Coefficients" (see Chapter: Global Estimation) the the coefficient on the path from the error variance $\zeta$ is the square-root of the unexplained variance (Rule 5). In this case, we want the opposite: we want the *shared* variance between the latent and indicator variable (a lot of shared variance is what makes a good indicator!). As in the case of the error path, the path coefficient from the latent variable to the indicator is often expressed in its standardized form: the square-root of the reliability. This value is also known as the *loading*. From the reliability, we can also obtain the standardized error term $\delta_{x}$. This is the unshared variance, or 1 - the reliability.
+
+Imagine for an indicator variable $x$ we took some number of samples (say, 5). The average correlation among samples is $r = 0.75$, which is the reliability. The path coefficient is therefore $\sqrt(r) = \sqrt(0.76) = 0.87$. The standardized error variance on $x$ is 1 - reliability: $1 - r = 1 - 0.75 = 0.25$. For the unstandardized form, one can apply the following equation:
+
+  $$\delta_{x} = (1 - \lambda_{x}^2) \times VAR_{x}$$
+As with other coefficients, standardization is applied simply because multiple indicators may be measured in vastly different units, and one may wish to fairly compare the loadings.  
+  
+In summary: the standardized coefficient (the loading) linking indicator to latent variables is the square-root of the relability. The standardized error variance is 1 - reliability.
 
 
 
 
 
+
+multi-indicator
+
+
+latent variable for measurement error
+
+
+confirmatory factor analysis
 
 For the moment, latent variables are restricted to covariance-based SEM, although we are working to extend some concepts using the piecewise framework.
 

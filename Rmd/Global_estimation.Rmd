@@ -513,7 +513,13 @@ data(keeley)
 
 In their study, Grace & Keeley wanted to understand patterns in plant diversity following disturbance, in this case wildfires in California. 
 
-For purposes of exploration, let's first consider the relationship between fire severity and stand age (with older stands having more combustible materials). This is both a linear regression but also a simple SEM, and thus both can be fit using packages in R.
+### 1.6.1 *lavaan* vs `lm`
+
+For purposes of exploration, let's first consider the relationship between fire severity and stand age (with older stands having more combustible materials) 
+
+![keeley sem](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_sem1.png)
+
+This is both a linear regression but also a simple SEM, and thus both can be fit using packages in R.
 
 The package to fit the SEM using covariance-based methods is called *lavaan* (for LAtent VAriable ANalysis, which we will get to in another chapter). In *lavaan*, the syntax is the same as in other modeling functions in R with one key distinction: formulae are passed as character strings. To fit a model in *lavaan*, its first necessary to break down the component models by the endogenous (response) variables and code them as characters. For example:
 
@@ -535,7 +541,7 @@ As with any other model, the function to retrieve the output is `summary`:
 summary(keeley_sem1)
 ```
 
-The output is organized into a few sections. First is the likelihood optimization method, number of parameters, the total sample size for the model, the estimator ($F_{ML}$ is the default) and the fit statistic. The model has $\chi^2 = 0$ with 0 degrees of freedom: this is because we have as many knowns as unknowns, and thus the model is just identified or saturated. To show this, we can apply the t-rule: we must estimate the two variances of the variables plus their path coefficient ($t = 3$) and know the values of the two variables ($n = 2$). So if $t \leq n(n + 1)/2$ then $3 = 2(2+1)/2 = 6/2 = 3$, therefore the model is saturated.
+The output is organized into a few sections. First is the likelihood optimization method, number of parameters, the total sample size for the model, the estimator ($F_{ML}$ is the default) and the fit statistic. The model has $\chi^2 = 0$ with 0 degrees of freedom: this is because we have as many knowns as unknowns, and thus the model is just identified or saturated. To show this, we can apply the t-rule: we must estimate the two variances of the variables plus their path coefficient ($t = 3$) and know the values of the two variables ($n = 2$). Recall the equation for the t-rule $t \leq n(n + 1)/2$, so $3 = 2(2+1)/2 = 6/2 = 3$, and therefore the model is saturated.
 
 Next up are the actual parameter estimates: the relationship between fire severity and stand age is $\beta = 0.06$ with $P < 0.001$. The model has reports the estimated error variance on the endogenous variable.
 
@@ -597,23 +603,100 @@ summary(keeley_sem1, standardize = T, rsq = T)
 
 You'll note that, per Rule 5 of path coefficients, the error variance is $1 - R^2$.
 
+### 1.6.2 SEM using *lavaan*
+
 Now that we have covered the basics of *lavaan*, let's fit a slightly more complicated SEM. This model is a simplified subset of the full model presented by Grace & Keeley:
 
-![keeley sem](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_full_mediation_sem.png)
+![keeley sem](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_sem2.png)
 
-in which we assume that total cover of plants is a function of the severity of the burn, which in turn is informed by how old the plants are in a particular plot (which we have already investigated).
+Here, we test the hypotheses that total cover of plants is a function of the severity of the burn, which in turn is informed by how old the plants are in a particular plot (which we have already investigated). This test is known as *full mediation*, in other words that the effect of age is fully mediated by fire severity (we will test another scenario shortly).
 
+Again, we must provide the formulae as a character string. This model can be broken down into two equation representing the two endogenous variables:
 
+```{r}
+keeley_formula2 <- '
+firesev ~ age
+cover ~ firesev
+'
+```
 
+Multiple equations will go on separate lines so that *lavaan* can properly parse the model.
 
-describe data
-fit the model
-inspect output
-get indirect and total effects
-test for mediation (full vs partial)
-re-fit
-test using chi-squared difference
-test using AIC
+Now let's fit the SEM and examine the output:
+
+```{r}
+keeley_sem2 <- sem(keeley_formula2, data = keeley)
+
+summary(keeley_sem2, standardize = T, rsq = T)
+```
+
+The key difference from our previous application of *lavaan* is we now have extra information with which to compute the $\chi^2$ goodness-of-fit statistic. A quick application of the t-rule: unknowns = 3 variances + 2 path coefficients = 5, knowns = 3 variables, so $5 < 3(3+1)/2 = 6$ leaving us 1 extra degree of freedom.
+
+Moreover, we fail to reject the null that the observed and model-implied variance-covariance matrices are significantly different ($P = 0.069$). Thus, we have achieved adequate fit with this model.
+
+Incidentally, we can obtain other fit statistics using the `fitMeasures` function:
+
+```{r}
+fitMeasures(keeley_sem2)
+```
+
+Woah! We're certainly not lacking in statistics. 
+
+Returning to the summary output, we see the same coefficient for $firesev ~ age$ and a new estimate for $cover ~ firesev$. In this case, more severe fires reduce cover (not unexpectedly).
+
+Now that we have multiple linkages, we can also compute the indirect effect of age on cover. Recall from Rule 3 of path coefficients that the indirect effects along a compound path are the product of the individual path coefficients: $0.454 * -0.437 = -0.198$. 
+
+We can obtain this value by modifying the model formula to include these calculations directly. This involves giving a name to the coefficients in the model statement, then adding a new line indicating their product using the operator `:=`:
+
+```{r}
+keeley_formula2.1 <- '
+firesev ~ B1 * age
+cover ~ B2 * firesev
+
+indirect := B1 * B2
+'
+
+keeley_sem2.1 <- sem(keeley_formula2.1, keeley)
+
+summary(keeley_sem2.1, standardize = T)
+```
+
+Indeed, the indirect path coefficient is the same as computed above.
+
+Naming coefficients can come in handy when specifying, for example, a fixe values or when they ought to be constrained (see Chapter: Multigroup Modeling).
+
+### 1.6.3 Testing Alternate Structure using *lavaan*
+
+There is another possible configuration of these variables which includes a directed path between age and cover:
+
+![keeley sem](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_sem3.png)
+
+This type of model tests *partial mediation*, or the idea that the effect of age is partially mediated by fire severity, but there is all a direct linkage between age and cover. 
+
+Let's fit the partial mediation model:
+
+```{r}
+keeley_formula3 <- '
+firesev ~ age
+cover ~ firesev + age
+'
+
+keeley_sem3 <- sem(keeley_formula3, data = keeley)
+
+summary(keeley_sem3, standardize = T)
+```
+
+Ah, we have a problem: the model is saturated, so there are no degrees of freedom leftover with which to test model fit. 
+
+We can, however, test whether this model is more or less supported than the partial mediation model using the $\chi^2$ difference test:
+
+```{r}
+anova(keeley_sem2, keeley_sem3)
+```
+
+(Note that the $\chi^2$ statistic and associated degrees of freedom are still 0 for the model testing partial mediation.)
+
+We can see from this output that we fail to reject the null that the models are significantly different ($P = 0.069$). Because these are nested models, it is also fair to compare them using AIC/BIC. In both cases, the models are deemed equivalent and the more parsimonious model (full mediation) would be preferred. Moreover, examining the output of the model of partial mediation reveals a non-significant effect of age on cover ($P = 0.067$). Together, these pieces of information would suggest that plant cover is not directly effect by stand age, but rather the effect of age is entirely mediated through the severity of burns.
 
 ## References
 

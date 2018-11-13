@@ -29,7 +29,7 @@ A simple example of a latent-indicator relationship would be body size (latent) 
 
 This example reinforces the point that latent variables often are used to represent concepts. Body size is often invoked in lots of ecological theory (e.g., metabolic theory, Bergmann's rule), but is almost always represented as some easily measurable quantity such as body mass rather than the complex, multidimensional construct that it is in reality. Latent variable modeling allows us to better approach that multidimensional construct by integrating a series of indicator variables that arise from the general concept of body size (e.g., mass, length, width, etc.). It therefore is a powerful tool that is better positioned to integrate theory and observation than past approaches.
 
-However, some care should be taken when constructing latent variables. Just because we call a latent variable something does not always mean it *is* that thing For example, the latent variable body size as indicated by total abundance might appear legitimate--high abundances may constrain body sizes under limited resources--but is abundance *really* an indicator of this phenomenon? Can we go on to evaluate ecological theory about metabolic scaling on the basis of abundances? Probably not. So care should be taken when selecting/naming latent variables and identifying appropriate indicators. *Be sure the latent variable reflects the actual properties captured by the indicator variables!* The degree to which the indicators represent the phenomenon captured by the latent variable is termed *validity* and is often a qualitative approach to justifying the latent construct.
+However, some care should be taken when constructing latent variables. Just because we call a latent variable something does not always mean it *is* that thing For example, the latent variable body size as indicated by total abundance might appear legitimate--high abundances may constrain body sizes under limited resources--but is abundance *really* an indicator of this phenomenon? Can we go on to evaluate ecological theory about metabolic scaling on the basis of abundances? Probably not. So care should be taken when selecting/naming latent variables and identifying appropriate indicators (known as the *naming fallacy*). *Be sure the latent variable reflects the actual properties captured by the indicator variables!* The degree to which the indicators represent the phenomenon captured by the latent variable is termed *validity* and is often a qualitative approach to justifying the latent construct.
 
 In contrast, *reliability* of the latent variable provides quantitative values with which to gauge how well an indicator reflects the latent variable. Reliability implies that the same values of the indicator would be obtained if they were continually resampled again and again. In other words, reliable indicators approach the true population mean that is the (theoretical) product of the latent variable: a perfect indicator would generate the same values every time so they would have a correlation $r = 1$. Of course, rarely do we sample the entire population or so well, and there will inevitably be some differences among our samples leading to deviations in this value away from 1. 
 
@@ -162,10 +162,44 @@ With respect to the regression coefficient, *lavaan* returned $\gamma = 0.341$ w
 
 So, all in all, for single indicator latent variables, we are able to almost exactly reproduce the output from *lavaan* (slight differences are likely due to the optimization algorithm). *lavaan*, however, provides an easier, more robust framework that easily extends to multi-indicator latent variables, and so we will use it from here on out.
 
-## 1.4 Multi-indicator Latent Variables
-
-
-
-confirmatory factor analysis
-
 For the moment, latent variables are restricted to covariance-based SEM, although we are working to extend some concepts using the piecewise framework.
+
+
+## 1.4 Multi-indicator Latent Variables 
+
+Accounting for measurement error requires some estimate of reliability. Often, we don't *have* a measure of reliability, or at least one that is robust. In such cases, it might be recommended to revert to a non-latent variable approach where the path coefficients are not informed by any loadings.
+
+Another solution is to incorporate multiple indicator variables to provide a different measure of reliability. In this case, the correlation is not derived from multiple samples of the same indicator, but *among* indicators. It also acts as a check against indicators that do not inform the latent variable, as such variables will provide low reliability estimates.
+
+This approach also provides a conceptual advantage: we often choose a single indicator as a surrogate for a latent concept (e.g., body mass for body size). Including more indicators helps to generalize this phenomenon by testing that the result is not an impact of the choice of any single indicator.
+
+Multiple indicators raises a new problem, though: identifiability. Consider an exogenous latent variable indicated by two variables, $x1$ and $x1$. We can break this latent variable into two equations:
+
+  $$x1 = \lambda_{1}\xi + \delta_{x1}$$
+  $$x2 = \lambda_{2}\xi + \delta_{x1}$$
+
+We know the values of $x1$ and $x2$ and only know the correlation between them. To estimate values for the latent construct $\xi$ we need to know $lambda_{1}$, $\lambda_{2}$, $\delta_{x1}$ and $\delta_{x2}$. 
+
+Since $\delta = 1 - \lambda^2$, we need only solve for the two $\lambda$s, but we only have 1 piece of information: the correlation. The solution is to set the loadings to be equal: $lambda_{1} = \lambda_{2}$.
+
+We know from our "Rules of Path Coefficients" that the correlation equals the sum of the direct and indirect pathways (Rule 9). The only path connecting $x1$ and $x2$ is through $\epsilon$, thus value of the compound path is the product of the two individual pathways (Rule 3). Thus, the correlation $r_{x1,x2} = lambda_{1} \times \lambda_{2}$. Given the assumption that the two loadings are equal, $r_{x1,x2} = \lambda^2$ and thus $\lambda = \sqrt(r_{x1,x2})$.
+
+We can scale this procedure out for >2 indicators by setting only 2 loadings to be equal: this will give us the necessary information (along with Rule 8 of path coefficients) to generate unique solutions for the other loadings. IT is for this reason that at least three indicators are preferred for multi-indicator latent variables: it lessens the impact of the assumption that two loadings are equal.
+
+An alternate solution is to fix one of the loadings to be 1. If, for example, we fix $\lambda_{1} = 1$ then we know that $\lambda_{2} = r_{x1,x2} / \lambda_{1} = r_{x1,x2} / 1$. 
+
+Because it is unmeasured, we also need to provide a scale for our multi-indicator latent variable. This can be done by fixin the variance $\zeta = 1$ or by fixing one of the unstandardized loadings to 1. Both accomplish the same objective.
+
+
+
+
+
+When to use multiple indicators
+
+## 1.6 Confirmatory Factor Analysis
+
+Multi-indicator latent variables can also be used to the test the hypothesis that a suite of indicator variables are generated by the same underlying process. This is also called *confirmatory factor analysis*. In other words, you are testing the idea that the latent variable has given rise to emergent properties that, by virtue of a common cause, are correlated.
+
+In contrast, *exploratory factor analysis* assumes that all latent variables are indicated by all observed variables.
+
+

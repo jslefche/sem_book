@@ -1,7 +1,7 @@
 ---
 title: "Global Estimation"
 author: "Jon Lefcheck"
-date: "November 12, 2018"
+date: "November 13, 2018"
 output: html_document
 ---
 
@@ -197,6 +197,8 @@ which removes the joint influence of $y1$ and $x1$ on $y2$, and scales this effe
 (partialx1 <- (cor(data$x1, data$y2) - (cor(data$x1, data$y1) * cor(data$y1, data$y2))) / (1 - cor(data$x1, data$y1)^2))
 ```
 
+It is important to note that partial coefficients implement a statistical (rather than experimental) control. In other words, the partial effect of $x1$ *controls for* the contributions of $y1$. Thus, partial effects are useful in implementing statistical controls in situations where experimental controls are impossible.
+
 Similarly, the partial effect of $y1$ on $y2$ is given by:
 
   $$b_{y2y1} = \frac{r_{y2y1} - (r_{y2x1} \times r_{y1x1})}{1 - r_{x1y1}^2}$$
@@ -241,7 +243,7 @@ For example, the error variance on $y2$ is:
 
 These values capture the other (unknown) sources that cause the correlation between $y2$ and the other variables to deviate from 1. In other words, if we measured all the influences on $y2$ then the prediction error would be 0 because we would have explained everything that affects variance in $y2$.
 
-This idea is nicely illustrated with the  relationship between $x1$ and $y1$, where the square-root of variance explained is simply the correlation coefficient:
+This idea is nicely illustrated with the relationship between $x1$ and $y1$, where the square-root of variance explained is simply the correlation coefficient:
 
 ```{r}
 sqrt(summary(lm(y1 ~ x1, as.data.frame(apply(data, 2, scale))))$r.squared)
@@ -249,7 +251,9 @@ sqrt(summary(lm(y1 ~ x1, as.data.frame(apply(data, 2, scale))))$r.squared)
 cor(data$y1, data$x1)
 ```
 
-This is true because there are no other predictors of $y1$. Thus, we often represent the error correlation of $y1$ as $\sqrt(1 - r^2)$. 
+This is true because there are no other predictors of $y1$. 
+
+In a path diagram, error variances are often represented as $\zeta$ with an arrow leading into the endogenous variable. The path coefficient accompanying this arrow is the error correlation, and is the square-root of the error variance: $\sqrt(1 - r^2)$. 
 
 ### Rule 6: Unanalyzed (residual) correlations among two endogenous variables are their partial correlations.
 
@@ -499,28 +503,118 @@ We now have all the pieces necessary to fit an SEM using a covariance-based appr
 library(lavaan)
 ```
 
-To demonstrate the functionality of this package, let's use the data from Grace & Keeley (2005), which is included in the *piecewiseSEM* package:
+To demonstrate the functionality of this package, let's use the data from Grace & Keeley (2006), which is included in the *piecewiseSEM* package:
+
 ```{r}
 library(piecewiseSEM)
 
 data(keeley)
 ```
 
-We wish to fit the following model:
+In their study, Grace & Keeley wanted to understand patterns in plant diversity following disturbance, in this case wildfires in California. 
+
+For purposes of exploration, let's first consider the relationship between fire severity and stand age (with older stands having more combustible materials). This is both a linear regression but also a simple SEM, and thus both can be fit using packages in R.
+
+The package to fit the SEM using covariance-based methods is called *lavaan* (for LAtent VAriable ANalysis, which we will get to in another chapter). In *lavaan*, the syntax is the same as in other modeling functions in R with one key distinction: formulae are passed as character strings. To fit a model in *lavaan*, its first necessary to break down the component models by the endogenous (response) variables and code them as characters. For example:
+
+```{r}
+keeley_formula1 <- 'firesev ~ age'
+
+class(keeley_formula1)
+```
+
+The function used to fit the model is called (unsurprisingly) `sem` and accepts the formula string and the dataset:
+
+```{r}
+keeley_sem1 <- sem(keeley_formula1, data = keeley)
+```
+
+As with any other model, the function to retrieve the output is `summary`:
+
+```{r}
+summary(keeley_sem1)
+```
+
+The output is organized into a few sections. First is the likelihood optimization method, number of parameters, the total sample size for the model, the estimator ($F_{ML}$ is the default) and the fit statistic. The model has $\chi^2 = 0$ with 0 degrees of freedom: this is because we have as many knowns as unknowns, and thus the model is just identified or saturated. To show this, we can apply the t-rule: we must estimate the two variances of the variables plus their path coefficient ($t = 3$) and know the values of the two variables ($n = 2$). So if $t \leq n(n + 1)/2$ then $3 = 2(2+1)/2 = 6/2 = 3$, therefore the model is saturated.
+
+Next up are the actual parameter estimates: the relationship between fire severity and stand age is $\beta = 0.06$ with $P < 0.001$. The model has reports the estimated error variance on the endogenous variable.
+
+We can dissect this output a little more. First, let's fit the corresponding linear model using `lm`:
+
+```{r}
+keeley_mod <- lm(firesev ~ age, data = keeley)
+
+summary(keeley_mod)$coefficients
+```
+
+You'll notice that we get the same effect of age on fire severity $\beta = 0.0596$, but we also get an intercept, which is missing from the previous input. We can force *lavaan* to return the intercept using the argument `meanstructure = T` to the `sem` function:
+
+```{r}
+summary(sem(keeley_formula1, keeley, meanstructure = T))
+```
+
+which now returns the estimate of the intercept for fire severity. This value is the same as returned by `lm`.
+
+Returning to our exploration of how path coefficients are calculated, the slope of a simple linear regression is $b_{xy} = COV_{xy}/VAR_{x}$, which we can recover from the raw data:
+
+```{r}
+cov(keeley[, c("firesev", "age")])[2, 1]/var(keeley$age)
+```
+
+Note that this value is the same returned from both `sem` and `lm`. Recall also for simple linear regression that the standardized coefficient (mean = 0 and variance = 1) is equal to the correlation:
+
+```{r}
+cor(keeley$firesev, keeley$age)
+```
+
+We can obtain the standardized coefficient from `lm` using the `coefs` function from *piecewiseSEM*:
+
+```{r}
+coefs(keeley_mod)
+```
+
+and indeed, it equals the bivariate correlation!
+
+To return the standardized coefficients using *lavaan* requires a separate function or another argument. The function is `standardizedsolution` and returns a table of the standardized coefficients:
+
+```{r}
+standardizedsolution(keeley_sem1)
+```
+
+This output does not return the raw coefficients, however, or any other information about the model that is useful in interpretation. The obtain a single output, you can pass the argument `standardize = T` to `summary`:
+
+```{r}
+summary(keeley_sem1, standardize = T)
+```
+
+Now, a few columns are added at the end to report the standardized coefficients.
+
+`standardizedsolution` also returned the error variance on fire severity, which is $1 - R^2$. However, *lavaan* also doesn't return the $R^2$ value by default, but can be retrieved using the argument `rsq = T` for `summary`:
+
+```{r}
+summary(keeley_sem1, standardize = T, rsq = T)
+```
+
+You'll note that, per Rule 5 of path coefficients, the error variance is $1 - R^2$.
+
+Now that we have covered the basics of *lavaan*, let's fit a slightly more complicated SEM. This model is a simplified subset of the full model presented by Grace & Keeley:
 
 ![keeley sem](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_full_mediation_sem.png)
+
+in which we assume that total cover of plants is a function of the severity of the burn, which in turn is informed by how old the plants are in a particular plot (which we have already investigated).
+
+
+
 
 describe data
 fit the model
 inspect output
 get indirect and total effects
-modify model
+test for mediation (full vs partial)
 re-fit
 test using chi-squared difference
 test using AIC
 
-## 1.7 Testing Mediation
+## References
 
-
-
-
+Grace, J. B., & Keeley, J. E. (2006). A structural equation model analysis of postfire plant diversity in California shrublands. Ecological Applications, 16(2), 503-514.

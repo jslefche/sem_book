@@ -78,28 +78,94 @@ So far, we have only dealt with latent variables as exogenous (predictor) variab
 
 ![latent variable](https://raw.githubusercontent.com/jslefche/sem_book/master/img/latent_variable_endo.png)
 
-The plot looks roughly similar, with some changes in the parameters: the error variance on $y$ is now $\epsilon_{y}$, while the latent variable itself is represented as $\nu$ and it has its own error $\zeta$. The presence of two errors presents a challenge: we simply don't have enough information to estimate all the unknowns here. 
+The plot looks roughly similar, with some changes in the parameters: the error variance on $y$ is now $\epsilon_{y}$, while the latent variable itself is represented as $\eta$ and it has its own error $\zeta$. The presence of two errors presents a challenge: we simply don't have enough information to estimate all the unknowns here. 
 
-In this case, we often assume no measurement error on $y$ such that $\epsilon_{y} = 0$. Consequently, $y$ becomes a prefect indicator of $\nu$ such that the reliability is total and $\lambda_{y} = 1$. We will get the calculation of $\zeta$ momentarily. We will also examine the consequences of assuming $y$ has no error.
+In this case, we often assume no measurement error on $y$ such that $\epsilon_{y} = 0$. Consequently, $y$ becomes a prefect indicator of $\eta$ such that the reliability is total and $\lambda_{y} = 1$. We will get the calculation of $\zeta$ momentarily, which involves the value of the path(s) leading into $\eta$.
 
 ## 1.2 Application of Latent Variables to Path Models
 
 Allowing both exogenous and endogenous latent variables now allows us to fit a *structural model*, or one with directed paths between latent variables. This is in contrast to a *measurement model*, which focuses solely on relating indicators to latent variables.
 
+As an example of a structural model, let's combine the two latent variable models so that the exogenous latent variable is predicting the endogenous one: 
 
+![latent structural model](https://raw.githubusercontent.com/jslefche/sem_book/master/img/latent_structural_model.png)
 
+As before, let's fix the error of $y$ to be 0 so that the loading on $\eta = 1$. We can solve the exogenous paths as before, leaving us with two parameters left: the path coefficient $\gamma$ and $\zeta$.
 
+We can solve the path coefficient $\gamma$ by knowing the estimated coefficient between $x$ and $y$ and adjusting by the loading of $x$ on $\epsilon$.
 
-multi-indicator
+Let's return to our previous example and generate some data for $y$ then estimating the (standardized) coefficient:
 
+```{r}
+x <- unlist(x.list)
 
-latent variable for measurement error
+set.seed(11)
+
+y <- rnorm(50)
+
+xy_model <- lm(y ~ x)
+
+beta <- summary(xy_model)$coefficients[2, 1]
+
+beta_std <- beta * (sd(x) / sd(y)) # standardized
+```
+
+In this example, the estimated standardized path coefficient for $x$ on $y$ is $b = 0.31$.
+
+We can obtain an estimate of gamma using the following equation:
+
+  $$\gamma = \frac{b}{\lambda}$$
+  
+Which, for our example, is:
+
+```{r}
+(gamma <- beta_std / sqrt(r))
+```
+
+So the new estimate of the coefficient between the two latent variables is $\gamma = 0.34$. From this, we can obtain the unexplained variance, or $\epsilon$. Recall that the error $\delta_{x}$ is 1 - the explained variance, where the explained variance is the reliability. Here, we can transfer this knowledge such that: $\epsilon = 1 - \gamma^2$:
+
+```{r}
+1 - gamma^2
+
+# compare to regression residual variance
+1 - summary(xy_model)$r.squared
+```
+
+The error variance based on the model incorporated measurement error in $x$ has decreased. By removing the error in $x$ from our model, we have improved our estimate of the relationship between $x$ and $y$ *and* decreased the unexplained variance.
+
+## 1.3 Latent Variables in *lavaan*
+
+Let's reproduce this example using *lavaan*. The setup is almost identical except for a new operator `=~` which indicates a latent variable. Additionally, we will fix the variance in $x$ to the known variance from our repeated trials $r = 0.196$.
+
+```{r}
+library(lavaan)
+
+latent_formula1 <- '
+xi =~ x # exogenous latent
+eta =~ y # endogenous latent
+
+eta ~ xi # path model
+
+x ~~ 0.196 * x # fix error variance
+'
+
+latent_model1 <- sem(latent_formula1, data.frame(x = x, y = y))
+
+summary(latent_model1, standardize = T, rsq = T)
+```
+
+If we examine the output, we find a poor-fitting path model, but let's ignore that for now considering these were just random data. Instead, let's focus on the estimated parameters and compare them to our hand-calculated values. 
+
+The standardized loading on $xi = 0.91$ which is very close to the value we calculated $r = 0.90$. The loading on $\eta = 1$. Notice how we didn't specify that: the default in *lavaan* is to set the first loading to 1. 
+
+With respect to the regression coefficient, *lavaan* returned $\gamma = 0.341$ while we obtained $\gamma = 0.343$. Very close! Similarly the error variance on $\eta$ is 0.884, which is also nearly identical to $1 - \gamma^2 = 0.882$. Naturally, then, the explained variances are very close, being 1 - error variance.
+
+So, all in all, for single indicator latent variables, we are able to almost exactly reproduce the output from *lavaan* (slight differences are likely due to the optimization algorithm). *lavaan*, however, provides an easier, more robust framework that easily extends to multi-indicator latent variables, and so we will use it from here on out.
+
+## 1.4 Multi-indicator Latent Variables
+
 
 
 confirmatory factor analysis
 
 For the moment, latent variables are restricted to covariance-based SEM, although we are working to extend some concepts using the piecewise framework.
-
-## 1.2 Latent Variables as Exogenous in *lavaan*
-
-## 1.3 Latent Variables as Endogenous in *lavaan*

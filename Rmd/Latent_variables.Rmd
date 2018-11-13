@@ -9,11 +9,11 @@ output: html_document
 
 *Latent variables* are variables that are unobserved, but whose influence can be summarized through one or more *indicator variables*. They are useful for capturing complex or conceptual properties of a system that are difficult to quantify or measure directly. Early applications of latent variables, for example, focused on modeling the effects of 'general intelligence,' which is an abstract concept that is impossible to actually measure, but can be approximated using scores from different tests of cognitive performance (e.g., memory, verbal, spatial, etc.).
 
-Consider the following simple example of a latent variable:
+Consider the following simple example of a latent variable, in this case exogenous (informed only by predictors):
 
-![latent variable](https://raw.githubusercontent.com/jslefche/sem_book/master/img/latent_variable.png)
+![latent variable](https://raw.githubusercontent.com/jslefche/sem_book/master/img/latent_variable_exo.png)
 
-Here, the latent variable is indicated by the circle with the quantity $\xi$. The single indicator variable is indicated by the square box, as are all observed variables. You'll note a few curiosities compared to observed-variable models. 
+Here, the latent variable is indicated by the circle marked by $\xi$. The single indicator variable is indicated by the square box, as are all observed variables. You'll note a few curiosities compared to observed-variable models. 
 
 First, the direction of causality is reversed from what you might expect: *from* the latent variables *to* the observed variable. This is because the indicator variable is simply an emergent manifestion of the underlying phenomenon represented by the latent variable.
 
@@ -33,15 +33,58 @@ However, some care should be taken when constructing latent variables. Just beca
 
 In contrast, *reliability* of the latent variable provides quantitative values with which to gauge how well an indicator reflects the latent variable. Reliability implies that the same values of the indicator would be obtained if they were continually resampled again and again. In other words, reliable indicators approach the true population mean that is the (theoretical) product of the latent variable: a perfect indicator would generate the same values every time so they would have a correlation $r = 1$. Of course, rarely do we sample the entire population or so well, and there will inevitably be some differences among our samples leading to deviations in this value away from 1. 
 
-From this correlation, we can obtain a path coefficient from the latent to the indicator variable. Recall from the "Rules of Path Coefficients" (see Chapter: Global Estimation) the the coefficient on the path from the error variance $\zeta$ is the square-root of the unexplained variance (Rule 5). In this case, we want the opposite: we want the *shared* variance between the latent and indicator variable (a lot of shared variance is what makes a good indicator!). As in the case of the error path, the path coefficient from the latent variable to the indicator is often expressed in its standardized form: the square-root of the reliability. This value is also known as the *loading*. From the reliability, we can also obtain the standardized error term $\delta_{x}$. This is the unshared variance, or 1 - the reliability.
+From this correlation, we can obtain a path coefficient from the latent to the indicator variable. Recall from the "Rules of Path Coefficients" (see Chapter: Global Estimation) the the coefficient on the path from the error variance $\zeta$ is the square-root of the unexplained variance (Rule 5). In this case, we want the opposite: we want the *shared* variance between the latent and indicator variable (a lot of shared variance is what makes a good indicator!). As in the case of the error path, the path coefficient from the latent variable to the indicator is often expressed in its standardized form: the square-root of the reliability. This value is also known as the *loading*.
 
-Imagine for an indicator variable $x$ we took some number of samples (say, 5). The average correlation among samples is $r = 0.75$, which is the reliability. The path coefficient is therefore $\sqrt(r) = \sqrt(0.76) = 0.87$. The standardized error variance on $x$ is 1 - reliability: $1 - r = 1 - 0.75 = 0.25$. For the unstandardized form, one can apply the following equation:
+From the reliability, we can also obtain the standardized error term $\delta_{x}$. This is the unshared variance, or 1 - the reliability. For the unstandardized form, one can apply the following equation:
 
   $$\delta_{x} = (1 - \lambda_{x}^2) \times VAR_{x}$$
-As with other coefficients, standardization is applied simply because multiple indicators may be measured in vastly different units, and one may wish to fairly compare the loadings.  
+As with other coefficients, standardization is applied simply because multiple indicators may be measured in vastly different units, and one may wish to fairly compare the loadings. 
+
+Let's construct a simple example. Say we sample the variable $x$ repeatedly 5 times with $n = 10$. This could be 5 sampling dates or 5 separate trials.
+
+```{r}
+set.seed(11)
+
+x <- rnorm(10)
+
+x.list <- lapply(1:5, function(i) x + runif(10, 0, 2))
+```
+
+We can compute the average correlation among all trials. This is our measure of reliability:
+
+```{r}
+combos <- combn(1:5, 2)
+
+cors <- c()
+
+for(i in 1:ncol(combos)) cors <- c(cors, cor(x.list[[combos[1, i]]], x.list[[combos[2, i]]]))
+
+(r <- mean(cors)) 
+```
+
+From this value, we can obtain the path coefficient and the (standardized error variance):
+
+```{r}
+sqrt(r) # path coefficient
+
+1 - r # standardized error variance
+
+(1 - r) * var(unlist(x.list)) # unstandardized error variance
+```
   
 In summary: the standardized coefficient (the loading) linking indicator to latent variables is the square-root of the relability. The standardized error variance is 1 - reliability.
 
+So far, we have only dealt with latent variables as exogenous (predictor) variables, but they can also act as endogenous (response) variables. Here is an example endogenous latent variable:
+
+![latent variable](https://raw.githubusercontent.com/jslefche/sem_book/master/img/latent_variable_endo.png)
+
+The plot looks roughly similar, with some changes in the parameters: the error variance on $y$ is now $\epsilon_{y}$, while the latent variable itself is represented as $\nu$ and it has its own error $\zeta$. The presence of two errors presents a challenge: we simply don't have enough information to estimate all the unknowns here. 
+
+In this case, we often assume no measurement error on $y$ such that $\epsilon_{y} = 0$. Consequently, $y$ becomes a prefect indicator of $\nu$ such that the reliability is total and $\lambda_{y} = 1$. We will get the calculation of $\zeta$ momentarily. We will also examine the consequences of assuming $y$ has no error.
+
+## 1.2 Application of Latent Variables to Path Models
+
+Allowing both exogenous and endogenous latent variables now allows us to fit a *structural model*, or one with directed paths between latent variables. This is in contrast to a *measurement model*, which focuses solely on relating indicators to latent variables.
 
 
 

@@ -11,6 +11,29 @@ output: html_document
 
 Consider the following simple example of a latent variable:
 
+![latent variable](https://raw.githubusercontent.com/jslefche/sem_book/master/img/latent_variable.png)
+
+Here, the latent variable is indicated by the circle with the quantity $\xi$. The single indicator variable is indicated by the square box, as are all observed variables. You'll note a few curiosities compared to observed-variable models. 
+
+First, the direction of causality is reversed from what you might expect: *from* the latent variables *to* the observed variable. This is because the indicator variable is simply an emergent manifestion of the underlying phenomenon represented by the latent variable.
+
+Second, there is an error $\delta$ associated with the indicator. This implies that the indicator is an imperfect approximation of the latent construct. 
+
+Thus, the latent variable can be related in the following equation:
+
+  $$x = \lambda \xi + \delta_{x}$$
+  
+In other words, the values of $x$ are the result of the latent variable proportional to $\lambda$ (its effect on $x$) plus some error $\delta_{x}$.
+  
+A simple example of a latent-indicator relationship would be body size (latent) and body mass (indicator). There are obviously many aspects to body size that may be difficult to quanify, such as shape, volume, complexity, and so on. However, body mass is a simple, measurable consequence of these unmeasured characteristics, and thus can be thought to latently indicate body size. However, because we cannot perfectly measure body mass (there will always be some error associated with observed variables), we must incorporate that measurement error into our model of body size.
+
+This example reinforces the point that latent variables often are used to represent concepts. Body size is often invoked in lots of ecological theory (e.g., metabolic theory, Bergmann's rule), but is almost always represented as some easily measurable quantity such as body mass rather than the complex, multidimensional construct that it is in reality. Latent variable modeling allows us to better approach that multidimensional construct by integrating a series of indicator variables that arise from the general concept of body size (e.g., mass, length, width, etc.). It therefore is a powerful tool that is better positioned to integrate theory and observation than past approaches.
+
+However, some care should be taken when constructing latent variables. Just because we call a latent variable something does not always mean it *is* that thing For example, the latent variable body size as indicated by total abundance might appear legitimate--high abundances may constrain body sizes under limited resources--but is abundance *really* an indicator of this phenomenon? Can we go on to evaluate ecological theory about metabolic scaling on the basis of abundances? Probably not. So care should be taken when selecting latent variables and identifying appropriate indicators.
+
+
+
+
 
 
 For the moment, latent variables are restricted to covariance-based SEM, although we are working to extend some concepts using the piecewise framework.

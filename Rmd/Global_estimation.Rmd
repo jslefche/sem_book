@@ -251,9 +251,9 @@ sqrt(summary(lm(y1 ~ x1, as.data.frame(apply(data, 2, scale))))$r.squared)
 cor(data$y1, data$x1)
 ```
 
-This is true because there are no other predictors of $y1$. 
+(This is true because there are no other predictors of $y1$.) Thus, 1 - this value is the unexplained correlation between the two arising from other sources.
 
-In a path diagram, error variances are often represented as $\zeta$ with an arrow leading into the endogenous variable. The path coefficient accompanying this arrow is the error correlation, and is the square-root of the error variance: $\sqrt(1 - r^2)$. 
+In a path diagram, error variances are often represented as $\zeta$ with an arrow leading into the endogenous variable. The path coefficient is the unexplained variance, but is often expressed as the error correlation: $\sqrt(1 - R^2)$, in keeping with the presentation of the other (standardized) coefficients.
 
 ### Rule 6: Unanalyzed (residual) correlations among two endogenous variables are their partial correlations.
 

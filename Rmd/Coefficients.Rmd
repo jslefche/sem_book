@@ -98,7 +98,77 @@ coefs(xy_model, standardize = "range")
 
 In both cases, we obtain a $b = 0.0981$ suggesting that a full shift in $x$ along its range would only result in a shift of 10% along the range of $y$.
 
+Both scale and relevant range-standardization only apply when the response is normally-distributed. If not, we must make some assumptions in order to obtain standardized coefficients. Let's start with binomial responses.
+
 ## 1.4 Binomial Response Models
+
+Binomial responses are those that are binary (0, 1) such as success or failure, present or absent, and so on. What is unique about them is that they do not have a linear relationship with a predictor $x$. Instead, they are best modeled using a sigmoidal curve. To demonstrate, let's generate some data and fit a curve:
+
+```{r}
+set.seed(44)
+
+x <- rnorm(20)
+
+x <- x[order(x)]
+
+y <- c(rbinom(10, 1, 0.8), rbinom(10, 1, 0.2))
+
+glm_model <- glm(y ~ x, "binomial")
+
+xpred <- seq(min(x), max(x), 0.01)
+
+ypred <- predict(glm_model, list(x = xpred), type = "response")
+
+plot(x, y)
+
+lines(xpred, ypred)
+```
+
+Clearly these data are not linear, and modeling them as such would violate the assumptions of the test. Instead, as you can see, we fit them to a binomial distribution using a generalized linear model (GLM).
+
+GLMs consist of three parts: (1) the random component, or the expected values of the response based on their underlying distribution, (2) the systematic component that represents the linear combination of predictors, and (3) the link function, which links the expected values of the response (random component) to the linear combination of predictors (systematic component). 
+
+Basically, the link functions take something inherently non-linear and attempts to linearize it. This can be shown by plotting the predictions on the link-scale:
+
+```{r}
+ypred_link <- predict(glm_model, list(x = xpred), type = "link")
+
+plot(xpred, ypred_link)
+```
+
+Note how the line is no longer sigmoidal, but straight!
+
+For binomial responses, there are two kinds of link functions: logit and probit. We'll focus on the logit link for now because its more common. With this link, the coefficients are in units of logits or the *log odds ratio*, which reflect the log of the probability of observing an outcome (e.g., 1) relative to the probability of not observing it (e.g., 0). 
+
+Often these coefficients are reverted to just the odds ratio by taking the exponent, which yields the proportional change in the probablity observing one outcome (1) with some change unit change in the predictor.
+
+Say, for example, we have a coefficient $\beta = -0.12$. A 1 unit change in $x$ would result in $exp(-0.12) = 0.88 \times 100%$ or 88% reduction in the odds of observing the outcome (1).
+
+The problem is that (log) odds ratios are not comparable across models, and its unclear how they might be standardized, since the coefficient is on the link (linear) scale, while the only variance we can compute is from the raw data, which is on the non-linear scale. Thus, we need to find some sway to obtain estimates of variance on the same scale as the coefficient.
+
+One approach is to consider that for every value of $x$, there is an underlying probability distribution of observing a 0 or a 1. The mean of these distributions is where a particular outcome is *most* likely. Let's say at low values of $x$ we observe 0, at at high values of $x$ we observe 1. If we order $x$, the mean probabilities give rise to a linear increase in observing 1 with increasing $x$. 
+
+This linear but latent variable, which we call $y^*$, is therefore related to the observed values of $x$ through a vector of linear coefficients $\beta$ as in any other linear model:
+
+  $$y^*_{i} = x_{i}\beta + \epsilon_{i}$$
+
+The problem is, we can never observe this linear underlying or *latent propensity*, and so we must approximate it, At some value of $x$, this probability is evenly split at 50/50: we call this cutpoint $\tau$. Below $\tau$ we are more likely to observe 0 in our example, while above $\tau$ we are more likely to observe 1. 
+
+Since latent variables are unobserved, we also make some assumptions about their error variance. In the chapter on Latent Variable Modeling, we often fixed their error variance to 1. In this case, there are theoretically-derived error variances depending on the link function: for the probit link, the error variance $\epsilon = 1$, while for the logit link, $\epsilon = \pi^2/3$.
+
+Regardless of the type of standardization, we need to know about the range or variance of the response. With our knowledge of $y^*_{i}$ and the theoretical error variances, we have all the information needed to perform achieve the variance on the link (linear) scale.
+
+The variance in $y^*$ is the sum of the variance of the predictions (on the linear scale) *plus* the theoretical error variance. For a logit link, then:
+
+  $$\sigma_{y^*_{i}}^2 = \sigma_{x\beta}^2 + \pi^2/3$$
+  
+Take the square-root of this quantity gives the standard deviation of $y$ on the linear scale for use in scale standardization: $\sqrt(\sigma_{x\beta}^2 + \pi^2/3)$, or alternately, the range of $y^*$ to use in relevant range standardization.
+
+Incidentally 
+
+
+
+
 
 
 

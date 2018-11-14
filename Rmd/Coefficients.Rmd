@@ -1,0 +1,41 @@
+---
+title: "Coefficients"
+author: "Jon Lefcheck"
+date: "November 14, 2018"
+output: html_document
+---
+
+## 1.1 Unstandardized and STandardized Coefficients
+
+Path (or regression) coefficients are the inferential engine behind structural equation modeling, and by extension all of linear and some non-linear statistics. They relate changes in the dependent variable $y$ to changes in the independent variable $x$, and thus act as a measure of association. In fact, you may recall from the chapter on Global Estimation that, in specific cases, path coefficients can be expressed as (partial) correlations. They also allow us to generate predictions for new values of $x$ and thus are useful in testing and extrapolating model results.
+
+There are two kinds of regression coefficients: unstandardized, or raw coefficients, and standardized coefficients.
+
+Unstandardized coefficients are the easiest to derive as they are the default values returned by all statistical programs. In short, they reflect the expected (linear) change in the response with each unit change in the predictor. For a coefficient value $\beta = 0.5$, for example, a 1 unit change in $x$ there is, on average, an 0.5 unit change in $y$.
+
+In models with more than one independent variable (e.g., $x1$, $x2$, etc), the coefficient reflects the expected change in $y$ *given* the other variables in the model. This implies that the effect of one particular variable controls for the presence of other variables, generally by holding them constant at their mean. This is why such coefficients are referred to as *partial* regression coefficients, because they reflect the independent (or partial) contributions of one particular variable.
+
+One tricky aspect to interpretation involves transformations. When the log-transformation is applied, for example, the relationships between the variable are no longer linear. This means that we have to change our interpretation slightly. When $y$ is log-transformed, the coefficient $\beta$ is interpreted as a 1 unit change in $x$ leads to a $(exp(\beta) - 1) \times 100%$ change in $y$. Oppositely, when the independent variable $x$ is log-transformed, $\beta$ is interpreted as a 1% change in $x$ leads to a $\beta$ increase in $y$. Finally, when both are transformed, both are expressed in percentages: a 1% change in $x$ leads to a $(exp(\beta) - 1) \times 100%$ change in $y$. Transformations often confound intrepretation, so it is worth mentioning.
+
+In contrast, standardized coefficients are expressed in equivalent units, regardless of the original measurements. Often these are in units of standard deviations of the mean (scale standardization) but, as we shall see shortly, there are other possibilities. 
+
+The goal of standardization is to increase comparability. In other words, the magnitude of standardized coefficients can be directly compared to make inferences about the relative strength of relationships.
+
+In SEM, it is often advised to report both unstandardized and standardized coefficients, because they present difference information. Unstandardized coefficients contain information about both the variance *and* the mean, and thus are essential for prediction. Along these lines, they are also useful for comparing across models fit to the same variables, but using different sets of data. Because the most common form of standardiation concerns scaling by the sample standard deviations, data derives from different sources have different sample variances,  their standardized coefficients are not comparable.
+
+Unstandardized coefficients are also most related to the phenomenon of interest in the units that are relevant to the outcome. Imagine telling someone that 1 standard deviation change in nutrient input levels would result in a 6 standard deviation change in water quality. That might seem impressive until it becomes clear that the size of the dataset has reduced the variance, and the absolutely relationship reveals only a very tiny change in water quality with each unit change in nutrient levels. 
+
+In contrast, standardized effects are useful for comparing the relative magnitude of change associated with different paths in the same model. Care should be taken not to interpret these relationships as the 'proportion of variance explained' but rather in terms of relative influence on the mean of the response. 
+
+By extension, standardization is necessary to compare indirect or compound effects among different paths in the same model. This is because those paths could be measured in very different units. Imagine, for example, wanting to compare the relative effect of direct vs. indirect pathways in a partially-mediate dmodel.
+
+In contrast, comparing the strength of indirect or compound effects across the same path in different models *requires* unstandardized coefficients, due to the issue of different sample variances raised above. Comparing the same path across different models using standardizd coefficients would require a demonstration that the sample variances are not significantly different (or that the entire population has been sampled).
+
+## 1.2 Scale Standardization
+
+
+## 1.3 Range Standardization
+
+## 1.4 Binomial Response Models
+
+## 1.5 Scaling to Other Non-Normal Distributions

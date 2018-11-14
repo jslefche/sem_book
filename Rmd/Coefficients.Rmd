@@ -148,6 +148,8 @@ The problem is that (log) odds ratios are not comparable across models, and its 
 
 One approach is to consider that for every value of $x$, there is an underlying probability distribution of observing a 0 or a 1. The mean of these distributions is where a particular outcome is *most* likely. Let's say at low values of $x$ we observe 0, at at high values of $x$ we observe 1. If we order $x$, the mean probabilities give rise to a linear increase in observing 1 with increasing $x$. 
 
+![latent propensity](https://raw.githubusercontent.com/jslefche/sem_book/master/img/coefficients_latent_propensity.png)
+
 This linear but latent variable, which we call $y^*$, is therefore related to the observed values of $x$ through a vector of linear coefficients $\beta$ as in any other linear model:
 
   $$y^*_{i} = x_{i}\beta + \epsilon_{i}$$

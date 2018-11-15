@@ -202,9 +202,9 @@ Here, because we did not specify it, the error variance of $x$ has automatically
 
 To start, the standardized $\gamma = 0.590$, which is lower than the $\gamma = 0.608$ we obtained when incorporating measurement error on $x$, but higher than the standardized coefficient from a simple linear regression $b = 0.544$. 
 
-The error variance on $\eta$ ($\zeta = 0.652$) is also lower than the unexplained variance from the linear regression ($1 - R^2 = 0.704$), but higher than in the measurement model incorpoting error on $x$ ($\zeta = 0.630$).
+The error variance on $\eta$ ($\zeta = 0.652$) is also lower than the unexplained variance from the linear regression ($1 - R^2 = 0.704$), but higher than in the latent variable model incorpoting error on $x$ ($\zeta = 0.630$).
 
-The *unstandardized coefficient*, however, is unchanged: $\beta = 0.792$. This is in contrast to the earlier measurement model, where the unstandardized estimate was 0.989.
+The *unstandardized coefficient*, however, is unchanged: $\beta = 0.792$. This is in contrast to the earlier latent variable model, where the unstandardized estimate was 0.989.
 
 Thus, we see that incorporating measurement error in endogenous latent variables resolves some of the downward bias in the unstandardized coefficient and error variance, but not the unstandardized coefficient. This difference emphasizes the need to report both standardized and unstandardized coefficients when constructing a path model (see Chapter: Coefficients).
 
@@ -231,11 +231,11 @@ We know the values of $x1$ and $x2$ and only know the correlation between them. 
   
 where $t = 4$ is the number of unknowns, and $n = 2$ is the number of knowns. In this example, $t = 4 \leq 3$ does not hold.
 
-Since $\delta = 1 - \lambda^2$, we need only solve for the two $\lambda$s, but we only have 1 piece of information: the correlation. The solution is to set the loadings to be equal: $lambda_{1} = \lambda_{2}$.
+Since $\delta = 1 - \lambda^2$, we need only solve for the two $\lambda$s, but we only have 1 piece of information: the correlation. The solution is to set the loadings to be equal: $lambda_{1} = \lambda_{2}$. This is because, with only this information, we have no reason to suspect one indicator is more correlated with the latent variable than the other. Its important to note here that the two must be *positively* correlated (or scaled to be so), otherwise setting them to be equal is not a valid assumption.
 
 We know from our "Rules of Path Coefficients" that the correlation equals the sum of the direct and indirect pathways (Rule 9). The only path connecting $x1$ and $x2$ is through $\epsilon$, and the value of the compound path is the product of the two individual pathways (Rule 3). Thus, the correlation $r_{x1,x2} = lambda_{1} \times \lambda_{2}$. Given the assumption that the two loadings are equal, $r_{x1,x2} = \lambda^2$ and thus $\lambda = \sqrt(r_{x1,x2})$.
 
-Because we have no reason to suspect one indicator is more correlated with the latent variable than the other, we can scale this procedure for >2 indicators by setting only 2 loadings to be equal: this will give us the necessary information (along with Rule 8 of path coefficients) to generate unique solutions for the other loadings. It is for this reason that at least three indicators are preferred for multi-indicator latent variables: it lessens the impact of the assumption that two loadings are equal.
+We can scale this procedure for >2 indicators by setting just the 2 loadings to be equal: this will give us the necessary information (along with Rule 8 of path coefficients) to generate unique solutions for the other loadings. It is for this reason that at least three indicators are preferred for multi-indicator latent variables: it lessens the impact of the assumption that two loadings are equal.
 
 An better solution is to fix one of the loadings to be 1. If, for example, we fix $\lambda_{1} = 1$ then we know that $\lambda_{2} = r_{x1,x2} / \lambda_{1} = r_{x1,x2} / 1 = r_{x1,x2}$. 
 
@@ -251,10 +251,11 @@ For the record, a reliability index > 0.9 is considered 'excellent', > 0.8 to be
 
 In fact, it is always recommended to inspect the correlation matrix among indicator variables to screen for potentially unrelated indicators. It may also help to identify indicators that are highly correlated, moreso than the other indicators. Such high correlations might suggest another common cause (such as the same measurement instrument, same observer, evolutionary constraints, etc.). In this case, it would be recommended to indicate a 'correlated error' among the two indicators indicating an underlying driver of their higher-than-average association beyond that imparted by the latent construct.
 
+When we get into the realm of multi-indicator latent variables, it becomes impossible to decompose partial relationships as we have previously for observed variable models (see Chapter: Global Estimation). Instead, maximum-likelihood functions are necessary to iteratively test and optimize the parameters that describe the relationships between observed and unobserved quantities.
+
+As in observed-variable models, maximum-likelihood estimators ($F_{ML}$) can be used to construct a $\chi^2$ statistic that is the difference between the observed and model-implied variance-covariance matrices (see Chapter: Global Estimation). In the case of latent variable models, the covariances among latent variables as well as the loadings are considered in constructing the estimated covariance matrix. Beyond that, the procedure is the same as for observed variable models in terms of calculating $\chi^2$ and testing it against the $\chi^2$-distribution with some model degrees of freedom.
 
 
-
-When to use multiple indicators
 
 
 
@@ -263,3 +264,85 @@ When to use multiple indicators
 Multi-indicator latent variables can also be used to the test the hypothesis that a suite of indicator variables are generated by the same underlying process. This is also called *confirmatory factor analysis*. In other words, you are testing the idea that the latent variable has given rise to emergent properties that, by virtue of a common cause, are correlated. This approach concerns only the *measurement model* and thus is a precursor to evaluation of any structural models in which the latent variables appear.
 
 In contrast, *exploratory factor analysis* assumes that all latent variables are indicated by all observed variables.
+
+
+
+
+
+## 1.7 Travis & Grace (2010): An Example
+
+Let's apply these concepts to an example dataset from Travis & Grace (2010). In this example, the authors transplanted individuals of the salt marsh plant *Spartina alterniflora* and measured their performance relative to local populations. In this case, performance was capturde by a number of variables including: stem density, the number of inflourescens, clone diameter, leaf height, and leaf width. The difference between transplants and local individuals was quantified using their genetic dissimilarity.
+
+In this case, the authors considered 'performance' to be a latent construct that manifests in the five indicators listed above:
+
+![travis latent](https://raw.githubusercontent.com/jslefche/sem_book/master/img/latent_variable_travis_performance.png)
+
+Let's first explore this latent construct before getting into the structural model. First, let's examine the raw correlations to see if this construct is justifiable:
+
+```{r}
+travis <- read.csv("./data/travis.csv")
+
+cor(travis[, 4:8])
+```
+
+The correlations range from 0.65-0.93, suggesting that these variables may be generated by the same process. There is nothing excessively correlated (e.g., 0.99) suggesting influence by another process.
+
+Now that we have qualitatively assessed the *validity* of the latent model, let's fit it and examine the output:
+
+```{r}
+travis_latent_formula1 <- 'performance =~ stems + infls + clonediam + leafht + leafwdth'
+
+travis_latent_model1 <- sem(travis_latent_formula1, travis)
+
+summary(travis_latent_model1)
+```
+
+Note that the first loading has been restricted to 1 for purposes of identifiability.
+
+First, we note that the model is a poor fit ($P < 0.001$). We can explore why this is using modification indices:
+
+```{r}
+print(modindices(travis_latent_model1))
+```
+
+Recall taht the value of the modification index (`mi` in the output) is the expected *decrease* in the model $\chi^2$. Here, a larger number would imply a better fit. It seems there is a strong implied correlation between leaf height and leaf width, presumably arising from common constraints on how the leaves of *Spartina* have evolved and the limited variety of shapes they can take, and not the plant's performance.
+
+We can introduce this correlation into the model and re-fit:
+
+```{r}
+travis_latent_formula2 <- '
+performance =~ stems + infls + clonediam + leafht + leafwdth
+leafht ~~ leafwdth
+'
+
+travis_latent_model2 <- sem(travis_latent_formula2, travis)
+
+summary(travis_latent_model2)
+```
+
+Introducing this correlated error has now reduced the $\chi^2$ statistic to an acceptably low level ($P = 0.116$). Thus, we have arrived at a legitimate latent construct of plant performance, which we can now use to evaluate some broader hypotheses.
+
+If you recall, the authors' original intent was to explore how native vs. non-native genotypes of *Spartina* influenced performance, which they quantified using a measure of genetic distance from the local population. To test this hypothesis, let's fit the following path model: 
+
+![travis path model](https://raw.githubusercontent.com/jslefche/sem_book/master/img/latent_variable_travis_path.png)
+
+Let's fit the above model:
+
+```{r}
+travis_path_formula1 <- '
+# latent
+performance =~ stems + infls + clonediam + leafht + leafwdth
+
+# structural paths
+performance ~ geneticdist
+
+# correlated errors
+leafht ~~ leafwdth
+'
+
+travis_path_model1 <- sem(travis_path_formula1, travis)
+
+summary(travis_path_model1)
+```
+
+It seems that this model fits the data well ($P = 0.141$) and the relationship of interest, between genetic distance and performance, is highly significant ($P < 0.001$). In this case, the more unlike the local population the transplants were (greater genetic distance), the worse they performed.

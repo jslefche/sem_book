@@ -90,15 +90,18 @@ As a first pass, let's fix the loadings of $x1$ and $x2$ to the values from the 
 
 ```{r}
 comp_formula2 <- '
-composite <~ x1 + x2
+composite <~ -0.831 * x1 + 0.675 * x2
 
 y ~ composite
 '
 
 comp_model2 <- sem(comp_formula2, data.frame(y, x1, x2))
 
-summary(comp_model2)
+summary(comp_model2, standardize = T)
 ```
 
+It seems *lavaan* has fixed the variance on the composite variable to 0 automatically. Moreover, the unstandardized coefficient is still 1 but the standardized coefficient is 0.238. 
+
+An alternative is to set the first loading to 1. This helps with identifiability but if the true value is far from 1, it may lead to non-convergence. In this case, computing the loadings by hand using multiple regression is needed.
 
 

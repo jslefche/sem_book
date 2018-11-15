@@ -5,3 +5,29 @@ date: "November 15, 2018"
 output: html_document
 ---
 
+Composite variables are another way, besides latent variables, to represent complex concepts in structural equation modeling. The most important distinction between the two is that, while latent variables give rise to measurable manifestations of an unobservable concept, compositive variables arise from the combined influence of other variables. This is best illustrated by an example composite variable:
+
+![composite variable](https://raw.githubusercontent.com/jslefche/sem_book/master/img/composite_variable_composite.png)
+
+Here the arrows are leading *into*, not out of, the composite variable $\eta$, indicating that the composite variable is made up of the influences of the three example variables.
+
+If the composite is *entirely* made up of the three influences, it can be said to have no error. An example might be the two levels of a treatment (present/absent) that lead into a single composite variable called 'Treatment.' In this case, there are no other levels of treatment because you, as the investigator, did not apply any. Thus the composite 'Treatment' captures the full universe of treatment possibilities given the data.
+
+In other cases, the property might arise from the collective influence of variables but is not without error. For example, the idea of soil condition arises from different aspects of the soil: its pH, moisture, grain size, and so on. However, one might measure only some of these, and thus there remain other factors (nitrogen content) that might contribute to the notion of soil condition. In this case, the composite *would* have error and is therefore known as a *latent composite*.
+
+The benefit of such an approach is that complicated ideas can be distilled into discrete *blocks* that are easier to present and discuss. For example, it is easier to talk about the effects of the experimental treatment on soil condition, rather than the effect of treatment 1 on soil moisture, the effect of treatment 1 on soil pH, the effect of treatment 1 on soil grain size, and so on.
+
+In this way, the composite harkens back to the early meta-model, or broad conceptual relationships that inform the parameterization of the structural path model. In fact, in populating the meta-model, you may wish to consider those broad concepts as composites when fitting the model, rather than modeling all relationships among all observed variables.
+
+Selecting among latent, latent composite, and composite variables comes down to the concept in question, the presumed direction of causality, and the nature of the indicators.
+
+For the soil example, consider: is it that there is a common difference among soils driving variation in pH, moisture, etc.? Or is it that pH, moisture, etc. are all independent properties that combine to inform soil condition? If the goal is measure plant growth in potting soils from different manufacturers, then manufacturer might be the common source of variation and a latent variable more appropriate. If the observer is visiting different sites and measuring conditions that describe the soil in each place, then perhaps a composite variable is warranted.
+
+Another way of thinking about this is whether the indicators are interchangeable. In other words, does soil pH tell us the same information as soil moisture? If so, then they might be indicators of the same latent phenomenon. If not, and they contain unique information, then they likely combine to form a composite variable.
+
+Finally, do the indicators co-vary? If they are under common control of a latent variable, then changing one should alter all the others. If they are relatively independent--for example, one can change grain size without changing nutrient content--then causation likely flows into a composite (rather than out of a latent) variable.
+
+
+
+
+

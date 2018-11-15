@@ -346,3 +346,7 @@ summary(travis_path_model1)
 ```
 
 It seems that this model fits the data well ($P = 0.141$) and the relationship of interest, between genetic distance and performance, is highly significant ($P < 0.001$). In this case, the more unlike the local population the transplants were (greater genetic distance), the worse they performed.
+
+## References
+Travis, S. E., & Grace, J. B. (2010). Predicting performance for ecological restoration: a case study using Spartina alterniflora. Ecological Applications, 20(1), 192-204.
+

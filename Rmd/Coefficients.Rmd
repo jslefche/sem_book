@@ -211,6 +211,7 @@ You'll note that the observation-empirical approach yields a smaller coefficient
 As it turns out, the latent-theoretic approach has one further benefit: we can extend it to other distributions (as they all have their own theoretical error variances) *and* mixed-effects models where we must also incorporate the random components.
 
 ## References
+
 Grace, J. B., Johnson, D. J., Lefcheck, J. S., & Byrnes, J. E. (2018). Quantifying relative importance: computing standardized effects in models with binary outcomes. Ecosphere, 9(6), e02283.
 
 Scott Long, J. (1997). Regression models for categorical and limited dependent variables. Advanced quantitative techniques in the social sciences, 7.

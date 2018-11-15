@@ -314,4 +314,5 @@ You'll note that the *piecewiseSEM* output does not return a goodness-of-fit tes
 To draw inference about the study system, we would say that two paths differ among groups and one path does not. We would then report the two path models parameterized using the coefficient output (with the $elev -> rich$ path having the same coefficient in both groups). We would report that richness is affected by elevation and biomass under ungrazed conditions, but not under grazed conditions, where only elevation directly influences richness.
 
 ## References
+
 Grace, J. B., & Jutila, H. (1999). The relationship between species density and community biomass in grazed and ungrazed coastal meadows. Oikos, 398-408.

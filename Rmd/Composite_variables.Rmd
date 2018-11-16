@@ -126,8 +126,71 @@ For this reason, it is generally recommended that one compute the loadings by ha
 
 ## 1.3 Grace & Keeley Revisited: A Worked Example
 
+Recall from the chapter on "Global Estimation" that Grace & Keeley (2006) were interested in the factors that mediated recovery of shrublands post-fire disturbance. In that chapter, we fit a sub-model of their larger model, and we'll fit a different sub-model in this chapter.
+
+In their model, they used plant cover to predict plant species richness. Let's assume for a moment that the relationship between cover and richness may be non-linear: its not until a certain amount of cover that rarer species begin to appear, for example. In this case, we might suppose there are both linear $cover$ and non-linear $cover^2$ components to the model. Composite variables are a nice way to summarize both the linear and non-linear effects.
+
+Let's fit the following composite variable:
+
+![keeley composite](https://raw.githubusercontent.com/jslefche/sem_book/master/img/composite_variable_keeley.png)
+
+Here we have a composite that summarizes the unsquared and squared values of cover, which then goes on to predict richness.
+
+Let's adopt the two-step approach and first fit a linear model.
+
+```{r}
+library(piecewiseSEM)
+
+data(keeley)
+
+cover_model <- lm(rich ~ cover + I(cover^2), keeley)
+
+summary(cover_model)
+```
+
+It seems both the unsquared and squared values of cover significantly predict richness, so we are justified in including both as indicators to our composite variable. Now we extract the coefficients, use them to generate the factor scores, and finally use those scores to predict richness.
+
+```{r}
+beta_cover <- summary(cover_model)$coefficients[2, 1]
+
+beta_cover2 <- summary(cover_model)$coefficients[3, 1]
+
+composite <- beta_cover * keeley$cover + beta_cover2 * (keeley$cover)^2
+
+summary(lm(rich ~ composite, data = data.frame(keeley, composite)))
+```
+
+As would be expected from the multiple regression, the composite term significantly predicts richness ($P < 0.001$). Let's use the `coefs` function from *piecewiseSEM* to obtain the standardized coefficient:
+
+```{r}
+coefs(lm(rich ~ composite, data = data.frame(keeley, composite)))
+```
+
+So a 1 SD change in the total cover effect would result in a 0.400 SD change in plant richness.
+
+We can alternately fit the model with *lavaan* using the same coefficients from the multiple regression:
+
+```{r}
+# create a new non-linear variable for cover^2
+keeley$coversq <- keeley$cover^2
+
+keeley_formula1 <- '
+composite <~ 58 * cover + -28.578 * coversq
+
+rich ~ composite
+'
+
+keeley_model1 <- sem(keeley_formula1, keeley)
+
+summary(keeley_model1, standardize = T)
+```
+
+We obtain the same standardized coefficient (0.400) as through the manual calculation.
 
 ## 1.4 Composites in *piecewiseSEM*
 
+For the moment, composites are not directly implemented in *piecewiseSEM* but we hope to shortly. In the interim, it is easy to compute them by hand, as above, extract the predicted scores, and use them as any other predictor. 
 
+## References
 
+Grace, J. B., & Keeley, J. E. (2006). A structural equation model analysis of postfire plant diversity in California shrublands. Ecological Applications, 16(2), 503-514.

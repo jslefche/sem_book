@@ -1,17 +1,19 @@
 ---
 title: "Composite Variables"
 author: "Jon Lefcheck"
-date: "November 15, 2018"
+date: "November 16, 2018"
 output: html_document
 ---
 
 ## 1.1 What is a Composite Variable?
 
-Composite variables are another way, besides latent variables, to represent complex concepts in structural equation modeling. The most important distinction between the two is that, while latent variables give rise to measurable manifestations of an unobservable concept, compositive variables arise from the combined influence of other variables. This is best illustrated by an example composite variable:
+Composite variables are another way, besides latent variables, to represent complex concepts in structural equation modeling. The most important distinction between the two is that, while latent variables give rise to measurable manifestations of an unobservable concept, composite variables arise from the combined influence of other variables. 
+
+Consider the following composite variable $\eta$:
 
 ![composite variable](https://raw.githubusercontent.com/jslefche/sem_book/master/img/composite_variable_composite.png)
 
-Here the arrows are leading *into*, not out of, the composite variable $\eta$, indicating that the composite variable is made up of the influences of the three example variables. Note: in this and other presentations, the composite is denoted by a hexagon, but can sometimes be an oval as it is a form of a latent variable (as we shall see).
+Here the arrows are leading *into*, not out of, $\eta$, indicating that the composite variable is made up of the influences of the three example variables. Note: in this and other presentations, the composite is denoted by a hexagon, but can sometimes be an oval as it can technically be a form of a latent variable.
 
 If the composite is *entirely* made up of the three influences, it can be said to have no error. An example might be the two levels of a treatment (present/absent) that lead into a single composite variable called 'Treatment.' In this case, there are no other levels of treatment because you, as the investigator, did not apply any. Thus the composite 'Treatment' captures the full universe of treatment possibilities given the data.
 
@@ -21,7 +23,7 @@ The benefit of such an approach is that complicated ideas can be distilled into 
 
 In this way, the composite harkens back to the early meta-model, or broad conceptual relationships that inform the parameterization of the structural path model. In fact, in populating the meta-model, you may wish to consider those broad concepts as composites when fitting the model, rather than modeling all relationships among all observed variables.
 
-Selecting among latent, latent composite, and composite variables comes down to the concept in question, the presumed direction of causality, and the nature of the indicators.
+Selecting between latent and composite variables comes down to the concept in question, the presumed direction of causality, and the nature of the indicators.
 
 For the soil example, consider: is it that there is a common difference among soils driving variation in pH, moisture, etc.? Or is it that pH, moisture, etc. are all independent properties that combine to inform soil condition? If the goal is measure plant growth in potting soils from different manufacturers, then manufacturer might be the common source of variation and a latent variable more appropriate. If the observer is visiting different sites and measuring conditions that describe the soil in each place, then perhaps a composite variable is warranted.
 
@@ -29,22 +31,22 @@ Another way of thinking about this is whether the indicators are interchangeable
 
 Finally, do the indicators co-vary? If they are under common control of a latent variable, then changing one should alter all the others. If they are relatively independent--for example, one can change grain size without changing nutrient content--then causation likely flows into a composite (rather than out of a latent) variable.
 
-Now that we have defined a composite variable, let's see how to make one!
+Now that we have defined a composite variable, let's see how to make one.
 
 ## 1.2 Constructing a Composite Variable
 
-Compared to latent variables, a composite variable is actually very easy: its simply the sum of its indicators, hence the term *composite*.
+Compared to latent variables, a composite variable is actually very easy to estimate: it is simply the sum of its indicators, hence the term *composite*.
 
 The way in which the indicators are summed depends on whether they are expected to have the same weight (a *fixed composite*) or different weights (a *statistical composite*). The former might be something like species relative abundances. The latter is what we will focus on here.
 
-The weights for the composite are easily acquired as they are the values that maximize the explained variance in some response. We have done this before many times: we're talking about maximum-likelihood fitting.
+The weights for the composite are easily acquired as they are the values that maximize the explained variance in some response. We have done this before many times using maximum-likelihood fitting.
 
 In fact, statistical composites can be boiled down to the coefficients from a multiple regression. The ML fitting function chooses parameter estimates for each predictor that maximize the likelihood of obseving the response. Those values serve as the loadings for the indicators of the composite variable. The data for each indicator are multipled by their loading and summed to generate the factor scores for the composite variable, which is then used in the structural model.
 
 Let's demonstrate using some random data:
 
 ```{r}
-set.seed(4)
+set.seed(8)
 
 y <- rnorm(50)
 x1 <- rnorm(50)
@@ -68,40 +70,64 @@ These values can then used to predict the response:
 summary(lm(y ~ composite))
 ```
 
-Note how the unstandardized coefficient is 1. This is because____________. Thus, the coefficient is only interpretable in standardized units.
+Note how the unstandardized coefficient is 1. This is because we the composite is essentially the predicted values of the response, so they are in the same units. Thus, the coefficient is really only interpretable in standardized units.
 
-Let's fit this composite model with *lavaan*:
+Let's alternately fit this composite model with *lavaan* and fix the loadings of $x1$ and $x2$ to the values from the multiple regression:
 
 ```{r}
 library(lavaan)
 
 comp_formula1 <- '
-composite <~ x1 + x2
+composite <~ -0.498 * x1 + 0.579 * x2
 
 y ~ composite
 '
 
-sem(comp_formula1, data.frame(y, x1, x2))
+comp_model1 <- sem(comp_formula1, data.frame(y, x1, x2))
+
+summary(comp_model1, standardize = T)
 ```
 
-Ah! A warning! It seems the model is not identified, so *lavaan* does not automatically fix the first loading to be 1 (as in latent variables). We have to fix the coefficients manually.
+We see from the output that the estimated loadings for our two indicators are the same values we provided, and consequently the understandardized coefficient is 1. However, the unstandardized coefficient is 0.177 and it is this value that we would present.
 
-As a first pass, let's fix the loadings of $x1$ and $x2$ to the values from the multiple regression:
+Let's suppose we didn't know the loadings from the multiple regression. We run into the same issue of identifiability as when constructing latent variables, so we must fix the first loading to 1. This will also define the scale of the copmosite. NOTE: *lavaan* does not do this automatically, we will have to implement it manually.
 
 ```{r}
 comp_formula2 <- '
-composite <~ -0.831 * x1 + 0.675 * x2
+composite <~ 1 * x1 + x2
 
 y ~ composite
 '
 
 comp_model2 <- sem(comp_formula2, data.frame(y, x1, x2))
-
-summary(comp_model2, standardize = T)
 ```
 
-It seems *lavaan* has fixed the variance on the composite variable to 0 automatically. Moreover, the unstandardized coefficient is still 1 but the standardized coefficient is 0.238. 
+It seems that, because the true loading of $x1$ on the composite is far from 1 (we know it is actually -0.498), we have received a non-convergence error!
 
-An alternative is to set the first loading to 1. This helps with identifiability but if the true value is far from 1, it may lead to non-convergence. In this case, computing the loadings by hand using multiple regression is needed.
+One solution is to set the other loading to 1:
+
+```{r}
+comp_formula3 <- '
+composite <~ x1 + 1 * x2
+
+y ~ composite
+'
+
+comp_model3 <- sem(comp_formula3, data.frame(y, x1, x2))
+
+summary(comp_model3)
+```
+
+Here the model converges because the true loading (0.579) is close enough to 1 for the maximum-likelihood fitting function to find it.
+
+Note that the unstandardized coefficient is no longer 1: this is because the scale of the composite has been set to that of the second indicator. However, the standardized coefficient is different from what we know the true relationship to be (0.236 vs. 0.177). 
+
+For this reason, it is generally recommended that one compute the loadings by hand and fix them in the model. This has an added benefit we will get to in section 1.4. But first let's explore a real-world example.
+
+## 1.3 Grace & Keeley Revisited: A Worked Example
+
+
+## 1.4 Composites in *piecewiseSEM*
+
 
 

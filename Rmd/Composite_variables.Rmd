@@ -187,9 +187,48 @@ summary(keeley_model1, standardize = T)
 
 We obtain the same standardized coefficient (0.400) as through the manual calculation.
 
+Finally, let's incorporate the predictive effect of fire severity on cover. Now the composite is endogenous because it is affected by fire severity, and goes on to predict richness. 
+
+First, we must fit the model without the composite to get the loadings of $cover$ and $cover^2$.
+
+Because the squared term is not a 'true' variable in the model but a convenience for us to explore this non-linearity, we must treat them as exogenous even though they are part of an endogenous composite. *lavaan* automatically models correlations among exogenous variables, but will not do so for the composite indicators. In this case, then, we must manually control for the correlation between $cover^s1$ and $cover$ and $firesev$.
+
+```{r}
+keeley_formula2 <- '
+composite <~ 58 * cover + -28.578 * coversq
+
+rich ~ composite
+
+cover ~ firesev
+
+cover ~~ coversq
+
+firesev ~~ coversq
+'
+
+keeley_model2 <- sem(keeley_formula2, data.frame(keeley, composite))
+
+summary(keeley_model2, standardize = T, rsq = T)
+```
+
+Here, we find a good-fitting model ($P = 0.092$). Moreover, we obtain the standardized coefficient for the effect of fire severity on cover $\gamma = -0.437$ and of the composite on richness $\beta = 0.400$, which is the total non-linear effect of cover.
+
+To otain the indirect effect then, we multiply these paths plus the standardized loading $cover$ on the composite: $-0.437 * 3.048 * 0.400 =  -0.533$.  
+
 ## 1.4 Composites in *piecewiseSEM*
 
-For the moment, composites are not directly implemented in *piecewiseSEM* but we hope to shortly. In the interim, it is easy to compute them by hand, as above, extract the predicted scores, and use them as any other predictor. 
+For the moment, composites are not directly implemented in *piecewiseSEM* but we hope to introduce that functionality shortly. In the interim, it is easy to compute them by hand, as we have shown above, extract the predicted scores, and use them as any other predictor:
+
+```{r}
+keeley$composite <- composite
+
+keeley_psem <- psem(
+  lm(firesev ~ cover, keeley),
+  lm(rich ~ composite, keeley)
+)
+
+summary(keeley_psem)
+```
 
 ## References
 

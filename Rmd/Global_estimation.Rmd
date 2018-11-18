@@ -414,7 +414,7 @@ There is a handy rule that can be used to quickly gauge whether a model is under
 
   $$t \leq \frac{n(n+1)}{2}$$
   
-where $t$ is the number of unknowns (parameters to be estimated) and $n$ is the number of knowns (observed variables).
+where $t$ is the number of unknowns (parameters to be estimated) and $n$ is the number of knowns (observed variables). The left hand side is how many pieces of information we want to know. The right hand side reflects the information we have to work with, and is equal to the number of unique cells in the observed variance-covariance matrix (diagonal = variance, and lower triangle = covariances).
 
 Consider the simple mediation model from earlier:
 
@@ -422,13 +422,13 @@ Consider the simple mediation model from earlier:
 
 In this model, we have several pieces of known information: $x1$, $y1$, and $y2$. So $n = 3$ for this model.
 
-For the number of estimated parameters, its helpful to consider the variance-covariance matrix. We need to estimate the parameters related each set of relationships ($b_{x1y1}$ and $b_{y1y2}$). These amount to the two covariances, but recall from the first section we also need the variances to derive those estimates ($var_{x1}$, $var_{y1}$, $var_{y2}$). So the total number of unknowns is $t = 5$, which is the number of values in the lower triangle of the variance-covariance matrix (including the diagonal).
+We need to estimate the parameters related each set of relationships ($b_{x1y1}$ and $b_{y1y2}$). These amount to the two covariances, but recall from the first section we also need the variances to derive those estimates ($var_{x1}$, $var_{y1}$, $var_{y2}$). So the total number of unknowns is $t = 5$.
 
 We can plug in these values to see if we meet the t-rule:
 
   $$5 \leq \frac{3(3+1)}{2} = 6$$
   
-In this case $5 \leq 6$ holds true and we have enough information to arrive at a unique solution.
+In this case $5 \leq 6$ holds true and we have enough information to arrive at a unique solution. Note that the right hand side of the equation is the number of entries in the variance-covariance matrix: 3 variances (diagonal) plus 3 covariances (off-diagonal).
 
 Let's consider our second model, which adds another path:
 

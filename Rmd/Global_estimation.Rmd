@@ -490,7 +490,7 @@ There are a number of other fit statistics that have been developed which you ma
 
 What happens if the model doesn't fit? Depending on the goals of your analysis (e.g., exploratory) you may wish to see which parts of your model have failed to be reproduced by the model-implied variance-covariance matrix. This can be achieved in two ways:
   
-  - examination of model residuals: parameters with large residuals (difference between observed and expected) could suggest missing information or linkages.
+  - examination correlation of model residuals: parameters with large residual correlations (difference between observed and expected) could suggest missing information or linkages.
   - *modification indices*, or the expected decrease in the $\chi^2$ if a missing path were to be included in the model. A high value of a modification index would suggest the missing path should be included. (Tests of directed separation, which we cover in the chapter on Local Estimation, provide similar insight and are returned automatically by *piecewiseSEM*.)
   
 Users should take caution when exploring these techniques as to avoid dredging the model. SEM is a technique that relies heavily on informed model specification: adding paths in that are suggested by the data but not anticipated by the user to achieve adequate fit, or comparing all sub-models using AIC, for example, might be appropriate in other applications, but ignore the basic philosophy behind SEM.

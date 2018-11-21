@@ -1,7 +1,7 @@
 ---
 title: "Coefficients"
 author: "Jon Lefcheck"
-date: "November 14, 2018"
+date: "November 21, 2018"
 output: html_document
 ---
 
@@ -142,6 +142,7 @@ plot(xpred, ypred_link)
 Note how the line is no longer sigmoidal, but straight!
 
 For binomial responses, there are two kinds of link functions: logit and probit. We'll focus on the logit link for now because its more common. With this link, the coefficients are in units of logits or the *log odds ratio*, which reflect the log of the probability of observing an outcome (1) relative to the probability of not observing it (0). 
+
 Often these coefficients are reverted to just the odds ratio by taking the exponent, which yields the proportional change in the probablity observing one outcome (1) with a unit change change in the predictor.
 
 Say, for example, we have a coefficient $\beta = -0.12$. A 1 unit change in $x$ would result in $exp(-0.12) = 0.88 \times 100%$ or 88% reduction in the odds of observing the outcome.
@@ -209,6 +210,8 @@ You'll note that the observation-empirical approach yields a smaller coefficient
 ## 1.5 Scaling to Other Non-Normal Distributions
 
 As it turns out, the latent-theoretic approach has one further benefit: we can extend it to other distributions (as they all have their own theoretical error variances) *and* mixed-effects models where we must also incorporate the random components.
+
+[content to come]
 
 ## References
 

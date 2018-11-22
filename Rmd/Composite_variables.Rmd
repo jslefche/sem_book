@@ -187,7 +187,9 @@ summary(keeley_model1, standardize = T)
 
 We obtain the same standardized coefficient (0.400) as through the manual calculation.
 
-Finally, let's incorporate the predictive effect of fire severity on cover. Now the composite is endogenous because it is affected by fire severity, and goes on to predict richness. 
+Finally, let's incorporate the  effect of fire severity on cover. Now the composite is endogenous because it is affected by fire severity, and goes on to predict richness. 
+
+![keeley endogenous composite](https://raw.githubusercontent.com/jslefche/sem_book/master/img/composite_variable_keeley_endo.png)
 
 First, we must fit the model without the composite to get the loadings of $cover$ and $cover^2$.
 

@@ -224,7 +224,7 @@ keeley$composite <- composite
 
 keeley_psem <- psem(
   lm(firesev ~ cover, keeley),
-  lm(rich ~ composite, keeley)
+  lm(rich ~ composite + firesev, keeley)
 )
 
 summary(keeley_psem)

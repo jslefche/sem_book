@@ -88,7 +88,7 @@ comp_model1 <- sem(comp_formula1, data.frame(y, x1, x2))
 summary(comp_model1, standardize = T)
 ```
 
-We see from the output that the estimated loadings for our two indicators are the same values we provided, and consequently the understandardized coefficient is 1. However, the unstandardized coefficient is 0.177 and it is this value that we would present.
+We see from the output that the estimated loadings for our two indicators are the same values we provided, and consequently the understandardized coefficient is 1. However, the unstandardized coefficient is 0.177 and it is this value that we would present (although its non-significant, given that these are fake data).
 
 Let's suppose we didn't know the loadings from the multiple regression. We run into the same issue of identifiability as when constructing latent variables, so we must fix the first loading to 1. This will also define the scale of the copmosite. NOTE: *lavaan* does not do this automatically, we will have to implement it manually.
 
@@ -115,7 +115,7 @@ y ~ composite
 
 comp_model3 <- sem(comp_formula3, data.frame(y, x1, x2))
 
-summary(comp_model3)
+summary(comp_model3, standardize = T)
 ```
 
 Here the model converges because the true loading (0.579) is close enough to 1 for the maximum-likelihood fitting function to find it.
@@ -180,7 +180,7 @@ composite <~ 58 * cover + -28.578 * coversq
 rich ~ composite
 '
 
-keeley_model1 <- sem(keeley_formula1, keeley)
+keeley_model1 <- sem(keeley_formula1, keeley, fixed.x = F)
 
 summary(keeley_model1, standardize = T)
 ```
@@ -191,13 +191,13 @@ Finally, let's incorporate the predictive effect of fire severity on cover. Now 
 
 First, we must fit the model without the composite to get the loadings of $cover$ and $cover^2$.
 
-Because the squared term is not a 'true' variable in the model but a convenience for us to explore this non-linearity, we must treat them as exogenous even though they are part of an endogenous composite. *lavaan* automatically models correlations among exogenous variables, but will not do so for the composite indicators. In this case, then, we must manually control for the correlation between $cover^s1$ and $cover$ and $firesev$.
+Because the squared term is not a 'true' variable in the model but a convenience for us to explore this non-linearity, we must treat them as exogenous even though they are part of an endogenous composite. *lavaan* automatically models correlations among exogenous variables, but will not do so for the composite indicators. In this case, then, we must manually control for the correlation between $cover^2$ and $cover$ and $firesev$.
 
 ```{r}
 keeley_formula2 <- '
 composite <~ 58 * cover + -28.578 * coversq
 
-rich ~ composite
+rich ~ composite + firesev
 
 cover ~ firesev
 
@@ -211,9 +211,9 @@ keeley_model2 <- sem(keeley_formula2, data.frame(keeley, composite))
 summary(keeley_model2, standardize = T, rsq = T)
 ```
 
-Here, we find a good-fitting model ($P = 0.092$). Moreover, we obtain the standardized coefficient for the effect of fire severity on cover $\gamma = -0.437$ and of the composite on richness $\beta = 0.400$, which is the total non-linear effect of cover.
+Here, we find a good-fitting model ($P = 0.80$). Moreover, we obtain the standardized coefficient for the effect of fire severity on cover $\gamma = -0.437$ and of the composite on richness $\beta = 0.292$ controlling for fire severity, which is the total non-linear effect of cover.
 
-To otain the indirect effect then, we multiply these paths plus the standardized loading $cover$ on the composite: $-0.437 * 3.048 * 0.400 =  -0.533$.  
+To otain the indirect effect then, we multiply these paths plus the standardized loading $cover$ on the composite: $-0.437 * 3.048 * 0.292 =  -0.389$.  
 
 ## 1.4 Composites in *piecewiseSEM*
 

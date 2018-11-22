@@ -112,7 +112,7 @@ If we use a Chi-squared difference test as before:
 anova(multigroup1, multigroup2)
 ```
 
-We find that the models are still significantly different, imypling that the path between $x -> y$ should not be constrained, and that it should be left to vary among groups.
+We find that the models are still significantly different, implying that the path between $x -> y$ should not be constrained, and that it should be left to vary among groups.
 
 We can repeat this exercise with the second path, $y -> z$:
 
@@ -210,7 +210,7 @@ Let's now turn to a real example from Grace & Jutila (1999). While the original 
 
 In their study, the authors were interested in the controls of on plant species' density in Finnish meadows. In this worked example, we will consider only elevation and total biomass in their effects on density, plus an effect of elevation on biomass:
 
-![jutila_sem](https://raw.githubusercontent.com/jslefche/jslefche.github.io/master/sem_img/jutila_sem.png)
+![jutila_sem](https://raw.githubusercontent.com/jslefche/sem_book/master/img/multigroup_jutila_sem.png)
 
 Moreover, they repeated their observations in two treatments: grazed and ungrazed meadows. Grazing will serve as the grouping variable for our multigroup analysis.
 

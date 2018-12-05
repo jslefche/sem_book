@@ -5,11 +5,9 @@ date: "November 12, 2018"
 output: html_document
 ---
 
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+# Multigroup Analysis
 
-## 1.1 Introduction to Multigroup Analysis
+## Introduction to Multigroup Analysis
 
 Often in ecology we wish to compare the results from two or more groups. These groups could reflect experimental treatments, different sites,  different sexes, or any number of types of organization. The ultimate goal of such an analysis is to ask whether the relationships among predictor and response variables vary by group. For example, does the effect of pesticide on invertebrate biomass change as function of where the pesticide is applied?
 
@@ -29,7 +27,7 @@ The application of multigroup models differs between a global estimation (i.e., 
 
 In this chapter, we will work through both approaches, and then compare/contrast the output.
 
-## 1.2 Multigroup Analysis using Global Estimation
+## Multigroup Analysis using Global Estimation
 
 Multigroup modeling using global estimation begins with the estimation of two models: one in which all parameters are allowed to differ between groups, and one in which all parameters are fixed to those obtained from analysis of the pooled data across groups. We call the first model the "free" model since all parameters are free to vary, and the second the "constrained" model since each path, regardless of its group, is constrained to a single value determined by the entire dataset.
 
@@ -139,7 +137,7 @@ It is also important to note that sample size must be sufficiently large to esti
 
 Standardized coefficients also present a challenge. Because variances are likely to be unequal among groups, the standardized coefficient must be computed on a per group basis, even if the unstandardized coefficient is constrained to the global value. Both packages for SEM will do this automatically, so you may notice that the standardized solutions may vary even among constrained paths.
 
-## 1.3 Multigroup Analysis using Local Estimation
+## Multigroup Analysis using Local Estimation
 
 The goal of multigroup analysis using local estimation is identical to that of global estimation: to identify whether a single global model is sufficient to describe the data, or whether some or all paths vary by some grouping variable. The difference lies in execution: while *lavaan* is a back-and-forth manual process of relaxing and constraining paths, *piecewiseSEM* tests constraints and automatically selects the best output for your data. 
 
@@ -204,7 +202,7 @@ pmultigroup$group.coefs
 
 You'll note that the outputs are roughly equivalent (owing to slight differences in the estimation procedures for each package). Critically, the coefficient for the path from $x -> y$ is the same in both groups.
 
-## 1.4 Grace & Jutila (1999): A Worked Example
+## Grace & Jutila (1999): A Worked Example
 
 Let's now turn to a real example from Grace & Jutila (1999). While the original paper fit a far more complicated model than we will, the following simplified model demonstrates the approach well.
 

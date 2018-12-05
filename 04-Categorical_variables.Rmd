@@ -5,7 +5,9 @@ date: "November 12, 2018"
 output: html_document
 ---
 
-## 1.1 Introduction to Exogenous Categorical Variables
+# Categorical Variables
+
+## Introduction to Exogenous Categorical Variables
 
 While most examples using SEM consider continuous variables, it is often the case that the variables are discrete. These include binary (yes/no, failure/success, etc.), nominal (site 1, site 2), or ordinal levels (small < medium < large). There are two cases: categorical variables as exogenous or as endogenous. We will deal with the simpler case of exogenous categorical variables first, as they pose not so much of a computational issue, but a conceptual one.
 
@@ -43,7 +45,7 @@ This approach becomes prohibitive with large number of categories and can greatl
 
 A alternate approach draws on this final point, and involves testing and reporting the model-estimated, or marginal, means.
 
-## 1.3 Exogenous Categorical Variables as Marginal Means
+## Exogenous Categorical Variables as Marginal Means
 
 All models can be used for prediction. In multiple regression, the predicted values of one variable are often computed while holding the values of other variables at their mean. Marginal means are the mean of these predicted values. In other words, it is the expected value of one variable given the other variables in the model.
 
@@ -143,7 +145,7 @@ In this output, the significance test from the ANOVA is reported in the row corr
 
 This solution provides a measure of whether the path between the exogenous categorical variable and the respones is significant, as well as parameters for each level in the form of the model-estimated marginal means.
 
-## 1.3 Exogenous Categorical Variables as Marginal Means: A Worked Example
+## Exogenous Categorical Variables as Marginal Means: A Worked Example
 
 Let's consider an example from Bowen et al. (2017). In this study, the authors were interested in how different microbiomes of the salt marsh plant *Phragmites australis* drive ecosystem functioning, and ultimately the production of aboveground biomass. In this case, they considered three microbial communities: those from a native North American lineage, from Gulf Coast lineage, and an introduced lineage. There were additional genotypes within each community type, necessitating the application of random effects to account for intraspecific variation.
 
@@ -181,7 +183,7 @@ In this case, it appears that the model fits the data well enough ($P = 0.057$).
 
 Thus, despite a multi-level categorical predictor (microbiome status), the two-step procedure of ANOVA and calculation of marginal means reveals a mechanistic understanding of the drivers of plant biomass in this species.
 
-## 1.3 Endogenous Categorical Variables
+## Endogenous Categorical Variables
 
 Endogenous categorical variables are far trickier, and at the moment, are not implemented in *piecewiseSEM*.
 

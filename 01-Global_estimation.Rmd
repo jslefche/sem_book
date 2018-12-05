@@ -5,7 +5,9 @@ date: "November 13, 2018"
 output: html_document
 ---
 
-## 1.1 What is (Co)variance?
+# Global Estimation
+
+## What is (Co)variance?
 
 The building block of the global estimation procedure for SEM is variance, specifically the covariance between  variables. Before we delve into the specifics of this procedure, its worth reviewing the basics of variance and covariance.
 
@@ -79,7 +81,7 @@ Incidentally, this is the same as dividing the covariance of $x$ and $y$ by the 
 
 Now that we have reviewed these basic concepts, we can begin to consider them within the context of SEM.
 
-## 1.2 Regression Coefficients
+## Regression Coefficients
 
 The inferential heart of structural equation modeling are regression (or path) coefficients. These values mathematically quantify the linear dependence of one variable on another (or lack thereof). This verbage should sound familiar because that is what we have alreday established is the goal of covariance/correlation. In this section, we will demonstrate how path coefficients can be derived from correlation coefficients and explore the 8 "rules of path coefficients."
 
@@ -229,7 +231,7 @@ Indeed, this procedure gives us the same value as the former equation or the mul
 
 However, this raises the interesting notion of residual error. The second equation still has variance $y2$ that is unexplained by the residuals of $x1$. In other words, the model does not perfectly predict $y2$. The idea of residual (unexplained) variance leads us the fifth rule of path coefficients.
 
-## Rule 5: Errors on endogenous variables relate the unexplained correlations or variances arising from unmeasured variables.
+### Rule 5: Errors on endogenous variables relate the unexplained correlations or variances arising from unmeasured variables.
 
 Variables that have paths entering them (regardless of whether they also have paths emanating from them) are called *endogenous* variables. In this example, $y1$ and $y2$ are both endogenous variables, even though $y$ goes onto also predict $y2$, because both have arrows entering them.
 
@@ -338,7 +340,7 @@ This example closes our discussion of path coefficients. The major points to rem
   
 An understanding of covariances and correlations is essential to understanding the solutions provided by a global estimation approach to SEM.
 
-## 1.3 Variance-based Structural Equation Modeling
+## Variance-based Structural Equation Modeling
 
 The classical approach to SEM is based on the the idea of variance and covariances. With >2 variables, you can construct a variance-covariance matrix, where the diagonals are the variances of each variable and the off-diagonals are the covariances between each pair. Consider our last example:
 
@@ -375,7 +377,7 @@ A number of assumptions accompany maximum-likelihood fitting:
   
 The notion of sample size is a good one: as models become increasingly complex, they require more data to fit. The issue of model 'identifiability' and sample size is dealt with in the next section.
 
-## 1.4 Model Identifiability
+## Model Identifiability
 
 Like any statistical technique, having sufficient power to test your hypotheses is key to arriving at robust unbiased inferences about your data. This requirement is particularly relevant to SEM, which often evaluates multiple hypotheses simultaneously, and therefore requires more data than other approaches. In this section, we will briefly review the idea of model 'identifiability' and sample size requirements.
 
@@ -456,7 +458,7 @@ However, this value is a lower limit: ideally, replication is *5-20x* the number
 
 Identifiability and replication are key in not only providing an actual solution, but also in providing extra information with which to evaluate model fit, the topic of the next section.
 
-## 1.5 Goodness-of-fit Measures
+## Goodness-of-fit Measures
 
 As we have established, the purpose of covariance-based SEM is to reproduce the global observed variance-covariance matrix. However, given that our hypothesized relationships may not actually match the data, we must be prepared to evaluate how well the model-estimated variance-covariance matrix matches the observed variance-covariance matrix. 
 
@@ -495,7 +497,7 @@ What happens if the model doesn't fit? Depending on the goals of your analysis (
   
 Users should take caution when exploring these techniques as to avoid dredging the model. SEM is a technique that relies heavily on informed model specification: adding paths in that are suggested by the data but not anticipated by the user to achieve adequate fit, or comparing all sub-models using AIC, for example, might be appropriate in other applications, but ignore the basic philosophy behind SEM.
 
-## 1.6 Model Fitting Using *lavaan*
+## Model Fitting Using *lavaan*
 
 We now have all the pieces necessary to fit an SEM using a covariance-based approach. The package to do so is called *lavaan*:
 
@@ -513,7 +515,7 @@ data(keeley)
 
 In their study, Grace & Keeley wanted to understand patterns in plant diversity following disturbance, in this case wildfires in California. 
 
-### 1.6.1 *lavaan* vs `lm`
+### *lavaan* vs `lm`
 
 For purposes of exploration, let's first consider the relationship between fire severity and stand age (with older stands having more combustible materials) 
 
@@ -603,7 +605,7 @@ summary(keeley_sem1, standardize = T, rsq = T)
 
 You'll note that, per Rule 5 of path coefficients, the error variance is $1 - R^2$.
 
-### 1.6.2 SEM using *lavaan*
+### SEM using *lavaan*
 
 Now that we have covered the basics of *lavaan*, let's fit a slightly more complicated SEM. This model is a simplified subset of the full model presented by Grace & Keeley:
 
@@ -665,7 +667,7 @@ Indeed, the indirect path coefficient is the same as computed above.
 
 Naming coefficients can come in handy when specifying, for example, a fixe values or when they ought to be constrained (see Chapter: Multigroup Modeling).
 
-### 1.6.3 Testing Alternate Structure using *lavaan*
+### Testing Alternate Structure using *lavaan*
 
 There is another possible configuration of these variables which includes a directed path between age and cover:
 

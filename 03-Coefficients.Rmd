@@ -5,7 +5,9 @@ date: "November 21, 2018"
 output: html_document
 ---
 
-## 1.1 Unstandardized and Standardized Coefficients
+# Coefficients
+
+## Unstandardized and Standardized Coefficients
 
 Path (or regression) coefficients are the inferential engine behind structural equation modeling, and by extension all of linear and even some non-linear statistics (as we shall see). They relate changes in the dependent variable $y$ to changes in the independent variable $x$, and thus act as a measure of association. In fact, you may recall from the chapter on Global Estimation that, under specific circumstances, path coefficients can be expressed as (partial) correlations, which all scientists are familiar with as a unitless measure of association. They also allow us to generate predictions for new values of $x$ and thus are useful in testing and extrapolating model results.
 
@@ -31,7 +33,7 @@ In contrast, comparing the strength of indirect or compound effects across the s
 
 Thus, both standardized and unstandardized coefficients have their place. Let's now explore some of the different forms of standardization, and how they can be achieved.
 
-## 1.2 Scale Standardization
+## Scale Standardization
 
 The most typical implementation of standardization is placing the coefficients in units of standard deviations of the mean. This is accomplished by scaling the coefficient $\beta$ by the ratio of the standard deviation of $x$ over the standard deviation of $y$:
 
@@ -78,7 +80,7 @@ summary(xy_sem, standardize = T)
 
 In all 3 cases, we have achieved a scale-standardized coefficient of $b = 0.095$. Thus, a 1 SD change in $x$ would result in a 0.095 SD change in $y$.
 
-## 1.3 Range Standardization
+## Range Standardization
 
 An alternative to scale standardization is 'relevant range' standardization. This approach scales the coefficients over, as the name implies, some relevant range. Typically this is the full range of the data, in which case $\beta$ can be standardized as follows:
 
@@ -103,7 +105,7 @@ In both cases, we obtain a $b = 0.0981$ suggesting that a full shift in $x$ alon
 
 Both scale and relevant range-standardization only apply when the response is normally-distributed. If not, we must make some assumptions in order to obtain standardized coefficients. Let's start with binomial responses.
 
-## 1.4 Binomial Response Models
+## Binomial Response Models
 
 Binomial responses are those that are binary (0, 1) such as success or failure, present or absent, and so on. What is unique about them is that they do not have a linear relationship with a predictor $x$. Instead, they are best modeled using a sigmoidal curve. To demonstrate, let's generate some data, fit a binary model, and plot the predicted relationship:
 
@@ -207,7 +209,7 @@ We see that both approaches produce coefficients, and they are the same as retur
 
 You'll note that the observation-empirical approach yields a smaller coefficient than the latent-theoretic. This is because the former approach is influenced by the fact that it is based on the relationship between a linear approximation (predictions) of a non-linear variable (raw values), introducing a loss of information. The *latent theoretic approach* also suffers from a loss of information from use of a distribution-specific but theoretically-derived error variance, which may or may not approach the true error variance (which is unknowable). Either way, both kinds of standardization are not without their drawbacks, but both provide potentially useful information in being able to compare linear and now *linearized* standardized coefficients.
 
-## 1.5 Scaling to Other Non-Normal Distributions
+## Scaling to Other Non-Normal Distributions
 
 As it turns out, the latent-theoretic approach has one further benefit: we can extend it to other distributions (as they all have their own theoretical error variances) *and* mixed-effects models where we must also incorporate the random components.
 

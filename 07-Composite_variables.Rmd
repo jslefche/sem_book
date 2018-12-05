@@ -5,7 +5,9 @@ date: "November 16, 2018"
 output: html_document
 ---
 
-## 1.1 What is a Composite Variable?
+# Composite Variables
+
+## What is a Composite Variable?
 
 Composite variables are another way, besides latent variables, to represent complex concepts in structural equation modeling. The most important distinction between the two is that, while latent variables give rise to measurable manifestations of an unobservable concept, composite variables arise from the combined influence of other variables. 
 
@@ -33,7 +35,7 @@ Finally, do the indicators co-vary? If they are under common control of a latent
 
 Now that we have defined a composite variable, let's see how to make one.
 
-## 1.2 Constructing a Composite Variable
+## Constructing a Composite Variable
 
 Compared to latent variables, a composite variable is actually very easy to estimate: it is simply the sum of its indicators, hence the term *composite*.
 
@@ -124,7 +126,7 @@ Note that the unstandardized coefficient is no longer 1: this is because the sca
 
 For this reason, it is generally recommended that one compute the loadings by hand and fix them in the model. This has an added benefit we will get to in section 1.4. But first let's explore a real-world example.
 
-## 1.3 Grace & Keeley Revisited: A Worked Example
+## Grace & Keeley Revisited: A Worked Example
 
 Recall from the chapter on "Global Estimation" that Grace & Keeley (2006) were interested in the factors that mediated recovery of shrublands post-fire disturbance. In that chapter, we fit a sub-model of their larger model, and we'll fit a different sub-model in this chapter.
 
@@ -217,7 +219,7 @@ Here, we find a good-fitting model ($P = 0.80$). Moreover, we obtain the standar
 
 To otain the indirect effect then, we multiply these paths plus the standardized loading $cover$ on the composite: $-0.437 * 3.048 * 0.292 =  -0.389$.  
 
-## 1.4 Composites in *piecewiseSEM*
+## Composites in *piecewiseSEM*
 
 For the moment, composites are not directly implemented in *piecewiseSEM* but we hope to introduce that functionality shortly. In the interim, it is easy to compute them by hand, as we have shown above, extract the predicted scores, and use them as any other predictor:
 

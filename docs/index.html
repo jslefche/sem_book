@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Structural Equation Modeling in R for Ecology and Evolution</title>
+  <meta name="description" content="Structural Equation Modeling in R for Ecology and Evolution">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+
+  <meta property="og:title" content="Structural Equation Modeling in R for Ecology and Evolution" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  <meta name="github-repo" content="jslefche/sem_book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Structural Equation Modeling in R for Ecology and Evolution" />
+  
+  
+  
+
+<meta name="author" content="Jonathan Lefcheck">
+
+
+<meta name="date" content="2018-12-05">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+
+<link rel="next" href="global-estimation.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface</a></li>
+<li class="chapter" data-level="2" data-path="global-estimation.html"><a href="global-estimation.html"><i class="fa fa-check"></i><b>2</b> Global Estimation</a><ul>
+<li class="chapter" data-level="2.1" data-path="global-estimation.html"><a href="global-estimation.html#what-is-covariance"><i class="fa fa-check"></i><b>2.1</b> What is (Co)variance?</a></li>
+<li class="chapter" data-level="2.2" data-path="global-estimation.html"><a href="global-estimation.html#regression-coefficients"><i class="fa fa-check"></i><b>2.2</b> Regression Coefficients</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="global-estimation.html"><a href="global-estimation.html#rule-1-unspecified-relationships-among-exogenous-variables-are-simply-their-bivariate-correlations."><i class="fa fa-check"></i><b>2.2.1</b> Rule 1: Unspecified relationships among exogenous variables are simply their bivariate correlations.</a></li>
+<li class="chapter" data-level="2.2.2" data-path="global-estimation.html"><a href="global-estimation.html#rule-2-when-two-variables-are-connected-by-a-single-path-the-coefficient-of-that-path-is-the-regression-coefficient."><i class="fa fa-check"></i><b>2.2.2</b> Rule 2: When two variables are connected by a single path, the coefficient of that path is the regression coefficient.</a></li>
+<li class="chapter" data-level="2.2.3" data-path="global-estimation.html"><a href="global-estimation.html#rule-3-the-strength-of-a-compound-path-one-that-includes-multiple-links-is-the-product-of-the-individual-coefficients."><i class="fa fa-check"></i><b>2.2.3</b> Rule 3: The strength of a compound path (one that includes multiple links) is the product of the individual coefficients.</a></li>
+<li class="chapter" data-level="2.2.4" data-path="global-estimation.html"><a href="global-estimation.html#rule-4.-when-variables-are-connected-by-more-than-one-pathway-each-pathway-is-the-partial-regression-coefficient."><i class="fa fa-check"></i><b>2.2.4</b> Rule 4. When variables are connected by more than one pathway, each pathway is the ‘partial’ regression coefficient.</a></li>
+<li class="chapter" data-level="2.2.5" data-path="global-estimation.html"><a href="global-estimation.html#rule-5-errors-on-endogenous-variables-relate-the-unexplained-correlations-or-variances-arising-from-unmeasured-variables."><i class="fa fa-check"></i><b>2.2.5</b> Rule 5: Errors on endogenous variables relate the unexplained correlations or variances arising from unmeasured variables.</a></li>
+<li class="chapter" data-level="2.2.6" data-path="global-estimation.html"><a href="global-estimation.html#rule-6-unanalyzed-residual-correlations-among-two-endogenous-variables-are-their-partial-correlations."><i class="fa fa-check"></i><b>2.2.6</b> Rule 6: Unanalyzed (residual) correlations among two endogenous variables are their partial correlations.</a></li>
+<li class="chapter" data-level="2.2.7" data-path="global-estimation.html"><a href="global-estimation.html#rule-7-the-total-effect-one-variable-has-another-is-the-sum-of-its-direct-and-indirect-effects."><i class="fa fa-check"></i><b>2.2.7</b> Rule 7: The total effect one variable has another is the sum of its direct and indirect effects.</a></li>
+<li class="chapter" data-level="2.2.8" data-path="global-estimation.html"><a href="global-estimation.html#rule-8-the-total-effect-including-undirected-paths-is-equivalent-to-the-total-correlation."><i class="fa fa-check"></i><b>2.2.8</b> Rule 8: The total effect (including undirected paths) is equivalent to the total correlation.</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="global-estimation.html"><a href="global-estimation.html#variance-based-structural-equation-modeling"><i class="fa fa-check"></i><b>2.3</b> Variance-based Structural Equation Modeling</a></li>
+<li class="chapter" data-level="2.4" data-path="global-estimation.html"><a href="global-estimation.html#model-identifiability"><i class="fa fa-check"></i><b>2.4</b> Model Identifiability</a></li>
+<li class="chapter" data-level="2.5" data-path="global-estimation.html"><a href="global-estimation.html#goodness-of-fit-measures"><i class="fa fa-check"></i><b>2.5</b> Goodness-of-fit Measures</a></li>
+<li class="chapter" data-level="2.6" data-path="global-estimation.html"><a href="global-estimation.html#model-fitting-using-lavaan"><i class="fa fa-check"></i><b>2.6</b> Model Fitting Using <em>lavaan</em></a><ul>
+<li class="chapter" data-level="2.6.1" data-path="global-estimation.html"><a href="global-estimation.html#lavaan-vs-lm"><i class="fa fa-check"></i><b>2.6.1</b> <em>lavaan</em> vs <code>lm</code></a></li>
+<li class="chapter" data-level="2.6.2" data-path="global-estimation.html"><a href="global-estimation.html#sem-using-lavaan"><i class="fa fa-check"></i><b>2.6.2</b> SEM using <em>lavaan</em></a></li>
+<li class="chapter" data-level="2.6.3" data-path="global-estimation.html"><a href="global-estimation.html#testing-alternate-structure-using-lavaan"><i class="fa fa-check"></i><b>2.6.3</b> Testing Alternate Structure using <em>lavaan</em></a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="global-estimation.html"><a href="global-estimation.html#references"><i class="fa fa-check"></i><b>2.7</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="coefficients.html"><a href="coefficients.html"><i class="fa fa-check"></i><b>3</b> Coefficients</a><ul>
+<li class="chapter" data-level="3.1" data-path="coefficients.html"><a href="coefficients.html#unstandardized-and-standardized-coefficients"><i class="fa fa-check"></i><b>3.1</b> Unstandardized and Standardized Coefficients</a></li>
+<li class="chapter" data-level="3.2" data-path="coefficients.html"><a href="coefficients.html#scale-standardization"><i class="fa fa-check"></i><b>3.2</b> Scale Standardization</a></li>
+<li class="chapter" data-level="3.3" data-path="coefficients.html"><a href="coefficients.html#range-standardization"><i class="fa fa-check"></i><b>3.3</b> Range Standardization</a></li>
+<li class="chapter" data-level="3.4" data-path="coefficients.html"><a href="coefficients.html#binomial-response-models"><i class="fa fa-check"></i><b>3.4</b> Binomial Response Models</a></li>
+<li class="chapter" data-level="3.5" data-path="coefficients.html"><a href="coefficients.html#scaling-to-other-non-normal-distributions"><i class="fa fa-check"></i><b>3.5</b> Scaling to Other Non-Normal Distributions</a></li>
+<li class="chapter" data-level="3.6" data-path="coefficients.html"><a href="coefficients.html#references-1"><i class="fa fa-check"></i><b>3.6</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="categorical-variables.html"><a href="categorical-variables.html"><i class="fa fa-check"></i><b>4</b> Categorical Variables</a><ul>
+<li class="chapter" data-level="4.1" data-path="categorical-variables.html"><a href="categorical-variables.html#introduction-to-exogenous-categorical-variables"><i class="fa fa-check"></i><b>4.1</b> Introduction to Exogenous Categorical Variables</a></li>
+<li class="chapter" data-level="4.2" data-path="categorical-variables.html"><a href="categorical-variables.html#exogenous-categorical-variables-as-marginal-means"><i class="fa fa-check"></i><b>4.2</b> Exogenous Categorical Variables as Marginal Means</a></li>
+<li class="chapter" data-level="4.3" data-path="categorical-variables.html"><a href="categorical-variables.html#exogenous-categorical-variables-as-marginal-means-a-worked-example"><i class="fa fa-check"></i><b>4.3</b> Exogenous Categorical Variables as Marginal Means: A Worked Example</a></li>
+<li class="chapter" data-level="4.4" data-path="categorical-variables.html"><a href="categorical-variables.html#endogenous-categorical-variables"><i class="fa fa-check"></i><b>4.4</b> Endogenous Categorical Variables</a></li>
+<li class="chapter" data-level="4.5" data-path="categorical-variables.html"><a href="categorical-variables.html#references-2"><i class="fa fa-check"></i><b>4.5</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html"><i class="fa fa-check"></i><b>5</b> Multigroup Analysis</a><ul>
+<li class="chapter" data-level="5.1" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#introduction-to-multigroup-analysis"><i class="fa fa-check"></i><b>5.1</b> Introduction to Multigroup Analysis</a></li>
+<li class="chapter" data-level="5.2" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#multigroup-analysis-using-global-estimation"><i class="fa fa-check"></i><b>5.2</b> Multigroup Analysis using Global Estimation</a></li>
+<li class="chapter" data-level="5.3" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#multigroup-analysis-using-local-estimation"><i class="fa fa-check"></i><b>5.3</b> Multigroup Analysis using Local Estimation</a></li>
+<li class="chapter" data-level="5.4" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#grace-jutila-1999-a-worked-example"><i class="fa fa-check"></i><b>5.4</b> Grace &amp; Jutila (1999): A Worked Example</a></li>
+<li class="chapter" data-level="5.5" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#references-3"><i class="fa fa-check"></i><b>5.5</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html"><i class="fa fa-check"></i><b>6</b> Latent Variable Modeling</a><ul>
+<li class="chapter" data-level="6.1" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#introduction-to-latent-variable-modeling"><i class="fa fa-check"></i><b>6.1</b> Introduction to Latent Variable Modeling</a></li>
+<li class="chapter" data-level="6.2" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#application-of-latent-variables-to-path-models"><i class="fa fa-check"></i><b>6.2</b> Application of Latent Variables to Path Models</a></li>
+<li class="chapter" data-level="6.3" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#latent-variables-in-lavaan"><i class="fa fa-check"></i><b>6.3</b> Latent Variables in <em>lavaan</em></a></li>
+<li class="chapter" data-level="6.4" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#multi-indicator-latent-variables"><i class="fa fa-check"></i><b>6.4</b> Multi-indicator Latent Variables</a></li>
+<li class="chapter" data-level="6.5" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#confirmatory-factor-analysis"><i class="fa fa-check"></i><b>6.5</b> Confirmatory Factor Analysis</a></li>
+<li class="chapter" data-level="6.6" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#travis-grace-2010-an-example"><i class="fa fa-check"></i><b>6.6</b> Travis &amp; Grace (2010): An Example</a></li>
+<li class="chapter" data-level="6.7" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#references-4"><i class="fa fa-check"></i><b>6.7</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="composite-variables.html"><a href="composite-variables.html"><i class="fa fa-check"></i><b>7</b> Composite Variables</a><ul>
+<li class="chapter" data-level="7.1" data-path="composite-variables.html"><a href="composite-variables.html#what-is-a-composite-variable"><i class="fa fa-check"></i><b>7.1</b> What is a Composite Variable?</a></li>
+<li class="chapter" data-level="7.2" data-path="composite-variables.html"><a href="composite-variables.html#constructing-a-composite-variable"><i class="fa fa-check"></i><b>7.2</b> Constructing a Composite Variable</a></li>
+<li class="chapter" data-level="7.3" data-path="composite-variables.html"><a href="composite-variables.html#grace-keeley-revisited-a-worked-example"><i class="fa fa-check"></i><b>7.3</b> Grace &amp; Keeley Revisited: A Worked Example</a></li>
+<li class="chapter" data-level="7.4" data-path="composite-variables.html"><a href="composite-variables.html#composites-in-piecewisesem"><i class="fa fa-check"></i><b>7.4</b> Composites in <em>piecewiseSEM</em></a></li>
+<li class="chapter" data-level="7.5" data-path="composite-variables.html"><a href="composite-variables.html#references-5"><i class="fa fa-check"></i><b>7.5</b> References</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Structural Equation Modeling in R for Ecology and Evolution</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">Structural Equation Modeling in R for Ecology and Evolution</h1>
+<p class="author"><em>Jonathan Lefcheck</em></p>
+<p class="date"><em>2018-12-05</em></p>
+</div>
+<div id="preface" class="section level1">
+<h1><span class="header-section-number">1</span> Preface</h1>
+<p>Structural equation modeling is among the fastest growing statistical techniques in the natural sciences, thanks in large part to new advances and software packages that make it broadly applicable and easy to use.</p>
+<p>This book is meant to be an approachable guide to the theory, math, and application of SEM. It integrates code from popular open-source packages such as <em>lavaan</em> and <em>piecewiseSEM</em>. Each chapter ends with worked examples from the published literature.</p>
+<p>Moreover, as the author of the <em>piecewiseSEM</em> package, this format allows me to document newly-deployed functionality in the package, such as the addition of multigroup analysis and composite variables, new forms of standardization, and updates to model R<sup>2</sup>s.</p>
+<p>Happy reading!</p>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+<a href="global-estimation.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

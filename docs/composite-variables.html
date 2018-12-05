@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>7 Composite Variables | Structural Equation Modeling in R for Ecology and Evolution</title>
+  <meta name="description" content="7 Composite Variables | Structural Equation Modeling in R for Ecology and Evolution>
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+
+  <meta property="og:title" content="7 Composite Variables | Structural Equation Modeling in R for Ecology and Evolution />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  <meta name="github-repo" content="jslefche/sem_book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="7 Composite Variables | Structural Equation Modeling in R for Ecology and Evolution />
+  
+  
+  
+
+<meta name="author" content="Jonathan Lefcheck">
+
+
+<meta name="date" content="2018-12-05">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="latent-variable-modeling.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface</a></li>
+<li class="chapter" data-level="2" data-path="global-estimation.html"><a href="global-estimation.html"><i class="fa fa-check"></i><b>2</b> Global Estimation</a><ul>
+<li class="chapter" data-level="2.1" data-path="global-estimation.html"><a href="global-estimation.html#what-is-covariance"><i class="fa fa-check"></i><b>2.1</b> What is (Co)variance?</a></li>
+<li class="chapter" data-level="2.2" data-path="global-estimation.html"><a href="global-estimation.html#regression-coefficients"><i class="fa fa-check"></i><b>2.2</b> Regression Coefficients</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="global-estimation.html"><a href="global-estimation.html#rule-1-unspecified-relationships-among-exogenous-variables-are-simply-their-bivariate-correlations."><i class="fa fa-check"></i><b>2.2.1</b> Rule 1: Unspecified relationships among exogenous variables are simply their bivariate correlations.</a></li>
+<li class="chapter" data-level="2.2.2" data-path="global-estimation.html"><a href="global-estimation.html#rule-2-when-two-variables-are-connected-by-a-single-path-the-coefficient-of-that-path-is-the-regression-coefficient."><i class="fa fa-check"></i><b>2.2.2</b> Rule 2: When two variables are connected by a single path, the coefficient of that path is the regression coefficient.</a></li>
+<li class="chapter" data-level="2.2.3" data-path="global-estimation.html"><a href="global-estimation.html#rule-3-the-strength-of-a-compound-path-one-that-includes-multiple-links-is-the-product-of-the-individual-coefficients."><i class="fa fa-check"></i><b>2.2.3</b> Rule 3: The strength of a compound path (one that includes multiple links) is the product of the individual coefficients.</a></li>
+<li class="chapter" data-level="2.2.4" data-path="global-estimation.html"><a href="global-estimation.html#rule-4.-when-variables-are-connected-by-more-than-one-pathway-each-pathway-is-the-partial-regression-coefficient."><i class="fa fa-check"></i><b>2.2.4</b> Rule 4. When variables are connected by more than one pathway, each pathway is the ‘partial’ regression coefficient.</a></li>
+<li class="chapter" data-level="2.2.5" data-path="global-estimation.html"><a href="global-estimation.html#rule-5-errors-on-endogenous-variables-relate-the-unexplained-correlations-or-variances-arising-from-unmeasured-variables."><i class="fa fa-check"></i><b>2.2.5</b> Rule 5: Errors on endogenous variables relate the unexplained correlations or variances arising from unmeasured variables.</a></li>
+<li class="chapter" data-level="2.2.6" data-path="global-estimation.html"><a href="global-estimation.html#rule-6-unanalyzed-residual-correlations-among-two-endogenous-variables-are-their-partial-correlations."><i class="fa fa-check"></i><b>2.2.6</b> Rule 6: Unanalyzed (residual) correlations among two endogenous variables are their partial correlations.</a></li>
+<li class="chapter" data-level="2.2.7" data-path="global-estimation.html"><a href="global-estimation.html#rule-7-the-total-effect-one-variable-has-another-is-the-sum-of-its-direct-and-indirect-effects."><i class="fa fa-check"></i><b>2.2.7</b> Rule 7: The total effect one variable has another is the sum of its direct and indirect effects.</a></li>
+<li class="chapter" data-level="2.2.8" data-path="global-estimation.html"><a href="global-estimation.html#rule-8-the-total-effect-including-undirected-paths-is-equivalent-to-the-total-correlation."><i class="fa fa-check"></i><b>2.2.8</b> Rule 8: The total effect (including undirected paths) is equivalent to the total correlation.</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="global-estimation.html"><a href="global-estimation.html#variance-based-structural-equation-modeling"><i class="fa fa-check"></i><b>2.3</b> Variance-based Structural Equation Modeling</a></li>
+<li class="chapter" data-level="2.4" data-path="global-estimation.html"><a href="global-estimation.html#model-identifiability"><i class="fa fa-check"></i><b>2.4</b> Model Identifiability</a></li>
+<li class="chapter" data-level="2.5" data-path="global-estimation.html"><a href="global-estimation.html#goodness-of-fit-measures"><i class="fa fa-check"></i><b>2.5</b> Goodness-of-fit Measures</a></li>
+<li class="chapter" data-level="2.6" data-path="global-estimation.html"><a href="global-estimation.html#model-fitting-using-lavaan"><i class="fa fa-check"></i><b>2.6</b> Model Fitting Using <em>lavaan</em></a><ul>
+<li class="chapter" data-level="2.6.1" data-path="global-estimation.html"><a href="global-estimation.html#lavaan-vs-lm"><i class="fa fa-check"></i><b>2.6.1</b> <em>lavaan</em> vs <code>lm</code></a></li>
+<li class="chapter" data-level="2.6.2" data-path="global-estimation.html"><a href="global-estimation.html#sem-using-lavaan"><i class="fa fa-check"></i><b>2.6.2</b> SEM using <em>lavaan</em></a></li>
+<li class="chapter" data-level="2.6.3" data-path="global-estimation.html"><a href="global-estimation.html#testing-alternate-structure-using-lavaan"><i class="fa fa-check"></i><b>2.6.3</b> Testing Alternate Structure using <em>lavaan</em></a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="global-estimation.html"><a href="global-estimation.html#references"><i class="fa fa-check"></i><b>2.7</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="coefficients.html"><a href="coefficients.html"><i class="fa fa-check"></i><b>3</b> Coefficients</a><ul>
+<li class="chapter" data-level="3.1" data-path="coefficients.html"><a href="coefficients.html#unstandardized-and-standardized-coefficients"><i class="fa fa-check"></i><b>3.1</b> Unstandardized and Standardized Coefficients</a></li>
+<li class="chapter" data-level="3.2" data-path="coefficients.html"><a href="coefficients.html#scale-standardization"><i class="fa fa-check"></i><b>3.2</b> Scale Standardization</a></li>
+<li class="chapter" data-level="3.3" data-path="coefficients.html"><a href="coefficients.html#range-standardization"><i class="fa fa-check"></i><b>3.3</b> Range Standardization</a></li>
+<li class="chapter" data-level="3.4" data-path="coefficients.html"><a href="coefficients.html#binomial-response-models"><i class="fa fa-check"></i><b>3.4</b> Binomial Response Models</a></li>
+<li class="chapter" data-level="3.5" data-path="coefficients.html"><a href="coefficients.html#scaling-to-other-non-normal-distributions"><i class="fa fa-check"></i><b>3.5</b> Scaling to Other Non-Normal Distributions</a></li>
+<li class="chapter" data-level="3.6" data-path="coefficients.html"><a href="coefficients.html#references-1"><i class="fa fa-check"></i><b>3.6</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="categorical-variables.html"><a href="categorical-variables.html"><i class="fa fa-check"></i><b>4</b> Categorical Variables</a><ul>
+<li class="chapter" data-level="4.1" data-path="categorical-variables.html"><a href="categorical-variables.html#introduction-to-exogenous-categorical-variables"><i class="fa fa-check"></i><b>4.1</b> Introduction to Exogenous Categorical Variables</a></li>
+<li class="chapter" data-level="4.2" data-path="categorical-variables.html"><a href="categorical-variables.html#exogenous-categorical-variables-as-marginal-means"><i class="fa fa-check"></i><b>4.2</b> Exogenous Categorical Variables as Marginal Means</a></li>
+<li class="chapter" data-level="4.3" data-path="categorical-variables.html"><a href="categorical-variables.html#exogenous-categorical-variables-as-marginal-means-a-worked-example"><i class="fa fa-check"></i><b>4.3</b> Exogenous Categorical Variables as Marginal Means: A Worked Example</a></li>
+<li class="chapter" data-level="4.4" data-path="categorical-variables.html"><a href="categorical-variables.html#endogenous-categorical-variables"><i class="fa fa-check"></i><b>4.4</b> Endogenous Categorical Variables</a></li>
+<li class="chapter" data-level="4.5" data-path="categorical-variables.html"><a href="categorical-variables.html#references-2"><i class="fa fa-check"></i><b>4.5</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html"><i class="fa fa-check"></i><b>5</b> Multigroup Analysis</a><ul>
+<li class="chapter" data-level="5.1" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#introduction-to-multigroup-analysis"><i class="fa fa-check"></i><b>5.1</b> Introduction to Multigroup Analysis</a></li>
+<li class="chapter" data-level="5.2" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#multigroup-analysis-using-global-estimation"><i class="fa fa-check"></i><b>5.2</b> Multigroup Analysis using Global Estimation</a></li>
+<li class="chapter" data-level="5.3" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#multigroup-analysis-using-local-estimation"><i class="fa fa-check"></i><b>5.3</b> Multigroup Analysis using Local Estimation</a></li>
+<li class="chapter" data-level="5.4" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#grace-jutila-1999-a-worked-example"><i class="fa fa-check"></i><b>5.4</b> Grace &amp; Jutila (1999): A Worked Example</a></li>
+<li class="chapter" data-level="5.5" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#references-3"><i class="fa fa-check"></i><b>5.5</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html"><i class="fa fa-check"></i><b>6</b> Latent Variable Modeling</a><ul>
+<li class="chapter" data-level="6.1" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#introduction-to-latent-variable-modeling"><i class="fa fa-check"></i><b>6.1</b> Introduction to Latent Variable Modeling</a></li>
+<li class="chapter" data-level="6.2" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#application-of-latent-variables-to-path-models"><i class="fa fa-check"></i><b>6.2</b> Application of Latent Variables to Path Models</a></li>
+<li class="chapter" data-level="6.3" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#latent-variables-in-lavaan"><i class="fa fa-check"></i><b>6.3</b> Latent Variables in <em>lavaan</em></a></li>
+<li class="chapter" data-level="6.4" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#multi-indicator-latent-variables"><i class="fa fa-check"></i><b>6.4</b> Multi-indicator Latent Variables</a></li>
+<li class="chapter" data-level="6.5" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#confirmatory-factor-analysis"><i class="fa fa-check"></i><b>6.5</b> Confirmatory Factor Analysis</a></li>
+<li class="chapter" data-level="6.6" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#travis-grace-2010-an-example"><i class="fa fa-check"></i><b>6.6</b> Travis &amp; Grace (2010): An Example</a></li>
+<li class="chapter" data-level="6.7" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#references-4"><i class="fa fa-check"></i><b>6.7</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="composite-variables.html"><a href="composite-variables.html"><i class="fa fa-check"></i><b>7</b> Composite Variables</a><ul>
+<li class="chapter" data-level="7.1" data-path="composite-variables.html"><a href="composite-variables.html#what-is-a-composite-variable"><i class="fa fa-check"></i><b>7.1</b> What is a Composite Variable?</a></li>
+<li class="chapter" data-level="7.2" data-path="composite-variables.html"><a href="composite-variables.html#constructing-a-composite-variable"><i class="fa fa-check"></i><b>7.2</b> Constructing a Composite Variable</a></li>
+<li class="chapter" data-level="7.3" data-path="composite-variables.html"><a href="composite-variables.html#grace-keeley-revisited-a-worked-example"><i class="fa fa-check"></i><b>7.3</b> Grace &amp; Keeley Revisited: A Worked Example</a></li>
+<li class="chapter" data-level="7.4" data-path="composite-variables.html"><a href="composite-variables.html#composites-in-piecewisesem"><i class="fa fa-check"></i><b>7.4</b> Composites in <em>piecewiseSEM</em></a></li>
+<li class="chapter" data-level="7.5" data-path="composite-variables.html"><a href="composite-variables.html#references-5"><i class="fa fa-check"></i><b>7.5</b> References</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Structural Equation Modeling in R for Ecology and Evolution</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="composite-variables" class="section level1">
+<h1><span class="header-section-number">7</span> Composite Variables</h1>
+<div id="what-is-a-composite-variable" class="section level2">
+<h2><span class="header-section-number">7.1</span> What is a Composite Variable?</h2>
+<p>Composite variables are another way, besides latent variables, to represent complex concepts in structural equation modeling. The most important distinction between the two is that, while latent variables give rise to measurable manifestations of an unobservable concept, composite variables arise from the combined influence of other variables.</p>
+<p>Consider the following composite variable <span class="math inline">\(\eta\)</span>:</p>
+<div class="figure">
+<img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/composite_variable_composite.png" alt="composite variable" />
+<p class="caption">composite variable</p>
+</div>
+<p>Here the arrows are leading <em>into</em>, not out of, <span class="math inline">\(\eta\)</span>, indicating that the composite variable is made up of the influences of the three example variables. Note: in this and other presentations, the composite is denoted by a hexagon, but can sometimes be an oval as it can technically be a form of a latent variable.</p>
+<p>If the composite is <em>entirely</em> made up of the three influences, it can be said to have no error. An example might be the two levels of a treatment (present/absent) that lead into a single composite variable called ‘Treatment.’ In this case, there are no other levels of treatment because you, as the investigator, did not apply any. Thus the composite ‘Treatment’ captures the full universe of treatment possibilities given the data.</p>
+<p>In other cases, the property might arise from the collective influence of variables but is not without error. For example, the idea of soil condition arises from different aspects of the soil: its pH, moisture, grain size, and so on. However, one might measure only some of these, and thus there remain other factors (nitrogen content) that might contribute to the notion of soil condition. In this case, the composite <em>would</em> have error and is therefore known as a <em>latent composite</em>.</p>
+<p>The benefit of such an approach is that complicated ideas can be distilled into discrete <em>blocks</em> that are easier to present and discuss. For example, it is easier to talk about the effects of the experimental treatment on soil condition, rather than the effect of treatment 1 on soil moisture, the effect of treatment 1 on soil pH, the effect of treatment 1 on soil grain size, and so on.</p>
+<p>In this way, the composite harkens back to the early meta-model, or broad conceptual relationships that inform the parameterization of the structural path model. In fact, in populating the meta-model, you may wish to consider those broad concepts as composites when fitting the model, rather than modeling all relationships among all observed variables.</p>
+<p>Selecting between latent and composite variables comes down to the concept in question, the presumed direction of causality, and the nature of the indicators.</p>
+<p>For the soil example, consider: is it that there is a common difference among soils driving variation in pH, moisture, etc.? Or is it that pH, moisture, etc. are all independent properties that combine to inform soil condition? If the goal is measure plant growth in potting soils from different manufacturers, then manufacturer might be the common source of variation and a latent variable more appropriate. If the observer is visiting different sites and measuring conditions that describe the soil in each place, then perhaps a composite variable is warranted.</p>
+<p>Another way of thinking about this is whether the indicators are interchangeable. In other words, does soil pH tell us the same information as soil moisture? If so, then they might be indicators of the same latent phenomenon. If not, and they contain unique information, then they likely combine to form a composite variable.</p>
+<p>Finally, do the indicators co-vary? If they are under common control of a latent variable, then changing one should alter all the others. If they are relatively independent–for example, one can change grain size without changing nutrient content–then causation likely flows into a composite (rather than out of a latent) variable.</p>
+<p>Now that we have defined a composite variable, let’s see how to make one.</p>
+</div>
+<div id="constructing-a-composite-variable" class="section level2">
+<h2><span class="header-section-number">7.2</span> Constructing a Composite Variable</h2>
+<p>Compared to latent variables, a composite variable is actually very easy to estimate: it is simply the sum of its indicators, hence the term <em>composite</em>.</p>
+<p>The way in which the indicators are summed depends on whether they are expected to have the same weight (a <em>fixed composite</em>) or different weights (a <em>statistical composite</em>). The former might be something like species relative abundances. The latter is what we will focus on here.</p>
+<p>The weights for the composite are easily acquired as they are the values that maximize the explained variance in some response. We have done this before many times using maximum-likelihood fitting.</p>
+<p>In fact, statistical composites can be boiled down to the coefficients from a multiple regression. The ML fitting function chooses parameter estimates for each predictor that maximize the likelihood of obseving the response. Those values serve as the loadings for the indicators of the composite variable. The data for each indicator are multipled by their loading and summed to generate the factor scores for the composite variable, which is then used in the structural model.</p>
+<p>Let’s demonstrate using some random data:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">8</span>)
+
+y &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">50</span>)
+x1 &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">50</span>)
+x2 &lt;-<span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span><span class="kw">runif</span>(<span class="dv">50</span>)
+
+<span class="co"># run multiple regression</span>
+model &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2)
+
+<span class="co"># get loadings</span>
+beta_x1 &lt;-<span class="st"> </span><span class="kw">summary</span>(model)<span class="op">$</span>coefficients[<span class="dv">2</span>, <span class="dv">1</span>]
+  
+beta_x2 &lt;-<span class="st">  </span><span class="kw">summary</span>(model)<span class="op">$</span>coefficients[<span class="dv">3</span>, <span class="dv">1</span>]
+
+<span class="co"># compute factor scores</span>
+composite &lt;-<span class="st"> </span>beta_x1 <span class="op">*</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>beta_x2 <span class="op">*</span><span class="st"> </span>x2</code></pre></div>
+<p>These values can then used to predict the response:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>composite))</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ composite)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.88387 -0.70164  0.05644  0.54393  2.07769 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)  -0.3031     0.2424  -1.250    0.217
+## composite     1.0000     0.8045   1.243    0.220
+## 
+## Residual standard error: 1.014 on 48 degrees of freedom
+## Multiple R-squared:  0.03118,    Adjusted R-squared:  0.011 
+## F-statistic: 1.545 on 1 and 48 DF,  p-value: 0.2199</code></pre>
+<p>Note how the unstandardized coefficient is 1. This is because we the composite is essentially the predicted values of the response, so they are in the same units. Thus, the coefficient is really only interpretable in standardized units.</p>
+<p>Let’s alternately fit this composite model with <em>lavaan</em> and fix the loadings of <span class="math inline">\(x1\)</span> and <span class="math inline">\(x2\)</span> to the values from the multiple regression:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lavaan)</code></pre></div>
+<pre><code>## This is lavaan 0.6-2</code></pre>
+<pre><code>## lavaan is BETA software! Please report any bugs.</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">comp_formula1 &lt;-<span class="st"> &#39;</span>
+<span class="st">composite &lt;~ -0.498 * x1 + 0.579 * x2</span>
+
+<span class="st">y ~ composite</span>
+<span class="st">&#39;</span>
+
+comp_model1 &lt;-<span class="st"> </span><span class="kw">sem</span>(comp_formula1, <span class="kw">data.frame</span>(y, x1, x2))
+
+<span class="kw">summary</span>(comp_model1, <span class="dt">standardize =</span> T)</code></pre></div>
+<pre><code>## lavaan 0.6-2 ended normally after 14 iterations
+## 
+##   Optimization method                           NLMINB
+##   Number of free parameters                          2
+## 
+##   Number of observations                            50
+## 
+##   Estimator                                         ML
+##   Model Fit Test Statistic                       0.000
+##   Degrees of freedom                                 1
+##   P-value (Chi-square)                           0.999
+## 
+## Parameter Estimates:
+## 
+##   Information                                 Expected
+##   Information saturated (h1) model          Structured
+##   Standard Errors                             Standard
+## 
+## Composites:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+##   composite &lt;~                                                          
+##     x1               -0.498                              -2.793   -3.163
+##     x2                0.579                               3.248    3.642
+## 
+## Regressions:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+##   y ~                                                                   
+##     composite         1.000    0.788    1.269    0.205    0.178    0.177
+## 
+## Variances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+##    .y                 0.987    0.197    5.000    0.000    0.987    0.969
+##     composite         0.000                               0.000    0.000</code></pre>
+<p>We see from the output that the estimated loadings for our two indicators are the same values we provided, and consequently the understandardized coefficient is 1. However, the unstandardized coefficient is 0.177 and it is this value that we would present (although its non-significant, given that these are fake data).</p>
+<p>Let’s suppose we didn’t know the loadings from the multiple regression. We run into the same issue of identifiability as when constructing latent variables, so we must fix the first loading to 1. This will also define the scale of the copmosite. NOTE: <em>lavaan</em> does not do this automatically, we will have to implement it manually.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">comp_formula2 &lt;-<span class="st"> &#39;</span>
+<span class="st">composite &lt;~ 1 * x1 + x2</span>
+
+<span class="st">y ~ composite</span>
+<span class="st">&#39;</span>
+
+comp_model2 &lt;-<span class="st"> </span><span class="kw">sem</span>(comp_formula2, <span class="kw">data.frame</span>(y, x1, x2))</code></pre></div>
+<pre><code>## Warning in lavaan::lavaan(model = comp_formula2, data = data.frame(y, x1, :
+## lavaan WARNING: the optimizer warns that a solution has NOT been found!</code></pre>
+<p>It seems that, because the true loading of <span class="math inline">\(x1\)</span> on the composite is far from 1 (we know it is actually -0.498), we have received a non-convergence error!</p>
+<p>One solution is to set the other loading to 1:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">comp_formula3 &lt;-<span class="st"> &#39;</span>
+<span class="st">composite &lt;~ x1 + 1 * x2</span>
+
+<span class="st">y ~ composite</span>
+<span class="st">&#39;</span>
+
+comp_model3 &lt;-<span class="st"> </span><span class="kw">sem</span>(comp_formula3, <span class="kw">data.frame</span>(y, x1, x2))
+
+<span class="kw">summary</span>(comp_model3, <span class="dt">standardize =</span> T)</code></pre></div>
+<pre><code>## lavaan 0.6-2 ended normally after 22 iterations
+## 
+##   Optimization method                           NLMINB
+##   Number of free parameters                          3
+## 
+##   Number of observations                            50
+## 
+##   Estimator                                         ML
+##   Model Fit Test Statistic                       0.000
+##   Degrees of freedom                                 0
+##   Minimum Function Value               0.0000000000000
+## 
+## Parameter Estimates:
+## 
+##   Information                                 Expected
+##   Information saturated (h1) model          Structured
+##   Standard Errors                             Standard
+## 
+## Composites:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+##   composite &lt;~                                                          
+##     x1               -0.860    0.230   -3.745    0.000   -2.792   -3.162
+##     x2                1.000                               3.247    3.642
+## 
+## Regressions:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+##   y ~                                                                   
+##     composite         0.579    0.489    1.184    0.236    0.178    0.177
+## 
+## Variances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+##    .y                 0.987    0.197    5.000    0.000    0.987    0.969
+##     composite         0.000                               0.000    0.000</code></pre>
+<p>Here the model converges because the true loading (0.579) is close enough to 1 for the maximum-likelihood fitting function to find it.</p>
+<p>Note that the unstandardized coefficient is no longer 1: this is because the scale of the composite has been set to that of the second indicator. However, the standardized coefficient is different from what we know the true relationship to be (0.236 vs. 0.177).</p>
+<p>For this reason, it is generally recommended that one compute the loadings by hand and fix them in the model. This has an added benefit we will get to in section 1.4. But first let’s explore a real-world example.</p>
+</div>
+<div id="grace-keeley-revisited-a-worked-example" class="section level2">
+<h2><span class="header-section-number">7.3</span> Grace &amp; Keeley Revisited: A Worked Example</h2>
+<p>Recall from the chapter on “Global Estimation” that Grace &amp; Keeley (2006) were interested in the factors that mediated recovery of shrublands post-fire disturbance. In that chapter, we fit a sub-model of their larger model, and we’ll fit a different sub-model in this chapter.</p>
+<p>In their model, they used plant cover to predict plant species richness. Let’s assume for a moment that the relationship between cover and richness may be non-linear: its not until a certain amount of cover that rarer species begin to appear, for example. In this case, we might suppose there are both linear <span class="math inline">\(cover\)</span> and non-linear <span class="math inline">\(cover^2\)</span> components to the model. Composite variables are a nice way to summarize both the linear and non-linear effects.</p>
+<p>Let’s fit the following composite variable:</p>
+<div class="figure">
+<img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/composite_variable_keeley.png" alt="keeley composite" />
+<p class="caption">keeley composite</p>
+</div>
+<p>Here we have a composite that summarizes the unsquared and squared values of cover, which then goes on to predict richness.</p>
+<p>Let’s adopt the two-step approach and first fit a linear model.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(piecewiseSEM)</code></pre></div>
+<pre><code>## 
+##   This is piecewiseSEM version 2.1.0
+## 
+## 
+##   If you have used the package before, it is strongly recommended you read Section 3 of the vignette(&#39;piecewiseSEM&#39;) to familiarize yourself with the new syntax
+## 
+##   Questions or bugs can be addressed to &lt;LefcheckJ@si.edu&gt;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(keeley)
+
+cover_model &lt;-<span class="st"> </span><span class="kw">lm</span>(rich <span class="op">~</span><span class="st"> </span>cover <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(cover<span class="op">^</span><span class="dv">2</span>), keeley)
+
+<span class="kw">summary</span>(cover_model)</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = rich ~ cover + I(cover^2), data = keeley)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -29.161 -11.958  -0.595  10.094  32.956 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   25.641      6.574   3.900 0.000189 ***
+## cover         57.999     18.931   3.064 0.002910 ** 
+## I(cover^2)   -28.577     12.385  -2.307 0.023403 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 14 on 87 degrees of freedom
+## Multiple R-squared:  0.1598, Adjusted R-squared:  0.1404 
+## F-statistic: 8.271 on 2 and 87 DF,  p-value: 0.0005147</code></pre>
+<p>It seems both the unsquared and squared values of cover significantly predict richness, so we are justified in including both as indicators to our composite variable. Now we extract the coefficients, use them to generate the factor scores, and finally use those scores to predict richness.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">beta_cover &lt;-<span class="st"> </span><span class="kw">summary</span>(cover_model)<span class="op">$</span>coefficients[<span class="dv">2</span>, <span class="dv">1</span>]
+
+beta_cover2 &lt;-<span class="st"> </span><span class="kw">summary</span>(cover_model)<span class="op">$</span>coefficients[<span class="dv">3</span>, <span class="dv">1</span>]
+
+composite &lt;-<span class="st"> </span>beta_cover <span class="op">*</span><span class="st"> </span>keeley<span class="op">$</span>cover <span class="op">+</span><span class="st"> </span>beta_cover2 <span class="op">*</span><span class="st"> </span>(keeley<span class="op">$</span>cover)<span class="op">^</span><span class="dv">2</span>
+
+<span class="kw">summary</span>(<span class="kw">lm</span>(rich <span class="op">~</span><span class="st"> </span>composite, <span class="dt">data =</span> <span class="kw">data.frame</span>(keeley, composite)))</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = rich ~ composite, data = data.frame(keeley, composite))
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -29.161 -11.958  -0.595  10.094  32.956 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  25.6406     5.9516   4.308 4.27e-05 ***
+## composite     1.0000     0.2445   4.090 9.51e-05 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 13.93 on 88 degrees of freedom
+## Multiple R-squared:  0.1598, Adjusted R-squared:  0.1502 
+## F-statistic: 16.73 on 1 and 88 DF,  p-value: 9.507e-05</code></pre>
+<p>As would be expected from the multiple regression, the composite term significantly predicts richness (<span class="math inline">\(P &lt; 0.001\)</span>). Let’s use the <code>coefs</code> function from <em>piecewiseSEM</em> to obtain the standardized coefficient:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coefs</span>(<span class="kw">lm</span>(rich <span class="op">~</span><span class="st"> </span>composite, <span class="dt">data =</span> <span class="kw">data.frame</span>(keeley, composite)))</code></pre></div>
+<pre><code>##   Response Predictor Estimate Std.Error DF Crit.Value P.Value Std.Estimate
+## 1     rich composite        1    0.2445 88     4.0904   1e-04       0.3997
+##      
+## 1 ***</code></pre>
+<p>So a 1 SD change in the total cover effect would result in a 0.400 SD change in plant richness.</p>
+<p>We can alternately fit the model with <em>lavaan</em> using the same coefficients from the multiple regression:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create a new non-linear variable for cover^2</span>
+keeley<span class="op">$</span>coversq &lt;-<span class="st"> </span>keeley<span class="op">$</span>cover<span class="op">^</span><span class="dv">2</span>
+
+keeley_formula1 &lt;-<span class="st"> &#39;</span>
+<span class="st">composite &lt;~ 58 * cover + -28.578 * coversq</span>
+
+<span class="st">rich ~ composite</span>
+<span class="st">&#39;</span>
+
+keeley_model1 &lt;-<span class="st"> </span><span class="kw">sem</span>(keeley_formula1, keeley, <span class="dt">fixed.x =</span> F)</code></pre></div>
+<pre><code>## Warning in lav_data_full(data = data, group = group, cluster = cluster, :
+## lavaan WARNING: some observed variances are (at least) a factor 1000 times
+## larger than others; use varTable(fit) to investigate</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(keeley_model1, <span class="dt">standardize =</span> T)</code></pre></div>
+<pre><code>## lavaan 0.6-2 ended normally after 20 iterations
+## 
+##   Optimization method                           NLMINB
+##   Number of free parameters                          5
+## 
+##   Number of observations                            90
+## 
+##   Estimator                                         ML
+##   Model Fit Test Statistic                       0.000
+##   Degrees of freedom                                 1
+##   P-value (Chi-square)                           1.000
+## 
+## Parameter Estimates:
+## 
+##   Information                                 Expected
+##   Information saturated (h1) model          Structured
+##   Standard Errors                             Standard
+## 
+## Composites:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+##   composite &lt;~                                                          
+##     cover            58.000                               9.660    3.048
+##     coversq         -28.578                              -4.760   -2.295
+## 
+## Regressions:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+##   rich ~                                                                
+##     composite         1.000    0.242    4.137    0.000    6.004    0.400
+## 
+## Covariances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+##   cover ~~                                                              
+##     coversq           0.147    0.022    6.602    0.000    0.147    0.969
+## 
+## Variances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+##    .rich            189.597   28.263    6.708    0.000  189.597    0.840
+##     composite         0.000                               0.000    0.000
+##     cover             0.100    0.015    6.708    0.000    0.100    1.000
+##     coversq           0.233    0.035    6.708    0.000    0.233    1.000</code></pre>
+<p>We obtain the same standardized coefficient (0.400) as through the manual calculation.</p>
+<p>Finally, let’s incorporate the effect of fire severity on cover. Now the composite is endogenous because it is affected by fire severity, and goes on to predict richness.</p>
+<div class="figure">
+<img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/composite_variable_keeley_endo.png" alt="keeley endogenous composite" />
+<p class="caption">keeley endogenous composite</p>
+</div>
+<p>First, we must fit the model without the composite to get the loadings of <span class="math inline">\(cover\)</span> and <span class="math inline">\(cover^2\)</span>.</p>
+<p>Because the squared term is not a ‘true’ variable in the model but a convenience for us to explore this non-linearity, we must treat them as exogenous even though they are part of an endogenous composite. <em>lavaan</em> automatically models correlations among exogenous variables, but will not do so for the composite indicators. In this case, then, we must manually control for the correlation between <span class="math inline">\(cover^2\)</span> and <span class="math inline">\(cover\)</span> and <span class="math inline">\(firesev\)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keeley_formula2 &lt;-<span class="st"> &#39;</span>
+<span class="st">composite &lt;~ 58 * cover + -28.578 * coversq</span>
+
+<span class="st">rich ~ composite + firesev</span>
+
+<span class="st">cover ~ firesev</span>
+
+<span class="st">cover ~~ coversq</span>
+
+<span class="st">firesev ~~ coversq</span>
+<span class="st">&#39;</span>
+
+keeley_model2 &lt;-<span class="st"> </span><span class="kw">sem</span>(keeley_formula2, <span class="kw">data.frame</span>(keeley, composite))</code></pre></div>
+<pre><code>## Warning in lav_data_full(data = data, group = group, cluster = cluster, :
+## lavaan WARNING: some observed variances are (at least) a factor 1000 times
+## larger than others; use varTable(fit) to investigate</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(keeley_model2, <span class="dt">standardize =</span> T, <span class="dt">rsq =</span> T)</code></pre></div>
+<pre><code>## lavaan 0.6-2 ended normally after 53 iterations
+## 
+##   Optimization method                           NLMINB
+##   Number of free parameters                          9
+## 
+##   Number of observations                            90
+## 
+##   Estimator                                         ML
+##   Model Fit Test Statistic                       0.065
+##   Degrees of freedom                                 1
+##   P-value (Chi-square)                           0.799
+## 
+## Parameter Estimates:
+## 
+##   Information                                 Expected
+##   Information saturated (h1) model          Structured
+##   Standard Errors                             Standard
+## 
+## Composites:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+##   composite &lt;~                                                          
+##     cover            58.000                               9.660    3.048
+##     coversq         -28.578                              -4.760   -2.295
+## 
+## Regressions:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+##   rich ~                                                                
+##     composite         0.731    0.265    2.757    0.006    4.391    0.292
+##     firesev          -2.132    0.969   -2.200    0.028   -2.132   -0.233
+##   cover ~                                                               
+##     firesev          -0.084    0.018   -4.611    0.000   -0.084   -0.437
+## 
+## Covariances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+##  .cover ~~                                                              
+##     coversq           0.122    0.019    6.588    0.000    0.122    0.893
+##   coversq ~~                                                            
+##     firesev          -0.301    0.089   -3.369    0.001   -0.301   -0.380
+## 
+## Variances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+##    .rich            179.922   26.821    6.708    0.000  179.922    0.797
+##    .cover             0.081    0.012    6.708    0.000    0.081    0.809
+##     coversq           0.233    0.035    6.708    0.000    0.233    1.000
+##     firesev           2.700    0.402    6.708    0.000    2.700    1.000
+##     composite         0.000                               0.000    0.000
+## 
+## R-Square:
+##                    Estimate
+##     rich              0.203
+##     cover             0.191</code></pre>
+<p>Here, we find a good-fitting model (<span class="math inline">\(P = 0.80\)</span>). Moreover, we obtain the standardized coefficient for the effect of fire severity on cover <span class="math inline">\(\gamma = -0.437\)</span> and of the composite on richness <span class="math inline">\(\beta = 0.292\)</span> controlling for fire severity, which is the total non-linear effect of cover.</p>
+<p>To otain the indirect effect then, we multiply these paths plus the standardized loading <span class="math inline">\(cover\)</span> on the composite: <span class="math inline">\(-0.437 * 3.048 * 0.292 = -0.389\)</span>.</p>
+</div>
+<div id="composites-in-piecewisesem" class="section level2">
+<h2><span class="header-section-number">7.4</span> Composites in <em>piecewiseSEM</em></h2>
+<p>For the moment, composites are not directly implemented in <em>piecewiseSEM</em> but we hope to introduce that functionality shortly. In the interim, it is easy to compute them by hand, as we have shown above, extract the predicted scores, and use them as any other predictor:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keeley<span class="op">$</span>composite &lt;-<span class="st"> </span>composite
+
+keeley_psem &lt;-<span class="st"> </span><span class="kw">psem</span>(
+  <span class="kw">lm</span>(firesev <span class="op">~</span><span class="st"> </span>cover, keeley),
+  <span class="kw">lm</span>(rich <span class="op">~</span><span class="st"> </span>composite <span class="op">+</span><span class="st"> </span>firesev, keeley)
+)
+
+<span class="kw">summary</span>(keeley_psem)</code></pre></div>
+<pre><code>## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |================================                                 |  50%
+  |                                                                       
+  |=================================================================| 100%</code></pre>
+<pre><code>## 
+## Structural Equation Model of keeley_psem 
+## 
+## Call:
+##   firesev ~ cover
+##   rich ~ composite + firesev
+## 
+##     AIC      BIC
+##  19.913   37.412
+## 
+## ---
+## Tests of directed separation:
+## 
+##              Independ.Claim Estimate Std.Error DF Crit.Value P.Value 
+##          rich ~ cover + ...  -2.0305    8.1328 86    -0.2497  0.8034 
+##   firesev ~ composite + ...  -0.0853    0.0456 87    -1.8710  0.0647 
+## 
+## Global goodness-of-fit:
+## 
+##   Fisher&#39;s C = 5.913 with P-value = 0.206 and on 4 degrees of freedom
+## 
+## ---
+## Coefficients:
+## 
+##   Response Predictor Estimate Std.Error DF Crit.Value P.Value Std.Estimate
+##    firesev     cover  -2.2769    0.4994 88    -4.5594  0.0000      -0.4371
+##       rich composite   0.7314    0.2698 87     2.7108  0.0081       0.2923
+##       rich   firesev  -2.1323    0.9859 87    -2.1629  0.0333      -0.2332
+##      
+##   ***
+##    **
+##     *
+## 
+##   Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05
+## 
+## Individual R-squared:
+## 
+##   Response method R.squared
+##    firesev   none      0.19
+##       rich   none      0.20</code></pre>
+</div>
+<div id="references-5" class="section level2">
+<h2><span class="header-section-number">7.5</span> References</h2>
+<p>Grace, J. B., &amp; Keeley, J. E. (2006). A structural equation model analysis of postfire plant diversity in California shrublands. Ecological Applications, 16(2), 503-514.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="latent-variable-modeling.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

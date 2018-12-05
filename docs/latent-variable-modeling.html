@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>6 Latent Variable Modeling | Structural Equation Modeling in R for Ecology and Evolution</title>
+  <meta name="description" content="6 Latent Variable Modeling | Structural Equation Modeling in R for Ecology and Evolution>
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+
+  <meta property="og:title" content="6 Latent Variable Modeling | Structural Equation Modeling in R for Ecology and Evolution />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  <meta name="github-repo" content="jslefche/sem_book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="6 Latent Variable Modeling | Structural Equation Modeling in R for Ecology and Evolution />
+  
+  
+  
+
+<meta name="author" content="Jonathan Lefcheck">
+
+
+<meta name="date" content="2018-12-05">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="multigroup-analysis.html">
+<link rel="next" href="composite-variables.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface</a></li>
+<li class="chapter" data-level="2" data-path="global-estimation.html"><a href="global-estimation.html"><i class="fa fa-check"></i><b>2</b> Global Estimation</a><ul>
+<li class="chapter" data-level="2.1" data-path="global-estimation.html"><a href="global-estimation.html#what-is-covariance"><i class="fa fa-check"></i><b>2.1</b> What is (Co)variance?</a></li>
+<li class="chapter" data-level="2.2" data-path="global-estimation.html"><a href="global-estimation.html#regression-coefficients"><i class="fa fa-check"></i><b>2.2</b> Regression Coefficients</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="global-estimation.html"><a href="global-estimation.html#rule-1-unspecified-relationships-among-exogenous-variables-are-simply-their-bivariate-correlations."><i class="fa fa-check"></i><b>2.2.1</b> Rule 1: Unspecified relationships among exogenous variables are simply their bivariate correlations.</a></li>
+<li class="chapter" data-level="2.2.2" data-path="global-estimation.html"><a href="global-estimation.html#rule-2-when-two-variables-are-connected-by-a-single-path-the-coefficient-of-that-path-is-the-regression-coefficient."><i class="fa fa-check"></i><b>2.2.2</b> Rule 2: When two variables are connected by a single path, the coefficient of that path is the regression coefficient.</a></li>
+<li class="chapter" data-level="2.2.3" data-path="global-estimation.html"><a href="global-estimation.html#rule-3-the-strength-of-a-compound-path-one-that-includes-multiple-links-is-the-product-of-the-individual-coefficients."><i class="fa fa-check"></i><b>2.2.3</b> Rule 3: The strength of a compound path (one that includes multiple links) is the product of the individual coefficients.</a></li>
+<li class="chapter" data-level="2.2.4" data-path="global-estimation.html"><a href="global-estimation.html#rule-4.-when-variables-are-connected-by-more-than-one-pathway-each-pathway-is-the-partial-regression-coefficient."><i class="fa fa-check"></i><b>2.2.4</b> Rule 4. When variables are connected by more than one pathway, each pathway is the ‘partial’ regression coefficient.</a></li>
+<li class="chapter" data-level="2.2.5" data-path="global-estimation.html"><a href="global-estimation.html#rule-5-errors-on-endogenous-variables-relate-the-unexplained-correlations-or-variances-arising-from-unmeasured-variables."><i class="fa fa-check"></i><b>2.2.5</b> Rule 5: Errors on endogenous variables relate the unexplained correlations or variances arising from unmeasured variables.</a></li>
+<li class="chapter" data-level="2.2.6" data-path="global-estimation.html"><a href="global-estimation.html#rule-6-unanalyzed-residual-correlations-among-two-endogenous-variables-are-their-partial-correlations."><i class="fa fa-check"></i><b>2.2.6</b> Rule 6: Unanalyzed (residual) correlations among two endogenous variables are their partial correlations.</a></li>
+<li class="chapter" data-level="2.2.7" data-path="global-estimation.html"><a href="global-estimation.html#rule-7-the-total-effect-one-variable-has-another-is-the-sum-of-its-direct-and-indirect-effects."><i class="fa fa-check"></i><b>2.2.7</b> Rule 7: The total effect one variable has another is the sum of its direct and indirect effects.</a></li>
+<li class="chapter" data-level="2.2.8" data-path="global-estimation.html"><a href="global-estimation.html#rule-8-the-total-effect-including-undirected-paths-is-equivalent-to-the-total-correlation."><i class="fa fa-check"></i><b>2.2.8</b> Rule 8: The total effect (including undirected paths) is equivalent to the total correlation.</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="global-estimation.html"><a href="global-estimation.html#variance-based-structural-equation-modeling"><i class="fa fa-check"></i><b>2.3</b> Variance-based Structural Equation Modeling</a></li>
+<li class="chapter" data-level="2.4" data-path="global-estimation.html"><a href="global-estimation.html#model-identifiability"><i class="fa fa-check"></i><b>2.4</b> Model Identifiability</a></li>
+<li class="chapter" data-level="2.5" data-path="global-estimation.html"><a href="global-estimation.html#goodness-of-fit-measures"><i class="fa fa-check"></i><b>2.5</b> Goodness-of-fit Measures</a></li>
+<li class="chapter" data-level="2.6" data-path="global-estimation.html"><a href="global-estimation.html#model-fitting-using-lavaan"><i class="fa fa-check"></i><b>2.6</b> Model Fitting Using <em>lavaan</em></a><ul>
+<li class="chapter" data-level="2.6.1" data-path="global-estimation.html"><a href="global-estimation.html#lavaan-vs-lm"><i class="fa fa-check"></i><b>2.6.1</b> <em>lavaan</em> vs <code>lm</code></a></li>
+<li class="chapter" data-level="2.6.2" data-path="global-estimation.html"><a href="global-estimation.html#sem-using-lavaan"><i class="fa fa-check"></i><b>2.6.2</b> SEM using <em>lavaan</em></a></li>
+<li class="chapter" data-level="2.6.3" data-path="global-estimation.html"><a href="global-estimation.html#testing-alternate-structure-using-lavaan"><i class="fa fa-check"></i><b>2.6.3</b> Testing Alternate Structure using <em>lavaan</em></a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="global-estimation.html"><a href="global-estimation.html#references"><i class="fa fa-check"></i><b>2.7</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="coefficients.html"><a href="coefficients.html"><i class="fa fa-check"></i><b>3</b> Coefficients</a><ul>
+<li class="chapter" data-level="3.1" data-path="coefficients.html"><a href="coefficients.html#unstandardized-and-standardized-coefficients"><i class="fa fa-check"></i><b>3.1</b> Unstandardized and Standardized Coefficients</a></li>
+<li class="chapter" data-level="3.2" data-path="coefficients.html"><a href="coefficients.html#scale-standardization"><i class="fa fa-check"></i><b>3.2</b> Scale Standardization</a></li>
+<li class="chapter" data-level="3.3" data-path="coefficients.html"><a href="coefficients.html#range-standardization"><i class="fa fa-check"></i><b>3.3</b> Range Standardization</a></li>
+<li class="chapter" data-level="3.4" data-path="coefficients.html"><a href="coefficients.html#binomial-response-models"><i class="fa fa-check"></i><b>3.4</b> Binomial Response Models</a></li>
+<li class="chapter" data-level="3.5" data-path="coefficients.html"><a href="coefficients.html#scaling-to-other-non-normal-distributions"><i class="fa fa-check"></i><b>3.5</b> Scaling to Other Non-Normal Distributions</a></li>
+<li class="chapter" data-level="3.6" data-path="coefficients.html"><a href="coefficients.html#references-1"><i class="fa fa-check"></i><b>3.6</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="categorical-variables.html"><a href="categorical-variables.html"><i class="fa fa-check"></i><b>4</b> Categorical Variables</a><ul>
+<li class="chapter" data-level="4.1" data-path="categorical-variables.html"><a href="categorical-variables.html#introduction-to-exogenous-categorical-variables"><i class="fa fa-check"></i><b>4.1</b> Introduction to Exogenous Categorical Variables</a></li>
+<li class="chapter" data-level="4.2" data-path="categorical-variables.html"><a href="categorical-variables.html#exogenous-categorical-variables-as-marginal-means"><i class="fa fa-check"></i><b>4.2</b> Exogenous Categorical Variables as Marginal Means</a></li>
+<li class="chapter" data-level="4.3" data-path="categorical-variables.html"><a href="categorical-variables.html#exogenous-categorical-variables-as-marginal-means-a-worked-example"><i class="fa fa-check"></i><b>4.3</b> Exogenous Categorical Variables as Marginal Means: A Worked Example</a></li>
+<li class="chapter" data-level="4.4" data-path="categorical-variables.html"><a href="categorical-variables.html#endogenous-categorical-variables"><i class="fa fa-check"></i><b>4.4</b> Endogenous Categorical Variables</a></li>
+<li class="chapter" data-level="4.5" data-path="categorical-variables.html"><a href="categorical-variables.html#references-2"><i class="fa fa-check"></i><b>4.5</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html"><i class="fa fa-check"></i><b>5</b> Multigroup Analysis</a><ul>
+<li class="chapter" data-level="5.1" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#introduction-to-multigroup-analysis"><i class="fa fa-check"></i><b>5.1</b> Introduction to Multigroup Analysis</a></li>
+<li class="chapter" data-level="5.2" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#multigroup-analysis-using-global-estimation"><i class="fa fa-check"></i><b>5.2</b> Multigroup Analysis using Global Estimation</a></li>
+<li class="chapter" data-level="5.3" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#multigroup-analysis-using-local-estimation"><i class="fa fa-check"></i><b>5.3</b> Multigroup Analysis using Local Estimation</a></li>
+<li class="chapter" data-level="5.4" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#grace-jutila-1999-a-worked-example"><i class="fa fa-check"></i><b>5.4</b> Grace &amp; Jutila (1999): A Worked Example</a></li>
+<li class="chapter" data-level="5.5" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#references-3"><i class="fa fa-check"></i><b>5.5</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html"><i class="fa fa-check"></i><b>6</b> Latent Variable Modeling</a><ul>
+<li class="chapter" data-level="6.1" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#introduction-to-latent-variable-modeling"><i class="fa fa-check"></i><b>6.1</b> Introduction to Latent Variable Modeling</a></li>
+<li class="chapter" data-level="6.2" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#application-of-latent-variables-to-path-models"><i class="fa fa-check"></i><b>6.2</b> Application of Latent Variables to Path Models</a></li>
+<li class="chapter" data-level="6.3" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#latent-variables-in-lavaan"><i class="fa fa-check"></i><b>6.3</b> Latent Variables in <em>lavaan</em></a></li>
+<li class="chapter" data-level="6.4" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#multi-indicator-latent-variables"><i class="fa fa-check"></i><b>6.4</b> Multi-indicator Latent Variables</a></li>
+<li class="chapter" data-level="6.5" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#confirmatory-factor-analysis"><i class="fa fa-check"></i><b>6.5</b> Confirmatory Factor Analysis</a></li>
+<li class="chapter" data-level="6.6" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#travis-grace-2010-an-example"><i class="fa fa-check"></i><b>6.6</b> Travis &amp; Grace (2010): An Example</a></li>
+<li class="chapter" data-level="6.7" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#references-4"><i class="fa fa-check"></i><b>6.7</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="composite-variables.html"><a href="composite-variables.html"><i class="fa fa-check"></i><b>7</b> Composite Variables</a><ul>
+<li class="chapter" data-level="7.1" data-path="composite-variables.html"><a href="composite-variables.html#what-is-a-composite-variable"><i class="fa fa-check"></i><b>7.1</b> What is a Composite Variable?</a></li>
+<li class="chapter" data-level="7.2" data-path="composite-variables.html"><a href="composite-variables.html#constructing-a-composite-variable"><i class="fa fa-check"></i><b>7.2</b> Constructing a Composite Variable</a></li>
+<li class="chapter" data-level="7.3" data-path="composite-variables.html"><a href="composite-variables.html#grace-keeley-revisited-a-worked-example"><i class="fa fa-check"></i><b>7.3</b> Grace &amp; Keeley Revisited: A Worked Example</a></li>
+<li class="chapter" data-level="7.4" data-path="composite-variables.html"><a href="composite-variables.html#composites-in-piecewisesem"><i class="fa fa-check"></i><b>7.4</b> Composites in <em>piecewiseSEM</em></a></li>
+<li class="chapter" data-level="7.5" data-path="composite-variables.html"><a href="composite-variables.html#references-5"><i class="fa fa-check"></i><b>7.5</b> References</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Structural Equation Modeling in R for Ecology and Evolution</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="latent-variable-modeling" class="section level1">
+<h1><span class="header-section-number">6</span> Latent Variable Modeling</h1>
+<div id="introduction-to-latent-variable-modeling" class="section level2">
+<h2><span class="header-section-number">6.1</span> Introduction to Latent Variable Modeling</h2>
+<p><em>Latent variables</em> are variables that are unobserved, but whose influence can be summarized through one or more <em>indicator variables</em>. They are useful for capturing complex or conceptual properties of a system that are difficult to quantify or measure directly. Early applications of latent variables, for example, focused on modeling the effects of ‘general intelligence,’ which is an abstract concept that is impossible to actually measure, but can be approximated using scores from different tests of cognitive performance (e.g., memory, verbal, spatial, etc.).</p>
+<p>Consider the following simple example of a latent variable, in this case exogenous (informed only by a single predictor):</p>
+<div class="figure">
+<img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/latent_variable_exo.png" alt="latent variable" />
+<p class="caption">latent variable</p>
+</div>
+<p>Here, the latent variable is indicated by the circle marked by <span class="math inline">\(\xi\)</span>. The single indicator variable <span class="math inline">\(x\)</span> is indicated by the square box, as are all observed variables. You’ll note a few curiosities compared to observed-variable models.</p>
+<p>First, the direction of causality is reversed from what you might expect: <em>from</em> the latent variables <em>to</em> the observed variable. This is because the indicator variable is simply an emergent manifestion of the underlying phenomenon represented by the latent variable.</p>
+<p>Second, there is an error <span class="math inline">\(\delta\)</span> associated with the indicator. This implies that the indicator is often an imperfect approximation of the latent construct. In other words, there are other factors influencing the correlation between the observed and latent variable.</p>
+<p>The latent variable can be related to the indicator variable using the following equation:</p>
+<p><span class="math display">\[x = \lambda \xi + \delta_{x}\]</span></p>
+<p>Here, the values of <span class="math inline">\(x\)</span> are the result of the latent variable proportional to <span class="math inline">\(\lambda\)</span> (its effect on <span class="math inline">\(x\)</span>) plus some error <span class="math inline">\(\delta_{x}\)</span>.</p>
+<p>A simple example of a latent-indicator relationship would be body size (latent) and body mass (indicator). There are obviously many aspects to body size that may be difficult to quantify, such as shape, volume, complexity, and so on. However, body mass is a simple, measurable consequence of these unmeasured characteristics, and thus can be thought to latently indicate body size. However, because we often can’t perfectly measure body mass of every individual we are interested in, we must incorporate sampling error into our model of body size.</p>
+<p>This example reinforces the point that latent variables are used to represent concepts. Body size is often invoked in lots of ecological hypotheses (e.g., metabolic theory, Bergmann’s rule), but is almost always represented as some easily measurable quantity such as body mass rather than the complex, multidimensional construct that it is in reality. Latent variable modeling allows us to better approach that multidimensional construct by modeling a series of indicator variables that arise from the general concept of body size (e.g., mass, length, width, etc.). It therefore is a powerful tool that is better positioned to integrate theory and observation than relying on one or few surrogates.</p>
+<p>However, some care should be taken when constructing latent variables. Just because we call a latent variable something does not always mean it <em>is</em> that thing. For example, the latent variable body size as indicated by total abundance might appear legitimate–high abundances may constrain body sizes under limited resources–but is abundance <em>really</em> an indicator of this phenomenon? Can we go on to evaluate ecological theory about metabolic scaling on the basis of abundances? Probably not. So care should be taken when selecting/naming latent variables and identifying appropriate indicators (known as the <em>naming fallacy</em>). In other words: <em>be sure the latent variable reflects the actual properties captured by the indicator variables!</em> The degree to which the indicators represent the phenomenon captured by the latent variable is termed <em>validity</em> and is a qualitative justification of the latent construct.</p>
+<p>In contrast, <em>reliability</em> of the latent variable provides quantitative values with which to gauge how well an indicator reflects the latent variable. Reliability implies that the same values of the indicator would be obtained if they were continually resampled again and again. In other words, reliable indicators approach the true population mean that is the (theoretical) product of the latent variable: a perfect indicator would generate the same values every time so they would have a correlation <span class="math inline">\(r = 1\)</span>. Of course, rarely do we sample an entire population or so well, and there will inevitably be some differences among our samples leading to deviations in <span class="math inline">\(r\)</span> away from 1.</p>
+<p>From this correlation, we can obtain a path coefficient from the latent to the indicator variable. Recall from the “Rules of Path Coefficients” (see Chapter: Global Estimation) the the coefficient on the path from the error variance <span class="math inline">\(\zeta\)</span> is the square-root of the unexplained variance (Rule 5). In this case, we want the opposite: we want the <em>shared</em> variance between the latent and indicator variable (a lot of shared variance is what makes a good indicator!). As in the case of the error path, the path coefficient from the latent variable to the indicator is often expressed in its standardized form: the square-root of the reliability. This value is also known as the <em>loading</em>.</p>
+<p>From the reliability, we can also obtain the standardized error term <span class="math inline">\(\delta_{x}\)</span>. This is the unshared variance, or 1 - the reliability. For the unstandardized form, one can apply the following equation:</p>
+<p><span class="math display">\[\delta_{x} = (1 - \lambda_{x}^2) \times VAR_{x}\]</span></p>
+<p>As with other coefficients, standardization is applied simply because multiple indicators may be measured in vastly different units, and one may wish to fairly compare the loadings and errors.</p>
+<p>Let’s construct a simple example. Say we sample the variable <span class="math inline">\(x\)</span> repeatedly 5 times with <span class="math inline">\(n = 10\)</span>. This could be 5 sampling dates or 5 separate trials.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">11</span>)
+
+x &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">10</span>)
+
+x.list &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="cf">function</span>(i) x <span class="op">+</span><span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>, <span class="dv">0</span>, <span class="dv">2</span>))
+
+x. &lt;-<span class="st"> </span><span class="kw">unlist</span>(x.list)</code></pre></div>
+<p>We can compute the average correlation among all trials. This is our measure of reliability:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">combos &lt;-<span class="st"> </span><span class="kw">combn</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">2</span>)
+
+cors &lt;-<span class="st"> </span><span class="kw">c</span>()
+
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(combos)) cors &lt;-<span class="st"> </span><span class="kw">c</span>(cors, <span class="kw">cor</span>(x.list[[combos[<span class="dv">1</span>, i]]], x.list[[combos[<span class="dv">2</span>, i]]]))
+
+(r &lt;-<span class="st"> </span><span class="kw">mean</span>(cors)) </code></pre></div>
+<pre><code>## [1] 0.804403</code></pre>
+<p>From this value <span class="math inline">\(r = 0.804\)</span>, we can obtain the path coefficient and the (standardized error variance):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sqrt</span>(r) <span class="co"># path coefficient</span></code></pre></div>
+<pre><code>## [1] 0.8968852</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>r <span class="co"># standardized error variance</span></code></pre></div>
+<pre><code>## [1] 0.195597</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>r) <span class="op">*</span><span class="st"> </span><span class="kw">var</span>(<span class="kw">unlist</span>(x.list)) <span class="co"># unstandardized error variance</span></code></pre></div>
+<pre><code>## [1] 0.213149</code></pre>
+<p>In summary: the standardized coefficient (the loading) linking indicator to latent variables is the square-root of the relability. The standardized error variance is 1 - reliability.</p>
+<p>So far, we have only dealt with latent variables as exogenous (predictor) variables, but they can also act as endogenous (response) variables. Here is an example endogenous latent variable:</p>
+<div class="figure">
+<img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/latent_variable_endo.png" alt="latent variable" />
+<p class="caption">latent variable</p>
+</div>
+<p>The graph looks roughly similar, with some changes in the parameters: the error variance on <span class="math inline">\(y\)</span> is now <span class="math inline">\(\epsilon_{y}\)</span>, while the latent variable itself is represented as <span class="math inline">\(\eta\)</span> and it has its own error <span class="math inline">\(\zeta\)</span>. The presence of this additional error presents a challenge: we simply don’t have enough information to estimate all the unknowns here.</p>
+<p>In this case, we assume no measurement error on <span class="math inline">\(y\)</span> such that <span class="math inline">\(\epsilon_{y} = 0\)</span>. Consequently, <span class="math inline">\(y\)</span> becomes a perfect indicator of <span class="math inline">\(\eta\)</span> such that the reliability is total and <span class="math inline">\(\lambda_{y} = 1\)</span>. We will get the calculation of <span class="math inline">\(\zeta\)</span> momentarily, which involves the value of the path(s) leading into <span class="math inline">\(\eta\)</span>.</p>
+</div>
+<div id="application-of-latent-variables-to-path-models" class="section level2">
+<h2><span class="header-section-number">6.2</span> Application of Latent Variables to Path Models</h2>
+<p>Allowing both exogenous and endogenous latent variables now allows us to fit a <em>structural model</em>, or one with directed paths between latent variables. This is in contrast to a <em>measurement model</em>, which focuses solely on relating indicators to latent variables.</p>
+<p>As an example of a structural model, let’s combine the two latent variable models so that the exogenous latent variable is predicting the endogenous one:</p>
+<div class="figure">
+<img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/latent_structural_model.png" alt="latent structural model" />
+<p class="caption">latent structural model</p>
+</div>
+<p>As before, let’s fix the error of <span class="math inline">\(y\)</span> to be 0 so that the loading on <span class="math inline">\(\eta = 1\)</span>. We can solve the exogenous paths as before, leaving us with two parameters left: the path coefficient <span class="math inline">\(\gamma\)</span> and <span class="math inline">\(\zeta\)</span>.</p>
+<p>We can solve the path coefficient <span class="math inline">\(\gamma\)</span> by knowing the regression coefficient (correlation) between the raw values of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> and adjusting by the loading of <span class="math inline">\(x\)</span> on <span class="math inline">\(\xi\)</span>.</p>
+<p>Let’s return to our previous example and generate some data for <span class="math inline">\(y\)</span>, then estimate the (standardized) coefficient, or correlation:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">3</span>)
+
+y &lt;-<span class="st"> </span>x <span class="op">+</span><span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>, <span class="dv">0</span>, <span class="dv">5</span>)
+
+y.list &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="cf">function</span>(i) y <span class="op">+</span><span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>, <span class="dv">0</span>, <span class="dv">2</span>))
+
+y. &lt;-<span class="st"> </span><span class="kw">unlist</span>(y.list)
+
+xy_model &lt;-<span class="st"> </span><span class="kw">lm</span>(y. <span class="op">~</span><span class="st"> </span>x.)
+
+beta &lt;-<span class="st"> </span><span class="kw">summary</span>(xy_model)<span class="op">$</span>coefficients[<span class="dv">2</span>, <span class="dv">1</span>]
+
+(beta_std &lt;-<span class="st"> </span>beta <span class="op">*</span><span class="st"> </span>(<span class="kw">sd</span>(x.) <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(y.))) <span class="co"># standardized</span></code></pre></div>
+<pre><code>## [1] 0.5440115</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(x., y.) <span class="co"># same as the standardized coefficient for simple regression</span></code></pre></div>
+<pre><code>## [1] 0.5440115</code></pre>
+<p>In this example, the estimated standardized path coefficient for <span class="math inline">\(x\)</span> on <span class="math inline">\(y\)</span> is <span class="math inline">\(b = 0.544\)</span>.</p>
+<p>We can obtain an estimate of gamma using the following equation:</p>
+<p><span class="math display">\[\gamma = \frac{b}{\lambda}\]</span></p>
+<p>Which, for our example, is:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(gamma &lt;-<span class="st"> </span>beta_std <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(r))</code></pre></div>
+<pre><code>## [1] 0.6065565</code></pre>
+<p>So the new estimate of the coefficient between the two latent variables is <span class="math inline">\(\gamma = 0.607\)</span>. This is because the measurement error in <span class="math inline">\(x\)</span> was formerly lumped in to the prediction error of <span class="math inline">\(y\)</span>: by removing it, we have improved the estimate of the true effect of <span class="math inline">\(x\)</span> on <span class="math inline">\(y\)</span>. Not accounting for measurement error, then, results in a downward bias in both the coefficients and the variance explained.</p>
+<p>From this value, we can obtain the unexplained variance, or <span class="math inline">\(\zeta\)</span>. Recall that the error <span class="math inline">\(\delta_{x}\)</span> is 1 - the explained variance, where the explained variance is the reliability. Here, we can transfer this knowledge such that: <span class="math inline">\(\zeta = 1 - \gamma^2\)</span>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>gamma<span class="op">^</span><span class="dv">2</span></code></pre></div>
+<pre><code>## [1] 0.6320892</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># compare to regression residual variance</span>
+<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">summary</span>(xy_model)<span class="op">$</span>r.squared</code></pre></div>
+<pre><code>## [1] 0.7040515</code></pre>
+<p>The error variance has decreased from 0.704 to 0.632 relative to the linear model, again, as a consequence of removing the measurement error in <span class="math inline">\(x\)</span>. So, by incorporating the error in <span class="math inline">\(x\)</span> into our model, we have improved our estimate of the relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> <em>and</em> decreased the unexplained variance.</p>
+</div>
+<div id="latent-variables-in-lavaan" class="section level2">
+<h2><span class="header-section-number">6.3</span> Latent Variables in <em>lavaan</em></h2>
+<p>Let’s reproduce this example using <em>lavaan</em>. The setup is almost identical except for a new operator <code>=~</code> which indicates a latent variable. Additionally, we will fix the error variance in <span class="math inline">\(x\)</span> to the known (unstandardized) error variance from our repeated trials.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lavaan)</code></pre></div>
+<pre><code>## This is lavaan 0.6-2</code></pre>
+<pre><code>## lavaan is BETA software! Please report any bugs.</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>r) <span class="op">*</span><span class="st"> </span><span class="kw">var</span>(x.) <span class="co"># unstandardized error variance</span></code></pre></div>
+<pre><code>## [1] 0.213149</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">latent_formula1 &lt;-<span class="st"> &#39;</span>
+<span class="st">xi =~ x # exogenous latent</span>
+<span class="st">eta =~ y # endogenous latent</span>
+
+<span class="st">eta ~ xi # path model</span>
+
+<span class="st">x ~~ 0.213 * x # fix error variance</span>
+<span class="st">&#39;</span>
+
+latent_model1 &lt;-<span class="st"> </span><span class="kw">sem</span>(latent_formula1, <span class="kw">data.frame</span>(<span class="dt">x =</span> x., <span class="dt">y =</span> y.))
+
+<span class="kw">summary</span>(latent_model1, <span class="dt">standardize =</span> T, <span class="dt">rsq =</span> T)</code></pre></div>
+<pre><code>## lavaan 0.6-2 ended normally after 22 iterations
+## 
+##   Optimization method                           NLMINB
+##   Number of free parameters                          3
+## 
+##   Number of observations                            50
+## 
+##   Estimator                                         ML
+##   Model Fit Test Statistic                       0.000
+##   Degrees of freedom                                 0
+##   Minimum Function Value               0.0000000000000
+## 
+## Parameter Estimates:
+## 
+##   Information                                 Expected
+##   Information saturated (h1) model          Structured
+##   Standard Errors                             Standard
+## 
+## Latent Variables:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+##   xi =~                                                                 
+##     x                 1.000                               0.925    0.895
+##   eta =~                                                                
+##     y                 1.000                               1.504    1.000
+## 
+## Regressions:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+##   eta ~                                                                 
+##     xi                0.989    0.221    4.469    0.000    0.608    0.608
+## 
+## Variances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+##    .x                 0.213                               0.213    0.199
+##    .y                 0.000                               0.000    0.000
+##     xi                0.855    0.214    4.003    0.000    1.000    1.000
+##    .eta               1.426    0.327    4.363    0.000    0.630    0.630
+## 
+## R-Square:
+##                    Estimate
+##     x                 0.801
+##     y                 1.000
+##     eta               0.370</code></pre>
+<p>If we examine the output, we find a poor-fitting model, but let’s ignore that for now considering these were just random data. Instead, let’s focus on the estimated parameters and compare them to our hand-calculated values.</p>
+<p>The standardized loading on <span class="math inline">\(xi = 0.895\)</span> which is very close to the value we calculated <span class="math inline">\(\sqrt(r) = 0.897\)</span>. The loading on <span class="math inline">\(\eta\)</span> is <span class="math inline">\(\lambda_{y} = 1\)</span>. Notice how we didn’t specify that: the default in <em>lavaan</em> is to set the first loading to 1 when the error variance is not supplied (more on this later).</p>
+<p>With respect to the regression coefficient, <em>lavaan</em> returned a standardized <span class="math inline">\(\gamma = 0.608\)</span> while we obtained <span class="math inline">\(\gamma = 0.607\)</span>. Very close! Similarly the standardized error variance on <span class="math inline">\(\eta\)</span> is <span class="math inline">\(\zeta = 0.630\)</span>, which is also very close to <span class="math inline">\(1 - \gamma^2 = 0.632\)</span>. Naturally, then, the explained variances are also nearly identical, being 1 - error variance.</p>
+<p>So, all in all, for single indicator latent variables, we are able to almost exactly reproduce the output from <em>lavaan</em> (slight differences are due to the optimization algorithm).</p>
+<p>One could alternately fix the error of the exogenous latent variable and incorporate measurement error of <span class="math inline">\(y\)</span>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cors.y &lt;-<span class="st"> </span><span class="kw">c</span>()
+
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(combos)) cors.y &lt;-<span class="st"> </span><span class="kw">c</span>(cors.y, <span class="kw">cor</span>(y.list[[combos[<span class="dv">1</span>, i]]], y.list[[combos[<span class="dv">2</span>, i]]]))
+
+(r.y &lt;-<span class="st"> </span><span class="kw">mean</span>(cors.y)) </code></pre></div>
+<pre><code>## [1] 0.8535083</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>r.y) <span class="op">*</span><span class="st"> </span><span class="kw">var</span>(y.) <span class="co"># unstandardized error variance</span></code></pre></div>
+<pre><code>## [1] 0.3380926</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">latent_formula2 &lt;-<span class="st"> &#39;</span>
+<span class="st">xi =~ x # exogenous latent</span>
+<span class="st">eta =~ y # endogenous latent</span>
+
+<span class="st">eta ~ xi # path model</span>
+
+<span class="st">y ~~ 0.338 * y # fix error variance</span>
+<span class="st">&#39;</span>
+
+latent_model2 &lt;-<span class="st"> </span><span class="kw">sem</span>(latent_formula2, <span class="kw">data.frame</span>(<span class="dt">x =</span> x., <span class="dt">y =</span> y.))
+
+<span class="kw">summary</span>(latent_model2, <span class="dt">standardize =</span> T, <span class="dt">rsq =</span> T)</code></pre></div>
+<pre><code>## lavaan 0.6-2 ended normally after 11 iterations
+## 
+##   Optimization method                           NLMINB
+##   Number of free parameters                          3
+## 
+##   Number of observations                            50
+## 
+##   Estimator                                         ML
+##   Model Fit Test Statistic                       0.000
+##   Degrees of freedom                                 0
+## 
+## Parameter Estimates:
+## 
+##   Information                                 Expected
+##   Information saturated (h1) model          Structured
+##   Standard Errors                             Standard
+## 
+## Latent Variables:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+##   xi =~                                                                 
+##     x                 1.000                               1.033    1.000
+##   eta =~                                                                
+##     y                 1.000                               1.387    0.922
+## 
+## Regressions:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+##   eta ~                                                                 
+##     xi                0.792    0.173    4.584    0.000    0.590    0.590
+## 
+## Variances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+##    .y                 0.338                               0.338    0.149
+##    .x                 0.000                               0.000    0.000
+##     xi                1.068    0.214    5.000    0.000    1.000    1.000
+##    .eta               1.254    0.318    3.939    0.000    0.652    0.652
+## 
+## R-Square:
+##                    Estimate
+##     y                 0.851
+##     x                 1.000
+##     eta               0.348</code></pre>
+<p>Here, because we did not specify it, the error variance of <span class="math inline">\(x\)</span> has automatically been fixed to 0 and the loading to 1.</p>
+<p>To start, the standardized <span class="math inline">\(\gamma = 0.590\)</span>, which is lower than the <span class="math inline">\(\gamma = 0.608\)</span> we obtained when incorporating measurement error on <span class="math inline">\(x\)</span>, but higher than the standardized coefficient from a simple linear regression <span class="math inline">\(b = 0.544\)</span>.</p>
+<p>The error variance on <span class="math inline">\(\eta\)</span> (<span class="math inline">\(\zeta = 0.652\)</span>) is also lower than the unexplained variance from the linear regression (<span class="math inline">\(1 - R^2 = 0.704\)</span>), but higher than in the latent variable model incorpoting error on <span class="math inline">\(x\)</span> (<span class="math inline">\(\zeta = 0.630\)</span>).</p>
+<p>The <em>unstandardized coefficient</em>, however, is unchanged: <span class="math inline">\(\beta = 0.792\)</span>. This is in contrast to the earlier latent variable model, where the unstandardized estimate was 0.989.</p>
+<p>Thus, we see that incorporating measurement error in endogenous latent variables resolves some of the downward bias in the unstandardized coefficient and error variance, but not the unstandardized coefficient. This difference emphasizes the need to report both standardized and unstandardized coefficients when constructing a path model (see Chapter: Coefficients).</p>
+<p>For the moment, latent variables are restricted to covariance-based SEM, although we are working to extend some concepts using the piecewise framework. <em>lavaan</em>, however, provides an easier, robust framework that easily extends to multi-indicator latent variables, and so we will use it from here on out.</p>
+</div>
+<div id="multi-indicator-latent-variables" class="section level2">
+<h2><span class="header-section-number">6.4</span> Multi-indicator Latent Variables</h2>
+<p>Accounting for measurement error requires some estimate of reliability. Often, we don’t <em>have</em> a measure of reliability, because we don’t design our experiments to obtain one. In such cases, it might be recommended to revert to a non-latent variable approach where the path coefficients are not informed by any loadings.</p>
+<p>Another solution is to incorporate multiple indicator variables to provide a different measure of reliability. In this case, the correlation is not derived from multiple samples of the same indicator, but <em>among</em> indicators. It also acts as a check against indicators that do not inform the latent variable, as such variables will provide low reliability estimates.</p>
+<p>This approach also provides a conceptual advantage: we often choose a single indicator as a surrogate for a latent concept (e.g., body mass for body size). Including more indicators helps to generalize this phenomenon by testing that the result is not an impact of the choice of any single indicator.</p>
+<p>Multiple indicators raises a new problem, though: identifiability. Remember from the chapter on Global Estimation that we must have enough known pieces of information to estimate all the unknown quantities implied by the model. Latent variable models must also follow the “t-rule” (see Chapter: Global Estimation).</p>
+<p>Consider an exogenous latent variable indicated by two variables, <span class="math inline">\(x1\)</span> and <span class="math inline">\(x1\)</span>. We can break this latent variable into two equations:</p>
+<p><span class="math display">\[x1 = \lambda_{1}\xi + \delta_{x1}\]</span> <span class="math display">\[x2 = \lambda_{2}\xi + \delta_{x1}\]</span></p>
+<p>We know the values of <span class="math inline">\(x1\)</span> and <span class="math inline">\(x2\)</span> and only know the correlation between them. To estimate values for the latent construct <span class="math inline">\(\xi\)</span> we need to estimate <span class="math inline">\(lambda_{1}\)</span>, <span class="math inline">\(\lambda_{2}\)</span>, <span class="math inline">\(\delta_{x1}\)</span> and <span class="math inline">\(\delta_{x2}\)</span>. This model fails the t-rule, which, if you recall, is:</p>
+<p><span class="math display">\[t \leq \frac{n(n+1)}{2}\]</span></p>
+<p>where <span class="math inline">\(t = 4\)</span> is the number of unknowns, and <span class="math inline">\(n = 2\)</span> is the number of knowns. In this example, <span class="math inline">\(t = 4 \leq 3\)</span> does not hold.</p>
+<p>Since <span class="math inline">\(\delta = 1 - \lambda^2\)</span>, we need only solve for the two <span class="math inline">\(\lambda\)</span>s, but we only have 1 piece of information: the correlation. The solution is to set the loadings to be equal: <span class="math inline">\(lambda_{1} = \lambda_{2}\)</span>. This is because, with only this information, we have no reason to suspect one indicator is more correlated with the latent variable than the other. Its important to note here that the two must be <em>positively</em> correlated (or scaled to be so), otherwise setting them to be equal is not a valid assumption.</p>
+<p>We know from our “Rules of Path Coefficients” that the correlation equals the sum of the direct and indirect pathways (Rule 9). The only path connecting <span class="math inline">\(x1\)</span> and <span class="math inline">\(x2\)</span> is through <span class="math inline">\(\epsilon\)</span>, and the value of the compound path is the product of the two individual pathways (Rule 3). Thus, the correlation <span class="math inline">\(r_{x1,x2} = lambda_{1} \times \lambda_{2}\)</span>. Given the assumption that the two loadings are equal, <span class="math inline">\(r_{x1,x2} = \lambda^2\)</span> and thus <span class="math inline">\(\lambda = \sqrt(r_{x1,x2})\)</span>.</p>
+<p>We can scale this procedure for &gt;2 indicators by setting just the 2 loadings to be equal: this will give us the necessary information (along with Rule 8 of path coefficients) to generate unique solutions for the other loadings. It is for this reason that at least three indicators are preferred for multi-indicator latent variables: it lessens the impact of the assumption that two loadings are equal.</p>
+<p>An better solution is to fix one of the loadings to be 1. If, for example, we fix <span class="math inline">\(\lambda_{1} = 1\)</span> then we know that <span class="math inline">\(\lambda_{2} = r_{x1,x2} / \lambda_{1} = r_{x1,x2} / 1 = r_{x1,x2}\)</span>.</p>
+<p>This choice has another consequence: because it is unmeasured, we also need to provide a scale for our multi-indicator latent variable. This can be done by fixing the variance <span class="math inline">\(\zeta = 1\)</span> or by fixing one of the unstandardized loadings to 1. Both accomplish the same objective.</p>
+<p>Finally, we can obtain an integrated estimate of reliability from multi-indicator latent variables using the following equation:</p>
+<p><span class="math display">\[\rho_{xi,xj} = \frac{(\sum\lambda_{j})^2}{(\sum\lambda_{j})^2 + \sum\epsilon_{j}} \]</span></p>
+<p>where <span class="math inline">\(j\)</span> is the number of indicator variables.</p>
+<p>For the record, a reliability index &gt; 0.9 is considered ‘excellent’, &gt; 0.8 to be ‘good’, and so on. Anything &lt; 0.5 is considered to be no different than random chance, and so indicators with such a low degree of correlation should be avoided.</p>
+<p>In fact, it is always recommended to inspect the correlation matrix among indicator variables to screen for potentially unrelated indicators. It may also help to identify indicators that are highly correlated, moreso than the other indicators. Such high correlations might suggest another common cause (such as the same measurement instrument, same observer, evolutionary constraints, etc.). In this case, it would be recommended to indicate a ‘correlated error’ among the two indicators indicating an underlying driver of their higher-than-average association beyond that imparted by the latent construct.</p>
+<p>When we get into the realm of multi-indicator latent variables, it becomes impossible to decompose partial relationships as we have previously for observed variable models (see Chapter: Global Estimation). Instead, maximum-likelihood functions are necessary to iteratively test and optimize the parameters that describe the relationships between observed and unobserved quantities.</p>
+<p>As in observed-variable models, maximum-likelihood estimators (<span class="math inline">\(F_{ML}\)</span>) can be used to construct a <span class="math inline">\(\chi^2\)</span> statistic that is the difference between the observed and model-implied variance-covariance matrices (see Chapter: Global Estimation). In the case of latent variable models, the covariances among latent variables as well as the loadings are considered in constructing the estimated covariance matrix. Beyond that, the procedure is the same as for observed variable models in terms of calculating <span class="math inline">\(\chi^2\)</span> and testing it against the <span class="math inline">\(\chi^2\)</span>-distribution with some model degrees of freedom.</p>
+</div>
+<div id="confirmatory-factor-analysis" class="section level2">
+<h2><span class="header-section-number">6.5</span> Confirmatory Factor Analysis</h2>
+<p>Multi-indicator latent variables can also be used to the test the hypothesis that a suite of indicator variables are generated by the same underlying process. This is also called <em>confirmatory factor analysis</em>. In other words, you are testing the idea that the latent variable has given rise to emergent properties that, by virtue of a common cause, are correlated. This approach concerns only the <em>measurement model</em> and thus is a precursor to evaluation of any structural models in which the latent variables appear.</p>
+<p>In contrast, <em>exploratory factor analysis</em> assumes that all latent variables are indicated by all observed variables.</p>
+<p>[content pending]</p>
+</div>
+<div id="travis-grace-2010-an-example" class="section level2">
+<h2><span class="header-section-number">6.6</span> Travis &amp; Grace (2010): An Example</h2>
+<p>Let’s apply these concepts to an example dataset from Travis &amp; Grace (2010). In this example, the authors transplanted individuals of the salt marsh plant <em>Spartina alterniflora</em> and measured their performance relative to local populations. In this case, performance was captured by a number of variables including: stem density, the number of infloresences, clone diameter, leaf height, and leaf width. The difference between transplants and local individuals was quantified using their genetic dissimilarity.</p>
+<p>In this case, the authors considered ‘performance’ to be a latent construct that manifests in the five indicators listed above:</p>
+<div class="figure">
+<img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/latent_variable_travis_performance.png" alt="travis latent" />
+<p class="caption">travis latent</p>
+</div>
+<p>Let’s first explore this latent construct before getting into the structural model. First, let’s examine the raw correlations to see if this construct is justifiable:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">travis &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;./data/travis.csv&quot;</span>)
+
+<span class="kw">cor</span>(travis[, <span class="dv">4</span><span class="op">:</span><span class="dv">8</span>])</code></pre></div>
+<pre><code>##               stems     infls clonediam    leafht  leafwdth
+## stems     1.0000000 0.8339227 0.9333150 0.7275625 0.6457378
+## infls     0.8339227 1.0000000 0.8126388 0.6925888 0.6026302
+## clonediam 0.9333150 0.8126388 1.0000000 0.7729843 0.7296621
+## leafht    0.7275625 0.6925888 0.7729843 1.0000000 0.9687725
+## leafwdth  0.6457378 0.6026302 0.7296621 0.9687725 1.0000000</code></pre>
+<p>The correlations range from 0.65-0.93, suggesting that these variables may be generated by the same process. There is one excessive correlation between leaf height and width, potentially suggesting influence by another process.</p>
+<p>Now that we have qualitatively assessed the <em>validity</em> of the latent model, let’s fit it and examine the output:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">travis_latent_formula1 &lt;-<span class="st"> &#39;performance =~ stems + infls + clonediam + leafht + leafwdth&#39;</span>
+
+travis_latent_model1 &lt;-<span class="st"> </span><span class="kw">sem</span>(travis_latent_formula1, travis)</code></pre></div>
+<pre><code>## Warning in lav_object_post_check(object): lavaan WARNING: some estimated ov
+## variances are negative</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(travis_latent_model1)</code></pre></div>
+<pre><code>## lavaan 0.6-2 ended normally after 82 iterations
+## 
+##   Optimization method                           NLMINB
+##   Number of free parameters                         10
+## 
+##   Number of observations                            23
+## 
+##   Estimator                                         ML
+##   Model Fit Test Statistic                      51.106
+##   Degrees of freedom                                 5
+##   P-value (Chi-square)                           0.000
+## 
+## Parameter Estimates:
+## 
+##   Information                                 Expected
+##   Information saturated (h1) model          Structured
+##   Standard Errors                             Standard
+## 
+## Latent Variables:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##   performance =~                                      
+##     stems             1.000                           
+##     infls             0.126    0.037    3.377    0.001
+##     clonediam         1.160    0.309    3.751    0.000
+##     leafht            1.215    0.244    4.971    0.000
+##     leafwdth          0.151    0.031    4.822    0.000
+## 
+## Variances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##    .stems           125.886   37.014    3.401    0.001
+##    .infls             2.405    0.707    3.403    0.001
+##    .clonediam       132.478   39.038    3.394    0.001
+##    .leafht           -1.847    5.336   -0.346    0.729
+##    .leafwdth          0.223    0.105    2.131    0.033
+##     performance     135.763   67.580    2.009    0.045</code></pre>
+<p>Note that the first loading has been restricted to 1 for purposes of identifiability.</p>
+<p>First, we note that the model is a poor fit (<span class="math inline">\(P &lt; 0.001\)</span>). We can explore why this is using modification indices:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="kw">modindices</span>(travis_latent_model1))</code></pre></div>
+<pre><code>##          lhs op       rhs     mi     epc sepc.lv sepc.all sepc.nox
+## 12     stems ~~     infls 10.470  11.784  11.784    0.677    0.677
+## 13     stems ~~ clonediam 17.152 112.521 112.521    0.871    0.871
+## 14     stems ~~    leafht  0.693  -7.889  -7.889   -0.517   -0.517
+## 15     stems ~~  leafwdth  2.214  -1.836  -1.836   -0.346   -0.346
+## 16     infls ~~ clonediam  8.773  11.092  11.092    0.621    0.621
+## 17     infls ~~    leafht  0.062  -0.312  -0.312   -0.148   -0.148
+## 18     infls ~~  leafwdth  2.906  -0.281  -0.281   -0.383   -0.383
+## 19 clonediam ~~    leafht  4.028 -21.233 -21.233   -1.357   -1.357
+## 20 clonediam ~~  leafwdth  0.037  -0.261  -0.261   -0.048   -0.048
+## 21    leafht ~~  leafwdth 37.862  17.177  17.177   26.752   26.752</code></pre>
+<p>Recall that the value of the modification index (<code>mi</code> in the output) is the expected <em>decrease</em> in the model <span class="math inline">\(\chi^2\)</span>. Here, a larger number would imply a better fit. It seems there is a strong implied correlation between leaf height and leaf width, presumably arising from common constraints on how the leaves of <em>Spartina</em> have evolved and the limited variety of shapes they can take, and not the plant’s performance.</p>
+<p>We can introduce this correlation into the model and re-fit:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">travis_latent_formula2 &lt;-<span class="st"> &#39;</span>
+<span class="st">performance =~ stems + infls + clonediam + leafht + leafwdth</span>
+<span class="st">leafht ~~ leafwdth</span>
+<span class="st">&#39;</span>
+
+travis_latent_model2 &lt;-<span class="st"> </span><span class="kw">sem</span>(travis_latent_formula2, travis)
+
+<span class="kw">summary</span>(travis_latent_model2)</code></pre></div>
+<pre><code>## lavaan 0.6-2 ended normally after 81 iterations
+## 
+##   Optimization method                           NLMINB
+##   Number of free parameters                         11
+## 
+##   Number of observations                            23
+## 
+##   Estimator                                         ML
+##   Model Fit Test Statistic                       7.410
+##   Degrees of freedom                                 4
+##   P-value (Chi-square)                           0.116
+## 
+## Parameter Estimates:
+## 
+##   Information                                 Expected
+##   Information saturated (h1) model          Structured
+##   Standard Errors                             Standard
+## 
+## Latent Variables:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##   performance =~                                      
+##     stems             1.000                           
+##     infls             0.117    0.016    7.173    0.000
+##     clonediam         1.086    0.096   11.319    0.000
+##     leafht            0.697    0.127    5.509    0.000
+##     leafwdth          0.082    0.018    4.529    0.000
+## 
+## Covariances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##  .leafht ~~                                           
+##    .leafwdth         10.831    3.432    3.156    0.002
+## 
+## Variances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##    .stems            15.267   10.877    1.404    0.160
+##    .infls             1.204    0.390    3.085    0.002
+##    .clonediam        24.786   13.830    1.792    0.073
+##    .leafht           78.958   24.465    3.227    0.001
+##    .leafwdth          1.672    0.509    3.283    0.001
+##     performance     246.382   77.658    3.173    0.002</code></pre>
+<p>Introducing this correlated error has now reduced the <span class="math inline">\(\chi^2\)</span> statistic to an acceptably low level (<span class="math inline">\(P = 0.116\)</span>). Thus, we have arrived at a legitimate latent construct of plant performance, which we can now use to evaluate some broader hypotheses.</p>
+<p>If you recall, the authors’ original intent was to explore how native vs. non-native genotypes of <em>Spartina</em> influenced performance, which they quantified using a measure of genetic distance from the local population. To test this hypothesis, let’s fit the following path model:</p>
+<div class="figure">
+<img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/latent_variable_travis_path.png" alt="travis path model" />
+<p class="caption">travis path model</p>
+</div>
+<p>Let’s fit the above model:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">travis_path_formula1 &lt;-<span class="st"> &#39;</span>
+<span class="st"># latent</span>
+<span class="st">performance =~ stems + infls + clonediam + leafht + leafwdth</span>
+
+<span class="st"># structural paths</span>
+<span class="st">performance ~ geneticdist</span>
+
+<span class="st"># correlated errors</span>
+<span class="st">leafht ~~ leafwdth</span>
+<span class="st">&#39;</span>
+
+travis_path_model1 &lt;-<span class="st"> </span><span class="kw">sem</span>(travis_path_formula1, travis)
+
+<span class="kw">summary</span>(travis_path_model1)</code></pre></div>
+<pre><code>## lavaan 0.6-2 ended normally after 107 iterations
+## 
+##   Optimization method                           NLMINB
+##   Number of free parameters                         12
+## 
+##   Number of observations                            23
+## 
+##   Estimator                                         ML
+##   Model Fit Test Statistic                      12.237
+##   Degrees of freedom                                 8
+##   P-value (Chi-square)                           0.141
+## 
+## Parameter Estimates:
+## 
+##   Information                                 Expected
+##   Information saturated (h1) model          Structured
+##   Standard Errors                             Standard
+## 
+## Latent Variables:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##   performance =~                                      
+##     stems             1.000                           
+##     infls             0.117    0.017    6.929    0.000
+##     clonediam         1.106    0.096   11.508    0.000
+##     leafht            0.711    0.127    5.601    0.000
+##     leafwdth          0.084    0.018    4.650    0.000
+## 
+## Regressions:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##   performance ~                                       
+##     geneticdist     -51.673   11.365   -4.547    0.000
+## 
+## Covariances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##  .leafht ~~                                           
+##    .leafwdth         10.416    3.312    3.145    0.002
+## 
+## Variances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##    .stems            19.691   10.733    1.835    0.067
+##    .infls             1.246    0.401    3.108    0.002
+##    .clonediam        19.411   12.364    1.570    0.116
+##    .leafht           76.177   23.645    3.222    0.001
+##    .leafwdth          1.612    0.492    3.278    0.001
+##    .performance     120.509   39.656    3.039    0.002</code></pre>
+<p>It seems that this model fits the data well (<span class="math inline">\(P = 0.141\)</span>) and the relationship of interest, between genetic distance and performance, is highly significant (<span class="math inline">\(P &lt; 0.001\)</span>). In this case, the more unlike the local population the transplants were (greater genetic distance), the worse they performed.</p>
+</div>
+<div id="references-4" class="section level2">
+<h2><span class="header-section-number">6.7</span> References</h2>
+<p>Travis, S. E., &amp; Grace, J. B. (2010). Predicting performance for ecological restoration: a case study using Spartina alterniflora. Ecological Applications, 20(1), 192-204.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="multigroup-analysis.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="composite-variables.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

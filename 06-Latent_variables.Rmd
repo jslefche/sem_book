@@ -274,7 +274,7 @@ In this case, the authors considered 'performance' to be a latent construct that
 Let's first explore this latent construct before getting into the structural model. First, let's examine the raw correlations to see if this construct is justifiable:
 
 ```{r}
-travis <- read.csv("travis.csv")
+travis <- read.csv("./data/travis.csv")
 
 cor(travis[, 4:8])
 ```

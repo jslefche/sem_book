@@ -156,7 +156,7 @@ In this case, the variable "*Phragmites* status" corresponds to the three commun
 Let's read in the data and construct the model:
 
 ```{r}
-bowen <- read.csv("bowen.csv")
+bowen <- read.csv("./data/bowen.csv")
 
 bowen <- na.omit(bowen)
 

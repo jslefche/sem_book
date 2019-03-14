@@ -1,0 +1,10 @@
+---
+title: "Local Estimation"
+author: "Jon Lefcheck"
+date: "March 14, 2019"
+output: html_document
+---
+
+# Location Estimation
+
+## 

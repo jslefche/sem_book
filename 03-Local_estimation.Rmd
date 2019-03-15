@@ -13,11 +13,17 @@ In the previous chapter, we explored the use of structural equation modeling to 
 
 This approach comes with a number of assumptions about the data, notably that they are multivariate normal and  sufficiently replicated to generate unbiased parameter estimates. However, most data--particularly ecological data--violate these assumptions, and given the difficulty with which they are collected and the complexity of the proposed relationships, often lead to issues with power and identifiability. 
 
-While variance-covariance based methods have been extended to consider special cases such as non-normality, an alternate estimation procedure was proposed in 2000 by Shipley based on concepts from graph theory. In this method, relationships for each endogenous (response) variable are estimated separately using linear regression, which is why we call it *local estimation*. Recall that global estimation assumes linear relationships, and indeed we have seen in the previous chapter that fitting an SEM and comparing the output with that from a linear model can yield the same results. Local estimation takes the latter approach: fitting a linear model for each response and stringing together the inferences based on the indirect relationships specified in the path diagram. 
+While variance-covariance based methods have been extended to consider special cases such as non-normality, an alternate estimation procedure was proposed in 2000 by Shipley based on concepts from graph theory. In this method, relationships for each endogenous (response) variable are estimated separately, which is why we call it *local estimation* or  *piecewise SEM* due to the piecewise nature by which the model is evaluated. 
+
+Recall that global estimation assumes linear relationships, and indeed we have seen in the previous chapter that fitting an SEM and comparing the output with that from a linear model can yield the same results. Local estimation takes the latter approach: fitting a linear model for each response and then stringing together the inferences, rather than trying to estimate all relationships at once.
 
 This approach imparts great flexibility because the assumptions pertaining to each response can be evaluated and addressed individually, rather than treating every variable as arising from the same data-generating process. For example, generalized linear models can be fit for data that are non-normal such as count, proportion, or binary outcomes (e.g., survivorship or presence-absence). Mixed-effects or hierarchical models can be fit for data that are nested or adhere to some predefined structure. Similarly, non-independence (such as spatial, temporal, or phylogenetic) can be incorporated into the model structure to provide more robust parameter estimates. Moreover, only enough data is needed to be able to fit and estimate each individual regression. In doing so, Shipley's method relaxes many of the assumptions associated with global estimation and better reflects the types and quantity of data collected by modern ecologists.
 
-However, recall that the goodness-of-fit measures of variance-covariance based structural equation models largely come from comparison of the observed vs. estimated variance-covariance matrix. Because local estimation produces a separate variance-covariance matrix for each modeled response, there is no clear extension from global methods. Instead, Shipley proposed a new test based on *directed acyclic graphs* (or DAGs). DAGs are the pictorial representation of the hypothesized causal relationships: in other words, the path diagram. There is a rich literature pertaining to DAGs, principally in their estimation and evaluation, and Shipley has drawn on this to propose a new index of model fit.
+However, recall that the goodness-of-fit measures of variance-covariance based structural equation models largely come from comparison of the observed vs. estimated variance-covariance matrix. Because local estimation produces a separate variance-covariance matrix for each modeled response, there is no clear extension from global methods. Instead, Shipley proposed a new test based on *directed acyclic graphs* (or DAGs). 
+
+DAGs are the pictorial representation of the hypothesized causal relationships: in other words, the path diagram. Its important to point out now that DAGs assume *recursive* relationships, or the absence of feedback loops or bidirectional relationships. Thus, local estimation is unsuitable for 
+
+There is a rich literature pertaining to DAGs, principally in their estimation and evaluation, and Shipley has drawn on this to propose a new index of model fit.
 
 ## Tests of directed separation
 
@@ -41,21 +47,40 @@ This 1 degree of freedom corresponds to the missing relationship between $x1 -> 
 
 In this simple example, there is one conditioning variable for the single independence claim. This one independence claim constitutes what is called the *basis set* which is the minimum number of independence claims derived from a path diagram. The key word is *minimum*. 
 
-We could have just as easily tested the claim $y2 | x1 (y1)$ which is the same relationship but in the opposite direction. Moreover, the statistical test associated with this relationship is the same regardless of the direction. Thus, we would only include the 1 claim rather than both claims that provide the same information.
+We could have just as easily tested the claim $y2 | x1 (y1)$ which is the same relationship but in the opposite direction. However, the statistical test associated with this relationship is the same regardless of the direction. In this case, we would only include the 1 claim rather than both claims that provide the same information. _Thus, the sum number of independence claims in the basis set cannot be derived from some combination of the others within it._
 
-As path diagrams become more complex, the natural question is: how far back do you go? Take the following example:
-![sem_model2](https://raw.githubusercontent.com/jslefche/sem_book/master/img/local_estimation_model1.png)
+For the record, if we add this claim back into the model, we would have no missing paths and thus there would be no independence claims or tests of directed separation possible. As in the case with $\chi^2$, we would not have any leftover information with which to test model fit.
+
+As path diagrams become more complex, the natural question is: how far back do you go in terms of conditioning? Take the following example:
+![sem_model3](https://raw.githubusercontent.com/jslefche/sem_book/master/img/local_estimation_model1.png)
+
+There are several missing paths: $x1 -> y2$, $x1 -> y3$ and $y1 -> y3$.
+
+Let's consider the independence claim $x1 -> y3$. Based on our last example, $y2$ must be included as a conditioning variable due to its direct influence on $y3$, but what about $y1$? It has an indirect influence on $y3$ through $y2$. However, by having included $y2$ in the independence claim, we have already (theoretically) incorporated the indirect influence of $y1$ through it. So the full claim would be: $x1 | y3 (y2)$. 
+
+_Thus, conditioning variables consist of only those variables *immediately ancestral* to the two variables whose independence is being evaluated._ In other words, we assume that the effects of any other downstream variables are captured in the variance contributed by the immediate ancestors, and we can therefore ignore them. Upstream variables (those occuring later in the path diagram) are never considered as conditioning variables.
+
+For the claim $y1 -> y3$ there are now two conditioning variables: $y2$ (on $y3$) and also $x1$ (on $y1$). So the independence claim would be: $y1 | y2 (x1, y1)$.
+
+The basis set for this diagram would then be:
+
+-$x1 | y3 (y2)$
+-$y1 | y3 (y2, x1)$
+-$x1 | y2 (y1)$
+
+Deriving the basis set can be difficult but mercifully is automated in the `piecewiseSEM` package. This package makes some choices about the basis set that deviate from the recommendations of Shipley. For example, consider the following path diagram:
+
+![sem_model4](https://raw.githubusercontent.com/jslefche/sem_book/master/img/local_estimation_model2.png)
+
+The basis set includes the unspecified paths from $x1 | y2 (y1)$ and $x2 | y2 (y1)$. But what about $x1 | x2$?
+
+Shipley would include this claim in the basis set. However, an argument could be made against it along several fronts.
+
+First, unlike $y2$ which is an *a priori* specified outcome (i.e., has a directed path flowing into it), there is no expectation of a causal relationship between the two endogenous variables $x1$ and $x2$. In fact, this may generate nonsensical claims (for example, between lake depth and pesticide application, or between temperature and urbanization). If the purpose of the test is to evaluate potentially causal linkages that were deemed irrelevant, is it useful to test totally non-causal links? If we did indeed recover a significant correlation between lake depth and pesticide application, is that mechanistically interesting or totally spurious? And should we therefore reject a model due to a totally spurious relationship? These are tough questions with no clear answer. From a personal perspective, the tests of directed separation should be diagnostic: should I have included this path? Did it provide useful information? Including non-informative claims simply inflates the test statistic with no real benefit to the identifying causal processes.
+
+Second, and more practically, there is no easy way for the user to specify the distributional and other assumptions associated with exogenous variables in the same way they can for endogenous variables. By virtue of modeling $y2$ in a directed path (from $y1$), it is clear how that response should be treateed when looking at the two unspecified independence claims: say, for example, that $y2$ is binomially-distributed. However, no where in the regression models that make up the path diagram is there information on how $x1$ should be treated: is it also binomial? Hierarchical? Polynomial? Asking the user to code this information would vastly inflate the amount of code necessary to run tests, and combined with the above, would yield little return for the investment.
 
 
 
 
-
-We could add this back into the path diagram, but that would remove our capacity 
-
-
-
-
-
-
-implies *recursive* relationships, or the absence of feedback loops or bidirectional relationships.
 

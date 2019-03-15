@@ -1,7 +1,7 @@
 ---
 title: "Local Estimation"
 author: "Jon Lefcheck"
-date: "March 14, 2019"
+date: "March 15, 2019"
 output: html_document
 ---
 
@@ -17,12 +17,45 @@ While variance-covariance based methods have been extended to consider special c
 
 This approach imparts great flexibility because the assumptions pertaining to each response can be evaluated and addressed individually, rather than treating every variable as arising from the same data-generating process. For example, generalized linear models can be fit for data that are non-normal such as count, proportion, or binary outcomes (e.g., survivorship or presence-absence). Mixed-effects or hierarchical models can be fit for data that are nested or adhere to some predefined structure. Similarly, non-independence (such as spatial, temporal, or phylogenetic) can be incorporated into the model structure to provide more robust parameter estimates. Moreover, only enough data is needed to be able to fit and estimate each individual regression. In doing so, Shipley's method relaxes many of the assumptions associated with global estimation and better reflects the types and quantity of data collected by modern ecologists.
 
-However, recall that the goodness-of-fit measures of variance-covariance based structural equation models largely come from comparison of the observed vs. estimated variance-covariance matrix. Because local estimation produces a separate variance-covariance matrix for each modeled response, there is no clear extension from global methods. Instead, Shipley proposed a new test based on *directed acyclic graphs* (or DAGs). DAGs are the pictorial representation of the hypothesized causal relationships: in other words, the path diagram. There is a rich literature pertaining to DAGs, principally in their estimation and evaluation, and Shipley has drawn on this to propose a new index of model fit that pertains to local estimation.
+However, recall that the goodness-of-fit measures of variance-covariance based structural equation models largely come from comparison of the observed vs. estimated variance-covariance matrix. Because local estimation produces a separate variance-covariance matrix for each modeled response, there is no clear extension from global methods. Instead, Shipley proposed a new test based on *directed acyclic graphs* (or DAGs). DAGs are the pictorial representation of the hypothesized causal relationships: in other words, the path diagram. There is a rich literature pertaining to DAGs, principally in their estimation and evaluation, and Shipley has drawn on this to propose a new index of model fit.
 
 ## Tests of directed separation
 
-In global estimation, comparison of the observed vs. estimated variance-covariance matrices through the $\chi^2$ statistic asks whether the model-implied relationships deviate substantially from the relationships present in the data. If not, then the model is assumed to fit the data. 
+In global estimation, comparison of the observed vs. estimated variance-covariance matrices through the $\chi^2$ statistic asks whether the model-implied relationships deviate substantially from the relationships present in the data. If not, then the model is assumed to fit well.
 
 Another way of thinking about model fit is to ask: are we missing anything? Recall that SEM requires careful specification of a hypothesized model structure. In the case of underidentified models (those where there are more pieces of known information than parameters to be estimated), this means there are missing relationships that could be present but were not included. Paths might be excluded because there is no *a priori* reason or mechanism to suspect a relationship. 
 
-The *tests of directed separation* evaluate this hypothesis: that we are justified in excluding certain relationships. Two variables are *d-separated* if they are 
+The *tests of directed separation* evaluate this hypothesis: that we are justified in excluding certain relationships. This question is implicit in the $\chi^2$ statistic: a substantial deviation from the observed correlations suggests that we're missing information in our model that could bring in our estimates more in line with our observations. The tests of directed separation take this one step further by explicitly identifying and testing whether each piece of missing information (i.e., each missing path) could indeed change our interpretation of the model.
+
+Two variables are *d-separated* if they are statistically independent conditional on their joint influences. Let's unpack this: first, 'two variables.' The two variables are *unrelated* in the hypothesized causal model: in other words, there is not a directed path already connecting them. Second, 'statistically independent.' We test for statistical dependence in our model all the time: the *P*-values associated with the path coefficients, for example, test whether the magnitude is significantly different than zero (or no effect). Statistical *independence* then asks whether the two variables are significantly *unrelated*, or that that their relationship is in fact no diffeent than zero. Finally, 'conditional on their joint influences' means that the test for statistical independence must account for contributions from any other influences. In other words, the test must consider the *partial* effect of one variable on the other if either or both are already influenced by other variables in the model.
+
+Let's consider a simple path diagram:
+
+![sem_model1](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model1.png)
+
+In this case, we have specified two sets of directed relationships: $x1 -> y1$ and $y1 -> y2$.
+
+If we apply the t-rule from the chapter on global estimation, we have $3(3+1)/2$ of 6 pieces of known information (the variances on the 3 variables + the 3 sets of covariances). We want to estimate the 2 parameters $\gamma_{x1y1}$ and $\beta_{y1y2}$ and the variances on the 3 variables (we can get their covariances from that). Thus we have 6 known values to estimate 5 unknown values, and the model is *underidentified*. We noted in the chapter on global estimation that the number of leftover known values can be used as degrees of freedom in the $\chi^2$ goodness-of-fit test. In this case, there is 1 degree of freedom.
+
+This 1 degree of freedom corresponds to the missing relationship between $x1 -> y2$. This is the *independence claim* we wish to test. However, the effect of $x1$ on $y2$ must be independent (or the partial effect) or the known influence of $y1$. Thus, we are testing the partial effect of $x1$ on $y2$ given $y1$. You may see this claim written in the following notation: $x1 | y2 (y1)$ where the bar separates the two variables in the claim, and any conditioning variables follow in parantheses. 
+
+In this simple example, there is one conditioning variable for the single independence claim. This one independence claim constitutes what is called the *basis set* which is the minimum number of independence claims derived from a path diagram. The key word is *minimum*. 
+
+We could have just as easily tested the claim $y2 | x1 (y1)$ which is the same relationship but in the opposite direction. Moreover, the statistical test associated with this relationship is the same regardless of the direction. Thus, we would only include the 1 claim rather than both claims that provide the same information.
+
+As path diagrams become more complex, the natural question is: how far back do you go? Take the following example:
+![sem_model2](https://raw.githubusercontent.com/jslefche/sem_book/master/img/local_estimation_model1.png)
+
+
+
+
+
+We could add this back into the path diagram, but that would remove our capacity 
+
+
+
+
+
+
+implies *recursive* relationships, or the absence of feedback loops or bidirectional relationships.
+

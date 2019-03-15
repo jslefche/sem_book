@@ -432,7 +432,7 @@ Consider the simple mediation model from earlier:
 
 In this model, we have several pieces of known information: $x1$, $y1$, and $y2$. So $n = 3$ for this model.
 
-We need to estimate the parameters related each set of relationships ($b_{x1y1}$ and $b_{y1y2}$). These amount to the two covariances, but recall from the first section of this chapter that we also need the variances to derive those estimates ($var_{x1}$, $var_{y1}$, $var_{y2}$). So the total number of unknowns is $t = 5$.
+We need to estimate the parameters related each set of relationships ($\gamma_{x1y1}$ and $\beta_{y1y2}$). These amount to the two covariances, but recall from the first section of this chapter that we also need the variances to derive those estimates ($var_{x1}$, $var_{y1}$, $var_{y2}$). So the total number of unknowns is $t = 5$.
 
 We can plug in these values to see if we meet the t-rule:
 
@@ -488,7 +488,11 @@ In fact, $F_{ML}$ is $\chi^2$-distributed such that:
 
   $$\chi^2 = (n - 1)F_{ML}$$
   
-which allows us to actually quantify model fit. We can then formally compare the $\chi^2$ statistic to the $\chi^2$-distribution with $n - 1$ degrees of freedom to achieve a confidence level in the fit. Failing to reject the null hypothesis that the $\chi^2$ statistic is different from 0 (perfect fit) implies a generally good representation of the data (*P* > 0.05). Alternately, rejecting the null implies that the $\chi^2$ statistic is large, as is the discrepancy between the observed and modeled variance-covariance matrices, thus implying a poor fit to the data (*P* < 0.05). Interpreting the outcome of the significance test is often tricky, as a significant *P*-value indicates *poor* fit, so be careful.
+which allows us to actually quantify model fit. In this case $n$ refers to the sample size.
+
+We can then formally compare the $\chi^2$ statistic to the $\chi^2$-distribution with some degrees of freedom to achieve a confidence level in the fit. The degrees of freedom are determined by model identification: just identified models will have 0 degrees of freedom (and thus no test is possible), and identified models will have $n(n + 1)/2 - t$ degrees of freedom (where $n$ are the number of knowns and $t$ the number of unknowns, from teh t-rule). 
+
+Failing to reject the null hypothesis that the $\chi^2$ statistic is different from 0 (perfect fit) implies a generally good representation of the data (*P* > 0.05). Alternately, rejecting the null implies that the $\chi^2$ statistic is large, as is the discrepancy between the observed and modeled variance-covariance matrices, thus implying a poor fit to the data (*P* < 0.05). Interpreting the outcome of the significance test is often tricky, as a significant *P*-value indicates *poor* fit, so be careful.
 
 The $\chi^2$ index also provides a way to gauge the relative fit of two models, one of which is nested within the other. The *$\chi^2$ difference test* is simply the difference in $\chi^2$ values between the two models, with the degrees of freedom being the difference in the degrees of freedom between the two models. The resulting statistic can then be compared to a $\chi^2$ table to yield a significance value. Again, this test is for *nested* models. For non-nested models, other statistics allow for model comparisons, including AIC and BIC. An AIC or BIC score $\geq2$ is generally considered to indicate significant differneces among models, with smaller values indicating equivalency between the two models.
 

@@ -201,6 +201,13 @@ which takes the bivariate correlation between $x1$ and $y2$, removes the joint i
 
 It is important to note that partial coefficients implement a statistical (rather than experimental) control. In other words, the partial effect of $x1$ accounts for the statistical contributions of $y1$. Thus, partial effects are useful in situations where experimental controls are difficult or impossible.
 
+Notably, we can back out the unstandardized coefficient by multiplying by the ratio of standard deviations of the response over the predictor:
+```{r}
+((cor(data$x1, data$y2) - (cor(data$x1, data$y1) * cor(data$y1, data$y2))) / (1 - cor(data$x1, data$y1)^2))* (sd(data$y2)/sd(data$x1))
+
+summary(lm(y2 ~ x1 + y1, data))$coefficients[2, 1]
+```
+
 Similarly, the partial effect of $y1$ on $y2$ is given by:
 
   $$b_{y2y1} = \frac{r_{y2y1} - (r_{y2x1} \times r_{y1x1})}{1 - r_{x1y1}^2}$$

@@ -5,6 +5,24 @@ date: "March 14, 2019"
 output: html_document
 ---
 
-# Location Estimation
+# Local Estimation
 
-## 
+## Global vs. local estimation
+
+In the previous chapter, we explored the use of structural equation modeling to estimate relationships among a network of variables based on attempts to reproduce a single variance-covariance matrix. We refer to this approach as *global estimation* because the variance-covariance matrix captures relationships among *all* variables in the model.  
+
+This approach comes with a number of assumptions about the data, notably that they are multivariate normal and  sufficiently replicated to generate unbiased parameter estimates. However, most data--particularly ecological data--violate these assumptions, and given the difficulty with which they are collected and the complexity of the proposed relationships, often lead to issues with power and identifiability. 
+
+While variance-covariance based methods have been extended to consider special cases such as non-normality, an alternate estimation procedure was proposed in 2000 by Shipley based on concepts from graph theory. In this method, relationships for each endogenous (response) variable are estimated separately using linear regression, which is why we call it *local estimation*. Recall that global estimation assumes linear relationships, and indeed we have seen in the previous chapter that fitting an SEM and comparing the output with that from a linear model can yield the same results. Local estimation takes the latter approach: fitting a linear model for each response and stringing together the inferences based on the indirect relationships specified in the path diagram. 
+
+This approach imparts great flexibility because the assumptions pertaining to each response can be evaluated and addressed individually, rather than treating every variable as arising from the same data-generating process. For example, generalized linear models can be fit for data that are non-normal such as count, proportion, or binary outcomes (e.g., survivorship or presence-absence). Mixed-effects or hierarchical models can be fit for data that are nested or adhere to some predefined structure. Similarly, non-independence (such as spatial, temporal, or phylogenetic) can be incorporated into the model structure to provide more robust parameter estimates. Moreover, only enough data is needed to be able to fit and estimate each individual regression. In doing so, Shipley's method relaxes many of the assumptions associated with global estimation and better reflects the types and quantity of data collected by modern ecologists.
+
+However, recall that the goodness-of-fit measures of variance-covariance based structural equation models largely come from comparison of the observed vs. estimated variance-covariance matrix. Because local estimation produces a separate variance-covariance matrix for each modeled response, there is no clear extension from global methods. Instead, Shipley proposed a new test based on *directed acyclic graphs* (or DAGs). DAGs are the pictorial representation of the hypothesized causal relationships: in other words, the path diagram. There is a rich literature pertaining to DAGs, principally in their estimation and evaluation, and Shipley has drawn on this to propose a new index of model fit that pertains to local estimation.
+
+## Tests of directed separation
+
+In global estimation, comparison of the observed vs. estimated variance-covariance matrices through the $\chi^2$ statistic asks whether the model-implied relationships deviate substantially from the relationships present in the data. If not, then the model is assumed to fit the data. 
+
+Another way of thinking about model fit is to ask: are we missing anything? Recall that SEM requires careful specification of a hypothesized model structure. In the case of underidentified models (those where there are more pieces of known information than parameters to be estimated), this means there are missing relationships that could be present but were not included. Paths might be excluded because there is no *a priori* reason or mechanism to suspect a relationship. 
+
+The *tests of directed separation* evaluate this hypothesis: that we are justified in excluding certain relationships. Two variables are *d-separated* if they are 

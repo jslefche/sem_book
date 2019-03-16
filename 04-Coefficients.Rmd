@@ -1,7 +1,7 @@
 ---
 title: "Coefficients"
 author: "Jon Lefcheck"
-date: "November 21, 2018"
+date: "March 16, 2018"
 output: html_document
 ---
 
@@ -9,29 +9,29 @@ output: html_document
 
 ## Unstandardized and Standardized Coefficients
 
-Path (or regression) coefficients are the inferential engine behind structural equation modeling, and by extension all of linear and even some non-linear statistics (as we shall see). They relate changes in the dependent variable $y$ to changes in the independent variable $x$, and thus act as a measure of association. In fact, you may recall from the chapter on Global Estimation that, under specific circumstances, path coefficients can be expressed as (partial) correlations, which all scientists are familiar with as a unitless measure of association. They also allow us to generate predictions for new values of $x$ and thus are useful in testing and extrapolating model results.
+Path (or regression) coefficients are the inferential engine behind structural equation modeling, and by extension all of linear regression. They relate changes in the dependent variable $y$ to changes in the independent variable $x$, and thus act as a measure of association. In fact, you may recall from the chapter on global estimation that, under specific circumstances, path coefficients can be expressed as (partial) correlations, a unitless measure of association that makes them excellent for comparisons. They also allow us to generate predictions for new values of $x$ and are therefore useful in testing and extrapolating model results.
 
-There are two kinds of regression coefficients: unstandardized, or raw coefficients, and standardized coefficients.
+We will consider two kinds of regression coefficients: unstandardized (or raw) coefficients, and standardized coefficients.
 
-Unstandardized coefficients are the easiest to derive as they are the default values returned by all statistical programs. In short, they reflect the expected (linear) change in the response with each unit change in the predictor. For a coefficient value $\beta = 0.5$, for example, a 1 unit change in $x$ there is, on average, an 0.5 unit change in $y$.
+Unstandardized coefficients are the default values returned by all statistical programs. In short, they reflect the expected (linear) change in the response with each unit change in the predictor. For a coefficient value $\beta = 0.5$, for example, a 1 unit change in $x$ there is, on average, an 0.5 unit change in $y$.
 
 In models with more than one independent variable (e.g., $x1$, $x2$, etc), the coefficient reflects the expected change in $y$ *given* the other variables in the model. This implies that the effect of one particular variable controls for the presence of other variables, generally by holding them constant at their mean. This is why such coefficients are referred to as *partial* regression coefficients, because they reflect the independent (or partial) contributions of any particular variable.
 
-One tricky aspect to interpretation involves transformations. When the log-transformation is applied, for example, the relationships between the variable are no longer linear. This means that we have to change our interpretation slightly. When $y$ is log-transformed, the coefficient $\beta$ is interpreted as a 1 unit change in $x$ leads to a $(exp(\beta) - 1) \times 100%$ change in $y$. Oppositely, when the independent variable $x$ is log-transformed, $\beta$ is interpreted as a 1% change in $x$ leads to a $\beta$ increase in $y$. Finally, when both are transformed, both are expressed in percentages: a 1% change in $x$ leads to a $(exp(\beta) - 1) \times 100%$ change in $y$. Transformations often confound intrepretation, so it is worth mentioning.
+As an aside: one tricky aspect to interpretation involves transformations. When the log-transformation is applied, for example, the relationships between the variable are no longer linear. This means that we have to change our interpretation slightly. When $y$ is log-transformed, the coefficient $\beta$ is interpreted as a 1 unit change in $x$ leads to a $(exp(\beta) - 1) \times 100%$ change in $y$. Oppositely, when the independent variable $x$ is log-transformed, $\beta$ is interpreted as a 1% change in $x$ leads to a $\beta$ increase in $y$. Finally, when both are transformed, both are expressed in percentages: a 1% change in $x$ leads to a $(exp(\beta) - 1) \times 100%$ change in $y$. Transformations often confound intrepretation, so it is worth mentioning.
 
-In contrast, standardized coefficients are expressed in equivalent units, regardless of the original measurements. Often these are in units of standard deviations of the mean (scale standardization) but, as we shall see shortly, there are other possibilities. The goal of standardization is to increase _comparability_. In other words, the magnitude of standardized coefficients can be directly compared to make inferences about the relative strength of relationships.
+In contrast to raw coefficients, standardized coefficients are expressed in equivalent units, regardless of the original measurements. Often these are in units of standard deviations of the mean (scale standardization) but, as we shall see shortly, there are other possibilities. The goal of standardization is to increase _comparability_. In other words, the magnitude of standardized coefficients can be directly compared to make inferences about the relative strength of relationships.
 
-In SEM, it is often advised to report both unstandardized and standardized coefficients, because they present different and mutually exclusive information. Unstandardized coefficients contain information about both the variance *and* the mean, and thus are essential for prediction. Along these lines, they are also useful for comparing across models fit to the same variables, but using different sets of data. Because the most common form of standardization concerns scaling by the sample standard deviations, data derived from different sources have different sample variances and their standardized coefficients are not immediately comparable.
+In SEM, it is often advised to report both unstandardized and standardized coefficients, because they present different and mutually exclusive information. Unstandardized coefficients contain information about both the variance *and* the mean, and thus are essential for prediction. Along these lines, they are also useful for comparing across models fit to the same variables, but using different sets of data. Because the most common form of standardization concerns scaling by the sample standard deviations, data derived from different sources (i.e., different datasets) have different sample variances and their standardized coefficients are not immediately comparable.
 
-Unstandardized coefficients are also most related to the phenomenon of interest in the units that are relevant to the outcome. Imagine telling someone that 1 standard deviation change in nutrient input levels would result in a 6 standard deviation change in water quality. That might seem impressive until it becomes clear that the size of the dataset has reduced the sample variance, and the absoluty relationship reveals only a very tiny change in water quality with each unit change in nutrient levels. Not so impressive anymore.
+Unstandardized coefficients also reflect the phenomenon of interest in straightforward language. Imagine telling someone that 1 standard deviation change in nutrient input levels would result in a 6 standard deviation change in water quality. That might seem impressive until it becomes clear that the size of the dataset has reduced the sample variance, and the absoluty relationship reveals only a very tiny change in water quality with each unit change in nutrient levels. Not so impressive anymore.
 
-In contrast, standardized effects are useful for comparing the relative magnitude of change associated with different paths in the same model. Care should be taken not to interpret these relationships as the 'proportion of variance explained' but rather in terms of relative influence on the mean of the response. 
+Standardized effects, on the other hand, are useful for comparing the relative magnitude of change associated with different paths in the same model (i.e., using the same dataset). Care should be taken *not* to interpret these relationships as the 'proportion of variance explained'--for example, a larger standardized coefficient does not explain more variance in the response than a smaller standardized coefficient--but rather in terms of relative influence on the mean of the response. 
 
-By extension, standardization is necessary to compare indirect or compound effects among different paths in the same model. This is because those paths could be measured in very different units. For example, comparing the relative effect of direct vs. indirect pathways in a partially-mediated model.
+By extension, standardization is necessary to compare indirect or compound effects among different sets of paths in the same model: for example, comparing direct vs. indirect pathways in a partial mediation model. This is because those  pathways could be measured in very different units, and their relative magnitudes might simply reflect their measurement units rather than any stronger or weaker explanatory power.
 
-In contrast, comparing the strength of indirect or compound effects across the same path in different models *requires* unstandardized coefficients, due to the issue of different sample variances raised above. Comparing the same path across different models using standardiezd coefficients would require a demonstration that the sample variances are not significantly different (or that the entire population has been sampled).
+In contrast, comparing the strength of indirect or compound effects across the same path in different models *requires* unstandardized coefficients, due to the issue of different sample variances raised above. Comparing the same path across different models using standardized coefficients would require a demonstration that the sample variances are not significantly different (or alternately, that the entire population has been sampled).
 
-Thus, both standardized and unstandardized coefficients have their place. Let's now explore some of the different forms of standardization, and how they can be achieved.
+Thus, both standardized and unstandardized coefficients have their place in structural equation modeling. Let's now explore some of the different forms of standardization, and how they can be achieved.
 
 ## Scale Standardization
 
@@ -39,11 +39,11 @@ The most typical implementation of standardization is placing the coefficients i
 
   $$b = \beta*\left( \frac{sd_x}{sd_y} \right)$$
 
-This coefficient has the interpretation that, for a 1 standard deviation change in $x$, we expect a $b$ unit standard deviation change in $y$.
+Thus lending this standardization its name. This coefficient has the interpretation that, for a 1 standard deviation change in $x$, we expect a $b$ unit standard deviation change in $y$.
 
-This standardization can be achieved by Z-transforming the raw data, in which case $b$ is the (partial) correlation between $x$ and $y$  (see Chapter: Global Estimation). Scaling the raw data by subtracting the mean and dividing by the standard deviation lends this standardization its name.
+This standardization can also be achieved by *Z*-transforming the raw data, in which case $b$ is already the (partial) correlation between $x$ and $y$.
 
-Both *lavaan* and *piecewiseSEM* return scale-standardized coefficients. *lavaan* requires a different set of functions or arguments, while *piecewiseSEM* will do it by default using the functions `coefs`. `coefs` has the added benefit in that it can be called on any model object, not just an SEM. 
+Both *lavaan* and *piecewiseSEM* return scale-standardized coefficients. *lavaan* requires a different set of functions or arguments, while *piecewiseSEM* will do it by default using the functions `coefs`. `coefs` has the added benefit in that it can be called on any model object, and thus has applications outside of structural equation modeling.
 
 Let's run an example:
 
@@ -82,15 +82,15 @@ In all 3 cases, we have achieved a scale-standardized coefficient of $b = 0.095$
 
 ## Range Standardization
 
-An alternative to scale standardization is 'relevant range' standardization. This approach scales the coefficients over, as the name implies, some relevant range. Typically this is the full range of the data, in which case $\beta$ can be standardized as follows:
+An alternative to scale standardization is *relevant range* standardization. This approach scales the coefficients over some relevant range. Typically this is the full range of the data, in which case $\beta$ can be standardized as follows:
 
   $$b = \beta * \frac{max(x) - min(x)}{max(y) - min(y)}$$
 
-The interpretation for the coefficient would then be the expected proportional shift in $y$ along its range given a full shift along its range by $x$.
+The interpretation for the coefficient would then be the expected proportional shift in $y$ along its range given a full shift along the range of $x$.
 
-At first, this might seem like a strange form of standardization, but it makes perfect sense in certain cases. For example, consider a binary predictor: 0, 1. In such a case, the relevant range-standardized coefficient is the expected shift in $y$ given the shift from one state (0) to another (1). Or consider a management target such as decreasing nutrient runoff by 10%. Would reducing fertilizer application by 10% of its range yield a 10% reduction in runoff? Such expressions are the currency of some, more applied realms.
+At first, this might seem like a strange form of standardization, but it has some powerful applications. For example, consider a binary predictor: 0 or 1. In such a case, the relevant range-standardized coefficient is the expected shift in $y$ given the transition from one state (0) to another (1). Or consider a management target such as decreasing nutrient runoff by 10%. Would reducing fertilizer application by 10% of its range yield a 10% reduction in runoff? Such expressions are necessarily the currency of applied questions.
 
-Perhaps the best application of relevant ranges is in comparing coefficients within a model: rather than dealing in somewhat esoteric quantities of standard deviations, relevant range standardization simply asks which variable causes a greater shift in $y$ along its range. This is a much more digestable concept to most scientists. It may even provide a more fair comparison across the same paths fit to different datasets, if the ranges are roughly similar and/or encompassed in the others.
+Perhaps the best application of relevant ranges is in comparing coefficients within a model: rather than dealing in somewhat esoteric quantities of standard deviations, relevant range standardization simply asks which variable causes a greater shift in $y$ along its range. This is a much more digestable concept to most scientists. It may even provide a more fair comparison across the same paths fit to different datasets, if the ranges are roughly similar and/or encompassed in the others. Restricting the range may be a useful solution for comparing coefficients across models fit to different data, as long as the range doesn't extend beyond that observed in any particular dataset.
 
 For a worked example, we have now entered fully into the realm of *piecewiseSEM*--it does not appear as if *lavaan* has integrated this functionality a of yet. Let's attempt to scale the results by hand, then compare to the output from `coefs` with the argument `standardize = "range"`:
 
@@ -129,7 +129,7 @@ plot(x, y)
 lines(xpred, ypred)
 ```
 
-Clearly these data are not linear, and modeling them as such would violate the assumptions of the test. Instead, as you can see, we instead fit them to a binomial distribution using a generalized linear model (GLM).
+Clearly these data are not linear, and modeling them as such would ignore the underlying process. Instead, as you can see, we fit them to a binomial distribution using a generalized linear model (GLM). 
 
 GLMs consist of three parts: (1) the random component, or the expected values of the response based on their underlying distribution, (2) the systematic component that represents the linear combination of predictors, and (3) the link function, which links the expected values of the response (random component) to the linear combination of predictors (systematic component). 
 
@@ -151,17 +151,17 @@ Say, for example, we have a coefficient $\beta = -0.12$. A 1 unit change in $x$ 
 
 The problem is that (log) odds ratios themselves are not comparable across models, and its unclear how they might be standardized, since the coefficient is on the link (linear) scale, while the only variance we can compute is from the raw data, which is on the non-linear scale. Thus, we need to find some sway to obtain estimates of variance on the same scale as the coefficient.
 
-One approach is to consider that for every value of $x$, there is an underlying probability distribution of observing a 0 or a 1. The mean of these distributions is where a particular outcome is *most* likely. Let's say at low values of $x$ we observe 0, at at high values of $x$ we observe 1. If we order $x$, the mean probabilities give rise to a linear increase in observing 1 with increasing $x$. Here is an illustration of this phenomenon (from Long 1997):
+One approach is to consider that for every value of $x$, there is an underlying probability distribution of observing a 0 or a 1 for $y$. The mean of these distributions is where a particular outcome is *most* likely. Let's say at low values of $x$ we observe $y = 0$, at at high values of $x$ we observe $y = 1$. If we order $x$, the mean probabilities give rise to a linear increase in observing $y = 1$ with increasing $x$. Here is an illustration of this phenomenon (from Long 1997):
 
 ![latent propensity](https://raw.githubusercontent.com/jslefche/sem_book/master/img/coefficients_latent_propensity.png)
 
-This linear but latent variable, which we call $y^*$, is therefore related to the observed values of $x$ through a vector of linear coefficients $\beta$ as in any other linear model:
+This linear but latent (i.e., unobserved) variable, which we call $y^*$, is therefore related to the observed values of $x$ through a vector of linear coefficients $\beta$ as in any other linear model:
 
   $$y^*_{i} = x_{i}\beta + \epsilon_{i}$$
 
 The problem is, we can never observe this linear underlying or *latent propensity*, and so we must approximate it. At some value of $x$, this probability is evenly split at 50/50: we call this cutpoint $\tau$. Below $\tau$ we are more likely to observe 0 in our example, while above $\tau$ we are more likely to observe 1. We can relate $y$ to $y^*$ based on whether the observed values fall above or below this cutpoint.
 
-Since latent variables are unobserved, we must also make some assumptions about their error variance. In the chapter on Latent Variable Modeling, we often fixed their error variance to 1. In this case, there are theoretically-derived error variances depending on the distribution and the link function: for the probit link, the error variance $\epsilon = 1$, while for the logit link, $\epsilon = \pi^2/3$, both for the binomial distribution.
+Since latent variables are unobserved, we must also make some assumptions about their error variance. In a later chapter on Latent Variable Modeling, we often fixed their error variance to 1. In this case, there are theoretically-derived error variances depending on the distribution and the link function: for the probit link, the error variance $\epsilon = 1$, while for the logit link, $\epsilon = \pi^2/3$, both for the binomial distribution.
 
 Regardless of the type of standardization, we need to know about the range or variance of the response. With our knowledge of $y^*_{i}$ and the theoretical error variances, we have all the information needed to compute the variance on the link (linear) scale.
 
@@ -175,7 +175,7 @@ There is an alternate method to the 'latent theoretic approach', which relies on
 
   $$R^2 = \frac{\sigma_{\hat{y}}^2}{\sigma_{y}^2}$$
 
-We can obtain the variance of the observed values as the variance of the predicted values (on the linear scale) over the value of $R^2$. The standard deviation, of course, is the square-root of this value.
+We can obtain the variance of the observed values as the variance of the predicted values (on the linear scale) over the total explained variance of $R^2$. The standard deviation, of course, is the square-root of this variance.
 
 This method, called the *observation-empirical approach*, does not require the acknowledgement of any latent variables or theoretical error variances, but does require an acceptance of this is a valid measurement of $R^2$ (which some consider it not, as GLM estimation is based on deviance, not variance, and thus this statistic is not equivalent). It also does not provide a measure of the range of $y$ although we can assume, based on sampling theory, that is $6 * \sigma_{y}$. 
 
@@ -211,7 +211,7 @@ You'll note that the observation-empirical approach yields a smaller coefficient
 
 ## Scaling to Other Non-Normal Distributions
 
-As it turns out, the latent-theoretic approach has one further benefit: we can extend it to other distributions (as they all have their own theoretical error variances) *and* mixed-effects models where we must also incorporate the random components.
+As it turns out, the latent-theoretic approach has one further benefit: we can extend it to other distributions (as they all have their own described theoretical error variances), and mixed-effects models that introduce another source of random variation.
 
 [content to come]
 

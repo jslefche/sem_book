@@ -118,6 +118,132 @@ Like $\chi^2$ and other fit indices from global estimation, just identified mode
 
 ## Model fitting using *piecewiseSEM*
 
+Fitting a piecewise structural equation model is as simple as fitting each regression separately: if you can fit an `lm` in R, you can fit an SEM!
+
+The package of course is *piecewiseSEM*:
+
+```{r}
+library(piecewiseSEM)
+```
+
+And let's return to the data from Grace & Keeley (2006)
+
+```{r}
+data(keeley)
+```
+
+As a reminder, Grace & Keeley wanted to understand patterns in plant diversity following disturbance, in this case wildfires in California.
+
+In the end of the global estimation chapter, we tested for full mediation using the following model:
+
+![keeley se
+m](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_sem2.png)
+
+As in *lavaan*, its first necessary to break down the component models. Unlike *lavaan* these are not coded as character strings, but instead as full-fledged linear models. Moreover, they are put together using the function `psem` which is the primary workhouse of the *piecewiseSEM* package.
+
+```{r}
+keeley_psem <- psem(
+  lm(firesev ~ age, data = keeley),
+  lm(cover ~ firesev, data = keeley),
+  data = keeley)
+```
+
+Its not necessary to pass a `data` argument to `psem` but it can help alleviate errors in certain cases.
+
+Before we get to the model fitting, let's just examine the `psem` object:
+```{r}
+keeley_psem
+```
+
+It returns the component models, their model classes, and a snippet of the data.
+
+The first step is to derive the basis set using the function `basisSet`:
+
+```{r}
+basisSet(keeley_psem)
+```
+
+Here, there is a single independence claim representing the missing path from $age -> cover$ conditional on the influence of $firesev$ on $cover$.
+
+Now to evaluate the tests of directed separation using the function `dSep`:
+
+```{r}
+dSep(keeley_psem)
+```
+
+Note that the output is the same as if we evaluated the independence claim ourselves:
+
+```{r}
+summary(lm(cover ~ firesev + age, data = keeley))$coefficients
+```
+
+Now, we could compute the Fisher's *C* statistic from the d-sep test with 2 degrees of freedom and compare it to a $\chi^2$ distribution to get a model-wide *P*-value:
+
+```{r}
+(C <- -2 * log(summary(lm(cover ~ firesev + age, data = keeley))$coefficients[3, 4]))
+
+1-pchisq(C, 2)
+```
+
+Or, we could just use the function `fisherC`:
+
+```{r}
+fisherC(keeley_psem)
+```
+
+It seems in this case, as with the example for global estimation, we would fail to reject the partial mediation model with the directed path from $age -> cover$ and instead refer to the full mediation model. Also as previously, we can perform a Chi-square difference test to validate this conclusion empirically.
+
+Let's create the partial mediation model and compare the two:
+
+```{r}
+keeley_psem2 <- psem(
+  lm(cover ~ firesev + age, data = keeley),
+  lm(firesev ~ age, data = keeley),
+  data = keeley
+)
+
+anova(keeley_psem, keeley_psem2)
+```
+
+It seems that, based on the output of the Chi-square difference test, the two models are not significantly different and thus parsimony would tend towards the model with fewer estimatde parameters (the full mediation model).
+
+Note that the output also computes AIC and BIC scores: these can be obtained with the `AIC` and `BIC` functions as well:
+
+```{r}
+AIC(keeley_psem)
+
+BIC(keeley_psem)
+```
+
+A note of caution: as for the $\chi^2$ statistic in global estimation, a fully saturated or just identified model will yield a *C* statistic of 0. Based on Shipley's equation above, the AIC score reduces to $2K$, or twice the likelihood degrees of freedom. This is in contrast to global estimation, which apparently employs a different calculation of AIC because the same model fit in *lavaan* produces a different (and lower) AIC score. Until the differences are reconciled, we advise caution in applying AIC to saturated models with 0 degrees of freedom.
+
+This exercise was a long workaround to reveal that all the above can be executed simultaneously using the `summary` function:
+
+```{r}
+summary(keeley_psem)
+```
+
+The output should look very familar to the output from other summary calls, like `summary.lm`. The d-sep test, Fisher's C and information criteria are all reported.
+
+Additionally, model coefficients are returned. Unlike *lavaan*, the standardized estimates are provided by default. Also unlike *lavaan*, the individual model $R^2$ values are also returned by default. Both sets of statistics are key for inference, and thus we have decided to make them available with any further arguments passed to `summary`.
+
+We can compare the *piecewiseSEM* output to the *lavaan* output:
+
+```{r}
+library(lavaan)
+
+sem1 <- '
+firesev ~ age
+cover ~ firesev
+'
+
+keeley_sem1 <- sem(sem1, keeley)
+
+summary(keeley_sem1, standardize = T, rsq = T)
+```
+
+Note that we get almost all the same statistics, except for the model-wide *P*-value, which comes down to differences in the ML estimation procedure for *lavaan*. Inferentially, however, the two models are identical.
 
 
 
+## A special case where graph theory fails

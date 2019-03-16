@@ -685,7 +685,7 @@ Naming coefficients can come in handy when specifying, for example, fixed values
 
 There is another possible configuration of these variables which includes a directed path between age and cover:
 
-![keeley sem](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_sem2_alt.png)
+![keeley sem2](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_sem2_alt.png)
 
 This type of model tests *partial mediation*, or the idea that the effect of age is partially mediated by fire severity, but there is still a direct effect between age and cover. 
 

@@ -1,15 +1,17 @@
 ---
 title: "Categorical Variables"
 author: "Jon Lefcheck"
-date: "November 12, 2018"
+date: "March 16, 2019"
 output: html_document
 ---
 
 # Categorical Variables
 
-## Introduction to Exogenous Categorical Variables
+While SEM was derived to consider only continuous variables (and indeed most applications still do), it is often the case--especially in ecology--that the observed variables are discrete. For example: binary (yes/no, failure/success, etc.), nominal (site 1, site 2), or ordinal levels (small < medium < large). Newer advances in modeling allow for the incorporation--either directly or in a roundabout fashion--of categorical variables into SEM. 
 
-While most examples using SEM consider continuous variables, it is often the case that the variables are discrete. These include binary (yes/no, failure/success, etc.), nominal (site 1, site 2), or ordinal levels (small < medium < large). There are two cases: categorical variables as exogenous or as endogenous. We will deal with the simpler case of exogenous categorical variables first, as they pose not so much of a computational issue, but a conceptual one.
+There are two way that categorical variables could be included: as exogenous (predictors) or endogenous (responses). We will deal with the simpler case of exogenous categorical variables first, as they pose not so much of a computational issue, but a conceptual one.
+
+## Introduction to Exogenous Categorical Variables
 
 A linear regression predicting y has the following standard form:
 
@@ -193,9 +195,9 @@ In the case of endogenous categorical variables in a piecewise framework, there 
 
 * for ordinal variables, set the values depending on the order of the factor, e.g., small = 1 < medium = 2 < large = 3, and then model as numeric, which would yield a single coefficient.
 
-Nominal variables (i.e., levels are not ordered) cannot be modeled at this time.  One could approach this through the application of multinomial regression. 
+Nominal variables (i.e., levels are not ordered) could be modeled using multinomial regression, although this method would have to be executed by hand. An alternative is to use the factor levels to construct a *composite variable*, the subject of a later chapter.
 
-*lavaan* provides a robust alternative in the form of confirmatory factor analysis (see [http://lavaan.ugent.be/tutorial/cat.html](http://lavaan.ugent.be/tutorial/cat.html)).
+*lavaan* provides a robust alternative in the form of confirmatory factor analysis (see [http://lavaan.ugent.be/tutorial/cat.html](http://lavaan.ugent.be/tutorial/cat.html)). In *piecewiseSEM*, composites must currently be constructed by hand, althoug this procedure is not hugely prohibitive.
 
 ## References
 Bowen, J. L., Kearns, P. J., Byrnes, J. E., Wigginton, S., Allen, W. J., Greenwood, M., ... & Meyerson, L. A. (2017). Lineage overwhelms environmental conditions in determining rhizosphere bacterial community structure in a cosmopolitan invasive plant. Nature communications, 8(1), 433.

@@ -90,6 +90,34 @@ Now that we are comfortable identifying missing paths and constructing the basis
 
 Once the model is fit, statistical independence is assessed with a t-, F-, or other test. If the resulting *P*-value is >0.05, then we fail to reject the null hypothesis that the two variables are conditionally independent. In this case, a high *P*-value is a *good* thing: it indicates that we were justified in excluding that relationship from our path diagram in the first place, because the data don't support a strong linkage between those variables within some tolerable threshold of error.
 
-Shipley's most genius contribution was to shose *P*-values can be used to construct a fit index analogous to 
+Shipley's most important contribution was to shose *P*-values can be used to construct a fit index analogous to the $\chi^2$ statistic from global estimation: Fisher's *C* statistic.
+
+Fisher's *C* is calculated as:
+
+$$C = -2{\sum_{i=1}^k ln(p_i)}$$
+
+where $k$ is the number of independence claims in the basis set, *i* is the *i*th claim, and *p* is the *P*-value from the corresponding significance test.
+
+Furthermore, Shipley showed that *C* is $\chi^2$ distributed with 2$k$ degrees of freedom. Thus, a model-wide *P*-value can be obtained by comparing the value to a $\chi^2$ table with the appropriate degrees of freedom.
+
+As with the $\chi^2$ test in global estimation, a model-wide *P* > 0.05 is desirable because it implies that a the hypothesized structure is supported by the data. In other words, no potentially significant missing paths were excluded.
+
+Like the $\chi^2$ difference test, the *C* statistic can be used to compare nested models. Shipley later showed that the the *C* statistic can also be used to compute an AIC score for the SEM:
+
+  $$AIC = C + 2K$$
+  
+where $K$ is the likelihood degrees of freedom (not $k$, the number of claims in the basis set). A further variant for small sample sizes, $AIC_c$, can be obtained by adding an additional penalty:
+
+  $$AIC_c = C + 2K\frac{n}{(n - K - 1)}$$
+
+It's important to point out that, like the $\chi^2$ statistic for global estimation, the *C* statistic can be affected by sample size, but not in as a direct way. As sample size increases, the probability of recovering a "significant" *P*-vaue increases, reducing the potential for a good-fitting model. Similarly, more complex models may lead to a kind of "overfitting" where significant d-sep tests are obscured by many more non-significant values leading to strong support for the (potentially incorrect) model structure. Paradoxically, poor sample size can also lead to a good-fitting model because the tests lack the power to detect an actual effect (high Type II error). Such biases should be considered when reporting the results of the test.
+
+In this way, the tests of directed separation may be usefully diagnostic by drawing attention to the specific relationships that could be re-inserted into the model, which would have the added benefit of improving model fit (by removing those significant *P*-values from the basis set). Whether this is advisable depends on the goal of the exercise: in an "exploratory" mode, for example, adding paths might be useful *if* they are theoretically justifiable. Blindly selecting all the significant tests and re-inserting those paths, however, is irresponsible and in fact antithetical to the philsophy of SEM (where paths are carefully specified by the user).
+
+Like $\chi^2$ and other fit indices from global estimation, just identified models have no degrees of freedom (missing paths) left over with which to test model fit. As in those cases, we can turn to other diagnostic tests, such as individual model $R^2$ to give us a sense of confidence in the model structure. If a high proportion of variance is explained in all endogenous variable and there are significant path coefficients, it follows that residual error is low, and it's safe to assume that there are no other variables out there that can further clarify the model structure.
+
+## Model fitting using *piecewiseSEM*
+
+
 
 

@@ -488,7 +488,7 @@ In fact, $F_{ML}$ is $\chi^2$-distributed such that:
 
   $$\chi^2 = (n - 1)F_{ML}$$
   
-which allows us to actually quantify model fit. In this case $n$ refers to the sample size.
+which allows us to actually quantify model fit. In this case $n$ refers to the sample size. 
 
 We can then formally compare the $\chi^2$ statistic to the $\chi^2$-distribution with some degrees of freedom to achieve a confidence level in the fit. The degrees of freedom are determined by model identification: just identified models will have 0 degrees of freedom (and thus no test is possible), and identified models will have $n(n + 1)/2 - t$ degrees of freedom (where $n$ are the number of knowns and $t$ the number of unknowns, from teh t-rule). 
 
@@ -496,7 +496,7 @@ Failing to reject the null hypothesis that the $\chi^2$ statistic is different f
 
 The $\chi^2$ index also provides a way to gauge the relative fit of two models, one of which is nested within the other. The *$\chi^2$ difference test* is simply the difference in $\chi^2$ values between the two models, with the degrees of freedom being the difference in the degrees of freedom between the two models. The resulting statistic can then be compared to a $\chi^2$ table to yield a significance value. Again, this test is for *nested* models. For non-nested models, other statistics allow for model comparisons, including AIC and BIC. An AIC or BIC score $\geq2$ is generally considered to indicate significant differneces among models, with smaller values indicating equivalency between the two models.
 
-$\chi^2$ tests tend to be affected by sample size, with larger samples more likely to generate poor fit due to small absolute deviations. As a reuslt, there are several other fit indices for covariance-based SEM that attempt to correct for this problem:
+$\chi^2$ tests tend to be affected by sample size, with larger samples more likely to generate poor fit due to small absolute deviations (note the scaling of $F_{ML}$ by $n-1$ in the above equation). As a reuslt, there are several other fit indices for covariance-based SEM that attempt to correct for this problem:
   
   - *Root-mean squared error of approximation* (RMSEA): this statistic penalizes models based on sample size. An acceptable value is generally <0.10 and a good value is anything <0.8.
   - *Comparative fit index* (CFI): this statistic considers the deviation from a 'null' model. In most cases, the null estimates all variances but sets the covariances to 0. A value >0.9 is considered good.

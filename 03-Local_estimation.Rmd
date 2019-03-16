@@ -56,7 +56,8 @@ Yet, we could have just as easily tested the claim $y2 | x1 (y1)$, which is the 
 As an aside, if we add this claim back into the model, we would have no missing paths and thus there would be no independence claims or tests of directed separation possible. As is the case with $\chi^2$, we would not have any leftover information with which to test model fit.
 
 As path diagrams become more complex, the natural question is: how far back do you go in terms of conditioning? Take the following example:
-![sem_model3](https://raw.githubusercontent.com/jslefche/sem_book/master/img/local_estimation_model1.png)
+
+![sem_model2](https://raw.githubusercontent.com/jslefche/sem_book/master/img/local_estimation_model1.png)
 
 There are several missing paths: $x1 -> y2$, $x1 -> y3$ and $y1 -> y3$.
 
@@ -74,7 +75,7 @@ The full basis set for this diagram would then be:
 
 Deriving the basis set can be difficult but mercifully is automated in the `piecewiseSEM` package. This package makes some choices about the basis set that deviate from the recommendations of Shipley. For example, consider the following path diagram:
 
-![sem_model4](https://raw.githubusercontent.com/jslefche/sem_book/master/img/local_estimation_model2.png)
+![sem_model3](https://raw.githubusercontent.com/jslefche/sem_book/master/img/local_estimation_model2.png)
 
 The basis set includes the unspecified paths from $x1 | y2 (y1)$ and $x2 | y2 (y1)$. But what about $x1 | x2$?
 
@@ -136,8 +137,7 @@ As a reminder, Grace & Keeley wanted to understand patterns in plant diversity f
 
 In the end of the global estimation chapter, we tested for full mediation using the following model:
 
-![keeley se
-m](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_sem2.png)
+![keeley_sem](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_sem2.png)
 
 As in *lavaan*, its first necessary to break down the component models. Unlike *lavaan* these are not coded as character strings, but instead as full-fledged linear models. Moreover, they are put together using the function `psem` which is the primary workhouse of the *piecewiseSEM* package.
 
@@ -244,6 +244,95 @@ summary(keeley_sem1, standardize = T, rsq = T)
 
 Note that we get almost all the same statistics, except for the model-wide *P*-value, which comes down to differences in the ML estimation procedure for *lavaan*. Inferentially, however, the two models are identical.
 
+Of course, we might expect greater divergence between the two methods as *piecewiseSEM* begins to incorporate more about the distributional and other assumptions about the endogenous variables.
+
+## Shipley (2009): A Worked Example
 
 
-## A special case where graph theory fails
+
+
+## A Special Case: Where Graph Theory Fails
+
+In the majority of cases, as we have established, the direction of the independence claim doesn't matter because, while the coefficients will differ, their *P*-values will be identical. Thus it doesn't matter if you test $y | x$ or $x | y$ because the claim will yield the same significance test. EXCEPT when intermediate endogenous variables are non-normally distributed. 
+
+Consider the following SEM:
+
+![glm_sem](https://raw.githubusercontent.com/jslefche/sem_book/master/img/local_estimation_glm_sem.png)
+
+In this SEM, there are two independence claims:
+
+-$y3 | x1 (y1, y2)$
+-$y2 | y1 (x1)$
+
+In the second independence claim, if both variables were normally distributed, the significance value is the same whether the test is conducted as $y2 | y1 (x1)$ or $y1 | y2 (x1)$. This is NOT true, however, when one or both of the responses are fit to a non-normal distribution. This is because the response is now transformed via a *link function* $g(\mu)$ (see chapter on coefficients), and the parameter estimates--and their standard errors--are now expressed on the link scale. This transformation means the *P*-value obtained by regressing $y1 ~ y2$ is NOT the same as the one obtained by regressing $y2 ~ y1$.
+
+To show this is true, let's generate some Poisson-distributed data and model using both LM and GLM with a log-link:
+
+```{r}
+set.seed(87)
+
+glmdat <- data.frame(x1 = runif(50), y1 = rpois(50, 10), y2 = rpois(50, 50), y3 = runif(50))
+
+# LM
+summary(lm(y1 ~ y2 + x1, glmdat))$coefficients[2, 4]
+
+summary(lm(y2 ~ y1 + x1, glmdat))$coefficients[2, 4]
+
+# GLM
+summary(glm(y1 ~ y2 + x1, "poisson", glmdat))$coefficients[2, 4] 
+
+summary(glm(y2 ~ y1 + x1, "poisson", glmdat))$coefficients[2, 4]
+```
+In the case of `lm` the *P*-value is identical regardless of the direction, and moreover is < 0.05, thus--depending on the outcome of the other claim--we might reject the model.
+
+In contrast, when $y1$ and $y2$ are modeled as Poisson-distributed, the *P*-value is alternatingly < and >= 0.05. Thus, depending on how the claim is specified, we might or might not reject the model. A big difference!
+
+`piecewiseSEM` solves this by providing three options to the user. 
+
+(1) We can specify the directionality of the test if, for instance, it makes greater biological sense to test $y1$ against $y2$ instead of the reverse (for example abundance drives species richness, not vice versa); or
+
+(2) We can remove that path from the basis set and instead specify it as a correlated error using `%~~%`. This circumvents the issue altogether but it may not make sense to assume both variables are generated by some underlying process; or
+
+(3) We can conduct *both* tests and choose the most conservative (i.e., lowest) P**-value.
+
+These options are returned by `summary` in the event the above scenario is identified in the SEM:
+```{r}
+glmsem <- psem(
+  glm(y1 ~ x1, "poisson", glmdat),
+  glm(y2 ~ x1, "poisson", glmdat),
+  lm(y3 ~ y1 + y2, glmdat)
+)
+
+summary(glmsem)
+```
+In option 1, the directionality can be specified using `direction = c()` as an additional argument to `summary`.
+
+```{r}
+summary(glmsem, direction = c("y1 <- y2"), .progressBar = F)$dTable
+```
+
+In option 2, the SEM can be updated to remove that test by specifying it as a correlated error.
+
+```{r}
+summary(update(glmsem, y1 %~~% y2), .progressBar = F)
+```
+
+Note that the claim no longer appears in the section for the tests of directed separation.
+
+Finally, option 3 can be invoked by specifying `conserve = T` as an additional argument
+
+```{r}
+summary(glmsem, conserve = T, .progressBar = F)$dTable
+```
+
+The user should be vigilant for these kinds of situations and ensure that both the specified paths AND the independence claims all make biological sense. In the case where the underlying assumptions of the d-sep tests can bias the goodness-of-fit statistic, `piecewiseSEM` should automatically alert the user and suggest solutions.
+
+## References
+
+Shipley, Bill. "A new inferential test for path models based on directed acyclic graphs." Structural Equation Modeling 7.2 (2000): 206-218.
+
+Shipley, Bill. "Confirmatory path analysis in a generalized multilevel context." Ecology 90.2 (2009): 363-368.
+
+Shipley, Bill. "The AIC model selection method applied to path analytic models compared using ad‐separation test." Ecology 94.3 (2013): 560-564.
+
+Lefcheck, Jonathan S. "piecewiseSEM: Piecewise structural equation modelling in r for ecology, evolution, and systematics." Methods in Ecology and Evolution 7.5 (2016): 573-579.

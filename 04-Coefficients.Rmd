@@ -143,13 +143,13 @@ plot(xpred, ypred_link)
 
 Note how the line is no longer sigmoidal, but straight!
 
-For binomial responses, there are two kinds of link functions: logit and probit. We'll focus on the logit link for now because its more common. With this link, the coefficients are in units of logits or the *log odds ratio*, which reflect the log of the probability of observing an outcome (1) relative to the probability of not observing it (0). 
+For binomial responses, there are two kinds of link functions: logit and probit. We'll focus on the logit link for now because it's more common. With this link, the coefficients are in units of logits or the *log odds ratio*, which reflect the log of the probability of observing an outcome (1) relative to the probability of not observing it (0). 
 
 Often these coefficients are reverted to just the odds ratio by taking the exponent, which yields the proportional change in the probablity observing one outcome (1) with a unit change change in the predictor.
 
 Say, for example, we have a coefficient $\beta = -0.12$. A 1 unit change in $x$ would result in $exp(-0.12) = 0.88 \times 100%$ or 88% reduction in the odds of observing the outcome.
 
-The problem is that (log) odds ratios themselves are not comparable across models, and its unclear how they might be standardized, since the coefficient is on the link (linear) scale, while the only variance we can compute is from the raw data, which is on the non-linear scale. Thus, we need to find some sway to obtain estimates of variance on the same scale as the coefficient.
+The problem is that (log) odds ratios themselves are not comparable across models, and it's unclear how they might be standardized, since the coefficient is on the link (linear) scale, while the only variance we can compute is from the raw data, which is on the non-linear scale. Thus, we need to find some sway to obtain estimates of variance on the same scale as the coefficient.
 
 One approach is to consider that for every value of $x$, there is an underlying probability distribution of observing a 0 or a 1 for $y$. The mean of these distributions is where a particular outcome is *most* likely. Let's say at low values of $x$ we observe $y = 0$, at at high values of $x$ we observe $y = 1$. If we order $x$, the mean probabilities give rise to a linear increase in observing $y = 1$ with increasing $x$. Here is an illustration of this phenomenon (from Long 1997):
 

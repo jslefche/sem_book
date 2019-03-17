@@ -23,7 +23,7 @@ A key point to be made is that piecewise approach does not absolve the user of a
 
 However, recall that the goodness-of-fit measures for variance-covariance based structural equation models largely derive from comparison of the observed vs. estimated variance-covariance matrix. Because local estimation produces a separate variance-covariance matrix for each modeled response, there is no clear extension from global methods. Instead, Shipley proposed a new test based on *directed acyclic graphs* (or DAGs). 
 
-DAGs are the pictorial representation of the hypothesized causal relationships: in other words, the path diagram. Its important to point out quickly that DAGs assume *recursive* relationships, or the absence of feedback loops or bidirectional relationships. Thus, local estimation is unsuitable for such approaches and one must resort to a global approach (with some additional conditions for such model structures).
+DAGs are the pictorial representation of the hypothesized causal relationships: in other words, the path diagram. It's important to point out quickly that DAGs assume *recursive* relationships, or the absence of feedback loops or bidirectional relationships. Thus, local estimation is unsuitable for such approaches and one must resort to a global approach (with some additional conditions for such model structures).
 
 There is a rich literature pertaining to DAGs, principally in their estimation and evaluation, and Shipley has drawn on this to propose a new index of model fit.
 
@@ -35,7 +35,7 @@ Another way of thinking about model fit is to ask: are we missing anything? Reca
 
 The *tests of directed separation* evaluate this hypothesis: that we are justified in excluding relationships. This question is actually implicit in the $\chi^2$ statistic: a substantial deviation from the observed correlations suggests that we're missing information in our model that could bring in our estimates more in line with our observations. The tests of directed separation take this one step further by explicitly identifying and testing whether each piece of missing information (i.e., each missing path) could indeed change our interpretation of the overall model.
 
-Two variables are *d-separated* if they are statistically independent conditional on their joint influences. Let's unpack this statement, because its a doozy. First, 'two variables.' The two variables are *unrelated* in the hypothesized causal model: in other words, there is not a directed path already connecting them. Second, 'statistically independent.' We test for statistical dependence in our model all the time: the *P*-values associated with the path coefficients, for example, test whether the effect is significantly different than zero. Statistical *independence* then asks whether the two variables are significantly *unrelated*, or that that their relationship is in fact no diffeent than zero. Finally, 'conditional on their joint influences' means that the test for statistical independence must account for contributions from any other influences. In other words, the test must consider the *partial* effect of one variable on the other if either or both are already influenced by other variables in the model.
+Two variables are *d-separated* if they are statistically independent conditional on their joint influences. Let's unpack this statement. First, 'two variables.' The two variables are *unrelated* in the hypothesized causal model: in other words, there is not a directed path already connecting them. Second, 'statistically independent.' We test for statistical dependence in our model all the time: the *P*-values associated with the path coefficients, for example, test whether the effect is significantly different than zero. Statistical *independence* then asks whether the two variables are significantly *unrelated*, or that that their relationship is in fact no diffeent than zero. Finally, 'conditional on their joint influences' means that the test for statistical independence must account for contributions from any other influences. In other words, the test must consider the *partial* effect of one variable on the other if either or both are already influenced by other variables in the model.
 
 Procedurally, this evaluation is quite easy: identify missing paths, test whether the effect is not significantly different from zero (*P* > 0.05), and combine those inferences to gauge the overall trustworthiness of the model. But there is some background to cover first.
 
@@ -139,7 +139,7 @@ In the end of the global estimation chapter, we tested for full mediation using 
 
 ![keeley_sem](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_sem2.png)
 
-As in *lavaan*, its first necessary to break down the component models. Unlike *lavaan* these are not coded as character strings, but instead as full-fledged linear models. Moreover, they are put together using the function `psem` which is the primary workhouse of the *piecewiseSEM* package.
+As in *lavaan*, it's first necessary to break down the component models. Unlike *lavaan* these are not coded as character strings, but instead as full-fledged linear models. Moreover, they are put together using the function `psem` which is the primary workhouse of the *piecewiseSEM* package.
 
 ```{r}
 keeley_psem <- psem(
@@ -148,7 +148,7 @@ keeley_psem <- psem(
   data = keeley)
 ```
 
-Its not necessary to pass a `data` argument to `psem` but it can help alleviate errors in certain cases.
+It's not necessary to pass a `data` argument to `psem` but it can help alleviate errors in certain cases.
 
 Before we get to the model fitting, let's just examine the `psem` object:
 ```{r}
@@ -250,7 +250,7 @@ Of course, we might expect greater divergence between the two methods as *piecew
 
 Let's turn to the example from Shipley (2009) on tree survival. In this (hypothetical) study, individual trees are followed for 36 years at 20 sites and measured for date of bud burst (Date), cumulative degree days until first bud burst (DD), growth, and survival.
 
-Its important to note that these data have multiple levels of hierarchical structure: between sites, between individuals within sites, between years within individuals within sites. They also have non-normal responses: survival is measured as a binary outcome (alive or dead).
+It's important to note that these data have multiple levels of hierarchical structure: between sites, between individuals within sites, between years within individuals within sites. They also have non-normal responses: survival is measured as a binary outcome (alive or dead).
 
 Shipley hypothesized these variables are related in the following way:
 

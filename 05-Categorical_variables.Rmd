@@ -7,7 +7,7 @@ output: html_document
 
 # Categorical Variables
 
-While SEM was derived to consider only continuous variables (and indeed most applications still do), it is often the case--especially in ecology--that the observed variables are discrete. For example: binary (yes/no, failure/success, etc.), nominal (site 1, site 2), or ordinal levels (small < medium < large). Newer advances in modeling allow for the incorporation--either directly or in a roundabout fashion--of categorical variables into SEM. 
+While SEM was derived to consider only continuous variables (and indeed most applications still do), it's often the case--especially in ecology--that the observed variables are discrete. For example: binary (yes/no, failure/success, etc.), nominal (site 1, site 2), or ordinal levels (small < medium < large). Newer advances in modeling allow for the incorporation--either directly or in a roundabout fashion--of categorical variables into SEM. 
 
 There are two way that categorical variables could be included: as exogenous (predictors) or endogenous (responses). We will deal with the simpler case of exogenous categorical variables first, as they pose not so much of a computational issue, but a conceptual one.
 
@@ -49,7 +49,7 @@ A alternate approach draws on this final point, and involves testing and reporti
 
 ## Exogenous Categorical Variables as Marginal Means
 
-All models can be used for prediction. In multiple regression, the predicted values of one variable are often computed while holding the values of other variables at their mean. Marginal means are the mean of these predicted values. In other words, it is the expected value of one variable given the other variables in the model.
+All models can be used for prediction. In multiple regression, the predicted values of one variable are often computed while holding the values of other variables at their mean. Marginal means are the mean of these predicted values. In other words, it's the expected value of one variable given the other variables in the model.
 
 For categorical variables, marginal means are particularly useful because they provide an estimated mean for each level of each factor.
 

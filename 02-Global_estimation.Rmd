@@ -9,7 +9,7 @@ output: html_document
 
 ## What is (Co)variance?
 
-The building block of the global estimation procedure for SEM is variance, specifically the covariance between  variables. Before we delve into the specifics of this procedure, its worth reviewing the basics of variance and covariance.
+The building block of the global estimation procedure for SEM is variance, specifically the covariance between  variables. Before we delve into the specifics of this procedure, it's worth reviewing the basics of variance and covariance.
 
 Variance is the degree of spread in a set of data. Formally, it captures the deviation of each point from the mean value across all points. Consider the variable $x$. The variance of $x$ is calculated as:
 
@@ -92,7 +92,7 @@ In a simple linear regression, one variable $y$ is the response and another $x$ 
 
   $$\hat{y} = bx + a$$
   
-where $b$ is the regression coefficient and $a$ is the intercept. Its important to note that $b$ implies a linear relationship, i.e., the relatoinship between $x$ and $y$ can be captured by a straight line (for now).
+where $b$ is the regression coefficient and $a$ is the intercept. It's important to note that $b$ implies a linear relationship, i.e., the relatoinship between $x$ and $y$ can be captured by a straight line (for now).
 
 The regression coefficient between $x$ and $y$ can be related to the correlation coefficient through the following equation:
 
@@ -537,7 +537,7 @@ For purposes of exploration, let's first consider the relationship between fire 
 
 This is both a linear regression but also a simple SEM, and thus both can be fit using packages in R.
 
-The package to fit the SEM using covariance-based methods is called *lavaan* (for LAtent VAriable ANalysis, which we will delve into in a later chapter). In *lavaan*, the syntax is the same as in other modeling functions in R with one key distinction: formulae are passed as character strings. To fit a model in *lavaan*, its first necessary to break down the component models by the endogenous (response) variables and code them as characters. For example:
+The package to fit the SEM using covariance-based methods is called *lavaan* (for LAtent VAriable ANalysis, which we will delve into in a later chapter). In *lavaan*, the syntax is the same as in other modeling functions in R with one key distinction: formulae are passed as character strings. To fit a model in *lavaan*, it's first necessary to break down the component models by the endogenous (response) variables and code them as characters. For example:
 
 ```{r}
 keeley_formula1 <- 'firesev ~ age'

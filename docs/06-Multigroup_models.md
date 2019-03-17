@@ -1,7 +1,7 @@
 ---
 title: "Multigroup Analysis"
 author: "Jon Lefcheck"
-date: "November 12, 2018"
+date: "March 17, 2019"
 output: html_document
 ---
 
@@ -9,21 +9,21 @@ output: html_document
 
 ## Introduction to Multigroup Analysis
 
-Often in ecology we wish to compare the results from two or more groups. These groups could reflect experimental treatments, different sites,  different sexes, or any number of types of organization. The ultimate goal of such an analysis is to ask whether the relationships among predictor and response variables vary by group. For example, does the effect of pesticide on invertebrate biomass change as function of where the pesticide is applied?
+Often in ecology we wish to compare the results from two or more groups. These groups could reflect experimental treatments, different sites, different sexes, or any number of types of organization. The ultimate goal of such an analysis is to ask whether the relationships among predictor and response variables vary by group. 
 
-Historically, such a goal would be captured through the application of a statistical interaction. In the above example, the statistical model might be something like:
+Historically, such a goal would be captured through the application of a statistical interaction. For example, does the effect of pesticide on invertebrate biomass change as function of where the pesticide is applied? This model might look something like this:
 
   $$biomass = pesticide * location$$
   
-Here, a significant interaction between $pesticide \times location$ would indicate that the effect of pesticide applicaiton on invertebrate biomass varies by location. It would of course then be up to the author to use their knowledge of the system to speculate why this is.
+A significant interaction between $pesticide \times location$ would indicate that the effect of pesticide applicaiton on invertebrate biomass indeed varies by location. It would of course then be up to the author to use their knowledge of the system to speculate why this is.
 
-In the event that the interaction is not statistically significant, then the author would conclude that the effect of pesticide is invariant to location, and could go on to interpret the main effect of pesticide. In this situation, they are able to generalize the effects of pesticide such that it is expected to have the same magnitude of effect regardless of where it is applied.
+In the event that the interaction is not statistically significant, then the author would conclude that the effect of pesticide is invariant to location, and could instead generalize the effects of pesticide such that it's expected to have the same magnitude of effect regardless of where it's applied.
 
-A multigroup model is essentially the same principle, but instead of focusing on a single response, the interaction is applied across a network of variables. In other words, it asks if not just one, but *all* coefficients are the same or different across groups while leveraging the entirety of the data across groups. In a sense, it can be thought of as a "model-wide" interaction, and in fact, this is how we will treat it later using a piecewise approach.
+A *multigroup model* is essentially the same principle, but instead of focusing on a single response, the interaction is applied across a structural equation model. In other words, it asks if not just one, but *all* coefficients are the same or different across groups. In a sense, it can be thought of as a "model-wide" interaction, and in fact, this is how we will treat it later using a piecewise approach.
 
-One could simply fit the same model structure to different subsets of the data, but this would not allow you to identify *which* paths change based on the group and which do not. Rather, one would have to compare the magnitude and standard errors of each pair of coefficients manually, rather than through a formal statistical procedure.
+Of course, you might ask: why not simply fit the same model structure to different subsets of the data? Unfortunately, this would not allow you to identify *which* paths change based on the group and which do not--which could be key insight. Rather, one would have to compare the magnitude and standard errors of each pair of coefficients manually, rather than through a formal statistical procedure.
 
-The application of multigroup models differs between a global estimation (i.e., variance-covariance-based SEM) and local estimation (i.e., piecewise SEM), but adhere to the same idea of identifying which paths have the same effect across groups, and which paths vary depending on the group.
+The application of multigroup models differs between a global estimation (i.e., variance-covariance-based SEM) and local estimation (i.e., piecewise SEM), but adhere to the same idea of identifying which paths have the same effect across groups and which paths vary depending on the group.
 
 In this chapter, we will work through both approaches, and then compare/contrast the output.
 
@@ -31,9 +31,9 @@ In this chapter, we will work through both approaches, and then compare/contrast
 
 Multigroup modeling using global estimation begins with the estimation of two models: one in which all parameters are allowed to differ between groups, and one in which all parameters are fixed to those obtained from analysis of the pooled data across groups. We call the first model the "free" model since all parameters are free to vary, and the second the "constrained" model since each path, regardless of its group, is constrained to a single value determined by the entire dataset.
 
-If the two models are not significantly different, and the latter fits the data well, then one can assume there is no variation in the path coefficients by group and multigroup approach is not necessary. If they are, then the exercise shifts towards understanding which paths are the same and which are different. This is achieved by sequentially constraining the coefficients of each path and re-fitting the model.
+If the two models are not significantly different, and the latter fits the data well, then one can assume there is no variation in the path coefficients by group and multigroup approach is not necessary. In this case, the output from the constrained model would be reported. If they are, then the exercise shifts towards understanding which paths are the same and which are different. This is achieved by sequentially constraining the coefficients of each path and re-fitting the model.
 
-Let's illustrate this procedure using a random example using three variables ($x$, $y$, and $z$) in two groups ("a" and "b"):
+Let's illustrate this procedure using a random example using three variables--$x$, $y$, and $z$--in two groups: "a" and "b":
 
 
 ```r
@@ -48,7 +48,7 @@ dat$z <- dat$y + runif(100)
 
 In this example, we suppose a simple mediation model: $x -> y -> z$, and that all three variables are correlated to some degree so that this path model makes sense.
 
-We can use *lavaan* to fit the "free" model. The key is allowing the coefficients to vary by specifying the `group =` argument.
+We can use *lavaan* to fit the "free" model. The key is allowing the coefficients to vary by specifying the `group =` argument:
 
 
 ```r
@@ -58,17 +58,7 @@ z ~ y
 '
 
 library(lavaan)
-```
 
-```
-## This is lavaan 0.6-2
-```
-
-```
-## lavaan is BETA software! Please report any bugs.
-```
-
-```r
 multigroup1 <- sem(multigroup.model, dat, group = "group") 
 ```
 
@@ -80,7 +70,7 @@ summary(multigroup1)
 ```
 
 ```
-## lavaan 0.6-2 ended normally after 38 iterations
+## lavaan 0.6-3 ended normally after 38 iterations
 ## 
 ##   Optimization method                           NLMINB
 ##   Number of free parameters                         12
@@ -158,7 +148,7 @@ summary(multigroup1.constrained)
 ```
 
 ```
-## lavaan 0.6-2 ended normally after 29 iterations
+## lavaan 0.6-3 ended normally after 29 iterations
 ## 
 ##   Optimization method                           NLMINB
 ##   Number of free parameters                         12
@@ -225,9 +215,9 @@ summary(multigroup1.constrained)
 ##    .z                 0.083    0.017    5.000    0.000
 ```
 
-This output is slightly different from the first: the coefficients are reported by group, but they are now the same between groups ($x -> y$ in group "a" = $x -> y$ in group "b"). The constrained paths are indicated by a parenthetical next to the path (e.g., `(.p1.)` for path 1).
+This output is slightly different from the first: the coefficients are reported by group, but they are now the same between groups (e.g., $x -> y$ in group "a" = $x -> y$ in group "b"). The constrained paths are indicated by a parenthetical next to the path (e.g., `(.p1.)` for path 1).
 
-Both the constrained and unconstrainted models fit the data well based on the Chi-squared statistic, and we can formally compare the two models using a Chi-squared difference test:
+Both the constrained and free models fit the data well based on the $\chi^2$ statistic, and we can formally compare the two using a Chi-squared difference test:
 
 
 ```r
@@ -247,7 +237,7 @@ anova(multigroup1, multigroup1.constrained)
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
-The significant *P*-value implies that the free and constrained models are significantly different. In other words, some paths vary while others do not. If the models were *not* significantly different, then one would conclude that the constrained model is equivalent to the free model. In other words, the coefficients would not vary by group and it would be fair to analyze the pooled data in a single model.
+The significant *P*-value implies that the free and constrained models are significantly different. In other words, some paths vary while others do not. If the models were *not* significantly different, then one would conclude that the constrained model is equivalent to the free model. In other words, the coefficients would not vary by group and it would be fair to analyze the pooled data in a single global model.
 
 However, this is the not the case for this example, and we can now undergo the processing of introducing and releasing constraints to try and identify which path varies between groups. In this simplified example, we have two choices: $x -> y$, and $y -> z$. Let's focus on $x -> y$ first.
 
@@ -282,7 +272,7 @@ anova(multigroup1, multigroup2)
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
-We find that the models are still significantly different, implying that the path between $x -> y$ should not be constrained, and that it should be left to vary among groups.
+...we find that the models are still significantly different, implying that the path between $x -> y$ should not be constrained, and that it should be left to vary among groups.
 
 We can repeat this exercise with the second path, $y -> z$:
 
@@ -299,7 +289,7 @@ summary(multigroup3)
 ```
 
 ```
-## lavaan 0.6-2 ended normally after 34 iterations
+## lavaan 0.6-3 ended normally after 34 iterations
 ## 
 ##   Optimization method                           NLMINB
 ##   Number of free parameters                         12
@@ -380,25 +370,23 @@ anova(multigroup1, multigroup3)
 
 In this case, there is *not* a significant difference between the two models, implying that the is no difference in the fit of the constrained model and the unstrained model, and that this constraint is valid. 
 
-Thus, if we were to select a model from which to draw inference, we would select the third model in which $x -> y$ is allowed to vary and $y -> z$ is constrained among groups. It is key to note that this model also fits the data well based on the $\chi^2$ statistic; if not, then like all poor-fitting path models (multigroup or otherwise), it would be unwise to present and draw conclusions from it.
+Thus, if we were to select a model from which to draw inference, we would select the third model in which $x -> y$ is allowed to vary and $y -> z$ is constrained among groups. It's key to note that this model also fits the data well based on the $\chi^2$ statistic; if not, then like all poor-fitting path models (multigroup or otherwise), it would be unwise to present and draw conclusions from it.
 
 This exercise of relaxing and imposing constraints is potentially very exploratory and could become exhaustive with more complicated models (i.e., one with lots of paths to potentially constrain/relax). Users should refrain from constraining and relaxing all paths and then choosing the most parsimonious model. Instead, choosing which paths to constrain should be motivated by the question: for example, we might expect some effects to be universal (e.g., temperature on metabolic rate) but not others (e.g., the effect of pesticide may vary depending on the history of application at various sites).
 
-It is also important to note that sample size must be sufficiently large to estimate all the parameters, but this is true for all structural equation models. Critically, the degrees of freedom for the model do *not* change based on the number of groups: because coefficients are estimated from independent variance-covariance matrices for each group, they do not constrain the complexity of the model per se.
+Critically, the degrees of freedom for the model do *not* change based on the number of groups because coefficients are estimated from variance-covariance matrices with the same dimensions. However, sample size must be sufficiently large to estimate all the parameters with minimal bias. While this is true for all structural equation models, it is especially true where parameters are estimated from covariances derived from different subsets (groups) that do not have the same representative as across the full dataset.
 
-Standardized coefficients also present a challenge. Because variances are likely to be unequal among groups, the standardized coefficient must be computed on a per group basis, even if the unstandardized coefficient is constrained to the global value. Both packages for SEM will do this automatically, so you may notice that the standardized solutions may vary even among constrained paths.
+Standardized coefficients also present a challenge. Because variances are likely to be unequal among groups, the standardized coefficient must be computed on a per group basis, even if the unstandardized coefficient is constrained to the global value. Both packages for SEM will do this automatically, so you may notice that the standardized solutions may--and more than often will--vary even among constrained paths.
 
-## Multigroup Analysis using Local Estimation
+## Multigroup Analysis Using Local Estimation
 
 The goal of multigroup analysis using local estimation is identical to that of global estimation: to identify whether a single global model is sufficient to describe the data, or whether some or all paths vary by some grouping variable. The difference lies in execution: while *lavaan* is a back-and-forth manual process of relaxing and constraining paths, *piecewiseSEM* tests constraints and automatically selects the best output for your data. 
 
-The upside is that the arduous and somewhat cumbersome process of specifying constraints is taken care of; the downside is that constraining particular paths is not possible at this time. This means that it is not currently possible to manually set constraints.
+The upside is that the arduous and somewhat cumbersome process of specifying constraints is taken care of; the downside is that manually constraining particular paths is not possible at this time.
 
-The first step in the local estimation process is to implement a model-wide interaction. In other words, every term in the model interacts with the grouping variable. If the interaction is significant, then the path varies by group; if not, then the path takes on the estimate from the global model. In this way, the piecewise multigroup procedure breaks down into a series of classical interaction terms.
+The first step in the local estimation process is to implement a model-wide interaction. In other words, every term in the model interacts with the grouping variable. If the interaction is significant, then the path is free to vary by group; if not, then the path takes on the estimate from the global dataset. In this way, the piecewise multigroup procedure breaks down into a series of classic interaction terms: it is literally and figuratively a model-wide interaction.
 
-Consider our previous example: $x -> y -> z$ and the groups "a" and "b".
-
-In a piecewise approach, we would first model the interaction between $x \times group$, and between $y \times group$:
+Consider our previous example fitted using *lavaan*. In a piecewise approach, we would first model the interaction between $x \times group$ to see whether the effect of $x$ on $y$ should vary by group:
 
 
 ```r
@@ -418,7 +406,9 @@ anova(lm(y ~ x * group, dat))
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
-In this case, the first interaction between $x \times group$ in predicting $y$ is significant, indicating the effect of $x$ on $y$ depends on $group$. We would then estimate the effect of $x$ and $y$ for each subset of the data, and report the coefficients separately. This situation is analogous to allowing the path to vary freely by group.
+In this case, the effect of $x$ on $y$ depends on $group$ (a significant interaction term). We would then estimate the effect of $x$ and $y$ for each subset of the data, and report the coefficients separately. =
+
+Next, we evaluate the effect of $y$ on $z$ by group:
 
 
 ```r
@@ -438,26 +428,14 @@ anova(lm(z ~ y * group, dat))
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
-The second interaction between $y \times group$ in predicting $z$ is non-significant, indicating that the effect of $y$ on $z$ does *not* depend on $group$ We would then estimate the effect of $y$ on $z$ given the entire dataset, and report that single coefficient across all groups.
+The second interaction between $y \times group$ in predicting $z$ is non-significant, indicating that the effect of $y$ on $z$ does *not* depend on $group$. We would then estimate the effect of $y$ on $z$ using the entire dataset and report that single constrained coefficient across all groups.
 
-The implementation of this approach in *piecewiseSEM* is very straightforward: first, build the model using `psem`, then use the function `multigroup` to perform the multigroup analysis:
+The implementation of this approach in *piecewiseSEM* is very straightforward: first, build the model using `psem`, then use the function `multigroup` to perform the multigroup analysis.
 
 
 ```r
 library(piecewiseSEM)
-```
 
-```
-## 
-##   This is piecewiseSEM version 2.1.0
-## 
-## 
-##   If you have used the package before, it is strongly recommended you read Section 3 of the vignette('piecewiseSEM') to familiarize yourself with the new syntax
-## 
-##   Questions or bugs can be addressed to <LefcheckJ@si.edu>
-```
-
-```r
 pmodel <- psem(
   lm(y ~ x, dat),
   lm(z ~ y, dat)
@@ -488,8 +466,8 @@ The `multigroup` function has an argument `group =` which, as in *lavaan*, accep
 ## Model-wide Interactions:
 ## 
 ##   Response Predictor Test.Stat DF P.Value  
-##          y   x:group       0.4  1  0.0325 *
-##          z   y:group       0.1  1  0.2379  
+##          y   x:group       4.8  1  0.0325 *
+##          z   y:group       1.0  1  0.2379  
 ## 
 ##  y -> z constrained to the global model
 ## 
@@ -516,13 +494,13 @@ The `multigroup` function has an argument `group =` which, as in *lavaan*, accep
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05    c = constrained
 ```
 
-If we examine the output, we see the output table of model-wide interactions. Its important to note that the package uses `car::Anova` with `type = "III"` sums-of-squares to estimate the interactions by default, but other types (e.g., type II) are accepted using the `test.type = ` argument.
+If we examine the output, we see the output table of model-wide interactions. It's important to note that the package uses `car::Anova` with `type = "II"` sums-of-squares to estimate the interactions by default, but other types (e.g., type III) are accepted using the `test.type = ` argument (or type I using the base `anova` function).
 
 As above, only the path from x -> y is significantly different among groups. In this case, the function explicitly reports that the path `y -> z constrained to the global model`.
 
 Next, as in *lavaan*, are the coefficient tables for each group. Values that have been constrained are the same between the two models, while the unconstrained path from $x -> y$ is different between groups "a" and "b".
 
-Its important to note that the standardized coefficients *do* differ for each group even though the paths are constrained. Again, this is because the variance differs between groups. Thus the standardization:
+It's important to note that the standardized coefficients *do* differ for each group even though the paths are constrained. Again, this is because the variance differs between groups. Thus the standardization:
 
     $$\beta_{std} = \beta*\left( \frac{sd_{x}}{sd_{y}} \right)$$
     
@@ -534,11 +512,11 @@ For comparison's sake, let's look at the output from the *lavaan* multigroup mod
 
 
 ```r
-multigroup3
+summary(multigroup3)
 ```
 
 ```
-## lavaan 0.6-2 ended normally after 34 iterations
+## lavaan 0.6-3 ended normally after 34 iterations
 ## 
 ##   Optimization method                           NLMINB
 ##   Number of free parameters                         12
@@ -557,6 +535,52 @@ multigroup3
 ## 
 ##   a                                              1.031
 ##   b                                              0.492
+## 
+## Parameter Estimates:
+## 
+##   Information                                 Expected
+##   Information saturated (h1) model          Structured
+##   Standard Errors                             Standard
+## 
+## 
+## Group 1 [a]:
+## 
+## Regressions:
+##                    Estimate  Std.Err  z-value  P(>|z|)
+##   y ~                                                 
+##     x                 0.771    0.163    4.734    0.000
+##   z ~                                                 
+##     y         (b2)    0.955    0.071   13.389    0.000
+## 
+## Intercepts:
+##                    Estimate  Std.Err  z-value  P(>|z|)
+##    .y                 0.684    0.088    7.745    0.000
+##    .z                 0.596    0.087    6.858    0.000
+## 
+## Variances:
+##                    Estimate  Std.Err  z-value  P(>|z|)
+##    .y                 0.080    0.016    5.000    0.000
+##    .z                 0.093    0.019    5.000    0.000
+## 
+## 
+## Group 2 [b]:
+## 
+## Regressions:
+##                    Estimate  Std.Err  z-value  P(>|z|)
+##   y ~                                                 
+##     x                 1.240    0.135    9.182    0.000
+##   z ~                                                 
+##     y         (b2)    0.955    0.071   13.389    0.000
+## 
+## Intercepts:
+##                    Estimate  Std.Err  z-value  P(>|z|)
+##    .y                 0.349    0.078    4.460    0.000
+##    .z                 0.557    0.080    6.974    0.000
+## 
+## Variances:
+##                    Estimate  Std.Err  z-value  P(>|z|)
+##    .y                 0.082    0.016    5.000    0.000
+##    .z                 0.082    0.016    5.000    0.000
 ```
 
 ```r
@@ -581,7 +605,7 @@ pmultigroup$group.coefs
 ## 2 c ***
 ```
 
-You'll note that the outputs are roughly equivalent (owing to slight differences in the estimation procedures for each package). Critically, the coefficient for the path from $x -> y$ is the same in both groups.
+You'll note that the outputs are roughly equivalent (owing to slight differences in the estimation procedures for each package). Critically, the coefficient for the path from $z -> y$ is the same in both groups.
 
 ## Grace & Jutila (1999): A Worked Example
 
@@ -589,7 +613,7 @@ Let's now turn to a real example from Grace & Jutila (1999). While the original 
 
 In their study, the authors were interested in the controls of on plant species' density in Finnish meadows. In this worked example, we will consider only elevation and total biomass in their effects on density, plus an effect of elevation on biomass:
 
-![jutila_sem](https://raw.githubusercontent.com/jslefche/sem_book/master/img/multigroup_jutila_sem.png)
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/multigroup_jutila_sem.png)
 
 Moreover, they repeated their observations in two treatments: grazed and ungrazed meadows. Grazing will serve as the grouping variable for our multigroup analysis.
 
@@ -610,20 +634,12 @@ mass ~ elev
 '
 
 jutila_lavaan <- sem(jutila_model, meadows, group = "grazed")
-```
 
-```
-## Warning in lav_data_full(data = data, group = group, cluster = cluster, :
-## lavaan WARNING: some observed variances are (at least) a factor 1000 times
-## larger than others; use varTable(fit) to investigate
-```
-
-```r
 summary(jutila_lavaan)
 ```
 
 ```
-## lavaan 0.6-2 ended normally after 53 iterations
+## lavaan 0.6-3 ended normally after 53 iterations
 ## 
 ##   Optimization method                           NLMINB
 ##   Number of free parameters                         14
@@ -697,20 +713,12 @@ Let's begin by constraining all paths:
 
 ```r
 jutila_lavaan2 <- sem(jutila_model, meadows, group = "grazed", group.equal = c("intercepts", "regressions"))
-```
 
-```
-## Warning in lav_data_full(data = data, group = group, cluster = cluster, :
-## lavaan WARNING: some observed variances are (at least) a factor 1000 times
-## larger than others; use varTable(fit) to investigate
-```
-
-```r
 summary(jutila_lavaan2)
 ```
 
 ```
-## lavaan 0.6-2 ended normally after 44 iterations
+## lavaan 0.6-3 ended normally after 44 iterations
 ## 
 ##   Optimization method                           NLMINB
 ##   Number of free parameters                         14
@@ -805,23 +813,7 @@ mass ~ c("b1", "b1") * elev
 '
 
 jutila_lavaan3 <- sem(jutila_model2, meadows, group = "grazed")
-```
 
-```
-## Warning in lav_data_full(data = data, group = group, cluster = cluster, :
-## lavaan WARNING: some observed variances are (at least) a factor 1000 times
-## larger than others; use varTable(fit) to investigate
-```
-
-```
-## Warning in lav_model_vcov(lavmodel = lavmodel, lavsamplestats = lavsamplestats, : lavaan WARNING:
-##     The variance-covariance matrix of the estimated parameters (vcov)
-##     does not appear to be positive definite! The smallest eigenvalue
-##     (= 4.499242e-21) is close to zero. This may be a symptom that the
-##     model is not identified.
-```
-
-```r
 anova(jutila_lavaan, jutila_lavaan3)
 ```
 
@@ -848,23 +840,7 @@ mass ~ elev
 '
 
 jutila_lavaan4 <- sem(jutila_model3, meadows, group = "grazed")
-```
 
-```
-## Warning in lav_data_full(data = data, group = group, cluster = cluster, :
-## lavaan WARNING: some observed variances are (at least) a factor 1000 times
-## larger than others; use varTable(fit) to investigate
-```
-
-```
-## Warning in lav_model_vcov(lavmodel = lavmodel, lavsamplestats = lavsamplestats, : lavaan WARNING:
-##     The variance-covariance matrix of the estimated parameters (vcov)
-##     does not appear to be positive definite! The smallest eigenvalue
-##     (= -3.785594e-18) is smaller than zero. This may be a symptom that
-##     the model is not identified.
-```
-
-```r
 anova(jutila_lavaan, jutila_lavaan4)
 ```
 
@@ -884,23 +860,7 @@ mass ~ elev
 '
 
 jutila_lavaan5 <- sem(jutila_model4, meadows, group = "grazed")
-```
 
-```
-## Warning in lav_data_full(data = data, group = group, cluster = cluster, :
-## lavaan WARNING: some observed variances are (at least) a factor 1000 times
-## larger than others; use varTable(fit) to investigate
-```
-
-```
-## Warning in lav_model_vcov(lavmodel = lavmodel, lavsamplestats = lavsamplestats, : lavaan WARNING:
-##     The variance-covariance matrix of the estimated parameters (vcov)
-##     does not appear to be positive definite! The smallest eigenvalue
-##     (= 3.376474e-14) is close to zero. This may be a symptom that the
-##     model is not identified.
-```
-
-```r
 anova(jutila_lavaan, jutila_lavaan5)
 ```
 
@@ -924,7 +884,7 @@ summary(jutila_lavaan4)
 ```
 
 ```
-## lavaan 0.6-2 ended normally after 53 iterations
+## lavaan 0.6-3 ended normally after 53 iterations
 ## 
 ##   Optimization method                           NLMINB
 ##   Number of free parameters                         14
@@ -993,7 +953,7 @@ summary(jutila_lavaan4)
 ##    .mass           43567.993       NA
 ```
 
-Now the model fits the data well ($P = 0.330$), and we have, through an iterative procedure of imposing and relaxing constraints, determined which paths differ among groups ($elev -> mass$, $mass -> rich$) and which do *not* ($elev -> rich$).
+Now the model fits the data well (*P* = 0.330), and we have, through an iterative procedure of imposing and relaxing constraints, determined which paths differ among groups ($elev -> mass$, $mass -> rich$) and which do *not* ($elev -> rich$).
 
 Now let's confirm this by fitting the model in *piecewiseSEM*:
 
@@ -1023,10 +983,10 @@ multigroup(jutila_psem, group = "grazed")
 ## 
 ## Model-wide Interactions:
 ## 
-##   Response   Predictor Test.Stat DF P.Value   
-##       rich elev:grazed      12.7  1  0.3358   
-##       rich mass:grazed     126.3  1  0.0026 **
-##       mass elev:grazed  287418.5  1  0.0055 **
+##   Response   Predictor  Test.Stat DF P.Value   
+##       rich elev:grazed     3296.7  1  0.3358   
+##       rich mass:grazed     3296.7  1  0.0026 **
+##       mass elev:grazed 14283672.9  1  0.0055 **
 ## 
 ##  elev -> rich constrained to the global model
 ## 
@@ -1057,11 +1017,11 @@ multigroup(jutila_psem, group = "grazed")
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05    c = constrained
 ```
 
-As in our analysis in *lavaan*, the `multigroup` function has identified the $elev -> rich$ path as the only one in which coefficients do not differ among groups. Thus, in the output, that coefficient is the same between groups; otherwise, the coefficients vary depending on whether the meadows is grazed or ungrazed. Moreover, it seems some of the paths differ in their statistical significance: the $rich -> mass$ is not significant in the grazed meadows, but is significant in the ungrazed meadows. So not only do the coefficients differ, but the model structure as well!
+As in our analysis in *lavaan*, the `multigroup` function has identified the $elev -> rich$ path as the only one in which coefficients do not differ among groups (denoted by a `c` next to the output). Thus, in the output, that coefficient is the same between groups; otherwise, the coefficients vary depending on whether the meadows is grazed or ungrazed. Moreover, it seems some of the paths differ in their statistical significance: the $rich -> mass$ is not significant in the grazed meadows, but is significant in the ungrazed meadows. So not only do the coefficients differ, but the model structure as well!
 
 You'll note that the *piecewiseSEM* output does not return a goodness-of-fit test because the model is saturated (i.e., no missing paths). While constraints are incorporated in terms of offsets (i.e., fixing model coefficients), unlike global estimation, this does not provide new information with which to test goodness-of-fit. This is a limitation of local estimation that extends beyond multigroup modeling to any piecewise model.
 
-To draw inference about the study system, we would say that two paths differ among groups and one path does not. We would then report the two path models parameterized using the coefficient output (with the $elev -> rich$ path having the same coefficient in both groups). We would report that richness is affected by elevation and biomass under ungrazed conditions, but not under grazed conditions, where only elevation directly influences richness.
+To draw inference about the study system, we would say that two paths differ among groups and one path does not. We would then report the two path models parameterized using the coefficient output (with the $elev -> rich$ path having the same coefficient in both groups). We would conclude that richness is affected by elevation and biomass under ungrazed conditions, but not under grazed conditions, where only elevation directly influences richness.
 
 ## References
 

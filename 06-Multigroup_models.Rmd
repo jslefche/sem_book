@@ -50,7 +50,7 @@ In this example, we suppose a simple mediation model: $x -> y -> z$, and that al
 
 We can use *lavaan* to fit the "free" model. The key is allowing the coefficients to vary by specifying the `group =` argument:
 
-```{r echo = T, results = 'hide'}
+```{r, message = FALSE, warning = FALSE}
 multigroup.model <- '
 y ~ x
 z ~ y
@@ -71,7 +71,7 @@ Note that, unlike the typical *lavaan* output, the printout is now organized by 
 
 Next, we fit the constrained model by specifying the additional argument `group.equal = c("intercepts", "regressions")`. This argument fixes both the intercepts and path coefficients in each groups to be the same.
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 multigroup1.constrained <- sem(multigroup.model, dat, group = "group", group.equal = c("intercepts", "regressions"))
 
 summary(multigroup1.constrained)
@@ -91,7 +91,7 @@ However, this is the not the case for this example, and we can now undergo the p
 
 We can introduce a single constraint by modifying the model formula and re-fitting the model:
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 multigroup.model2 <- '
 y ~ c("b1", "b1") * x
 z ~ y
@@ -113,7 +113,7 @@ anova(multigroup1, multigroup2)
 
 We can repeat this exercise with the second path, $y -> z$:
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 multigroup.model3 <- '
 y ~ x
 z ~ c("b2", "b2") * y
@@ -152,7 +152,7 @@ anova(lm(y ~ x * group, dat))
 
 In this case, the effect of $x$ on $y$ depends on $group$ (a significant interaction term). We would then estimate the effect of $x$ and $y$ for each subset of the data, and report the coefficients separately. =
 
-Next, we evalutae the effect of $y$ on $z$ by group:
+Next, we evaluate the effect of $y$ on $z$ by group:
 
 ```{r}
 anova(lm(z ~ y * group, dat))
@@ -162,7 +162,7 @@ The second interaction between $y \times group$ in predicting $z$ is non-signifi
 
 The implementation of this approach in *piecewiseSEM* is very straightforward: first, build the model using `psem`, then use the function `multigroup` to perform the multigroup analysis.
 
-```{r echo = T, results = 'hide'}
+```{r, message = FALSE, warning = FALSE}
 library(piecewiseSEM)
 
 pmodel <- psem(
@@ -207,7 +207,7 @@ Let's now turn to a real example from Grace & Jutila (1999). While the original 
 
 In their study, the authors were interested in the controls of on plant species' density in Finnish meadows. In this worked example, we will consider only elevation and total biomass in their effects on density, plus an effect of elevation on biomass:
 
-![jutila_sem](https://raw.githubusercontent.com/jslefche/sem_book/master/img/multigroup_jutila_sem.png)
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/multigroup_jutila_sem.png)
 
 Moreover, they repeated their observations in two treatments: grazed and ungrazed meadows. Grazing will serve as the grouping variable for our multigroup analysis.
 
@@ -219,7 +219,7 @@ data(meadows)
 
 First, let's construct the "free" model in *lavaan*:
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 jutila_model <- '
 rich ~ elev + mass
 mass ~ elev
@@ -234,7 +234,7 @@ In this example, the model fit can't be determined because the model is saturate
 
 Let's begin by constraining all paths:
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 jutila_lavaan2 <- sem(jutila_model, meadows, group = "grazed", group.equal = c("intercepts", "regressions"))
 
 summary(jutila_lavaan2)
@@ -246,7 +246,7 @@ The model is significantly different from the unconstrained model we fit previou
 
 The next step is to sequentially relax and constrain paths:
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 jutila_model2 <- '
 rich ~ elev + mass
 mass ~ c("b1", "b1") * elev
@@ -261,7 +261,7 @@ The model is still a poor fit, and it is significantly different from the "free"
 
 Let's repeat for the next two paths:
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 # elev -> rich
 jutila_model3 <- '
 rich ~ c("b2", "b2") * elev + mass

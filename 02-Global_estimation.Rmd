@@ -145,7 +145,7 @@ Variables that only have paths emanating from them (i.e., do not have arrows goi
 
 For this rule, we will expand upon our earlier example to construct a simple path diagram: 
 
-![sem_model1](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model1.png)
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model1.png)
 
 ```{r}
 data$y2 <- data$y1 + runif(100)
@@ -179,7 +179,7 @@ cor(data$y2, data$x1)
 
 Ahh, but wait! The correlations are not the same. This result implies that the relationship between $x1$ and $y2$ cannot be fully explained by the indirect path through $y1$. Rather, we require additional information to solve this problem, and it comes in the form of the missing link between $x1 -> y2$, which we can add to the model:
 
-![sem_model2](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model2.png)
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model2.png)
 
 Introducing this path raises a new issue: the relationship between $y1$ and $y2$ now arises from two sources. The first is their direct link, the second is from the indirect effect of $x1$ *through* $y1$. We require a new approach to be able to compute the independent effects of each variable on the others, which comes in the form of the 'partial' regression coefficient.
 
@@ -268,7 +268,7 @@ In a path diagram, error variances are often represented as $\zeta$ with an arro
 
 Imagine we remove the path from $y1 -> y2$:
 
-![sem_model3](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model3.png)
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model3.png)
 
 Both variables are endogenous and their relationship can still be quantified, just not in a directed way. If they were exogenous variables, the relationship would be their bivariate correlation (Rule #1), but in this case, we have to remove the effects of $x1$ on both variables.
 
@@ -428,7 +428,7 @@ where $t$ is the number of unknowns (parameters to be estimated) and $n$ is the 
 
 Consider the simple mediation model from earlier:
 
-![sem_model1](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model1.png)
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model1.png)
 
 In this model, we have several pieces of known information: $x1$, $y1$, and $y2$. So $n = 3$ for this model.
 
@@ -442,7 +442,7 @@ In this case $5 \leq 6$ holds true and we have enough information to arrive at a
 
 Let's consider our second model, which adds another path:
 
-![sem_model2](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model2.png)
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model2.png)
 
 Now we must additionally estimate the path from $x1$ to $y2$ so our value of $t = 5 + 1$. However, $6 \leq 6$ and so the t-rule is still satisfied. In this case, however, the model is just identified.
 
@@ -515,13 +515,13 @@ Users should take caution when exploring these techniques as to avoid dredging t
 
 We now have all the pieces necessary to fit an SEM using a covariance-based approach. The package to do so is called *lavaan*:
 
-```{r}
+```{r, results = "hide", message = FALSE, warning = FALSE}
 library(lavaan)
 ```
 
 To demonstrate the functionality of this package, let's use the data from Grace & Keeley (2006), which is included in the *piecewiseSEM* package:
 
-```{r}
+```{r, results = "hide", message = FALSE, warning = FALSE}
 library(piecewiseSEM)
 
 data(keeley)
@@ -533,7 +533,7 @@ In their study, Grace & Keeley wanted to understand patterns in plant diversity 
 
 For purposes of exploration, let's first consider the relationship between fire severity and stand age (with older stands having more combustible materials) 
 
-![keeley sem](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_sem1.png)
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_sem1.png)
 
 This is both a linear regression but also a simple SEM, and thus both can be fit using packages in R.
 
@@ -623,7 +623,7 @@ You'll note that, per Rule 5 of path coefficients, the error variance is $1 - R^
 
 Now that we have covered the basics of *lavaan*, let's fit a slightly more complicated SEM. This model is a simplified subset of the full model presented by Grace & Keeley:
 
-![keeley sem](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_sem2.png)
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_sem2.png)
 
 Here, we test the hypotheses that total cover of plants is a function of fire severity, which in turn is informed by how old the plants are in a particular plot (which we have already investigated using linear regression). This test is known as *full mediation*, in other words that the effect of age is fully mediated by fire severity (we will test another scenario shortly).
 
@@ -685,7 +685,7 @@ Naming coefficients can come in handy when specifying, for example, fixed values
 
 There is another possible configuration of these variables which includes a directed path between age and cover:
 
-![keeley sem2](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_sem2_alt.png)
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_sem2_alt.png)
 
 This type of model tests *partial mediation*, or the idea that the effect of age is partially mediated by fire severity, but there is still a direct effect between age and cover. 
 

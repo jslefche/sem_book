@@ -41,7 +41,7 @@ Procedurally, this evaluation is quite easy: identify missing paths, test whethe
 
 Let's consider a simple path diagram:
 
-![sem_model1](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model1.png)
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model1.png)
 
 In this case, we have specified two sets of directed relationships: $x1 -> y1$ and $y1 -> y2$.
 
@@ -57,7 +57,7 @@ As an aside, if we add this claim back into the model, we would have no missing 
 
 As path diagrams become more complex, the natural question is: how far back do you go in terms of conditioning? Take the following example:
 
-![sem_model2](https://raw.githubusercontent.com/jslefche/sem_book/master/img/local_estimation_model1.png)
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/local_estimation_model1.png)
 
 There are several missing paths: $x1 -> y2$, $x1 -> y3$ and $y1 -> y3$.
 
@@ -69,13 +69,13 @@ For the claim $y1 -> y3$ above, there are now two conditioning variables: $y2$ (
 
 The full basis set for this diagram would then be:
 
--$x1 | y3 (y2)$
--$y1 | y3 (y2, x1)$
--$x1 | y2 (y1)$
+* $x1 | y3 (y2)$
+* $y1 | y3 (y2, x1)$
+* $x1 | y2 (y1)$
 
 Deriving the basis set can be difficult but mercifully is automated in the `piecewiseSEM` package. This package makes some choices about the basis set that deviate from the recommendations of Shipley. For example, consider the following path diagram:
 
-![sem_model3](https://raw.githubusercontent.com/jslefche/sem_book/master/img/local_estimation_model2.png)
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/local_estimation_model2.png)
 
 The basis set includes the unspecified paths from $x1 | y2 (y1)$ and $x2 | y2 (y1)$. But what about $x1 | x2$?
 
@@ -123,7 +123,7 @@ Fitting a piecewise structural equation model is as simple as fitting each regre
 
 The package of course is *piecewiseSEM*:
 
-```{r}
+```{r, results = "hide", message = FALSE, warning = FALSE}
 library(piecewiseSEM)
 ```
 
@@ -137,7 +137,7 @@ As a reminder, Grace & Keeley wanted to understand patterns in plant diversity f
 
 In the end of the global estimation chapter, we tested for full mediation using the following model:
 
-![keeley_sem](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_sem2.png)
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_sem2.png)
 
 As in *lavaan*, it's first necessary to break down the component models. Unlike *lavaan* these are not coded as character strings, but instead as full-fledged linear models. Moreover, they are put together using the function `psem` which is the primary workhouse of the *piecewiseSEM* package.
 
@@ -168,7 +168,7 @@ Here, there is a single independence claim representing the missing path from $a
 Now to evaluate the tests of directed separation using the function `dSep`:
 
 ```{r}
-dSep(keeley_psem)
+dSep(keeley_psem, .progressBar = FALSE)
 ```
 
 Note that the output is the same as if we evaluated the independence claim ourselves:
@@ -220,7 +220,7 @@ A note of caution: as for the $\chi^2$ statistic in global estimation, a fully s
 This exercise was a long workaround to reveal that all the above can be executed simultaneously using the `summary` function:
 
 ```{r}
-summary(keeley_psem)
+summary(keeley_psem, .progressBar = FALSE)
 ```
 
 The output should look very familar to the output from other summary calls, like `summary.lm`. The d-sep test, Fisher's C and information criteria are all reported.
@@ -229,7 +229,7 @@ Additionally, model coefficients are returned. Unlike *lavaan*, the standardized
 
 We can compare the *piecewiseSEM* output to the *lavaan* output:
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 library(lavaan)
 
 sem1 <- '
@@ -254,7 +254,7 @@ It's important to note that these data have multiple levels of hierarchical stru
 
 Shipley hypothesized these variables are related in the following way:
 
-![shipley_sem](https://raw.githubusercontent.com/jslefche/sem_book/master/img/local_estimation_shipley_sem.png)
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/local_estimation_shipley_sem.png)
 
 Let's first treat the data as normal and independent using *lavaan*:
 
@@ -274,7 +274,7 @@ summary(shipley_sem, standardize = T, rsq = T)
 Firstly, we notice the goodness-of-fit can be estimated, but the model is a poor fit (*P* < 0.001). The paths are all significant but this doesn't do us much good considering the model is not suitable for inference. 
 
 Instead of fiddling with modification indices and trying to rejigger the model strcuture, let's analyze the same path diagram using a piecewise approach and recognizing both the hierarchical structure AND non-normality of the data:
-```{r}
+```{r, message = FALSE, warning = FALSE}
 library(nlme)
 library(lme4)
 
@@ -294,7 +294,7 @@ shipley_psem <- psem(
 
   )
 
-summary(shipley_psem)
+summary(shipley_psem, .progressBar = FALSE)
 ```
 
 (In the new version of *lme4* we get some warnings in the d-sep tests, but the model still return an output.)
@@ -313,12 +313,12 @@ In the majority of cases, as we have established, the direction of the independe
 
 Consider the following SEM:
 
-![glm_sem](https://raw.githubusercontent.com/jslefche/sem_book/master/img/local_estimation_glm_sem.png)
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/local_estimation_glm_sem.png)
 
 In this SEM, there are two independence claims:
 
--$y3 | x1 (y1, y2)$
--$y2 | y1 (x1)$
+* $y3 | x1 (y1, y2)$
+* $y2 | y1 (x1)$
 
 In the second independence claim, if both variables were normally distributed, the significance value is the same whether the test is conducted as $y2 | y1 (x1)$ or $y1 | y2 (x1)$. This is NOT true, however, when one or both of the responses are fit to a non-normal distribution. This is because the response is now transformed via a *link function* $g(\mu)$ (see chapter on coefficients), and the parameter estimates--and their standard errors--are now expressed on the link scale. This transformation means the *P*-value obtained by regressing $y1 ~ y2$ is NOT the same as the one obtained by regressing $y2 ~ y1$.
 

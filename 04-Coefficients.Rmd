@@ -47,7 +47,7 @@ Both *lavaan* and *piecewiseSEM* return scale-standardized coefficients. *lavaan
 
 Let's run an example:
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 library(lavaan)
 
 library(piecewiseSEM)
@@ -75,7 +75,6 @@ standardizedsolution(xy_sem)
 
 # also
 summary(xy_sem, standardize = T)
-
 ```
 
 In all 3 cases, we have achieved a scale-standardized coefficient of $b = 0.095$. Thus, a 1 SD change in $x$ would result in a 0.095 SD change in $y$.
@@ -153,7 +152,7 @@ The problem is that (log) odds ratios themselves are not comparable across model
 
 One approach is to consider that for every value of $x$, there is an underlying probability distribution of observing a 0 or a 1 for $y$. The mean of these distributions is where a particular outcome is *most* likely. Let's say at low values of $x$ we observe $y = 0$, at at high values of $x$ we observe $y = 1$. If we order $x$, the mean probabilities give rise to a linear increase in observing $y = 1$ with increasing $x$. Here is an illustration of this phenomenon (from Long 1997):
 
-![latent propensity](https://raw.githubusercontent.com/jslefche/sem_book/master/img/coefficients_latent_propensity.png)
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/coefficients_latent_propensity.png)
 
 This linear but latent (i.e., unobserved) variable, which we call $y^*$, is therefore related to the observed values of $x$ through a vector of linear coefficients $\beta$ as in any other linear model:
 

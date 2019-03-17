@@ -109,7 +109,7 @@ You'll note that this value is now different than the mean of the subset of the 
 
 This procedure gets increasingly complicated with both the number of factor levels and the number of covariates. The *emmeans* package provides an automated way to compute marginal means:
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 library(emmeans)
 
 emmeans(model, specs = "group") # where specs is the variable or list of variables whose means are to be estimated
@@ -137,7 +137,7 @@ These pairwise Tukey tests provide the final level of information, which is whet
 
 The `coefs` function in *piecewiseSEM* adopts a two-tiered approach by first computing the significance of the categorical variable using ANOVA, and then reports the marginal means and post-hoc tests:
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 library(piecewiseSEM)
 
 coefs(model)
@@ -153,13 +153,13 @@ Let's consider an example from Bowen et al. (2017). In this study, the authors w
 
 We will fit a simplified version of their full path diagram, focusing only on aboveground biomass (although they also test the effect on belowground biomass).
 
-![bowen_sem](https://raw.githubusercontent.com/jslefche/sem_book/master/img/categorical_variables_bowen_sem.png)
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/categorical_variables_bowen_sem.png)
 
 In this case, the variable "*Phragmites* status" corresponds to the three community types, and can't be represented using a single coefficient. Thus, the marginal-means approach is ideal to elucidate the effect of each community type on both proximate and ultimate ecosystem properties.
 
 Let's read in the data and construct the model:
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 bowen <- read.csv("./data/bowen.csv")
 
 bowen <- na.omit(bowen)
@@ -178,7 +178,7 @@ bowen_sem <- psem(
 And let's retrieve the output:
 
 ```{r}
-summary(bowen_sem, .progressBar = F)
+summary(bowen_sem, .progressBar = FALSE)
 ```
 
 In this case, it appears that the model fits the data well enough ($P = 0.057$). The linkage between microbial community type (status) and richness is non-significant, but the other paths are significant. Examination of the marginal means indicates microbial activity (RNA/DNA) and belowground carbon are generally highest in *Phragmites* with native microbial communities based on the post-hoc tests. However, none of these properties appear to influence the ultimate production of biomass. Rather, that property appears to be entirely controlled by the plant microbiome: those with the introduced microbial community have significantly higher aboveground biomass based on the post-hoc tests after controlling for microbial activity and soil nutrients. (In the full article, they draw the same inference for belowground biomass.)

@@ -13,7 +13,7 @@ output: html_document
 
 Consider the following simple example of a latent variable $\xi$, in this case exogenous and informed only by a single predictor $x$:
 
-![latent variable](https://raw.githubusercontent.com/jslefche/sem_book/master/img/latent_variable_exo.png)
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/latent_variable_exo.png)
 
 Here, the latent variable is indicated by the circle and the single indicator variable $x$ is indicated by the square box, as are all observed variables. You'll note a few curiosities compared to observed-variable models. 
 
@@ -81,7 +81,7 @@ In summary: the standardized coefficient (the loading) linking indicator to late
 
 So far, we have only dealt with latent variables as exogenous (predictor) variables, but they can also act as endogenous (response) variables. Here is an example endogenous latent variable:
 
-![latent variable](https://raw.githubusercontent.com/jslefche/sem_book/master/img/latent_variable_endo.png)
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/latent_variable_endo.png)
 
 The graph looks roughly similar, with some changes in the parameters: the error variance on $y$ is now $\epsilon_{y}$, while the latent variable itself is represented as $\eta$ and it has its own error $\zeta$. The presence of this additional error presents a challenge: we simply don't have enough information to estimate all the unknowns here. 
 
@@ -93,7 +93,7 @@ Having now described both exogenous and endogenous latent variables now allows u
 
 As an example of a structural model, let's combine the two latent variable models so that the exogenous latent variable is predicting the endogenous one: 
 
-![latent structural model](https://raw.githubusercontent.com/jslefche/sem_book/master/img/latent_structural_model.png)
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/latent_structural_model.png)
 
 As before, let's fix the error of $y$ to be 0 so that the loading on $\eta = 1$. We can solve the exogenous paths as before, leaving us with two parameters left: the path coefficient $\gamma$ and $\zeta$.
 
@@ -148,7 +148,7 @@ The error variance has decreased from 0.704 to 0.632 relative to the linear mode
 
 Let's reproduce this example using *lavaan*. The setup is almost identical except for a new operator `=~` which indicates a latent variable. Additionally, we will fix the error variance in $x$ to the known (unstandardized) error variance from our repeated trials (recall how to fix coefficients from the chapter on multigroup models).
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 library(lavaan)
 
 (1 - r) * var(x.) # unstandardized error variance
@@ -271,7 +271,7 @@ Let's apply these concepts to an example dataset from Travis & Grace (2010). In 
 
 In this case, the authors considered 'performance' to be a latent construct that manifests in the five indicators listed above:
 
-![travis latent](https://raw.githubusercontent.com/jslefche/sem_book/master/img/latent_variable_travis_performance.png)
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/latent_variable_travis_performance.png)
 
 Let's first explore this latent construct before getting into the structural model. First, let's examine the raw correlations to see if this construct is justifiable:
 
@@ -320,7 +320,7 @@ Ah-ha! Introducing this correlated error has now reduced the $\chi^2$ statistic 
 
 If you recall, the authors' original intent was to explore how native vs. non-native genotypes of *Spartina* influenced performance, which they quantified using a measure of genetic distance from the local population. To test this hypothesis, let's fit the following path model: 
 
-![travis path model](https://raw.githubusercontent.com/jslefche/sem_book/master/img/latent_variable_travis_path.png)
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/latent_variable_travis_path.png)
 
 Let's fit the above model:
 

@@ -13,7 +13,7 @@ Composite variables are another way (besides latent variables) to represent comp
 
 Consider the following composite variable $\eta$:
 
-![composite variable](https://raw.githubusercontent.com/jslefche/sem_book/master/img/composite_variable_composite.png)
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/composite_variable_composite.png)
 
 Here the arrows are leading *into*, not out of, $\eta$, indicating that the composite variable is made up of the influences of the three observed variables. Note: in this and other presentations, the composite is denoted by a hexagon, but can sometimes be an oval as it can technically be a form of a latent variable.
 
@@ -80,7 +80,7 @@ Note how the unstandardized coefficient is 1. This is because we the composite i
 
 Let's alternately fit this composite model with *lavaan* and fix the loadings of $x1$ and $x2$ to the values from the multiple regression:
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 library(lavaan)
 
 comp_formula1 <- '
@@ -138,13 +138,13 @@ In their model, they used plant cover to predict plant species richness. Let's a
 
 Let's fit the following composite variable:
 
-![keeley composite](https://raw.githubusercontent.com/jslefche/sem_book/master/img/composite_variable_keeley.png)
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/composite_variable_keeley.png)
 
 Here we have a composite that summarizes the unsquared and squared values of cover, which then goes on to predict richness. 
 
 Let's adopt the two-step approach and first fit a linear model.
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 library(piecewiseSEM)
 
 data(keeley)
@@ -176,7 +176,7 @@ So a 1 SD change in the total cover effect would result in a 0.400 SD change in 
 
 We can alternately fit the model with *lavaan* using the same coefficients from the multiple regression:
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 # create a new non-linear variable for cover^2
 keeley$coversq <- keeley$cover^2
 
@@ -195,11 +195,11 @@ We obtain the same standardized coefficient (0.400) as through the manual calcul
 
 Finally, let's incorporate the  effect of fire severity on cover. Now the composite is endogenous because it is affected by fire severity, and goes on to predict richness. 
 
-![keeley endogenous composite](https://raw.githubusercontent.com/jslefche/sem_book/master/img/composite_variable_keeley_endo.png)
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/composite_variable_keeley_endo.png)
 
 First, we must fit the model without the composite to get the loadings of $cover$ and $cover^2$.
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 keeley_formula2 <- '
 composite <~ 58 * cover + -28.578 * coversq
 
@@ -229,7 +229,7 @@ For the moment, composites are not directly implemented in *piecewiseSEM* with s
 
 Let's examine this with the Keeley model as above:
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 keeley$composite <- composite
 
 keeley_psem <- psem(
@@ -237,7 +237,7 @@ keeley_psem <- psem(
   lm(rich ~ composite + firesev, keeley)
 )
 
-summary(keeley_psem)
+summary(keeley_psem, .progressBar = FALSE)
 ```
 
 Note that we get the same standardized coefficients as in *lavaan*!

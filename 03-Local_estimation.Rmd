@@ -352,7 +352,7 @@ In contrast, when $y1$ and $y2$ are modeled as Poisson-distributed, the *P*-valu
 (3) We can conduct *both* tests and choose the most conservative (i.e., lowest) P**-value.
 
 These options are returned by `summary` in the event the above scenario is identified in the SEM:
-```{r}
+```{r, error = TRUE}
 glmsem <- psem(
   glm(y1 ~ x1, "poisson", glmdat),
   glm(y2 ~ x1, "poisson", glmdat),

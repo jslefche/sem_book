@@ -1,7 +1,7 @@
 --- 
 title: "Structural Equation Modeling in R for Ecology and Evolution"
 author: "Jonathan Lefcheck"
-date: "2019-03-17"
+date: "2019-03-19"
 site: bookdown::bookdown_site
 output: bookdown::gitbook
 documentclass: book

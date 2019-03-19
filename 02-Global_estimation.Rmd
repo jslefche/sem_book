@@ -82,7 +82,7 @@ Now that we have reviewed these basic concepts, we can begin to consider them wi
 
 ## Regression Coefficients
 
-The inferential heart of structural equation modeling are the regression (or path) coefficients. These values mathematically quantify the (mostly linear) dependence of one variable on anothe. This verbage should sound familiar because that is what we have already established as the goal of covariance/correlation. 
+The inferential heart of structural equation modeling are the regression (or path) coefficients. These values mathematically quantify the (mostly linear) dependence of one variable on another. This verbage should sound familiar because that is what we have already established as the goal of covariance/correlation. 
 
 In this section, we will demonstrate how path coefficients can be derived from correlation coefficients and explore Grace's "8 rules of path coefficients."
 
@@ -151,7 +151,7 @@ For this rule, we will expand upon our earlier example to construct a simple pat
 data$y2 <- data$y1 + runif(100)
 ```
 
-In this case, the path coefficient connecting $x1 -> y1$ is the regression coefficient of $y1 ~ x1$. Similarly, the path coefficient connecting $y1 -> y2$ is the regression coefficient of $y2 ~ y1$. If the data are standardized, then  the regression coefficient equals the correlation between the two
+In this case, the path coefficient connecting $x1 -> y1$ is the regression coefficient $\gamma_{y1,x1}$. Similarly, the path coefficient connecting $y1 -> y2$ is the regression coefficient $\beta_{y2,y1}$. If the data are standardized, then  the regression coefficient equals the correlation between the two
 
 ```{r}
 (pathx1_y1 <- summary(lm(y1 ~ x1, as.data.frame(apply(data, 2, scale))))$coefficients[2, 1])
@@ -304,9 +304,9 @@ Let's calculate this value:
 cor(data$y1, data$x1) * cor(data$y2, data$x1)
 ```
 
-Ah, the two are very different, implying that $y1$ and $y2$ are *not* conditionally independent given the joint influence of $x1$. In other words, there are other, unmeasured sources of variance that are influencing the relationship between these two variables. This interpretation is a good way to think about the notion of correlated errors
+Ah, the two are very different, implying that $y1$ and $y2$ are *not* conditionally independent given the joint influence of $x1$. In other words, there are other, unmeasured sources of variance that are influencing the relationship between these two variables. This interpretation is a good way to think about the notion of correlated errors.
 
-The concept of conditional independence is critical in the implementation of local estimation, principally in the tests of directed separation that form the basis of the goodness-of-fit statistic, which we will revisit in Chapter 3
+The concept of conditional independence is critical in the implementation of local estimation, principally in the tests of directed separation that form the basis of the goodness-of-fit statistic, which we will revisit in Chapter 3.
 
 Now that we have derived all the quantities related to direct, indirect, and error variances/correlations, we have all the information necessary to calculate total effects.
 
@@ -490,13 +490,13 @@ In fact, $F_{ML}$ is $\chi^2$-distributed such that:
   
 which allows us to actually quantify model fit. In this case $n$ refers to the sample size. 
 
-We can then formally compare the $\chi^2$ statistic to the $\chi^2$-distribution with some degrees of freedom to achieve a confidence level in the fit. The degrees of freedom are determined by model identification: just identified models will have 0 degrees of freedom (and thus no test is possible), and identified models will have $n(n + 1)/2 - t$ degrees of freedom (where $n$ are the number of knowns and $t$ the number of unknowns, from teh t-rule). 
+We can then formally compare the $\chi^2$ statistic to the $\chi^2$-distribution with some degrees of freedom to achieve a confidence level in the fit. The degrees of freedom are determined by model identification: just identified models will have 0 degrees of freedom (and thus no test is possible), and identified models will have $n(n + 1)/2 - t$ degrees of freedom (where $n$ are the number of knowns and $t$ the number of unknowns, from the t-rule). 
 
 Failing to reject the null hypothesis that the $\chi^2$ statistic is different from 0 (perfect fit) implies a generally good representation of the data (*P* > 0.05). Alternately, rejecting the null implies that the $\chi^2$ statistic is large, as is the discrepancy between the observed and modeled variance-covariance matrices, thus implying a poor fit to the data (*P* < 0.05). Interpreting the outcome of the significance test is often tricky, as a significant *P*-value indicates *poor* fit, so be careful.
 
 The $\chi^2$ index also provides a way to gauge the relative fit of two models, one of which is nested within the other. The *$\chi^2$ difference test* is simply the difference in $\chi^2$ values between the two models, with the degrees of freedom being the difference in the degrees of freedom between the two models. The resulting statistic can then be compared to a $\chi^2$ table to yield a significance value. Again, this test is for *nested* models. For non-nested models, other statistics allow for model comparisons, including AIC and BIC. An AIC or BIC score $\geq2$ is generally considered to indicate significant differneces among models, with smaller values indicating equivalency between the two models.
 
-$\chi^2$ tests tend to be affected by sample size, with larger samples more likely to generate poor fit due to small absolute deviations (note the scaling of $F_{ML}$ by $n-1$ in the above equation). As a reuslt, there are several other fit indices for covariance-based SEM that attempt to correct for this problem:
+$\chi^2$ tests tend to be affected by sample size, with larger samples more likely to generate poor fit due to small absolute deviations (note the scaling of $F_{ML}$ by $n-1$ in the above equation). As a result, there are several other fit indices for covariance-based SEM that attempt to correct for this problem:
   
   - *Root-mean squared error of approximation* (RMSEA): this statistic penalizes models based on sample size. An acceptable value is generally <0.10 and a good value is anything <0.8.
   - *Comparative fit index* (CFI): this statistic considers the deviation from a 'null' model. In most cases, the null estimates all variances but sets the covariances to 0. A value >0.9 is considered good.

@@ -559,7 +559,7 @@ summary(keeley_sem1)
 
 The output is organized into a few sections. First is the likelihood optimization method, number of parameters, the total sample size for the model, the estimator ($F_{ML}$ is the default) and the fit statistic. The model has $\chi^2 = 0$ with 0 degrees of freedom: this is because we have as many knowns as unknowns, and thus the model is just identified or saturated. To show this, we can apply the t-rule: we must estimate the two variances of the variables plus their path coefficient ($t = 3$) and know the values of the two variables ($n = 2$). Recall the equation for the t-rule $t \leq n(n + 1)/2$, so $3 = 2(2+1)/2 = 6/2 = 3$, and therefore the model is saturated.
 
-Next up are the actual parameter estimates: the relationship between fire severity and stand age is $\beta = 0.06$ with $P < 0.001$. The model has reports the estimated error variance on the endogenous variable.
+Next up are the actual parameter estimates: the relationship between fire severity and stand age is $\beta = 0.06$ with $P < 0.001$. The model reports the estimated error variance on the endogenous variable.
 
 We can dissect this output a little more. First, let's fit the corresponding linear model using `lm`:
 
@@ -627,7 +627,7 @@ Now that we have covered the basics of *lavaan*, let's fit a slightly more compl
 
 Here, we test the hypotheses that total cover of plants is a function of fire severity, which in turn is informed by how old the plants are in a particular plot (which we have already investigated using linear regression). This test is known as *full mediation*, in other words that the effect of age is fully mediated by fire severity (we will test another scenario shortly).
 
-Again, we must provide the formulae as a character string. This model can be broken down into two equation representing the two endogenous variables:
+Again, we must provide the formulae as a character string. This model can be broken down into two equations representing the two endogenous variables:
 
 ```{r}
 keeley_formula2 <- '
@@ -658,9 +658,9 @@ fitMeasures(keeley_sem2)
 
 Woah! We're certainly not lacking in statistics. 
 
-Returning to the summary output, we see the same coefficient for $firesev ~ age$ and a new estimate for $cover ~ firesev$. In this case, more severe fires reduce cover (not unexpectedly).
+Returning to the summary output, we see the same coefficient for $firesev \sim age$ and a new estimate for $cover \sim firesev$. In this case, more severe fires reduce cover (not unexpectedly).
 
-Now that we have multiple linkages, we can also compute the indirect effect of age on cover. Recall from Rule 3 of path coefficients that the indirect effects along a compound path are the product of the individual path coefficients: $0.454 * -0.437 = -0.198$. 
+Now that we have multiple linkages, we can also compute the indirect effect of age on cover. Recall from Rule 3 of path coefficients that the indirect effects along a compound path are the product of the individual path coefficients: $0.454 \times -0.437 = -0.198$. 
 
 We can obtain this value by modifying the model formula to include these calculations directly. This involves giving a name to the coefficients in the model strings, then adding a new line indicating their product using the operator `:=`:
 

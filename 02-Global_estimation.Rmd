@@ -603,7 +603,7 @@ To return the standardized coefficients using *lavaan* requires a separate funct
 standardizedsolution(keeley_sem1)
 ```
 
-This output does not return the raw coefficients, however, or any other information about the model that is useful in interpretation. The obtain a single output, you can pass the argument `standardize = T` to `summary`:
+This output does not return the raw coefficients, however, or any other information about the model that is useful in interpretation. To obtain a single output, you can pass the argument `standardize = T` to `summary`:
 
 ```{r}
 summary(keeley_sem1, standardize = T)

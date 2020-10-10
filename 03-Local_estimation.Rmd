@@ -35,7 +35,7 @@ Another way of thinking about model fit is to ask: are we missing anything? Reca
 
 The *tests of directed separation* evaluate this hypothesis: that we are justified in excluding relationships. This question is actually implicit in the $\chi^2$ statistic: a substantial deviation from the observed correlations suggests that we're missing information in our model that could bring in our estimates more in line with our observations. The tests of directed separation take this one step further by explicitly identifying and testing whether each piece of missing information (i.e., each missing path) could indeed change our interpretation of the overall model.
 
-Two variables are *d-separated* if they are statistically independent conditional on their joint influences. Let's unpack this statement. First, 'two variables.' The two variables are *unrelated* in the hypothesized causal model: in other words, there is not a directed path already connecting them. Second, 'statistically independent.' We test for statistical dependence in our model all the time: the *P*-values associated with the path coefficients, for example, test whether the effect is significantly different than zero. Statistical *independence* then asks whether the two variables are significantly *unrelated*, or that that their relationship is in fact no diffeent than zero. Finally, 'conditional on their joint influences' means that the test for statistical independence must account for contributions from any other influences. In other words, the test must consider the *partial* effect of one variable on the other if either or both are already influenced by other variables in the model.
+Two variables are *d-separated* if they are statistically independent conditional on their joint influences. Let's unpack this statement. First, 'two variables.' The two variables are *unrelated* in the hypothesized causal model: in other words, there is not a directed path already connecting them. Second, 'statistically independent.' We test for statistical dependence in our model all the time: the *P*-values associated with the path coefficients, for example, test whether the effect is significantly different than zero. Statistical *independence* then asks whether the two variables are significantly *unrelated*, or that that their relationship is in fact no different than zero. Finally, 'conditional on their joint influences' means that the test for statistical independence must account for contributions from any other influences. In other words, the test must consider the *partial* effect of one variable on the other if either or both are already influenced by other variables in the model.
 
 Procedurally, this evaluation is quite easy: identify missing paths, test whether the effect is not significantly different from zero (*P* > 0.05), and combine those inferences to gauge the overall trustworthiness of the model. But there is some background to cover first.
 
@@ -47,7 +47,7 @@ In this case, we have specified two sets of directed relationships: $x1 -> y1$ a
 
 If we apply the t-rule from the chapter on global estimation, we have $3(3+1)/2$ or 6 pieces of known information (the variances on the 3 variables + the 3 sets of covariances). We want to estimate the 2 parameters $\gamma_{x1y1}$ and $\beta_{y1y2}$ and the variances on the 3 variables (we can get their covariances from that). Thus we have 6 known values to estimate 5 unknown values, and the model is *underidentified*. We noted in the chapter on global estimation that the number of leftover known values can be used as degrees of freedom in the $\chi^2$ goodness-of-fit test. In this case, there is 1 degree of freedom, so likewise, we can go on to test model fit.
 
-This 1 degree of freedom actually corresponds to the missing relationship between $x1 -> y2$. This is the *independence claim* we wish to test: that there is indeed no relationship between $x1$ and $y2$. However, the effect of $x1$ on $y2$ must be independent (or the partial effect) or the known influence of $y1$. Thus, we are testing the partial effect of $x1$ on $y2$ given $y1$. You may see this claim written in the following notation: $x1 | y2 (y1)$ where the bar separates the two variables in the claim, and any conditioning variables follow in parantheses. (Shipley actually puts the two variables in parentheses followed by the conditioning variables in brackets: $(x1, y2) | {y1}$, for the record.)
+This 1 degree of freedom actually corresponds to the missing relationship between $x1 -> y2$. This is the *independence claim* we wish to test: that there is indeed no relationship between $x1$ and $y2$. However, the effect of $x1$ on $y2$ must be independent (or the partial effect) or the known influence of $y1$. Thus, we are testing the partial effect of $x1$ on $y2$ given $y1$. You may see this claim written in the following notation: $x1 | y2 (y1)$ where the bar separates the two variables in the claim, and any conditioning variables follow in parentheses. (Shipley actually puts the two variables in parentheses followed by the conditioning variables in brackets: $(x1, y2) | {y1}$, for the record.)
 
 In this simple example, there is one conditioning variable for the single independence claim. This one independence claim constitutes what is called the *basis set* which is the minimum number of independence claims derived from a path diagram. The key word is *minimum*. 
 
@@ -63,7 +63,7 @@ There are several missing paths: $x1 -> y2$, $x1 -> y3$ and $y1 -> y3$.
 
 Let's consider the independence claim $x1 -> y3$. Based on our last example, $y2$ must be included as a conditioning variable due to its direct influence on $y3$, but what about $y1$? It has an indirect influence on $y3$ through $y2$. However, by having included $y2$ in the independence claim, we have already (theoretically) incorporated the indirect influence of $y1$ through it. In other words, any effect of $y1$ would change $y2$ before $y3$, and the variance in $y2$ is already considered in the independence claim. So the full claim would be: $x1 | y3 (y2)$. 
 
-_Our second rule is:  conditioning variables consist of only those variables *immediately ancestral* to the two variables whose independence is being evaluated._ In other words, we assume that the effects of any other downstream variables are captured in the variance contributed by the immediate ancestors, and we can therefore ignore them. Upstream variables (those occuring later in the path diagram) are never considered as conditioning variables, for the obvious reason that they have no effect on the preceding variables.
+_Our second rule is:  conditioning variables consist of only those variables *immediately ancestral* to the two variables whose independence is being evaluated._ In other words, we assume that the effects of any other downstream variables are captured in the variance contributed by the immediate ancestors, and we can therefore ignore them. Upstream variables (those occurring later in the path diagram) are never considered as conditioning variables, for the obvious reason that they have no effect on the preceding variables.
 
 For the claim $y1 -> y3$ above, there are now two conditioning variables: $y2$ (on $y3$) and also $x1$ (on $y1$). So the final independence claim would be: $y1 | y2 (x1, y1)$.
 
@@ -223,7 +223,7 @@ This exercise was a long workaround to reveal that all the above can be executed
 summary(keeley_psem, .progressBar = FALSE)
 ```
 
-The output should look very familar to the output from other summary calls, like `summary.lm`. The d-sep test, Fisher's C and information criteria are all reported.
+The output should look very familiar to the output from other summary calls, like `summary.lm`. The d-sep test, Fisher's C and information criteria are all reported.
 
 Additionally, model coefficients are returned. Unlike *lavaan*, the standardized estimates are provided by default. Also unlike *lavaan*, the individual model $R^2$ values are also returned by default. Both sets of statistics are key for inference, and thus we have decided to make them available with any further arguments passed to `summary`.
 
@@ -273,7 +273,7 @@ summary(shipley_sem, standardize = T, rsq = T)
 
 Firstly, we notice the goodness-of-fit can be estimated, but the model is a poor fit (*P* < 0.001). The paths are all significant but this doesn't do us much good considering the model is not suitable for inference. 
 
-Instead of fiddling with modification indices and trying to rejigger the model strcuture, let's analyze the same path diagram using a piecewise approach and recognizing both the hierarchical structure AND non-normality of the data:
+Instead of fiddling with modification indices and trying to rejigger the model structure, let's analyze the same path diagram using a piecewise approach and recognizing both the hierarchical structure AND non-normality of the data:
 ```{r, message = FALSE, warning = FALSE}
 library(nlme)
 library(lme4)
@@ -299,7 +299,7 @@ summary(shipley_psem, .progressBar = FALSE)
 
 (In the new version of *lme4* we get some warnings in the d-sep tests, but the model still returns an output.)
 
-The immediately obvious difference is that the model is no longer a poor fit: we have 12 degrees of freedom corresponding to 6 indepdence claims, all of which have *P* > 0.05. Therefore, the model-wide *P* = 0.484, and we would therefore reject the null that the data do not support the hypothesized model structure.
+The immediately obvious difference is that the model is no longer a poor fit: we have 12 degrees of freedom corresponding to 6 independence claims, all of which have *P* > 0.05. Therefore, the model-wide *P* = 0.484, and we would therefore reject the null that the data do not support the hypothesized model structure.
 
 Moreover, while the direction of the parameter estimates remain the same, they vary considerably in their magnitudes (e.g., $\beta_{date, DD} = -0.652$ for *lavaan* and $\beta_{date, DD} = -0.498$ in *piecewiseSEM*).
 
@@ -309,7 +309,7 @@ Thus, by addressing the non-independence of the data, we have converged on suppo
 
 ## A Special Case: Where Graph Theory Fails
 
-In the majority of cases, as we have established, the direction of the independence claim doesn't matter because, while the coefficients will differ, their *P*-values will be identical. Thus, it doesn't matter if you test $y | x$ or $x | y$ because the claim will yield the same significance test. EXCEPT when intermediate endogenous variables are non-normally distributed. 
+In the majority of cases, as we have established, the direction of the independence claim doesn't matter because, while the coefficients will differ, their *P*-values will be identical. Thus, it doesn't matter if you test $y | x$ or $x | y$ because the claim will yield the same significance test. EXCEPT when intermediate endogenous variables are non-normally distributed.
 
 Consider the following SEM:
 
@@ -320,14 +320,19 @@ In this SEM, there are two independence claims:
 * $y3 | x1 (y1, y2)$
 * $y2 | y1 (x1)$
 
-In the second independence claim, if both variables were normally distributed, the significance value is the same whether the test is conducted as $y2 | y1 (x1)$ or $y1 | y2 (x1)$. This is NOT true, however, when one or both of the responses are fit to a non-normal distribution. This is because the response is now transformed via a *link function* $g(\mu)$ (see chapter on coefficients), and the parameter estimates--and their standard errors--are now expressed on the link scale. This transformation means the *P*-value obtained by regressing $y1 ~ y2$ is NOT the same as the one obtained by regressing $y2 ~ y1$.
+In the second independence claim, if both variables were normally distributed, the significance value is the same whether the test is conducted as $y2 | y1 (x1)$ or $y1 | y2 (x1)$. This is NOT true, however, when one or both of the responses are fit to a non-normal distribution. This is because the response is now transformed via a *link function* $g(\mu)$ (see chapter on coefficients), and the parameter estimates--and their standard errors--are now expressed on the link scale. This transformation means the *P*-value obtained by regressing $y1 \sim y2$ is NOT the same as the one obtained by regressing $y2 \sim y1$.
 
 To show this is true, let's generate some Poisson-distributed data and model using both LM and GLM with a log-link:
 
 ```{r}
 set.seed(87)
 
-glmdat <- data.frame(x1 = runif(50), y1 = rpois(50, 10), y2 = rpois(50, 50), y3 = runif(50))
+glmdat <- data.frame(
+  x1 = runif(50), 
+  y1 = rpois(50, 10), 
+  y2 = rpois(50, 50), 
+  y3 = runif(50)
+)
 
 # LM
 summary(lm(y1 ~ y2 + x1, glmdat))$coefficients[2, 4]
@@ -339,7 +344,7 @@ summary(glm(y1 ~ y2 + x1, "poisson", glmdat))$coefficients[2, 4]
 
 summary(glm(y2 ~ y1 + x1, "poisson", glmdat))$coefficients[2, 4]
 ```
-In the case of `lm` the *P*-value is identical regardless of the direction, and moreover is < 0.05, thus--depending on the outcome of the other claim--we might reject the model.
+In the case of `lm`, the *P*-value is identical regardless of the direction, and moreover is < 0.05, thus--depending on the outcome of the other claim--we might reject the model.
 
 In contrast, when $y1$ and $y2$ are modeled as Poisson-distributed, the *P*-value is alternatingly < and >= 0.05. Thus, depending on how the claim is specified, we might or might not reject the model. A big difference!
 
@@ -391,4 +396,4 @@ Shipley, Bill. "Confirmatory path analysis in a generalized multilevel context."
 
 Shipley, Bill. "The AIC model selection method applied to path analytic models compared using ad‐separation test." Ecology 94.3 (2013): 560-564.
 
-Lefcheck, Jonathan S. "piecewiseSEM: Piecewise structural equation modelling in r for ecology, evolution, and systematics." Methods in Ecology and Evolution 7.5 (2016): 573-579.
+Lefcheck, Jonathan S. "piecewiseSEM: Piecewise structural equation modeling in r for ecology, evolution, and systematics." Methods in Ecology and Evolution 7.5 (2016): 573-579.

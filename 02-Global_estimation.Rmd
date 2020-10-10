@@ -70,7 +70,7 @@ Replacing the values of x and y with the standardized versions in our calculatio
 sum(zx * zy)/(length(zx) - 1) == cor(x, y)
 ```
 
-In our example, the two variables are prefectly correlated, so $r = 1$.
+In our example, the two variables are perfectly correlated, so $r = 1$.
 
 Incidentally, this is the same as dividing the covariance of $x$ and $y$ by the product of their standard deviations, which omits the need for the Z-transformation step but achieves the same outcome:
 
@@ -82,7 +82,7 @@ Now that we have reviewed these basic concepts, we can begin to consider them wi
 
 ## Regression Coefficients
 
-The inferential heart of structural equation modeling are the regression (or path) coefficients. These values mathematically quantify the (mostly linear) dependence of one variable on another. This verbage should sound familiar because that is what we have already established as the goal of covariance/correlation. 
+The inferential heart of structural equation modeling are the regression (or path) coefficients. These values mathematically quantify the (mostly linear) dependence of one variable on another. This verbiage should sound familiar because that is what we have already established as the goal of covariance/correlation. 
 
 In this section, we will demonstrate how path coefficients can be derived from correlation coefficients and explore Grace's "8 rules of path coefficients."
 
@@ -92,7 +92,7 @@ In a simple linear regression, one variable $y$ is the response and another $x$ 
 
   $$\hat{y} = bx + a$$
   
-where $b$ is the regression coefficient and $a$ is the intercept. It's important to note that $b$ implies a linear relationship, i.e., the relatoinship between $x$ and $y$ can be captured by a straight line (for now).
+where $b$ is the regression coefficient and $a$ is the intercept. It's important to note that $b$ implies a linear relationship, i.e., the relationship between $x$ and $y$ can be captured by a straight line (for now).
 
 The regression coefficient between $x$ and $y$ can be related to the correlation coefficient through the following equation:
 
@@ -359,7 +359,7 @@ cov(data)
 
 returns the variance-covariance matrix for the three variables $x1$, $y1$, and $y2$. We would call this the *observed global* variance-covariance matrix.
 
-The entire machinary behind covariance-based SEM is to reproduce that global variance-covariance matrix. In fact, all of covariance-based SEM can be boiled down into a simple equation:
+The entire machinery behind covariance-based SEM is to reproduce that global variance-covariance matrix. In fact, all of covariance-based SEM can be boiled down into a simple equation:
 
   $$\Sigma = \Sigma(\Phi)$$
   
@@ -377,7 +377,7 @@ The maximum-likelihood fitting function can be expressed as:
   
 where $\Sigma$ is the modeled covariance matrix, $S$ is the observed covariance matrix, $p$ is the number of endogenous variables, and $q$ is the number of exogenous variables. $tr$ is the trace of the matrix (sum of the diagonal) and the $^{-1}$ is the inverse of the matrix. 
 
-Maximum-likelihood estimators have a few desireable properties, principally that they are invariant to the scales of the variables and provide unbiased estimates based on a few assumptions:
+Maximum-likelihood estimators have a few desirable properties, principally that they are invariant to the scales of the variables and provide unbiased estimates based on a few assumptions:
 
   - variables must exhibit multivariate normality. Oftentimes this is the not case: dummy variables, interactions and other product terms have non-normal distributions. However, $F_{ML}$ is fairly robust to violations of multinormality, especially as the sample size grows large.
   - the observed matrix $S$ must be positive-definite. This means there are no negative variances, an implied correlation > 1.0, or redundant variables (one row is a linear function of another).
@@ -416,7 +416,7 @@ Finally, consider a third equation:
 
   $$2a - 4 = 4b$$
   
-We now have more pieces of known information than unknowns, since we have already arrived at a solution for both $a$ and $b$ based on the previous two equations. In this case, we call the system of the equations *overidentified* because we have more information than is necessary to arrive at unique solutions for our unknown variables. This is the desireable state, because that extra information can be used to provide additional insight.
+We now have more pieces of known information than unknowns, since we have already arrived at a solution for both $a$ and $b$ based on the previous two equations. In this case, we call the system of the equations *overidentified* because we have more information than is necessary to arrive at unique solutions for our unknown variables. This is the desirable state, because that extra information can be used to provide additional insight.
 
 You may alternately hear models referred to as *saturated*. Such a model would be *just identified*; an *unsaturated* model would be *overidentified* and and an *oversaturated* model would be *underidentified*.
 
@@ -458,7 +458,7 @@ The order condition can be evaluated using the following equation:
   
   $$G \leq H$$
   
-where $G$ = the number of incoming paths, and $H$ = the number of exogenous variables + the number of indirectly-connected endogenous variabls. In the previous example, $G = 2$ while $H = 1$, so the model fails the order condition, as noted.
+where $G$ = the number of incoming paths, and $H$ = the number of exogenous variables + the number of indirectly-connected endogenous variables. In the previous example, $G = 2$ while $H = 1$, so the model fails the order condition, as noted.
 
 Model identification is only the first step in determining whether a model can provide unique solutions: sample size can also restrict model fitting by not providing enough replication for the $F_{ML}$ function to arrive at a stable set of estimates for the path coefficients.
 
@@ -494,7 +494,7 @@ We can then formally compare the $\chi^2$ statistic to the $\chi^2$-distribution
 
 Failing to reject the null hypothesis that the $\chi^2$ statistic is different from 0 (perfect fit) implies a generally good representation of the data (*P* > 0.05). Alternately, rejecting the null implies that the $\chi^2$ statistic is large, as is the discrepancy between the observed and modeled variance-covariance matrices, thus implying a poor fit to the data (*P* < 0.05). Interpreting the outcome of the significance test is often tricky, as a significant *P*-value indicates *poor* fit, so be careful.
 
-The $\chi^2$ index also provides a way to gauge the relative fit of two models, one of which is nested within the other. The *$\chi^2$ difference test* is simply the difference in $\chi^2$ values between the two models, with the degrees of freedom being the difference in the degrees of freedom between the two models. The resulting statistic can then be compared to a $\chi^2$ table to yield a significance value. Again, this test is for *nested* models. For non-nested models, other statistics allow for model comparisons, including AIC and BIC. An AIC or BIC score $\geq2$ is generally considered to indicate significant differneces among models, with smaller values indicating equivalency between the two models.
+The $\chi^2$ index also provides a way to gauge the relative fit of two models, one of which is nested within the other. The *$\chi^2$ difference test* is simply the difference in $\chi^2$ values between the two models, with the degrees of freedom being the difference in the degrees of freedom between the two models. The resulting statistic can then be compared to a $\chi^2$ table to yield a significance value. Again, this test is for *nested* models. For non-nested models, other statistics allow for model comparisons, including AIC and BIC. An AIC or BIC score $\geq2$ is generally considered to indicate significant differences among models, with smaller values indicating equivalency between the two models.
 
 $\chi^2$ tests tend to be affected by sample size, with larger samples more likely to generate poor fit due to small absolute deviations (note the scaling of $F_{ML}$ by $n-1$ in the above equation). As a result, there are several other fit indices for covariance-based SEM that attempt to correct for this problem:
   
@@ -509,7 +509,7 @@ What happens if the model doesn't fit? Depending on the goals of your analysis (
   - examination correlation of model residuals: parameters with large residual correlations (difference between observed and expected) could suggest missing information or linkages.
   - *modification indices*, or the expected decrease in the $\chi^2$ if a missing path were to be included in the model. A high value of a modification index would suggest the missing path should be included. (Tests of directed separation, which we cover in the chapter on Local Estimation, provide similar insight and are returned automatically by *piecewiseSEM*.)
   
-Users should take caution when exploring these techniques as to avoid dredging the model. SEM is a technique that relies heavily on informed model specification: adding paths in that are suggested by the data but not anticipated by the user to achieve adequate fit, or comparing all sub-models using AIC, for example, might be appropriate in other applications, but ignore the basic philosophy behind SEM that relationships are tested bas don *a priori* knowledge.
+Users should take caution when exploring these techniques as to avoid dredging the model. SEM is a technique that relies heavily on informed model specification: adding paths in that are suggested by the data but not anticipated by the user to achieve adequate fit, or comparing all sub-models using AIC, for example, might be appropriate in other applications, but ignore the basic philosophy behind SEM that relationships are tested based on *a priori* knowledge.
 
 ## Model Fitting Using *lavaan*
 

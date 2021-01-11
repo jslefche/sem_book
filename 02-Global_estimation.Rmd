@@ -1,7 +1,7 @@
 ---
 title: "Global Estimation"
 author: "Jon Lefcheck"
-date: "March 14, 2019"
+date: "January 11, 2021"
 output: html_document
 ---
 
@@ -21,7 +21,7 @@ Similarly, for the response $y$:
 
   $$VAR_{y} = \frac{\sum(y_{i} - \overline{y})^2}{n-1}$$
   
-Note that, regardless of the actual values of the variables, variances are always positive (due to the squared term). The larger the variance, the more spread out the data are around the mean.
+Note that, regardless of the actual scale of the variables, variances are always positive (due to the squared term). The larger the variance, the more spread out the data are around the mean.
 
 Covariance is a measure of the dependency between two variables. Covariance can be formalized as:
 
@@ -29,7 +29,7 @@ Covariance is a measure of the dependency between two variables. Covariance can 
 
 If variation in $x$ tends to track variation in $y$, then the numerator is large and covariance is high. In this case, the two variables are then said to co-vary.
 
-Consider a simple example. In R, the function `var` computes variance, and `cov` the covariance.
+Consider a simple example. In `R`, the function `var` computes variance, and `cov` the covariance, which we can compare to coding the equations above by hand:
 
 ```{r}
 x <- c(1, 2, 3, 4)
@@ -49,9 +49,12 @@ sum((x - mean(x)) * (y - mean(y)))/(length(x) - 1) == cov(x, y)
 The variance and covariance depend on the magnitude of the units. If the units of $x$ are much larger than $y$, then the covariance will also be large:
 
 ```{r}
-x <- x * 1000
-
 cov(x, y)
+
+# increase units of x
+x1 <- x * 1000
+
+cov(x1, y)
 ```
 
 This property can make the interpretation and comparison of (co)variances among sets of variables misleading if the units are very different between variables. To solve this issue, we can standardize the variables to have a mean of 0 and a variance of 1. This standardization is achieved by subtracting the mean from each observation, and dividing by the standard deviation of the mean (the square-root of the variance). This procedure is also known as the *Z*-transformation.
@@ -70,9 +73,9 @@ Replacing the values of x and y with the standardized versions in our calculatio
 sum(zx * zy)/(length(zx) - 1) == cor(x, y)
 ```
 
-In our example, the two variables are prefectly correlated, so $r = 1$.
+In our example, the two variables are perfectly correlated, so $r = 1$.
 
-Incidentally, this is the same as dividing the covariance of $x$ and $y$ by the product of their standard deviations, which omits the need for the Z-transformation step but achieves the same outcome:
+Incidentally, this is the same as dividing the covariance of $x$ and $y$ by the product of their standard deviations, which omits the need for the prior *Z*-transformation step but achieves the same outcome:
 
 ```{r}
 (cov(x, y) / (sd(x) * sd(y))) == cor(x, y)
@@ -82,31 +85,31 @@ Now that we have reviewed these basic concepts, we can begin to consider them wi
 
 ## Regression Coefficients
 
-The inferential heart of structural equation modeling are the regression (or path) coefficients. These values mathematically quantify the (mostly linear) dependence of one variable on another. This verbage should sound familiar because that is what we have already established as the goal of covariance/correlation. 
+The inferential heart of structural equation modeling are the regression (or path) coefficients. These values mathematically quantify the (mostly linear) dependence of one variable on another. This verbiage should sound familiar because that is what we have already established as the goal of covariance and correlation. 
 
 In this section, we will demonstrate how path coefficients can be derived from correlation coefficients and explore Grace's "8 rules of path coefficients."
 
 First, we must define the important distinction between a regression (path) coefficient and a correlation coefficient.
 
-In a simple linear regression, one variable $y$ is the response and another $x$ is the predictor. The association between the two variables is used to generator the predictor $\hat{y}$:
+In a simple linear regression, one variable $y$ is the response and another $x$ is the predictor. The association between the two variables is used to generate the predictor $\hat{y}$:
 
   $$\hat{y} = bx + a$$
   
-where $b$ is the regression coefficient and $a$ is the intercept. It's important to note that $b$ implies a linear relationship, i.e., the relatoinship between $x$ and $y$ can be captured by a straight line (for now).
+where $b$ is the regression coefficient and $a$ is the intercept. It's important to note that $b$ implies a linear relationship, i.e., the relationship between $x$ and $y$ can be captured by a straight line (for now, as we will see later there are ways to relax this restriction).
 
 The regression coefficient between $x$ and $y$ can be related to the correlation coefficient through the following equation:
 
   $$b_{xy} = r_{xy} (SD_{y}/SD_{x})$$
   
-If the variables have been Z-transformed, then the $SD_{x} = SD_{y} = 1$ and $b_{xy} = r_{xy}$.
+If the variables have been *Z*-transformed, then the $SD_{x} = SD_{y} = 1$ and $b_{xy} = r_{xy}$.
 
-This brings us to our first key point: when the variables have been scaled to mean = 0 and variance = 1, then the regression coefficient *is* the correlation coefficient. For multiple regression (more than 1 $x$), these values are the partial correlation coefficients. We refer to scaled relationships as *standardized coefficients*.
+This brings us to our first key point: when the variables have been scaled to mean = 0 and variance = 1, then the regression coefficient *is* the correlation coefficient. For multiple regression (more than one predictor $x1$, $x2$, and so on), these values are the partial correlation coefficients. We refer to scaled relationships as *standardized coefficients*.
 
-*Unstandardized coefficients*, then, are reported in their raw units. As with variance, then, their values depend on the unit of measure. In fact, the unstandardized coefficient can be related to the variance through the following equation:
+*Unstandardized coefficients*, in contrast, are reported in their raw units. As with variance, their values depend on the unit of measure. In fact, the unstandardized coefficient can be related to the variance through the following equation, which may appear familiar, as this is how we achieved a correlation coefficient from covariances earlier:
 
   $$b_{xy} = \frac{COV_{xy}}{VAR_{x}}$$
   
-In mathematical terms, then, the unstandardized coefficients are scaled by the variance of the predictor, while the standardized variance by the ratio of the standard deviations of both $x$ and $y$.
+In mathematical terms, the unstandardized coefficients are scaled by the variance of the predictor, while the standardized variance by the ratio of the standard deviations of both $x$ and $y$.
 
 We can demonstrate these principles using a simple example:
 
@@ -135,11 +138,13 @@ summary(std.model)$coefficients[2, 1]
 cor(data$y1, data$x1)
 ```
 
-The concepts of variance, covariance, and correlation therefore directly inform the calculation of unstandardized and standardized regression coefficients, and lend them their unique properties that we will now cover in the "8 rules of path coefficients."
+The concepts of variance, covariance, and correlation therefore directly inform the calculation of unstandardized and standardized regression coefficients and lend them their unique properties that we will now cover in the "8 rules of path coefficients."
 
 ### Rule 1: Unspecified relationships among exogenous variables are simply their bivariate correlations.
 
-Variables that only have paths emanating from them (i.e., do not have arrows going into them) are called *exogenous* variables. If there is not a directed path between two exogenous variables, then their relationship can be expressed by a the simple correlation between them. This is sometimes, but not always, indicated by a double-headed arrow. So $x1 <-> x2 == cor(x1, x2)$.
+Variables that only have paths emanating from them (i.e., do not have arrows going into them) are called *exogenous* variables. If there is not a directed path between two exogenous variables, then their relationship can be expressed by the simple correlation between them. This is sometimes, but not always, indicated by a double-headed arrow. So $x1 <-> x2 == cor(x1, x2)$.
+
+In contrast, variables for which arrows are also directed into are called *endogenous*. An endogenous variable can also have arrows directing *out* of it, but the sole condition is that they must be predicted (rather than solely predictors).
 
 ### Rule 2: When two variables are connected by a single path, the coefficient of that path is the regression coefficient.
 
@@ -151,7 +156,7 @@ For this rule, we will expand upon our earlier example to construct a simple pat
 data$y2 <- data$y1 + runif(100)
 ```
 
-In this case, the path coefficient connecting $x1 -> y1$ is the regression coefficient $\gamma_{y1,x1}$. Similarly, the path coefficient connecting $y1 -> y2$ is the regression coefficient $\beta_{y2,y1}$. If the data are standardized, then  the regression coefficient equals the correlation between the two
+In this case, the path coefficient connecting $x1 -> y1$ is the regression coefficient $\gamma_{y1,x1}$. Similarly, the path coefficient connecting $y1 -> y2$ is the regression coefficient $\beta_{y2,y1}$. If the data are standardized, then  the regression coefficient equals the correlation between the two:
 
 ```{r}
 (pathx1_y1 <- summary(lm(y1 ~ x1, as.data.frame(apply(data, 2, scale))))$coefficients[2, 1])
@@ -162,6 +167,8 @@ cor(data$y1, data$x1)
 
 cor(data$y2, data$y1)
 ```
+
+Note the distinction between exogenous and endogenous linkages, which are represented with $\gamma$, and relationships between two endogenous variables, which are represented with $\beta$. 
 
 ### Rule 3: The strength of a compound path (one that includes multiple links) is the product of the individual coefficients.
 
@@ -181,13 +188,13 @@ Ahh, but wait! The correlations are not the same. This result implies that the r
 
 ![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model2.png)
 
-Introducing this path raises a new issue: the relationship between $y1$ and $y2$ now arises from two sources. The first is their direct link, the second is from the indirect effect of $x1$ *through* $y1$. We require a new approach to be able to compute the independent effects of each variable on the others, which comes in the form of the 'partial' regression coefficient.
+Introducing this path raises a new issue: the relationship between $y1$ and $y2$ now arises from two sources. The first is their direct link, the second is the indirect effect of $x1$ *through* $y1$, which then goes on to affect $y2$. We require a new approach to be able to compute the independent effects of each variable on the others, which comes in the form of the 'partial' regression coefficient.
 
 ### Rule 4. When variables are connected by more than one pathway, each pathway is the 'partial' regression coefficient.
 
 A partial regression coefficient accounts for the joint influence of more than one variable on the response. In other words, the coefficient for one predictor controls for the influence of other predictors in the model. In this new model, $y2$ is affected by two variables: $x1$ and $y1$.
 
-Procedurally, this involve removing the shared variance between $x1$ and $y1$ so that their effects can be independently derived. 
+Procedurally, this involves removing the shared variance between $x1$ and $y1$ so that their associations with $y2$ can be independently derived. 
 
 We can calculate the partial effect of $x1$ through the following equation:
 
@@ -199,7 +206,7 @@ which takes the bivariate correlation between $x1$ and $y2$, removes the joint i
 (partialx1 <- (cor(data$x1, data$y2) - (cor(data$x1, data$y1) * cor(data$y1, data$y2))) / (1 - cor(data$x1, data$y1)^2))
 ```
 
-It is important to note that partial coefficients implement a statistical (rather than experimental) control. In other words, the partial effect of $x1$ accounts for the statistical contributions of $y1$. Thus, partial effects are useful in situations where experimental controls are difficult or impossible.
+It is important to note that partial coefficients implement a statistical (rather than experimental) control. In other words, the partial effect of $x1$ accounts for the statistical contributions of $y1$. Thus, partial effects are useful in situations where experimental controls are difficult or impossible to apply.
 
 Notably, we can back out the unstandardized coefficient by multiplying by the ratio of standard deviations of the response over the predictor:
 ```{r}
@@ -216,7 +223,7 @@ Similarly, the partial effect of $y1$ on $y2$ is given by:
 (partialy1 <- (cor(data$y2, data$y1) - (cor(data$y2, data$x1) * cor(data$y1, data$x1))) / (1 - cor(data$x1, data$y1)^2))
 ```
 
-As before, we can arrive at the same answer by looking at the (standardized) coefficients obtained through a multiple regression:
+As before, we can arrive at the same answer by looking at the (standardized) coefficients obtained through multiple regression:
 
 ```{r}
 summary(lm(y2 ~ x1 + y1, as.data.frame(apply(data, 2, scale))))$coefficients[2:3, 1]
@@ -238,13 +245,11 @@ partialx1
 
 Indeed, this iterative procedure gives us the same value as the former equation based on correlations and the output from the multiple regression.
 
-However, this raises the interesting notion of residual error. The second equation still has variance in $y2$ that is unexplained by either $x1$ or $y1$. In other words, the model does not perfectly predict $y2$. The idea of residual (unexplained) variance leads us the fifth rule of path coefficients.
+However, this raises the interesting notion of residual error. The second equation still has variance in $y2$ that is unassociated with variation in either $x1$ or $y1$. In other words, the model does not perfectly predict $y2$. The idea of residual (unexplained) variance leads us to the fifth rule of path coefficients.
 
 ### Rule 5: Errors on endogenous variables relate the unexplained correlations or variances arising from unmeasured variables.
 
-Variables that have paths entering them (regardless of whether they also have paths emanating from them) are called *endogenous* variables. In this example, $y1$ and $y2$ are both endogenous variables (even though $y1$ goes onto also predict $y2$) because both have arrows entering them.
-
-The variance explained by the model is captured by the $R^2$ statistics which is the ratio of explained variation to the total variation in $y2$. It follows then that the unexplained or residual variance is $1 - R^2$. 
+Most researchers are familiar with the $R^2$ statistic, or the ratio of explained variation to the total variation in $y2$. It follows then that the unexplained or residual variance is $1 - R^2$. 
 
 For example, the error variance on $y2$ is:
 
@@ -252,7 +257,7 @@ For example, the error variance on $y2$ is:
 1 - summary(lm(y2 ~ y1 + x1, as.data.frame(apply(data, 2, scale))))$r.squared
 ```
 
-These values capture the other (unknown) sources that cause the correlation between $y2$ and the other variables to deviate from 1. In other words, if $x1$ is the *only* variable controlling $y2$, then their correlation would be 1 and their prediction error would be 0 because we would have accounted for everything that affects $y2$.
+This value captures the other (unknown) sources that cause the correlation between $y2$ and the other variables to deviate from 1. In other words, if $x1$ is the *only* variable controlling $y2$, then their correlation would be 1 and their prediction error would be 0 because we would have accounted for everything that affects $y2$.
 
 This idea of residual or unexplained variance is easily illustrated with the relationship between $x1$ and $y1$ (because there are no partial correlations to deal with), where the square-root of variance explained is simply the correlation coefficient, and 1 - the correlation is the unexplained correlation arising from other sources:
 
@@ -291,9 +296,9 @@ As with the partial correlation, this value is the same as the correlation betwe
 errory1y2
 ```
 
-Hence these are known as *correlated errors* and are represented by double-headed arrows between the errors of two endogenous variables. (Often the errors are omitted, and the graph simply depicts a double-headed arrow between the variables themselves, but the correlation is truly among their errors.)
+Hence these are known as *correlated errors* and are represented by double-headed arrows between the errors of two endogenous variables. (Often the errors or $\zeta$'s are omittedin the diagram, and the graph simply depicts a double-headed arrow between the variables themselves, but the correlation is truly among their errors.)
 
-If the presence of $x1$ explains all of the variation in $y1$ and $y2$, then their partial correlation will be 0. In this case, the two endogenous variables are said to be *conditionally independent*, or that they are unrelated conditional on the joint influence of $x1$. If the two are conditionally independent, then the correlation between $y1$ and $y2$ is the product of the correlations between $y1$ and $x1$, and $y2$ and $x1$.
+If the presence of $x1$ explains all of the variation in $y1$ and $y2$, then their partial correlation will be 0. In this case, the two endogenous variables are said to be *conditionally independent*, or that they are unrelated conditional on the joint influence of $x1$. If the two are conditionally independent, then the correlation between $y1$ and $y2$ is the product of the correlations between $y1$ and $x1$, and $y2$ and $x1$. 
 
   $$r_{y1y2} = r_{y1x1} \times r_{y2x1}$$
   
@@ -306,13 +311,13 @@ cor(data$y1, data$x1) * cor(data$y2, data$x1)
 
 Ah, the two are very different, implying that $y1$ and $y2$ are *not* conditionally independent given the joint influence of $x1$. In other words, there are other, unmeasured sources of variance that are influencing the relationship between these two variables. This interpretation is a good way to think about the notion of correlated errors.
 
-The concept of conditional independence is critical in the implementation of local estimation, principally in the tests of directed separation that form the basis of the goodness-of-fit statistic, which we will revisit in Chapter 3.
+The concept of conditional independence is critical in the implementation of local estimation, principally in the tests of directed separation that form the basis of one goodness-of-fit statistic, which we will revisit in Chapter 3.
 
-Now that we have derived all the quantities related to direct, indirect, and error variances/correlations, we have all the information necessary to calculate total effects.
+Now that we have derived all the quantities related to direct, indirect, and error variances or correlations, we have all the information necessary to calculate total effects.
 
 ### Rule 7: The total effect one variable has another is the sum of its direct and indirect effects.
 
-If we return to out previous path model, which reinstates the path between $y1 -> y2$, the total effect of $x1$ on $y2$ includes the direct effect, as well as the indirect effect mediated by $y1$. 
+If we return to our previous path model, which reinstates the path between $y1 -> y2$, the total effect of $x1$ on $y2$ includes the direct effect as well as the indirect effect mediated by $y1$. 
 
 ```{r}
 (totalx1 <- partialx1 + cor(data$y1, data$x1) * partialy1)
@@ -338,14 +343,14 @@ If we consider the path model without the directed link between $y1$ and $y2$, t
 totaly1y2 == cor(data$y1, data$y2)
 ```
 
-This example closes our discussion of path coefficients. 
+This example closes our discussion of path coefficients and their 8 rules. 
 
 The major points to remember are:
 
-  - standardized coefficients reflect (partial) correlations
-  - the indirect effect of one variable on another is obtained by multiplying the individual path coefficients (standardized or unstandardized)
-  - the total effect is the sum of direct and indirect paths
-  - the bivariate correlation is the sum of the the total effect plus any undirected paths
+  - standardized coefficients reflect (partial) correlations;
+  - the indirect effect of one variable on another is obtained by multiplying the individual path coefficients (standardized or unstandardized);
+  - the total effect is the sum of direct and indirect paths;
+  - the bivariate correlation is the sum of the total effect plus any undirected paths.
   
 An understanding of covariances and correlations is essential to understanding the solutions provided by a global estimation approach to SEM.
 
@@ -357,25 +362,25 @@ The classical approach to SEM is based on the the idea of variance and covarianc
 cov(data)
 ```
 
-returns the variance-covariance matrix for the three variables $x1$, $y1$, and $y2$. We would call this the *observed global* variance-covariance matrix.
+This code returns the variance-covariance matrix for the three variables $x1$, $y1$, and $y2$. We would call this the *observed global* variance-covariance matrix.
 
-The entire machinary behind covariance-based SEM is to reproduce that global variance-covariance matrix. In fact, all of covariance-based SEM can be boiled down into a simple equation:
+The entire machinery behind covariance-based SEM is to reproduce that global variance-covariance matrix. In fact, all of covariance-based SEM can be boiled down into this simple equation:
 
   $$\Sigma = \Sigma(\Phi)$$
   
 where $\Sigma$ is the observed variance-covariance matrix, and $\Sigma(\Phi)$ is the model-estimated covariance matrix expressed in terms of $\Phi$, the matrix of model-estimated parameters (i.e., coefficients).
 
-In other words, this equation shows that the observed covariances can be understood in terms of statistical parameters that can be used to predict these same covariances. We have already shown that linear regression can be expressed in terms of these same principles, and so it follows that covariance-based SEM is simply a multivariate approach to regression.
+In other words, this equation shows that the observed covariances can be understood in terms of statistical parameters that can be used to predict these same covariances. We have already shown that linear regression can be expressed using variances and covariance, and so it follows that covariance-based SEM is simply a multivariate approach to regression.
 
 The question is: how do we arrive at $\Sigma(\Phi)$, or more relevantly, how do we estimate the matrix of model parameters $\Phi$ that lead to the estimated variance-covariance matrix?
 
-The most common tool is *maximum-likelihood estimation*, which iteratively searches parameter space and continually refines estimates of parameter values such that the differences between the observed and expected variance-covariance matrices.
+The most common tool is *maximum-likelihood estimation*, which iteratively searches parameter space and continually refines estimates of parameter values such that the differences between the observed and expected variance-covariance matrices are minimized.
 
 The maximum-likelihood fitting function can be expressed as:
 
   $$F_{ML} = log|\hat{\Sigma}| + tr(S\hat{\Sigma}^{-1}) - log|S| - (p + q)$$
   
-where $\Sigma$ is the modeled covariance matrix, $S$ is the observed covariance matrix, $p$ is the number of endogenous variables, and $q$ is the number of exogenous variables. $tr$ is the trace of the matrix (sum of the diagonal) and the $^{-1}$ is the inverse of the matrix. 
+where $\Sigma$ is the modeled covariance matrix, $S$ is the observed covariance matrix, $p$ is the number of endogenous variables, and $q$ is the number of exogenous variables. $tr$ is the trace of the matrix (sum of the diagonal) and the $^{-1}$ denotes the inverse of the matrix. 
 
 Maximum-likelihood estimators have a few desireable properties, principally that they are invariant to the scales of the variables and provide unbiased estimates based on a few assumptions:
 
@@ -389,7 +394,7 @@ The notion of sample size is a good one: as models become increasingly complex, 
 
 Like any statistical technique, having sufficient power to test your hypotheses is key to arriving at robust unbiased inferences about your data. This requirement is particularly relevant to SEM, which often evaluates multiple hypotheses simultaneously, and therefore requires more data than other approaches. In this section, we will briefly review the idea of model 'identifiability' and sample size requirements.
 
-A model is 'identified' if we can uniquely estimate each of its parameters. This not includes in the matrix of parameter estimates, but also their errors. In other words, we need at least as many 'known' pieces of information as 'unknowns' *at minimum* to be able to fit a model.
+A model is 'identified' if we can uniquely estimate each of its parameters. This not only includes in the matrix of parameter estimates but also their errors. In other words, we need at least as many 'known' pieces of information as 'unknowns' *at minimum* to be able to fit a model.
 
 Consider the following equation:
 
@@ -416,15 +421,15 @@ Finally, consider a third equation:
 
   $$2a - 4 = 4b$$
   
-We now have more pieces of known information than unknowns, since we have already arrived at a solution for both $a$ and $b$ based on the previous two equations. In this case, we call the system of the equations *overidentified* because we have more information than is necessary to arrive at unique solutions for our unknown variables. This is the desireable state, because that extra information can be used to provide additional insight.
+We now have more pieces of known information than unknowns, since we have already arrived at a solution for both $a$ and $b$ based on the previous two equations. In this case, we call the system of the equations *overidentified* because we have more information than is necessary to arrive at unique solutions for our unknown variables. This is the desireable state, because that extra information can be used to provide additional insight, which we will elaborate on shortly.
 
-You may alternately hear models referred to as *saturated*. Such a model would be *just identified*; an *unsaturated* model would be *overidentified* and and an *oversaturated* model would be *underidentified*.
+You may have also heard of models referred to as *saturated*. Such a model would be *just identified*; an *unsaturated* model would be *overidentified* and and an *oversaturated* model would be *underidentified*.
 
 There is a handy rule that can be used to quickly gauge whether a model is under-, just, or overidentified: the "t-rule." The t-rule takes the following form:
 
   $$t \leq \frac{n(n+1)}{2}$$
   
-where $t$ is the number of unknowns (parameters to be estimated) and $n$ is the number of knowns (observed variables). The left hand side is how many pieces of information we want to know. The right hand side reflects the information we have to work with, and is equal to the number of unique cells in the observed variance-covariance matrix (diagonal = variance, and lower triangle = covariances).
+where $t$ is the number of unknowns (parameters to be estimated) and $n$ is the number of knowns (observed variables). The left hand side is how many pieces of information we want to know. The right hand side reflects the information we have to work with and is equal to the number of unique cells in the observed variance-covariance matrix (diagonal = variance, and lower triangle = covariances).
 
 Consider the simple mediation model from earlier:
 
@@ -432,7 +437,7 @@ Consider the simple mediation model from earlier:
 
 In this model, we have several pieces of known information: $x1$, $y1$, and $y2$. So $n = 3$ for this model.
 
-We need to estimate the parameters related each set of relationships ($\gamma_{x1y1}$ and $\beta_{y1y2}$). These amount to the two covariances, but recall from the first section of this chapter that we also need the variances to derive those estimates ($var_{x1}$, $var_{y1}$, $var_{y2}$). So the total number of unknowns is $t = 5$.
+We need to estimate the parameters related each set of relationships ($\gamma_{x1y1}$ and $\beta_{y1y2}$). These amount to the two covariances, but recall from the first section of this chapter that we need three variances to derive those estimates ($var_{x1}$, $var_{y1}$, $var_{y2}$). So the total number of unknowns to be estimated is $t = 5$ (the three variances and the two regression parameters, or covariances).
 
 We can plug in these values to see if we meet the t-rule:
 
@@ -450,7 +455,7 @@ Tallying the number of parameters to be estimated can sometimes be tricky becaus
 
 If we were to consider a more complex model, such as one with a feedback from $y2$ to $y1$ (in addition to the path from $y1 -> y2$) then we would not have enough information to solve the model, which would be *underidentified*.
 
-Models with bi-directional feedbacks (with separate arrows going in each direction, as opposed to a single double-headed arrow) are referred to as *non-recursive*. These feedbacks can also occur among variables, for instance: $x1 -> y1 -> y2 -> x1$ would also be a non-recursive model. *Recursive* models, then, lack such feedbacks.
+Models with bidirectional feedbacks (with separate arrows going in each direction, as opposed to a single double-headed arrow) are referred to as *non-recursive*. These feedbacks can also occur among variables, for instance: $x1 -> y1 -> y2 -> x1$ would also be a non-recursive model. *Recursive* models, then, lack such feedbacks and all causal effects are unidirectional.
 
 Identifiability of non-recursive is tricky. Such models must satisfy the *order condition*. This condition tests whether variables involved in the feedback have unique information. In our above example of $y2$ also affecting $y1$, $y1$ has unique information in the form of $x1$ but $y2$ has no unique information, so it fails the order condition.
 
@@ -464,7 +469,7 @@ Model identification is only the first step in determining whether a model can p
 
 The basic rule-of-thumb is that the level of replication should be *at least* 5 times the number of estimated coefficients (not error variances or other correlations). So in our previous path model, we are estimating two relationships, so we require at least $n = 10$ to fit that model.
 
-However, this value is a lower limit: ideally, replication is *5-20x* the number of estimated parameters. The larger the sample size, the more precise (unbiased) the estimates will be. This is true for all linear regressions, not just SEM.
+However, this value is a lower limit: ideally, replication is *5-20x* the number of estimated parameters. The larger the sample size, the more precise (unbiased) the estimates will be. This is true for all linear regressions, not just SEM, and so we adopt these guidelines here.
 
 Identifiability and replication are key in not only providing an actual solution, but also in providing extra information with which to evaluate model fit, the topic of the next section.
 
@@ -472,7 +477,7 @@ Identifiability and replication are key in not only providing an actual solution
 
 As we have established, the purpose of covariance-based SEM is to reproduce the global observed variance-covariance matrix. However, given that our hypothesized relationships may not actually match the data, we must be prepared to evaluate how well the model-estimated variance-covariance matrix matches the observed variance-covariance matrix. 
 
-Recall that in the previous section on Path Coefficients, we evaluated the error variance/correlation as reflecting outside sources of variation uncaptured by our measured variables. High error variances would lead to less accurate estimates of the relationships among variables, and thus a high level of disagreement among the observed and model-implied variance-covariance matrix.
+Recall that in the previous section on Path Coefficients, we evaluated the error variance or correlation as reflecting outside sources of variation uncaptured by our measured variables. High error variances would lead to less accurate estimates of the relationships among variables, and thus a high level of disagreement among the observed and model-implied variance-covariance matrix.
 
 Also recall our formula for the maximum-likelihood fitting function:
 
@@ -488,28 +493,28 @@ In fact, $F_{ML}$ is $\chi^2$-distributed such that:
 
   $$\chi^2 = (n - 1)F_{ML}$$
   
-which allows us to actually quantify model fit. In this case $n$ refers to the sample size. 
+which allows us to actually quantify model fit. (In this case $n$ refers to the sample size.)
 
-We can then formally compare the $\chi^2$ statistic to the $\chi^2$-distribution with some degrees of freedom to achieve a confidence level in the fit. The degrees of freedom are determined by model identification: just identified models will have 0 degrees of freedom (and thus no test is possible), and identified models will have $n(n + 1)/2 - t$ degrees of freedom (where $n$ are the number of knowns and $t$ the number of unknowns, from the t-rule). 
+We can then formally compare the $\chi^2$ statistic to the $\chi^2$-distribution with some degrees of freedom to achieve a confidence level in the fit. The degrees of freedom are determined by model identification: just identified models will have 0 degrees of freedom (and thus no goodness-of-fit test is possible), and identified models will have $n(n + 1)/2 - t$ degrees of freedom (where $n$ are the number of knowns and $t$ the number of unknowns, from the t-rule). 
 
-Failing to reject the null hypothesis that the $\chi^2$ statistic is different from 0 (perfect fit) implies a generally good representation of the data (*P* > 0.05). Alternately, rejecting the null implies that the $\chi^2$ statistic is large, as is the discrepancy between the observed and modeled variance-covariance matrices, thus implying a poor fit to the data (*P* < 0.05). Interpreting the outcome of the significance test is often tricky, as a significant *P*-value indicates *poor* fit, so be careful.
+Failing to reject the null hypothesis that the $\chi^2$ statistic is different from 0 (the ideal fit) implies a generally good representation of the data (*P* > 0.05). Alternatively, rejecting the null implies that the $\chi^2$ statistic is large, as is the discrepancy between the observed and modeled variance-covariance matrices, thus implying a poor fit to the data (*P* < 0.05). Interpreting the outcome of the significance test is often tricky:  unlike testing whether regression parameters are significantly different from zero (something we are all familiar with), in this case, a significant *P*-value indicates *poor* fit, so be careful.
 
-The $\chi^2$ index also provides a way to gauge the relative fit of two models, one of which is nested within the other. The *$\chi^2$ difference test* is simply the difference in $\chi^2$ values between the two models, with the degrees of freedom being the difference in the degrees of freedom between the two models. The resulting statistic can then be compared to a $\chi^2$ table to yield a significance value. Again, this test is for *nested* models. For non-nested models, other statistics allow for model comparisons, including AIC and BIC. An AIC or BIC score $\geq2$ is generally considered to indicate significant differneces among models, with smaller values indicating equivalency between the two models.
+The $\chi^2$ index also provides a way to gauge the relative fit of two models, one of which is nested within the other. The *$\chi^2$ difference test* is simply the difference in $\chi^2$ values between the two models, with the degrees of freedom being the difference in the degrees of freedom between the two models. The resulting statistic can then be compared to a $\chi^2$ table to yield a significance value. Again, this test is for *nested* models. For non-nested models, other statistics allow for model comparisons, including AIC and BIC. An AIC or BIC score $\geq2$ is generally considered to indicate significant differences among models, with smaller values indicating equivalency between the two models.
 
 $\chi^2$ tests tend to be affected by sample size, with larger samples more likely to generate poor fit due to small absolute deviations (note the scaling of $F_{ML}$ by $n-1$ in the above equation). As a result, there are several other fit indices for covariance-based SEM that attempt to correct for this problem:
   
-  - *Root-mean squared error of approximation* (RMSEA): this statistic penalizes models based on sample size. An acceptable value is generally <0.10 and a good value is anything <0.8.
+  - *Root-mean squared error of approximation* (RMSEA): this statistic penalizes models based on sample size. An 'acceptable' value is generally <0.10 and a 'good' value is anything <0.08.
   - *Comparative fit index* (CFI): this statistic considers the deviation from a 'null' model. In most cases, the null estimates all variances but sets the covariances to 0. A value >0.9 is considered good.
   - *Standardized root-mean squared residual* (SRMR): the standardized difference between the observed and predicted correlations. A value <0.08 is considered good.
 
-There are a vast and frankly unnecessary number of other fit statistics that have been developed which you may run across. This [website](http://davidakenny.net/cm/fit.htm) has a fairly comprehensive overview.
+There are a vast and probably unnecessary number of other fit statistics that have been developed which you may run across. This [website](http://davidakenny.net/cm/fit.htm) has a fairly comprehensive overview, in the event you encounter some of the more uncommon ones in the literature.
 
 What happens if the model doesn't fit? Depending on the goals of your analysis (e.g., exploratory) you may wish to see which parts of your model have failed to be reproduced by the model-implied variance-covariance matrix. This can be achieved in two ways:
   
   - examination correlation of model residuals: parameters with large residual correlations (difference between observed and expected) could suggest missing information or linkages.
   - *modification indices*, or the expected decrease in the $\chi^2$ if a missing path were to be included in the model. A high value of a modification index would suggest the missing path should be included. (Tests of directed separation, which we cover in the chapter on Local Estimation, provide similar insight and are returned automatically by *piecewiseSEM*.)
   
-Users should take caution when exploring these techniques as to avoid dredging the model. SEM is a technique that relies heavily on informed model specification: adding paths in that are suggested by the data but not anticipated by the user to achieve adequate fit, or comparing all sub-models using AIC, for example, might be appropriate in other applications, but ignore the basic philosophy behind SEM that relationships are tested bas don *a priori* knowledge.
+Users should take caution when exploring these techniques as to avoid dredging the model. SEM is a technique that relies heavily on informed model specification. Adding paths in that are suggested by the data but not anticipated by the user only in an effort to achieve adequate fit might be appropriate in other applications, but ignore the basic philosophy behind SEM that relationships are based on *a priori* knowledge and intuition.
 
 ## Model Fitting Using *lavaan*
 
@@ -531,7 +536,7 @@ In their study, Grace & Keeley wanted to understand patterns in plant diversity 
 
 ### *lavaan* vs `lm`
 
-For purposes of exploration, let's first consider the relationship between fire severity and stand age (with older stands having more combustible materials) 
+For purposes of exploration, let's first consider the relationship between fire severity and stand age (with older stands having more combustible materials). 
 
 ![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_sem1.png)
 
@@ -559,7 +564,7 @@ summary(keeley_sem1)
 
 The output is organized into a few sections. First is the likelihood optimization method, number of parameters, the total sample size for the model, the estimator ($F_{ML}$ is the default) and the fit statistic. The model has $\chi^2 = 0$ with 0 degrees of freedom: this is because we have as many knowns as unknowns, and thus the model is just identified or saturated. To show this, we can apply the t-rule: we must estimate the two variances of the variables plus their path coefficient ($t = 3$) and know the values of the two variables ($n = 2$). Recall the equation for the t-rule $t \leq n(n + 1)/2$, so $3 = 2(2+1)/2 = 6/2 = 3$, and therefore the model is saturated.
 
-Next up are the actual parameter estimates: the relationship between fire severity and stand age is $\beta = 0.06$ with $P < 0.001$. The model has reports the estimated error variance on the endogenous variable.
+Next up are the actual parameter estimates: the relationship between fire severity and stand age is $\beta = 0.06$ with $P < 0.001$. The model also reports the estimated error variance on the endogenous variable.
 
 We can dissect this output a little more. First, let's fit the corresponding linear model using `lm`:
 
@@ -611,7 +616,7 @@ summary(keeley_sem1, standardize = T)
 
 Now, a few columns are added at the end to report the standardized coefficients.
 
-`standardizedsolution` also returned the error variance on fire severity, which is $1 - R^2$. However, *lavaan* also doesn't return the $R^2$ value by default, but can be retrieved using the argument `rsq = T` for `summary`:
+`standardizedsolution` also returned the error variance on fire severity, which is $1 - R^2$. However, *lavaan* also doesn't return the $R^2$ value by default, but can be retrieved using one more argument to `summary`, `rsq = T`:
 
 ```{r}
 summary(keeley_sem1, standardize = T, rsq = T)
@@ -625,9 +630,9 @@ Now that we have covered the basics of *lavaan*, let's fit a slightly more compl
 
 ![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_sem2.png)
 
-Here, we test the hypotheses that total cover of plants is a function of fire severity, which in turn is informed by how old the plants are in a particular plot (which we have already investigated using linear regression). This test is known as *full mediation*, in other words that the effect of age is fully mediated by fire severity (we will test another scenario shortly).
+Here, we test the hypotheses that total cover of plants is a function of fire severity, which in turn is informed by how old the plants are in a particular plot (which we have already investigated using linear regression). This test is known as *full mediation*. In other words, the effect of age is fully mediated by fire severity (we will test another scenario shortly). 
 
-Again, we must provide the formulae as a character string. This model can be broken down into two equation representing the two endogenous variables:
+Again, we must provide the formulae as a character string. This model can be broken down into two equations (placed on separate lines) representing the two endogenous variables:
 
 ```{r}
 keeley_formula2 <- '
@@ -636,7 +641,7 @@ cover ~ firesev
 '
 ```
 
-Multiple equations will go on separate lines so that *lavaan* can properly parse the model.
+NOTE: Multiple equations will go on separate lines so that *lavaan* can properly parse the model.
 
 Now let's fit the SEM and examine the output:
 
@@ -648,7 +653,7 @@ summary(keeley_sem2, standardize = T, rsq = T)
 
 The key difference from our previous application of *lavaan* is we now have extra information with which to compute the $\chi^2$ goodness-of-fit statistic. A quick application of the t-rule: unknowns = 3 variances + 2 path coefficients = 5, knowns = 3 variables, so $5 < 3(3+1)/2 = 6$ leaving us 1 extra degree of freedom.
 
-Moreover, we fail to reject the null that the observed and model-implied variance-covariance matrices are significantly different ($P = 0.069$). Thus, we have achieved adequate fit with this model.
+Moreover, we fail to reject the null that the observed and model-implied variance-covariance matrices are significantly different ($P = 0.069$). Thus, we have achieved adequate fit with this model. A note here that the magnitude of the P-value does not reflect increasing fit, only increasing support for the notion that the observed and model-estimated covariances are not different.
 
 Incidentally, we can obtain other fit statistics using the `fitMeasures` function:
 
@@ -679,9 +684,9 @@ summary(keeley_sem2.1, standardize = T)
 
 Indeed, the indirect path coefficient is the same as computed above.
 
-Naming coefficients can come in handy when specifying, for example, fixed values for specific purposes (e.g., Multigroup Modeling, Chapter 6).
+Naming coefficients can come in handy when specifying, for example, fixed values for specific purposes (e.g., multigroup modeling).
 
-### Testing Alternate Structure using *lavaan*
+### Testing Alternative Structures using *lavaan*
 
 There is another possible configuration of these variables which includes a directed path between age and cover:
 
@@ -704,7 +709,7 @@ summary(keeley_sem3, standardize = T)
 
 Ah, we have a problem: the model is saturated, so there are no degrees of freedom leftover with which to test model fit. 
 
-We can, however, test whether this model is more or less supported than the partial mediation model using the $\chi^2$ difference test:
+We can, however, use the $\chi^2$ test to determine whether this model is more or less supported than the partial mediation model, which is called using the function `anova`:
 
 ```{r}
 anova(keeley_sem2, keeley_sem3)
@@ -712,7 +717,7 @@ anova(keeley_sem2, keeley_sem3)
 
 (Note that the $\chi^2$ statistic and associated degrees of freedom are still 0 for the model testing partial mediation.)
 
-We can see from this output that we fail to reject the null that the models are significantly different ($P = 0.069$). Because these are nested models, it is also fair to compare them using AIC/BIC. In both cases, the models are deemed equivalent and the more parsimonious model (full mediation) would be preferred. Moreover, examining the output of the model of partial mediation reveals a non-significant effect of age on cover ($P = 0.067$). Together, these pieces of information would suggest that plant cover is not directly effect by stand age, but rather the effect of age is entirely mediated through the severity of burns.
+We can see from this output that we fail to reject the null that the models are significantly different ($P = 0.069$). Because these are nested models, it is also fair to compare them using AIC/BIC. In both cases, the models are deemed equivalent and the more parsimonious model (full mediation) would be preferred. Moreover, examining the output of the model of partial mediation reveals a non-significant effect of age on cover ($P = 0.067$). Together, these pieces of information would suggest that plant cover is not directly affected by stand age, but rather the effect of age is entirely mediated through the severity of burns.
 
 ## References
 

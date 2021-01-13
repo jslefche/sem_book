@@ -125,11 +125,46 @@ In this way, the tests of directed separation may be usefully diagnostic by draw
 
 ## A Log-Likelihood Approach to Model Fit
 
+Recently, Shipley and Douma developed an alternative index of model fit using maximum likelihood. You will recall from the chapter on global estimation that maximum likelihood estimation searches over parameter space for the values of the coefficients $\theta$ that maximize the probability $P$ of having observed your data $X$. The likelihood $L$ of the model is therefore the value produced by this function when $P$ is maximized by the estimated coefficients $\hat{\theta}$: $L(\hat{\theta} | X)$.
 
+This is often reported as the log-likelihood (the log of this value) as it simplifies the calculation of the fitting function for common statistical distributions: $log(L(\hat{\theta} | X))$.
 
+Each component model in the SEM produces a log-likelihood, assuming it is fit using maximum likelihood estimation. The log-likelihood of the full set of structural equations $M$ is therefore the sum of the individual log-likelihood values for each of the submodels (based on Markov decomposition of the joint probability distribution):
 
+  $$log(L_M(\theta | X)) = {\sum_{i=1}^k log(L_i(\theta_i | X_i)}$$
 
+This global quantity summarizes the likelihood associated with ALL of the coefficients across all models. 
 
+Recall from the global estimation chapter that the objective there is to minimize the discrepancy between the model estimated and observed variance-covariance matrices. This is essentially testing whether the covariance between unlinked variables is zero. Take this model from that chapter:
+
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model1.png)
+Here, the assumption is that the covariance between $x1$ and $y2$ is zero. In other words, by omitting a direct path between them, we are claiming that they are conditionally independent or causally unrelated. Deviations from this assumption will cause the model-estimated variance-covariance matrix to pull away from from the observed matrix, causing the $F_{ML}$ to increase, the likelihood to decline, and the fit to become increasingly poor.
+
+In a piecewise context, we could rewrite the structural equation $y2 ~ y1$ to be $y2 ~ y1 + 0*x1$ to reflect our assumption that the coefficient for the relationship between $x1$ and $y2$ is zero. This is different from the equation $y2 ~ y1 + x1$, which would produce an estimate for this relationship. In the d-sep tests, we actually fit this second model and extract the *P*-value associated with this estimate. If *P*>0.05, we validate our original assumption that the two are independent, conditional on $y1$.
+
+Yet, we can also produce a log-likelihood for this second model that allows $x1$ to vary freely. A likelihood ratio test would then allow us to tell whether the second model was more or less likely within some tolerance for error. If the second model is *more* likely, they we were incorrect in assuming the relationship between $x1$ and $y2$ is zero, and our original formulation could be considered a poor representation of the data.
+
+Shipley and Douma showed that this procedure can be extended to the entire SEM, by incorporating missing paths (or variables whose covariances are assumed to be 0), taking the difference in log-likelihoods, and summarizing them to get an overall index of model fit. Strong differences in likelihood would lead to larger values, implying increasingly poor fit. In this way, their procedure is the analogue of the classic $F_{ML}$ in global estimation.
+
+How, then, to re-fit the models including the missing parameters? We already have a handy blueprint in the form of the basis set, which tells us which relationships are missing. We can reparameterize the models to include the missing paths specified in the basis set, extract the log-likelihood, and compare to the log-likelihood of the original structure. We then repeat this by iterating over all structural equations. Because this procedure would require all variables to be linked, this procedure is essentially fitting a fully saturated model (i.e., all variables are linked) and comparing it to a nested model where some paths are missing. Note that this test is not possible for models that are already saturated, which is also true for global estimation.
+
+If we assume the fully saturated model $M_2$ and the proposed (nested) model $M_1$, Shipley and Douma show that the $\chi^2$ statistic can be computed as follows:
+
+  $$\chi^2_ML = -2(log(L(M_1)) - log(L(M_2))$$
+Which can be compared to a $\chi^2$ distribution with $k$ degrees of freedom, where $k$ is the sum of the differences in the likelihood degrees of freedom (number of likelihood-estimated parameters) between each of the submodels in $M1$ and $M2$.
+
+As AIC is simply the log-likelihood penalized for complexity, Shipley and Douma go on to show that a model-wide AIC value can be derived as the sum of the AIC values for each submodel in $M1$:
+
+  $$AIC_{M1} = {\sum_{i=1}^v AIC_i}$$
+Note that this is *not* the *difference* in AIC values between the proposed and saturated models. A corrected $AIC_c$ can be substituted for small sample sizes.
+
+What is useful about this method is that it solves several issues associated with the d-sep tests, namely:
+
+  - d-sep tests consider only changes in topology so it is only useful when comparing models that differ in their independence claims, whereas a log-likelihood approach considers all changes to the model above and beyond the DAG, such as changing the underlying distribution (which changes the maximum likelihood fitting function) or random effects.
+  - this method can be applied for all models fit using maximum likelihood, including truly non-linear approaches such as generalized additive models (GAMs). Note, however, that GAMs do not produce traditional linear coefficients (but rather fitted smoothing functions), so there are still downsides with respect to paramterizing the DAG and drawing inference.
+  - it omits issues associated with reporting *P*-values for mixed models where the denominator degrees of freedom are unclear (see: `lme4`).
+  
+This method cannot be used when the conditions for maximum likelihood are not met, such as for regresson on distance matrices, and so in these cases, only test of directed separation are possible. Nevertheless, it is an incredibly useful addition and will likely become the default goodness-of-fit metric moving forward due to its flexibility and similarity to traditional methods.
 
 ## Model fitting using *piecewiseSEM*
 

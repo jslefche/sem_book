@@ -138,6 +138,7 @@ This global quantity summarizes the likelihood associated with ALL of the coeffi
 Recall from the global estimation chapter that the objective there is to minimize the discrepancy between the model estimated and observed variance-covariance matrices. This is essentially testing whether the covariance between unlinked variables is zero. Take this model from that chapter:
 
 ![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model1.png)
+
 Here, the assumption is that the covariance between $x1$ and $y2$ is zero. In other words, by omitting a direct path between them, we are claiming that they are conditionally independent or causally unrelated. Deviations from this assumption will cause the model-estimated variance-covariance matrix to pull away from from the observed matrix, causing the $F_{ML}$ to increase, the likelihood to decline, and the fit to become increasingly poor.
 
 In a piecewise context, we could rewrite the structural equation $y2 ~ y1$ to be $y2 ~ y1 + 0*x1$ to reflect our assumption that the coefficient for the relationship between $x1$ and $y2$ is zero. This is different from the equation $y2 ~ y1 + x1$, which would produce an estimate for this relationship. In the d-sep tests, we actually fit this second model and extract the *P*-value associated with this estimate. If *P*>0.05, we validate our original assumption that the two are independent, conditional on $y1$. But it could just as easily *not* be zero, and we would reject the fit of the model.
@@ -335,7 +336,7 @@ Again, because we are making the same assumptions as for global estimation (i.e.
 
 Of course, we might expect greater divergence between the two methods if we were to incorporate different distributions and more complex model structures, which we will explore now.
 
-## Shipley (2009): A Worked Example
+## Extensions to Generalized Mixed Effects Models
 
 Let's turn to the example from Shipley (2009) on tree survival. In this (hypothetical) study, individual trees are followed for 36 years at 20 sites and measured for date of bud burst (Date), cumulative degree days until first bud burst (DD), growth, and survival.
 
@@ -423,6 +424,7 @@ You'll note that there is a mix of linear and non-linear variables, including Po
 Now let's consider the SEM from their paper (Figure 1a):
 
 ![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/local_estimation_gam_sem.png)
+
 In the paper, Shipley and Douma first fit a strictly linear SEM assuming multivariate normality, which we will also do here:
 
 ```{r}

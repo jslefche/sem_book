@@ -158,6 +158,8 @@ As AIC is simply the log-likelihood penalized for complexity, Shipley and Douma 
   $$AIC_{M1} = {\sum_{i=1}^v AIC_i}$$
 Note that this is *not* the *difference* in AIC values between the proposed and saturated models. Additionally, a corrected $AIC_c$ can be substituted for small sample sizes.
 
+Note that the AIC obtained from the d-sep tests cannot be compared with that derived from likelihood, and vice versa.
+
 What is useful about this method is that it brings the technique more in parity with variance-covariance based SEM, and solves several outstanding issues associated with the d-sep tests, namely:
 
   - d-sep tests consider only changes in topology so it is only useful when comparing models that differ in their independence claims, whereas a log-likelihood approach considers all changes to the model above and beyond the DAG, such as changing the underlying distribution (which changes the maximum likelihood fitting function) or random effects.
@@ -365,11 +367,9 @@ First, we notice the goodness-of-fit can be estimated, but the model is a poor f
 Instead of fiddling with modification indices and trying to rejigger the model strcuture, let's analyze the same path diagram using a piecewise approach and recognizing both the hierarchical structure AND non-normality of the data. For this we will use two common packages for mixed-effects models, *lme4* and *nlme*:
 
 ```{r, message = FALSE, warning = FALSE}
-# Load required libraries
 library(nlme)
 library(lme4)
 
-# Fit piecewise model
 shipley_psem <- psem(
 
   lme(DD ~ lat, random = ~ 1 | site / tree, na.action = na.omit,
@@ -396,7 +396,52 @@ The model $R^2$s are all higher as well, for fixed-effects only (marginal) and e
 
 Thus, by addressing the non-independence of the data, we have converged on support for the hypothesized model structure, more accurate parameter estimates, and a higher proportion of explained variance than was possible using *lavaan*.
 
-Note, however, that the model does not report a $\chi^2$ statistic, and issues a warning about convergence. When one or more of submodels in the saturated SEM fail to converge, it may produce invalid likelihood estimates that lead to the situation where $\chi^2$<0. Since this is not permissible, the function returns `NA` for the $\chi^2$ statistic and associated *P*-value. Potential solutions include tweaking model optimizers to ensure a convergent solution, or relying on Fisher's *C*  
+Note, however, that the model does not report a $\chi^2$ statistic, and issues a warning about convergence. When one or more of submodels in the saturated SEM fail to converge, it may produce invalid likelihood estimates that lead to the situation where $\chi^2$<0. Since this is not permissible, the function returns `NA` for the $\chi^2$ statistic and associated *P*-value. Potential solutions include tweaking model optimizers to ensure a convergent solution, or relying on Fisher's *C*. 
+
+## Extensions to Non-linear Models
+
+One of the benefits noted above for the newer log-likelihood based goodness-of-fit procedure is that it can be extended to truly non-linear models, such as generalized additive models (GAMs), where maximum likelihood estimation is applied. Let's now work through an example extending to GAMs.
+
+We'll work from the random dataset generated in the supplements for the paper by Shipley and Douma. First, let's generate the data:
+
+```{r}
+set.seed(100)
+n <- 100
+x1 <- rchisq(n, 7)
+mu2 <- 10*x1/(5 + x1)
+x2 <- rnorm(n, mu2, 1)
+x2[x2 <= 0] <- 0.1
+x3 <- rpois(n, lambda = (0.5*x2))
+x4 <- rpois(n, lambda = (0.5*x2))
+p.x5 <- exp(-0.5*x3 + 0.5*x4)/(1 + exp(-0.5*x3 + 0.5*x4))
+x5 <- rbinom(n, size = 1, prob = p.x5)
+dat2 <- data.frame(x1 = x1, x2 = x2, x3 = x3, x4 = x4, x5 = x5)
+```
+
+You'll note that there is a mix of linear and non-linear variables, including Poisson- and binomial-distributed ones.
+
+Now let's consider the SEM from their paper (Figure 1a):
+
+![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/local_estimation_gam_sem.png)
+
+
+
+```{r}
+modelList <- psem(
+  gam(x2 ~ s(x1), data = dat2, family = gaussian),
+  glm(x3 ~ x2, data = dat2, family = poisson),
+  gam(x4 ~ x2, data = dat2, family = poisson),
+  glm(x5 ~ x3 + x4, data = dat2, family = binomial)
+)
+```
+
+
+
+
+
+
+
+
 
 ## A Special Case: Where Graph Theory Fails
 
@@ -445,11 +490,11 @@ logLik(glm(y2 ~ y1 + x1, "poisson", glmdat))
 
 *piecewiseSEM* solves this by providing three options to the user. 
 
-(1) We can specify the directionality of the test if, for instance, it makes greater biological sense to test $y1$ against $y2$ instead of the reverse (for example abundance drives species richness, not vice versa); or
+(1) We can specify the directionality of the test if, for instance, it makes greater biological sense to test $y1$ against $y2$ instead of the reverse (for example: abundance drives species richness, not vice versa); or
 
 (2) We can remove that path from the basis set and instead specify it as a correlated error using `%~~%`. This circumvents the issue altogether but it may not make sense to assume both variables are generated by some underlying process; or
 
-(3) We can conduct *both* tests and choose the most conservative (i.e., lowest) *P*-value.
+(3) We can conduct *both* tests and choose the most conservative (i.e., lowest) *P*-value or maximum difference in the log-likelihoods.
 
 These options are returned by `summary` in the event the above scenario is identified in the SEM:
 
@@ -485,10 +530,6 @@ summary(glmsem, conserve = T, .progressBar = F)$dTable
 
 The user should be vigilant for these kinds of situations and ensure that both the specified paths AND the independence claims all make biological sense. In the case where the underlying assumptions of the d-sep tests can bias the goodness-of-fit statistic, *piecewiseSEM* should automatically alert the user and suggest solutions.
 
-## Non-linear Extensions
-
-
-
 ## References
 
 Shipley, Bill. "A new inferential test for path models based on directed acyclic graphs." Structural Equation Modeling 7.2 (2000): 206-218.
@@ -498,3 +539,5 @@ Shipley, Bill. "Confirmatory path analysis in a generalized multilevel context."
 Shipley, Bill. "The AIC model selection method applied to path analytic models compared using ad‐separation test." Ecology 94.3 (2013): 560-564.
 
 Lefcheck, Jonathan S. "piecewiseSEM: Piecewise structural equation modelling in r for ecology, evolution, and systematics." Methods in Ecology and Evolution 7.5 (2016): 573-579.
+
+Shipley, Bill, and Jacob C. Douma. "Generalized AIC and chi‐squared statistics for path models consistent with directed acyclic graphs." Ecology 101.3 (2020): e02960.

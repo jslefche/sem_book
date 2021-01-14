@@ -1,7 +1,7 @@
 ---
 title: "Local Estimation"
 author: "Jon Lefcheck"
-date: "13 January 2021"
+date: "14 January 2021"
 output: html_document
 ---
 
@@ -83,7 +83,7 @@ The full basis set for this diagram would then be:
 * $y1 | y3 (y2, x1)$
 * $x1 | y2 (y1)$
 
-Deriving the basis set can be difficult but mercifully is automated in the `piecewiseSEM` package. This package makes some choices about the basis set that deviate from the recommendations of Shipley. For example, consider the following path diagram:
+Deriving the basis set can be difficult but mercifully is automated in the *piecewiseSEM* package. This package makes some choices about the basis set that deviate from the recommendations of Shipley. For example, consider the following path diagram:
 
 ![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/local_estimation_model2.png)
 
@@ -162,7 +162,7 @@ What is useful about this method is that it brings the technique more in parity 
 
   - d-sep tests consider only changes in topology so it is only useful when comparing models that differ in their independence claims, whereas a log-likelihood approach considers all changes to the model above and beyond the DAG, such as changing the underlying distribution (which changes the maximum likelihood fitting function) or random effects.
   - this method can be applied for all models fit using maximum likelihood, including truly non-linear approaches such as generalized additive models (GAMs). Note, however, that GAMs do not produce traditional linear coefficients (but rather fitted smoothing functions), so there are still downsides with respect to paramterizing the DAG and drawing inference.
-  - it omits issues associated with reporting *P*-values for mixed models where the denominator degrees of freedom are unclear (see: `lme4`).
+  - it omits issues associated with reporting *P*-values for mixed models where the denominator degrees of freedom are unclear (see: *lme4*).
   
 This method cannot be used when the conditions for maximum likelihood are not met, such as for regresson on distance matrices, and so in these cases, only test of directed separation are possible. Nevertheless, log-likelihood based {\chi^2} is an incredibly useful addition and will likely become the default goodness-of-fit metric moving forward due to its flexibility and similarity to traditional methods.
 
@@ -346,6 +346,8 @@ Shipley hypothesized these variables are related in the following way:
 Let's first treat the data as normal and independent using *lavaan*:
 
 ```{r}
+data(shipley)
+
 shipley_model <- '
 DD ~ lat
 Date ~ DD
@@ -358,13 +360,16 @@ shipley_sem <- sem(shipley_model, shipley)
 summary(shipley_sem, standardize = T, rsq = T)
 ```
 
-Firstly, we notice the goodness-of-fit can be estimated, but the model is a poor fit (*P* < 0.001). The paths are all significant but this doesn't do us much good considering the model is not suitable for inference. 
+First, we notice the goodness-of-fit can be estimated, but the model is a poor fit (*P*<0.001). The paths are all significant but this doesn't do us much good considering the model is not suitable for inference. 
 
-Instead of fiddling with modification indices and trying to rejigger the model strcuture, let's analyze the same path diagram using a piecewise approach and recognizing both the hierarchical structure AND non-normality of the data:
+Instead of fiddling with modification indices and trying to rejigger the model strcuture, let's analyze the same path diagram using a piecewise approach and recognizing both the hierarchical structure AND non-normality of the data. For this we will use two common packages for mixed-effects models, *lme4* and *nlme*:
+
 ```{r, message = FALSE, warning = FALSE}
+# Load required libraries
 library(nlme)
 library(lme4)
 
+# Fit piecewise model
 shipley_psem <- psem(
 
   lme(DD ~ lat, random = ~ 1 | site / tree, na.action = na.omit,
@@ -383,16 +388,15 @@ shipley_psem <- psem(
 
 summary(shipley_psem, .progressBar = FALSE)
 ```
-
-(In the new version of *lme4* we get some warnings in the d-sep tests, but the model still return an output.)
-
-The immediately obvious difference is that the model is no longer a poor fit: we have 12 degrees of freedom corresponding to 6 indepdence claims, all of which have *P* > 0.05. Therefore, the model-wide *P* = 0.484, and we would therefore reject the null that the data do not support the hypothesized model structure.
+The immediately obvious difference based on Fisher's *C* is that the model is no longer a poor fit: we have 12 degrees of freedom corresponding to 6 independence claims, all of which have *P* > 0.05. Therefore, the model-wide *P* = 0.484, and we would therefore reject the null that the data do not support the hypothesized model structure.
 
 Moreover, while the direction of the parameter estimates remain the same, they vary considerably in their magnitudes (e.g., $\beta_{date, DD} = -0.652$ for *lavaan* and $\beta_{date, DD} = -0.497$ in *piecewiseSEM*).
 
 The model $R^2$s are all higher as well, for fixed-effects only (marginal) and especially for fixed- and random-effects together (conditional).
 
 Thus, by addressing the non-independence of the data, we have converged on support for the hypothesized model structure, more accurate parameter estimates, and a higher proportion of explained variance than was possible using *lavaan*.
+
+Note, however, that the model does not report a $\chi^2$ statistic, and issues a warning about convergence. When one or more of submodels in the saturated SEM fail to converge, it may produce invalid likelihood estimates that lead to the situation where $\chi^2$<0. Since this is not permissible, the function returns `NA` for the $\chi^2$ statistic and associated *P*-value. Potential solutions include tweaking model optimizers to ensure a convergent solution, or relying on Fisher's *C*  
 
 ## A Special Case: Where Graph Theory Fails
 
@@ -426,19 +430,29 @@ summary(glm(y1 ~ y2 + x1, "poisson", glmdat))$coefficients[2, 4]
 
 summary(glm(y2 ~ y1 + x1, "poisson", glmdat))$coefficients[2, 4]
 ```
+
 In the case of `lm` the *P*-value is identical regardless of the direction, and moreover is < 0.05, thus--depending on the outcome of the other claim--we might reject the model.
 
 In contrast, when $y1$ and $y2$ are modeled as Poisson-distributed, the *P*-value is alternatingly < and >= 0.05. Thus, depending on how the claim is specified, we might or might not reject the model. A big difference!
 
-`piecewiseSEM` solves this by providing three options to the user. 
+Note that the log-likelihoods are also different for GLM:
+
+```{r}
+logLik(glm(y1 ~ y2 + x1, "poisson", glmdat))
+
+logLik(glm(y2 ~ y1 + x1, "poisson", glmdat))
+```
+
+*piecewiseSEM* solves this by providing three options to the user. 
 
 (1) We can specify the directionality of the test if, for instance, it makes greater biological sense to test $y1$ against $y2$ instead of the reverse (for example abundance drives species richness, not vice versa); or
 
 (2) We can remove that path from the basis set and instead specify it as a correlated error using `%~~%`. This circumvents the issue altogether but it may not make sense to assume both variables are generated by some underlying process; or
 
-(3) We can conduct *both* tests and choose the most conservative (i.e., lowest) P**-value.
+(3) We can conduct *both* tests and choose the most conservative (i.e., lowest) *P*-value.
 
 These options are returned by `summary` in the event the above scenario is identified in the SEM:
+
 ```{r, error = TRUE}
 glmsem <- psem(
   glm(y1 ~ x1, "poisson", glmdat),
@@ -448,6 +462,7 @@ glmsem <- psem(
 
 summary(glmsem)
 ```
+
 In option 1, the directionality can be specified using `direction = c()` as an additional argument to `summary`.
 
 ```{r}
@@ -468,7 +483,11 @@ Finally, option 3 can be invoked by specifying `conserve = T` as an additional a
 summary(glmsem, conserve = T, .progressBar = F)$dTable
 ```
 
-The user should be vigilant for these kinds of situations and ensure that both the specified paths AND the independence claims all make biological sense. In the case where the underlying assumptions of the d-sep tests can bias the goodness-of-fit statistic, `piecewiseSEM` should automatically alert the user and suggest solutions.
+The user should be vigilant for these kinds of situations and ensure that both the specified paths AND the independence claims all make biological sense. In the case where the underlying assumptions of the d-sep tests can bias the goodness-of-fit statistic, *piecewiseSEM* should automatically alert the user and suggest solutions.
+
+## Non-linear Extensions
+
+
 
 ## References
 

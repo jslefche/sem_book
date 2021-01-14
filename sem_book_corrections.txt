@@ -1,13 +1,5 @@
 
 
-
-
-[3.5 A Special Case: Where Graph Theory Fails]
-
-[Graphic contains only x1, y1, y2, no y3. x1 appears twice.
- Probably the case that the x1 on the right is actually supposed
- to be y3.]
-
 #######
 
 [4.1 Unstandardized and Standardized Coefficients]

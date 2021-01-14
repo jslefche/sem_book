@@ -402,7 +402,7 @@ Note, however, that the model does not report a $\chi^2$ statistic, and issues a
 
 One of the benefits noted above for the newer log-likelihood based goodness-of-fit procedure is that it can be extended to truly non-linear models, such as generalized additive models (GAMs), where maximum likelihood estimation is applied. Let's now work through an example extending to GAMs.
 
-We'll work from the random dataset generated in the supplements for the paper by Shipley and Douma. First, let's generate the data:
+We'll work from the random dataset generated in the supplements for the paper by Shipley and Douma. First, let's generate the data using their code:
 
 ```{r}
 set.seed(100)
@@ -418,30 +418,57 @@ x5 <- rbinom(n, size = 1, prob = p.x5)
 dat2 <- data.frame(x1 = x1, x2 = x2, x3 = x3, x4 = x4, x5 = x5)
 ```
 
-You'll note that there is a mix of linear and non-linear variables, including Poisson- and binomial-distributed ones.
+You'll note that there is a mix of linear and non-linear variables, including Poisson- and binomial-distributions.
 
 Now let's consider the SEM from their paper (Figure 1a):
 
 ![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/local_estimation_gam_sem.png)
-
-
+In the paper, Shipley and Douma first fit a strictly linear SEM assuming multivariate normality, which we will also do here:
 
 ```{r}
-modelList <- psem(
+shipley_psem2 <- psem(
+  lm(x2 ~ x1, data = dat2),
+  lm(x3 ~ x2, data = dat2),
+  lm(x4 ~ x2, data = dat2),
+  lm(x5 ~ x3 + x4, data = dat2)
+)
+
+LLchisq(shipley_psem2)
+```
+We see that, despite having generated data that is inherently non-normal and non-linear, the model is actually a good fit to the data with a *P*-value of 0.529.
+
+Nevertheless, we know we can do better, both by including non-Gaussian distributions and also through the application of generalized additive models, which model the response not as a linear function of the predictors, but through smoothing functions that allow for non-linear relationships to emerge.
+
+Let's re-fit the model using a mix of GLMs and GAMs:
+
+```{r}
+library(mgcv)
+
+shipley_psem3 <- psem(
   gam(x2 ~ s(x1), data = dat2, family = gaussian),
   glm(x3 ~ x2, data = dat2, family = poisson),
   gam(x4 ~ x2, data = dat2, family = poisson),
   glm(x5 ~ x3 + x4, data = dat2, family = binomial)
 )
+
+LLchisq(shipley_psem3)
+```
+This model also has adequate fit, with a *P*-value of 0.647. Note that these are the same values reported in Table 2. How to choose among them? Let's compute the AIC scores (based on log-likelihoods) for both and compare them:
+
+```{r}
+AIC(shipley_psem2, shipley_psem3)
 ```
 
+We see that the second SEM--the one that better addresses the underlying forms of the data--has much higher support than the straight linear SEM, with the $\Delta AIC = 49.45$. Thus, we would far and away choose the second model, in line with how Shipley and Douma have designed their simulation.
 
+Now let's examine the summary output for this second model:
 
+```{r}
+summary(shipley_psem3)
+```
+Most of this should look familiar. Note that the output does not report estimates or standard errors for the smoothed variables. This is because, as noted previously, these are not linear coefficients but instead smoothing functions and there is not a single value relating how, for example, $x1$ changes with $x2$. Therefore, calculation of direct and indirect effects is not possible using GAMs, which could make them less than ideal when the goal is to compare the strength of various pathways within a model.
 
-
-
-
-
+However, it is possible, as we have shown here, to compare among models and validate the topology of the DAG, which in many cases is sufficient to test hypotheses. Those seeking to understand how $x1$ changes non-linearly with $x2$ would then have to present additional predicted plots of this relationship in addition to the path diagram.
 
 ## A Special Case: Where Graph Theory Fails
 

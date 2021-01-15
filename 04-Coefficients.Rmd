@@ -219,6 +219,60 @@ You'll note that the observation-empirical approach yields a smaller coefficient
 
 ## Scaling to Other Non-Normal Distributions
 
+In many ways, logistic regression is the most demanding case for standardization because we are actually modeling a latent (unmeasurable) property whose variance can't be known (but as explained above, can be estimated). For other distributions, we are modeling the actual values: this means that only the observation-empirical approach can be used, which simplifies the procedure greatly as we don't need to worry about any theoretical error variances. Let's work through an example using the Poisson distribution for count data. 
+
+The default link function for Poisson models is the log-link, which for our purposes means that we are simply modeling the log of the response. Therefore, we will assume that a generalized linear model fit to a Poisson distribution is approximately the same as a general linear model of the log-transformed response fit to a normal distribution (see papers by Ives and others on this topic). This approximate equivalency will become clear in a moment.
+
+First, let's create some example Poisson-distributed data:
+
+```{r}
+set.seed(100)
+
+count_data <- data.frame(y = rpois(100, 10))
+
+count_data$x <- count_data$y * runif(100, 0, 5)
+```
+
+Now let's fit an LM with the log-transformed response and see what kind of coefficient we recover:
+
+```{r}
+lm_model <- lm(log(y) ~ x, count_data)
+
+coefs(lm_model)$Std.Estimate
+```
+
+As you may recall from the second rule of path coefficients, the standardized coefficient from a simple linear regression is actually the bivariate correlation between the two:
+
+```{r}
+with(count_data, cor(x, log(y)))
+```
+
+And we see in this example that $b_x = r = 0.54$.
+
+Now let's re-fit this model to $y$ using GLM to a Poisson distribution with the default log-link:
+
+```{r}
+glm_model2 <- glm(y ~ x, family = poisson(link = "log"), count_data)
+
+coef(glm_model2)[2]
+```
+
+Here, $\beta_x = 0.012$ which is a bit different from the linear model. That is because the unstandardized coefficient is reported on the link scale.
+
+Let's repeat our observation-empirical procedure, first by getting the $R^2$ which is the squared correlation between the raw vs. fitted values, then by getting the variance of the raw observations:
+
+```{r}
+R2 <- cor(count_data$y, predict(glm_model2, type = "response"))^2 # non-linear predictions
+
+sd.yhat <- sqrt(var(predict(glm_model2, type = "link"))/R2)
+
+coef(glm_model2)[2] * sd(count_data$x)/sd.yhat
+```
+This value of $b_x = 0.57$ from the GLM is remarkably close to the standardized coefficient obtained from the linear model, which was $b_x = 0.54$ and also the correlation between $x$ and $log(y)$. The differences arise from the fact that for the linear model we have considered the error on $log(y)$ whereas in the GLM, we have only considered the systematic but not the random component. They are generally small enough to be negligible if the data are truly Poisson-distributed. Therefore, we feel comfortable enough reporting the observation-empirical values from the GLM, noting again that they have a slight downward bias due to not incorporating the random component.
+
+Its important to note that by virtue of considering only the the total variance of the fitted values produced by the model, we can extend these methods to hierarchical, mixed, and other models where variance is partitioned or modeled.
+
+For distributions other than Poisson and negative binomial, the procedure becomes trickier. For example, here we assume the variance of the response equals the mean. However, other classes--such as the quasi-distributions--estimate an additional parameter $\phi$ to explain how the variance changes with the mean. As we are interested in quantifying this variance, it is not yet clear how to derive meaningful approximations of $sd_y$ from such distributions. However, we hope to make significant progress on this front in the coming months, so this functionality may be incorporated into the *piecewiseSEM* package soon.
 
 ## References
 

@@ -1,30 +1,4 @@
 
-
-#######
-
-[4.1 Unstandardized and Standardized Coefficients]
-
-[Unnecessary word: "x there is" should be "x is"]
-
-[Current]     a 1 unit change in  x there is, on average, an 0.5 unit change in  y.
-[Recommended] a 1 unit change in  x there is, on average, an 0.5 unit change in  y.
-
-#######
-
-[Misspelled word: "absoluty" should be "absolute"]
-
-[Current]     and the absoluty relationship
-[Recommended] and the absolute relationship
-
-#######
-
-[4.4 Binomail Response Models]
-
-[Missing demonstrative pronoun "those"]
-
-[Current]     We see that both approaches produce coefficients, and they are the same as returned by the coefs function in piecewiseSEM (with the appropriate argument).
-[Recommended] We see that both approaches produce coefficients, and they are the same as those returned by the coefs function in piecewiseSEM (with the appropriate argument).
-
 #######
 
 [5 Categorical Variables]

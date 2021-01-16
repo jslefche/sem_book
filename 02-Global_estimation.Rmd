@@ -188,7 +188,7 @@ Ahh, but wait! The correlations are not the same. This result implies that the r
 
 ![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model2.png)
 
-Introducing this path raises a new issue: the relationship between $y1$ and $y2$ now arises from two sources. The first is their direct link, the second is the indirect effect of $x1$ *through* $y1$, which then goes on to affect $y2$. We require a new approach to be able to compute the independent effects of each variable on the others, which comes in the form of the 'partial' regression coefficient.
+Introducing this path raises a new issue: the relationship between $y1$ and $y2$ now arises from two sources. The first is their direct link, the second is the indirect effect of $x1$ on $y2$ *through* $y1$. We require a new approach to be able to compute the independent effects of each variable on the others, which comes in the form of the 'partial' regression coefficient.
 
 ### Rule 4. When variables are connected by more than one pathway, each pathway is the 'partial' regression coefficient.
 

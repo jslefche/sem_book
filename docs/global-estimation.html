@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html >
-
+<html lang="" xml:lang="">
 <head>
 
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>2 Global Estimation | Structural Equation Modeling in R for Ecology and Evolution</title>
-  <meta name="description" content="2 Global Estimation | Structural Equation Modeling in R for Ecology and Evolution">
-  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+  <meta name="description" content="2 Global Estimation | Structural Equation Modeling in R for Ecology and Evolution" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="2 Global Estimation | Structural Equation Modeling in R for Ecology and Evolution" />
   <meta property="og:type" content="book" />
@@ -22,18 +21,18 @@
   
   
 
-<meta name="author" content="Jonathan Lefcheck">
+<meta name="author" content="Jonathan Lefcheck" />
 
 
-<meta name="date" content="2019-03-19">
+<meta name="date" content="2021-01-16" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="index.html">
-<link rel="next" href="local-estimation.html">
+<link rel="prev" href="index.html"/>
+<link rel="next" href="local-estimation.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -41,6 +40,7 @@
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
 
 
 
@@ -48,44 +48,74 @@
 
 
 
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 </head>
@@ -119,23 +149,28 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="2.6" data-path="global-estimation.html"><a href="global-estimation.html#model-fitting-using-lavaan"><i class="fa fa-check"></i><b>2.6</b> Model Fitting Using <em>lavaan</em></a><ul>
 <li class="chapter" data-level="2.6.1" data-path="global-estimation.html"><a href="global-estimation.html#lavaan-vs-lm"><i class="fa fa-check"></i><b>2.6.1</b> <em>lavaan</em> vs <code>lm</code></a></li>
 <li class="chapter" data-level="2.6.2" data-path="global-estimation.html"><a href="global-estimation.html#sem-using-lavaan"><i class="fa fa-check"></i><b>2.6.2</b> SEM using <em>lavaan</em></a></li>
-<li class="chapter" data-level="2.6.3" data-path="global-estimation.html"><a href="global-estimation.html#testing-alternate-structure-using-lavaan"><i class="fa fa-check"></i><b>2.6.3</b> Testing Alternate Structure using <em>lavaan</em></a></li>
+<li class="chapter" data-level="2.6.3" data-path="global-estimation.html"><a href="global-estimation.html#testing-alternative-structures-using-lavaan"><i class="fa fa-check"></i><b>2.6.3</b> Testing Alternative Structures using <em>lavaan</em></a></li>
 </ul></li>
 <li class="chapter" data-level="2.7" data-path="global-estimation.html"><a href="global-estimation.html#references"><i class="fa fa-check"></i><b>2.7</b> References</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="local-estimation.html"><a href="local-estimation.html"><i class="fa fa-check"></i><b>3</b> Local Estimation</a><ul>
-<li class="chapter" data-level="3.1" data-path="local-estimation.html"><a href="local-estimation.html#global-vs.local-estimation"><i class="fa fa-check"></i><b>3.1</b> Global vs. local estimation</a></li>
+<li class="chapter" data-level="3.1" data-path="local-estimation.html"><a href="local-estimation.html#global-vs.-local-estimation"><i class="fa fa-check"></i><b>3.1</b> Global vs. local estimation</a></li>
 <li class="chapter" data-level="3.2" data-path="local-estimation.html"><a href="local-estimation.html#tests-of-directed-separation"><i class="fa fa-check"></i><b>3.2</b> Tests of directed separation</a></li>
-<li class="chapter" data-level="3.3" data-path="local-estimation.html"><a href="local-estimation.html#model-fitting-using-piecewisesem"><i class="fa fa-check"></i><b>3.3</b> Model fitting using <em>piecewiseSEM</em></a></li>
-<li class="chapter" data-level="3.4" data-path="local-estimation.html"><a href="local-estimation.html#shipley-2009-a-worked-example"><i class="fa fa-check"></i><b>3.4</b> Shipley (2009): A Worked Example</a></li>
-<li class="chapter" data-level="3.5" data-path="local-estimation.html"><a href="local-estimation.html#a-special-case-where-graph-theory-fails"><i class="fa fa-check"></i><b>3.5</b> A Special Case: Where Graph Theory Fails</a></li>
-<li class="chapter" data-level="3.6" data-path="local-estimation.html"><a href="local-estimation.html#references-1"><i class="fa fa-check"></i><b>3.6</b> References</a></li>
+<li class="chapter" data-level="3.3" data-path="local-estimation.html"><a href="local-estimation.html#a-log-likelihood-approach-to-assessing-model-fit"><i class="fa fa-check"></i><b>3.3</b> A Log-Likelihood Approach to Assessing Model Fit</a></li>
+<li class="chapter" data-level="3.4" data-path="local-estimation.html"><a href="local-estimation.html#model-fitting-using-piecewisesem"><i class="fa fa-check"></i><b>3.4</b> Model fitting using <em>piecewiseSEM</em></a></li>
+<li class="chapter" data-level="3.5" data-path="local-estimation.html"><a href="local-estimation.html#extensions-to-generalized-mixed-effects-models"><i class="fa fa-check"></i><b>3.5</b> Extensions to Generalized Mixed Effects Models</a></li>
+<li class="chapter" data-level="3.6" data-path="local-estimation.html"><a href="local-estimation.html#extensions-to-non-linear-models"><i class="fa fa-check"></i><b>3.6</b> Extensions to Non-linear Models</a></li>
+<li class="chapter" data-level="3.7" data-path="local-estimation.html"><a href="local-estimation.html#a-special-case-where-graph-theory-fails"><i class="fa fa-check"></i><b>3.7</b> A Special Case: Where Graph Theory Fails</a></li>
+<li class="chapter" data-level="3.8" data-path="local-estimation.html"><a href="local-estimation.html#references-1"><i class="fa fa-check"></i><b>3.8</b> References</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="coefficients.html"><a href="coefficients.html"><i class="fa fa-check"></i><b>4</b> Coefficients</a><ul>
 <li class="chapter" data-level="4.1" data-path="coefficients.html"><a href="coefficients.html#unstandardized-and-standardized-coefficients"><i class="fa fa-check"></i><b>4.1</b> Unstandardized and Standardized Coefficients</a></li>
 <li class="chapter" data-level="4.2" data-path="coefficients.html"><a href="coefficients.html#scale-standardization"><i class="fa fa-check"></i><b>4.2</b> Scale Standardization</a></li>
 <li class="chapter" data-level="4.3" data-path="coefficients.html"><a href="coefficients.html#range-standardization"><i class="fa fa-check"></i><b>4.3</b> Range Standardization</a></li>
-<li class="chapter" data-level="4.4" data-path="coefficients.html"><a href="coefficients.html#binomial-response-models"><i class="fa fa-check"></i><b>4.4</b> Binomial Response Models</a></li>
+<li class="chapter" data-level="4.4" data-path="coefficients.html"><a href="coefficients.html#binomial-response-models"><i class="fa fa-check"></i><b>4.4</b> Binomial Response Models</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="coefficients.html"><a href="coefficients.html#latent-theoretic-approach"><i class="fa fa-check"></i><b>4.4.1</b> Latent Theoretic Approach</a></li>
+<li class="chapter" data-level="4.4.2" data-path="coefficients.html"><a href="coefficients.html#observation-empirical-approach"><i class="fa fa-check"></i><b>4.4.2</b> Observation-Empirical Approach</a></li>
+</ul></li>
 <li class="chapter" data-level="4.5" data-path="coefficients.html"><a href="coefficients.html#scaling-to-other-non-normal-distributions"><i class="fa fa-check"></i><b>4.5</b> Scaling to Other Non-Normal Distributions</a></li>
 <li class="chapter" data-level="4.6" data-path="coefficients.html"><a href="coefficients.html#references-2"><i class="fa fa-check"></i><b>4.6</b> References</a></li>
 </ul></li>
@@ -196,229 +231,224 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>where <span class="math inline">\(x_{i}\)</span> is each sample value, <span class="math inline">\(\overline{x}\)</span> is the sample mean, and <span class="math inline">\(n\)</span> is the sample size.</p>
 <p>Similarly, for the response <span class="math inline">\(y\)</span>:</p>
 <p><span class="math display">\[VAR_{y} = \frac{\sum(y_{i} - \overline{y})^2}{n-1}\]</span></p>
-<p>Note that, regardless of the actual values of the variables, variances are always positive (due to the squared term). The larger the variance, the more spread out the data are around the mean.</p>
+<p>Note that, regardless of the actual scale of the variables, variances are always positive (due to the squared term). The larger the variance, the more spread out the data are around the mean.</p>
 <p>Covariance is a measure of the dependency between two variables. Covariance can be formalized as:</p>
 <p><span class="math display">\[COV_{xy} = \frac{\sum(x_{i} - \overline{x}) (y_{i} - \overline{y})}{n - 1}\]</span></p>
 <p>If variation in <span class="math inline">\(x\)</span> tends to track variation in <span class="math inline">\(y\)</span>, then the numerator is large and covariance is high. In this case, the two variables are then said to co-vary.</p>
-<p>Consider a simple example. In R, the function <code>var</code> computes variance, and <code>cov</code> the covariance.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>)
-
-y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)
-
-<span class="co"># variance in x</span>
-<span class="kw">sum</span>((x <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(x))<span class="op">^</span><span class="dv">2</span>)<span class="op">/</span>(<span class="kw">length</span>(x) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">==</span><span class="st"> </span><span class="kw">var</span>(x)</code></pre></div>
+<p>Consider a simple example. In <code>R</code>, the function <code>var</code> computes variance, and <code>cov</code> the covariance, which we can compare to coding the equations above by hand:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="global-estimation.html#cb1-1"></a>x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>)</span>
+<span id="cb1-2"><a href="global-estimation.html#cb1-2"></a></span>
+<span id="cb1-3"><a href="global-estimation.html#cb1-3"></a>y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)</span>
+<span id="cb1-4"><a href="global-estimation.html#cb1-4"></a></span>
+<span id="cb1-5"><a href="global-estimation.html#cb1-5"></a><span class="co"># variance in x</span></span>
+<span id="cb1-6"><a href="global-estimation.html#cb1-6"></a><span class="kw">sum</span>((x <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(x))<span class="op">^</span><span class="dv">2</span>)<span class="op">/</span>(<span class="kw">length</span>(x) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">==</span><span class="st"> </span><span class="kw">var</span>(x)</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># variance in y</span>
-<span class="kw">sum</span>((y <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(y))<span class="op">^</span><span class="dv">2</span>)<span class="op">/</span>(<span class="kw">length</span>(y) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">==</span><span class="st"> </span><span class="kw">var</span>(y)</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="global-estimation.html#cb3-1"></a><span class="co"># variance in y</span></span>
+<span id="cb3-2"><a href="global-estimation.html#cb3-2"></a><span class="kw">sum</span>((y <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(y))<span class="op">^</span><span class="dv">2</span>)<span class="op">/</span>(<span class="kw">length</span>(y) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">==</span><span class="st"> </span><span class="kw">var</span>(y)</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># covariance</span>
-<span class="kw">sum</span>((x <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(x)) <span class="op">*</span><span class="st"> </span>(y <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(y)))<span class="op">/</span>(<span class="kw">length</span>(x) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">==</span><span class="st"> </span><span class="kw">cov</span>(x, y)</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="global-estimation.html#cb5-1"></a><span class="co"># covariance</span></span>
+<span id="cb5-2"><a href="global-estimation.html#cb5-2"></a><span class="kw">sum</span>((x <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(x)) <span class="op">*</span><span class="st"> </span>(y <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(y)))<span class="op">/</span>(<span class="kw">length</span>(x) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">==</span><span class="st"> </span><span class="kw">cov</span>(x, y)</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>The variance and covariance depend on the magnitude of the units. If the units of <span class="math inline">\(x\)</span> are much larger than <span class="math inline">\(y\)</span>, then the covariance will also be large:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span>x <span class="op">*</span><span class="st"> </span><span class="dv">1000</span>
-
-<span class="kw">cov</span>(x, y)</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="global-estimation.html#cb7-1"></a><span class="kw">cov</span>(x, y)</span></code></pre></div>
+<pre><code>## [1] 1.666667</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="global-estimation.html#cb9-1"></a><span class="co"># increase units of x</span></span>
+<span id="cb9-2"><a href="global-estimation.html#cb9-2"></a>x1 &lt;-<span class="st"> </span>x <span class="op">*</span><span class="st"> </span><span class="dv">1000</span></span>
+<span id="cb9-3"><a href="global-estimation.html#cb9-3"></a></span>
+<span id="cb9-4"><a href="global-estimation.html#cb9-4"></a><span class="kw">cov</span>(x1, y)</span></code></pre></div>
 <pre><code>## [1] 1666.667</code></pre>
 <p>This property can make the interpretation and comparison of (co)variances among sets of variables misleading if the units are very different between variables. To solve this issue, we can standardize the variables to have a mean of 0 and a variance of 1. This standardization is achieved by subtracting the mean from each observation, and dividing by the standard deviation of the mean (the square-root of the variance). This procedure is also known as the <em>Z</em>-transformation.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">zx &lt;-<span class="st"> </span>(x <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(x)) <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(x)
-
-zy &lt;-<span class="st"> </span>(y <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(y)) <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(y)
-
-<span class="co"># can also be obtained using the function `?scale`</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="global-estimation.html#cb11-1"></a>zx &lt;-<span class="st"> </span>(x <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(x)) <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(x)</span>
+<span id="cb11-2"><a href="global-estimation.html#cb11-2"></a></span>
+<span id="cb11-3"><a href="global-estimation.html#cb11-3"></a>zy &lt;-<span class="st"> </span>(y <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(y)) <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(y)</span>
+<span id="cb11-4"><a href="global-estimation.html#cb11-4"></a></span>
+<span id="cb11-5"><a href="global-estimation.html#cb11-5"></a><span class="co"># can also be obtained using the function `?scale`</span></span></code></pre></div>
 <p>Replacing the values of x and y with the standardized versions in our calculation of covariance yields the Pearson product moment correlation, <span class="math inline">\(r\)</span>. Correlations are in units of standard deviations of the mean, and thus can be fairly compared regardless of the magnitude of the original variables. The function to compute the correlation is <code>cor</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(zx <span class="op">*</span><span class="st"> </span>zy)<span class="op">/</span>(<span class="kw">length</span>(zx) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">==</span><span class="st"> </span><span class="kw">cor</span>(x, y)</code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="global-estimation.html#cb12-1"></a><span class="kw">sum</span>(zx <span class="op">*</span><span class="st"> </span>zy)<span class="op">/</span>(<span class="kw">length</span>(zx) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">==</span><span class="st"> </span><span class="kw">cor</span>(x, y)</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<p>In our example, the two variables are prefectly correlated, so <span class="math inline">\(r = 1\)</span>.</p>
-<p>Incidentally, this is the same as dividing the covariance of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> by the product of their standard deviations, which omits the need for the Z-transformation step but achieves the same outcome:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(<span class="kw">cov</span>(x, y) <span class="op">/</span><span class="st"> </span>(<span class="kw">sd</span>(x) <span class="op">*</span><span class="st"> </span><span class="kw">sd</span>(y))) <span class="op">==</span><span class="st"> </span><span class="kw">cor</span>(x, y)</code></pre></div>
-<pre><code>## [1] TRUE</code></pre>
+<p>In our example, the two variables are perfectly correlated, so <span class="math inline">\(r = 1\)</span>.</p>
+<p>Incidentally, this is the same as dividing the covariance of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> by the product of their standard deviations, which omits the need for the prior <em>Z</em>-transformation step but achieves the same outcome:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="global-estimation.html#cb14-1"></a>(<span class="kw">cov</span>(x, y) <span class="op">/</span><span class="st"> </span>(<span class="kw">sd</span>(x) <span class="op">*</span><span class="st"> </span><span class="kw">sd</span>(y))) <span class="op">==</span><span class="st"> </span><span class="kw">cor</span>(x, y)</span></code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
 <p>Now that we have reviewed these basic concepts, we can begin to consider them within the context of SEM.</p>
 </div>
 <div id="regression-coefficients" class="section level2">
 <h2><span class="header-section-number">2.2</span> Regression Coefficients</h2>
-<p>The inferential heart of structural equation modeling are the regression (or path) coefficients. These values mathematically quantify the (mostly linear) dependence of one variable on another. This verbage should sound familiar because that is what we have already established as the goal of covariance/correlation.</p>
+<p>The inferential heart of structural equation modeling are the regression (or path) coefficients. These values mathematically quantify the (mostly linear) dependence of one variable on another. This verbiage should sound familiar because that is what we have already established as the goal of covariance and correlation.</p>
 <p>In this section, we will demonstrate how path coefficients can be derived from correlation coefficients and explore Grace’s “8 rules of path coefficients.”</p>
 <p>First, we must define the important distinction between a regression (path) coefficient and a correlation coefficient.</p>
-<p>In a simple linear regression, one variable <span class="math inline">\(y\)</span> is the response and another <span class="math inline">\(x\)</span> is the predictor. The association between the two variables is used to generator the predictor <span class="math inline">\(\hat{y}\)</span>:</p>
+<p>In a simple linear regression, one variable <span class="math inline">\(y\)</span> is the response and another <span class="math inline">\(x\)</span> is the predictor. The association between the two variables is used to generate the predictor <span class="math inline">\(\hat{y}\)</span>:</p>
 <p><span class="math display">\[\hat{y} = bx + a\]</span></p>
-<p>where <span class="math inline">\(b\)</span> is the regression coefficient and <span class="math inline">\(a\)</span> is the intercept. It’s important to note that <span class="math inline">\(b\)</span> implies a linear relationship, i.e., the relatoinship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> can be captured by a straight line (for now).</p>
+<p>where <span class="math inline">\(b\)</span> is the regression coefficient and <span class="math inline">\(a\)</span> is the intercept. It’s important to note that <span class="math inline">\(b\)</span> implies a linear relationship, i.e., the relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> can be captured by a straight line (for now, as we will see later there are ways to relax this restriction).</p>
 <p>The regression coefficient between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> can be related to the correlation coefficient through the following equation:</p>
 <p><span class="math display">\[b_{xy} = r_{xy} (SD_{y}/SD_{x})\]</span></p>
-<p>If the variables have been Z-transformed, then the <span class="math inline">\(SD_{x} = SD_{y} = 1\)</span> and <span class="math inline">\(b_{xy} = r_{xy}\)</span>.</p>
-<p>This brings us to our first key point: when the variables have been scaled to mean = 0 and variance = 1, then the regression coefficient <em>is</em> the correlation coefficient. For multiple regression (more than 1 <span class="math inline">\(x\)</span>), these values are the partial correlation coefficients. We refer to scaled relationships as <em>standardized coefficients</em>.</p>
-<p><em>Unstandardized coefficients</em>, then, are reported in their raw units. As with variance, then, their values depend on the unit of measure. In fact, the unstandardized coefficient can be related to the variance through the following equation:</p>
+<p>If the variables have been <em>Z</em>-transformed, then the <span class="math inline">\(SD_{x} = SD_{y} = 1\)</span> and <span class="math inline">\(b_{xy} = r_{xy}\)</span>.</p>
+<p>This brings us to our first key point: when the variables have been scaled to mean = 0 and variance = 1, then the regression coefficient <em>is</em> the correlation coefficient. For multiple regression (more than one predictor <span class="math inline">\(x1\)</span>, <span class="math inline">\(x2\)</span>, and so on), these values are the partial correlation coefficients. We refer to scaled relationships as <em>standardized coefficients</em>.</p>
+<p><em>Unstandardized coefficients</em>, in contrast, are reported in their raw units. As with variance, their values depend on the unit of measure. In fact, the unstandardized coefficient can be related to the variance through the following equation, which may appear familiar, as this is how we achieved a correlation coefficient from covariances earlier:</p>
 <p><span class="math display">\[b_{xy} = \frac{COV_{xy}}{VAR_{x}}\]</span></p>
-<p>In mathematical terms, then, the unstandardized coefficients are scaled by the variance of the predictor, while the standardized variance by the ratio of the standard deviations of both <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.</p>
+<p>In mathematical terms, the unstandardized coefficients are scaled by the variance of the predictor, while the standardized variance by the ratio of the standard deviations of both <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.</p>
 <p>We can demonstrate these principles using a simple example:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">111</span>)
-
-data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">y1 =</span> <span class="kw">runif</span>(<span class="dv">100</span>))
-
-data<span class="op">$</span>x1 &lt;-<span class="st"> </span>data<span class="op">$</span>y1 <span class="op">+</span><span class="st"> </span><span class="kw">runif</span>(<span class="dv">100</span>)
-
-unstd.model &lt;-<span class="st"> </span><span class="kw">lm</span>(y1 <span class="op">~</span><span class="st"> </span>x1, data)
-
-<span class="co"># get unstandardized coefficient</span>
-<span class="kw">summary</span>(unstd.model)<span class="op">$</span>coefficients[<span class="dv">2</span>, <span class="dv">1</span>]</code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="global-estimation.html#cb16-1"></a><span class="kw">set.seed</span>(<span class="dv">111</span>)</span>
+<span id="cb16-2"><a href="global-estimation.html#cb16-2"></a></span>
+<span id="cb16-3"><a href="global-estimation.html#cb16-3"></a>data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">y1 =</span> <span class="kw">runif</span>(<span class="dv">100</span>))</span>
+<span id="cb16-4"><a href="global-estimation.html#cb16-4"></a></span>
+<span id="cb16-5"><a href="global-estimation.html#cb16-5"></a>data<span class="op">$</span>x1 &lt;-<span class="st"> </span>data<span class="op">$</span>y1 <span class="op">+</span><span class="st"> </span><span class="kw">runif</span>(<span class="dv">100</span>)</span>
+<span id="cb16-6"><a href="global-estimation.html#cb16-6"></a></span>
+<span id="cb16-7"><a href="global-estimation.html#cb16-7"></a>unstd.model &lt;-<span class="st"> </span><span class="kw">lm</span>(y1 <span class="op">~</span><span class="st"> </span>x1, data)</span>
+<span id="cb16-8"><a href="global-estimation.html#cb16-8"></a></span>
+<span id="cb16-9"><a href="global-estimation.html#cb16-9"></a><span class="co"># get unstandardized coefficient</span></span>
+<span id="cb16-10"><a href="global-estimation.html#cb16-10"></a><span class="kw">summary</span>(unstd.model)<span class="op">$</span>coefficients[<span class="dv">2</span>, <span class="dv">1</span>]</span></code></pre></div>
 <pre><code>## [1] 0.462616</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># now using covariance</span>
-(<span class="kw">cov</span>(data<span class="op">$</span>y1, data<span class="op">$</span>x1) <span class="op">/</span><span class="st"> </span><span class="kw">var</span>(data<span class="op">$</span>x))</code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="global-estimation.html#cb18-1"></a><span class="co"># now using covariance</span></span>
+<span id="cb18-2"><a href="global-estimation.html#cb18-2"></a>(<span class="kw">cov</span>(data<span class="op">$</span>y1, data<span class="op">$</span>x1) <span class="op">/</span><span class="st"> </span><span class="kw">var</span>(data<span class="op">$</span>x))</span></code></pre></div>
 <pre><code>## [1] 0.462616</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># repeat with scaled data</span>
-std.model &lt;-<span class="st"> </span><span class="kw">lm</span>(y1 <span class="op">~</span><span class="st"> </span>x1, <span class="kw">as.data.frame</span>(<span class="kw">apply</span>(data, <span class="dv">2</span>, scale)))
-
-<span class="co"># get standardized coefficient</span>
-<span class="kw">summary</span>(std.model)<span class="op">$</span>coefficients[<span class="dv">2</span>, <span class="dv">1</span>]</code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="global-estimation.html#cb20-1"></a><span class="co"># repeat with scaled data</span></span>
+<span id="cb20-2"><a href="global-estimation.html#cb20-2"></a>std.model &lt;-<span class="st"> </span><span class="kw">lm</span>(y1 <span class="op">~</span><span class="st"> </span>x1, <span class="kw">as.data.frame</span>(<span class="kw">apply</span>(data, <span class="dv">2</span>, scale)))</span>
+<span id="cb20-3"><a href="global-estimation.html#cb20-3"></a></span>
+<span id="cb20-4"><a href="global-estimation.html#cb20-4"></a><span class="co"># get standardized coefficient</span></span>
+<span id="cb20-5"><a href="global-estimation.html#cb20-5"></a><span class="kw">summary</span>(std.model)<span class="op">$</span>coefficients[<span class="dv">2</span>, <span class="dv">1</span>]</span></code></pre></div>
 <pre><code>## [1] 0.6964617</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># now using correlation</span>
-<span class="kw">cor</span>(data<span class="op">$</span>y1, data<span class="op">$</span>x1)</code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="global-estimation.html#cb22-1"></a><span class="co"># now using correlation</span></span>
+<span id="cb22-2"><a href="global-estimation.html#cb22-2"></a><span class="kw">cor</span>(data<span class="op">$</span>y1, data<span class="op">$</span>x1)</span></code></pre></div>
 <pre><code>## [1] 0.6964617</code></pre>
-<p>The concepts of variance, covariance, and correlation therefore directly inform the calculation of unstandardized and standardized regression coefficients, and lend them their unique properties that we will now cover in the “8 rules of path coefficients.”</p>
+<p>The concepts of variance, covariance, and correlation therefore directly inform the calculation of unstandardized and standardized regression coefficients and lend them their unique properties that we will now cover in the “8 rules of path coefficients.”</p>
 <div id="rule-1-unspecified-relationships-among-exogenous-variables-are-simply-their-bivariate-correlations." class="section level3">
 <h3><span class="header-section-number">2.2.1</span> Rule 1: Unspecified relationships among exogenous variables are simply their bivariate correlations.</h3>
-<p>Variables that only have paths emanating from them (i.e., do not have arrows going into them) are called <em>exogenous</em> variables. If there is not a directed path between two exogenous variables, then their relationship can be expressed by a the simple correlation between them. This is sometimes, but not always, indicated by a double-headed arrow. So <span class="math inline">\(x1 &lt;-&gt; x2 == cor(x1, x2)\)</span>.</p>
+<p>Variables that only have paths emanating from them (i.e., do not have arrows going into them) are called <em>exogenous</em> variables. If there is not a directed path between two exogenous variables, then their relationship can be expressed by the simple correlation between them. This is sometimes, but not always, indicated by a double-headed arrow. So <span class="math inline">\(x1 &lt;-&gt; x2 == cor(x1, x2)\)</span>.</p>
+<p>In contrast, variables for which arrows are also directed into are called <em>endogenous</em>. An endogenous variable can also have arrows directing <em>out</em> of it, but the sole condition is that they must be predicted (rather than solely predictors).</p>
 </div>
 <div id="rule-2-when-two-variables-are-connected-by-a-single-path-the-coefficient-of-that-path-is-the-regression-coefficient." class="section level3">
 <h3><span class="header-section-number">2.2.2</span> Rule 2: When two variables are connected by a single path, the coefficient of that path is the regression coefficient.</h3>
 <p>For this rule, we will expand upon our earlier example to construct a simple path diagram:</p>
-<div class="figure">
-<img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model1.png" />
-
-</div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data<span class="op">$</span>y2 &lt;-<span class="st"> </span>data<span class="op">$</span>y1 <span class="op">+</span><span class="st"> </span><span class="kw">runif</span>(<span class="dv">100</span>)</code></pre></div>
-<p>In this case, the path coefficient connecting <span class="math inline">\(x1 -&gt; y1\)</span> is the regression coefficient <span class="math inline">\(\gamma_{y1,x1}\)</span>. Similarly, the path coefficient connecting <span class="math inline">\(y1 -&gt; y2\)</span> is the regression coefficient <span class="math inline">\(\beta_{y2,y1}\)</span>. If the data are standardized, then the regression coefficient equals the correlation between the two</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(pathx1_y1 &lt;-<span class="st"> </span><span class="kw">summary</span>(<span class="kw">lm</span>(y1 <span class="op">~</span><span class="st"> </span>x1, <span class="kw">as.data.frame</span>(<span class="kw">apply</span>(data, <span class="dv">2</span>, scale))))<span class="op">$</span>coefficients[<span class="dv">2</span>, <span class="dv">1</span>])</code></pre></div>
+<p><img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model1.png" /></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="global-estimation.html#cb24-1"></a>data<span class="op">$</span>y2 &lt;-<span class="st"> </span>data<span class="op">$</span>y1 <span class="op">+</span><span class="st"> </span><span class="kw">runif</span>(<span class="dv">100</span>)</span></code></pre></div>
+<p>In this case, the path coefficient connecting <span class="math inline">\(x1 -&gt; y1\)</span> is the regression coefficient <span class="math inline">\(\gamma_{y1,x1}\)</span>. Similarly, the path coefficient connecting <span class="math inline">\(y1 -&gt; y2\)</span> is the regression coefficient <span class="math inline">\(\beta_{y2,y1}\)</span>. If the data are standardized, then the regression coefficient equals the correlation between the two:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="global-estimation.html#cb25-1"></a>(pathx1_y1 &lt;-<span class="st"> </span><span class="kw">summary</span>(<span class="kw">lm</span>(y1 <span class="op">~</span><span class="st"> </span>x1, <span class="kw">as.data.frame</span>(<span class="kw">apply</span>(data, <span class="dv">2</span>, scale))))<span class="op">$</span>coefficients[<span class="dv">2</span>, <span class="dv">1</span>])</span></code></pre></div>
 <pre><code>## [1] 0.6964617</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(data<span class="op">$</span>y1, data<span class="op">$</span>x1)</code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="global-estimation.html#cb27-1"></a><span class="kw">cor</span>(data<span class="op">$</span>y1, data<span class="op">$</span>x1)</span></code></pre></div>
 <pre><code>## [1] 0.6964617</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(pathy1_y2 &lt;-<span class="st"> </span><span class="kw">summary</span>(<span class="kw">lm</span>(y2 <span class="op">~</span><span class="st"> </span>y1, <span class="kw">as.data.frame</span>(<span class="kw">apply</span>(data, <span class="dv">2</span>, scale))))<span class="op">$</span>coefficients[<span class="dv">2</span>, <span class="dv">1</span>])</code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="global-estimation.html#cb29-1"></a>(pathy1_y2 &lt;-<span class="st"> </span><span class="kw">summary</span>(<span class="kw">lm</span>(y2 <span class="op">~</span><span class="st"> </span>y1, <span class="kw">as.data.frame</span>(<span class="kw">apply</span>(data, <span class="dv">2</span>, scale))))<span class="op">$</span>coefficients[<span class="dv">2</span>, <span class="dv">1</span>])</span></code></pre></div>
 <pre><code>## [1] 0.6575341</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(data<span class="op">$</span>y2, data<span class="op">$</span>y1)</code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="global-estimation.html#cb31-1"></a><span class="kw">cor</span>(data<span class="op">$</span>y2, data<span class="op">$</span>y1)</span></code></pre></div>
 <pre><code>## [1] 0.6575341</code></pre>
+<p>Note the distinction between exogenous and endogenous linkages, which are represented with <span class="math inline">\(\gamma\)</span>, and relationships between two endogenous variables, which are represented with <span class="math inline">\(\beta\)</span>.</p>
 </div>
 <div id="rule-3-the-strength-of-a-compound-path-one-that-includes-multiple-links-is-the-product-of-the-individual-coefficients." class="section level3">
 <h3><span class="header-section-number">2.2.3</span> Rule 3: The strength of a compound path (one that includes multiple links) is the product of the individual coefficients.</h3>
 <p>One of the strengths of SEM is being able to quantify indirect or cascading linkages. This is accomplished by simply multiplying the path coefficients. So the effect of <span class="math inline">\(x1\)</span> on <span class="math inline">\(y2\)</span> is the product of the coefficient of the path <span class="math inline">\(x1 -&gt; y1\)</span> and <span class="math inline">\(y1 -&gt; y2\)</span>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pathx1_y1 <span class="op">*</span><span class="st"> </span>pathy1_y2</code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="global-estimation.html#cb33-1"></a>pathx1_y1 <span class="op">*</span><span class="st"> </span>pathy1_y2</span></code></pre></div>
 <pre><code>## [1] 0.4579473</code></pre>
 <p>By our earlier logic, this value should equal the correlation between <span class="math inline">\(x1\)</span> and <span class="math inline">\(y2\)</span>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(data<span class="op">$</span>y2, data<span class="op">$</span>x1)</code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="global-estimation.html#cb35-1"></a><span class="kw">cor</span>(data<span class="op">$</span>y2, data<span class="op">$</span>x1)</span></code></pre></div>
 <pre><code>## [1] 0.4484743</code></pre>
 <p>Ahh, but wait! The correlations are not the same. This result implies that the relationship between <span class="math inline">\(x1\)</span> and <span class="math inline">\(y2\)</span> cannot be fully explained by the indirect path through <span class="math inline">\(y1\)</span>. Rather, we require additional information to solve this problem, and it comes in the form of the missing link between <span class="math inline">\(x1 -&gt; y2\)</span>, which we can add to the model:</p>
-<div class="figure">
-<img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model2.png" />
-
-</div>
-<p>Introducing this path raises a new issue: the relationship between <span class="math inline">\(y1\)</span> and <span class="math inline">\(y2\)</span> now arises from two sources. The first is their direct link, the second is from the indirect effect of <span class="math inline">\(x1\)</span> <em>through</em> <span class="math inline">\(y1\)</span>. We require a new approach to be able to compute the independent effects of each variable on the others, which comes in the form of the ‘partial’ regression coefficient.</p>
+<p><img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model2.png" /></p>
+<p>Introducing this path raises a new issue: the relationship between <span class="math inline">\(y1\)</span> and <span class="math inline">\(y2\)</span> now arises from two sources. The first is their direct link, the second is the indirect effect of <span class="math inline">\(x1\)</span> on <span class="math inline">\(y2\)</span> <em>through</em> <span class="math inline">\(y1\)</span>. We require a new approach to be able to compute the independent effects of each variable on the others, which comes in the form of the ‘partial’ regression coefficient.</p>
 </div>
 <div id="rule-4.-when-variables-are-connected-by-more-than-one-pathway-each-pathway-is-the-partial-regression-coefficient." class="section level3">
 <h3><span class="header-section-number">2.2.4</span> Rule 4. When variables are connected by more than one pathway, each pathway is the ‘partial’ regression coefficient.</h3>
 <p>A partial regression coefficient accounts for the joint influence of more than one variable on the response. In other words, the coefficient for one predictor controls for the influence of other predictors in the model. In this new model, <span class="math inline">\(y2\)</span> is affected by two variables: <span class="math inline">\(x1\)</span> and <span class="math inline">\(y1\)</span>.</p>
-<p>Procedurally, this involve removing the shared variance between <span class="math inline">\(x1\)</span> and <span class="math inline">\(y1\)</span> so that their effects can be independently derived.</p>
+<p>Procedurally, this involves removing the shared variance between <span class="math inline">\(x1\)</span> and <span class="math inline">\(y1\)</span> so that their associations with <span class="math inline">\(y2\)</span> can be independently derived.</p>
 <p>We can calculate the partial effect of <span class="math inline">\(x1\)</span> through the following equation:</p>
 <p><span class="math display">\[b_{y2x1} = \frac{r_{x1y2} - (r_{x1y1} \times r_{y1y2})}{1 - r_{x1y1}^2}\]</span></p>
 <p>which takes the bivariate correlation between <span class="math inline">\(x1\)</span> and <span class="math inline">\(y2\)</span>, removes the joint influence of <span class="math inline">\(y1\)</span> and both <span class="math inline">\(x1\)</span> on <span class="math inline">\(y2\)</span>, then scales this effect by the shared variance between <span class="math inline">\(x1\)</span> and <span class="math inline">\(y1\)</span>. The result is the partial effect of <span class="math inline">\(x1\)</span> on <span class="math inline">\(y2\)</span>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(partialx1 &lt;-<span class="st"> </span>(<span class="kw">cor</span>(data<span class="op">$</span>x1, data<span class="op">$</span>y2) <span class="op">-</span><span class="st"> </span>(<span class="kw">cor</span>(data<span class="op">$</span>x1, data<span class="op">$</span>y1) <span class="op">*</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>y1, data<span class="op">$</span>y2))) <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>x1, data<span class="op">$</span>y1)<span class="op">^</span><span class="dv">2</span>))</code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="global-estimation.html#cb37-1"></a>(partialx1 &lt;-<span class="st"> </span>(<span class="kw">cor</span>(data<span class="op">$</span>x1, data<span class="op">$</span>y2) <span class="op">-</span><span class="st"> </span>(<span class="kw">cor</span>(data<span class="op">$</span>x1, data<span class="op">$</span>y1) <span class="op">*</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>y1, data<span class="op">$</span>y2))) <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>x1, data<span class="op">$</span>y1)<span class="op">^</span><span class="dv">2</span>))</span></code></pre></div>
 <pre><code>## [1] -0.0183964</code></pre>
-<p>It is important to note that partial coefficients implement a statistical (rather than experimental) control. In other words, the partial effect of <span class="math inline">\(x1\)</span> accounts for the statistical contributions of <span class="math inline">\(y1\)</span>. Thus, partial effects are useful in situations where experimental controls are difficult or impossible.</p>
+<p>It is important to note that partial coefficients implement a statistical (rather than experimental) control. In other words, the partial effect of <span class="math inline">\(x1\)</span> accounts for the statistical contributions of <span class="math inline">\(y1\)</span>. Thus, partial effects are useful in situations where experimental controls are difficult or impossible to apply.</p>
 <p>Notably, we can back out the unstandardized coefficient by multiplying by the ratio of standard deviations of the response over the predictor:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">((<span class="kw">cor</span>(data<span class="op">$</span>x1, data<span class="op">$</span>y2) <span class="op">-</span><span class="st"> </span>(<span class="kw">cor</span>(data<span class="op">$</span>x1, data<span class="op">$</span>y1) <span class="op">*</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>y1, data<span class="op">$</span>y2))) <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>x1, data<span class="op">$</span>y1)<span class="op">^</span><span class="dv">2</span>))<span class="op">*</span><span class="st"> </span>(<span class="kw">sd</span>(data<span class="op">$</span>y2)<span class="op">/</span><span class="kw">sd</span>(data<span class="op">$</span>x1))</code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="global-estimation.html#cb39-1"></a>((<span class="kw">cor</span>(data<span class="op">$</span>x1, data<span class="op">$</span>y2) <span class="op">-</span><span class="st"> </span>(<span class="kw">cor</span>(data<span class="op">$</span>x1, data<span class="op">$</span>y1) <span class="op">*</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>y1, data<span class="op">$</span>y2))) <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>x1, data<span class="op">$</span>y1)<span class="op">^</span><span class="dv">2</span>))<span class="op">*</span><span class="st"> </span>(<span class="kw">sd</span>(data<span class="op">$</span>y2)<span class="op">/</span><span class="kw">sd</span>(data<span class="op">$</span>x1))</span></code></pre></div>
 <pre><code>## [1] -0.01754746</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">lm</span>(y2 <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>y1, data))<span class="op">$</span>coefficients[<span class="dv">2</span>, <span class="dv">1</span>]</code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="global-estimation.html#cb41-1"></a><span class="kw">summary</span>(<span class="kw">lm</span>(y2 <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>y1, data))<span class="op">$</span>coefficients[<span class="dv">2</span>, <span class="dv">1</span>]</span></code></pre></div>
 <pre><code>## [1] -0.01754746</code></pre>
 <p>Similarly, the partial effect of <span class="math inline">\(y1\)</span> on <span class="math inline">\(y2\)</span> is given by:</p>
 <p><span class="math display">\[b_{y2y1} = \frac{r_{y2y1} - (r_{y2x1} \times r_{y1x1})}{1 - r_{x1y1}^2}\]</span></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(partialy1 &lt;-<span class="st"> </span>(<span class="kw">cor</span>(data<span class="op">$</span>y2, data<span class="op">$</span>y1) <span class="op">-</span><span class="st"> </span>(<span class="kw">cor</span>(data<span class="op">$</span>y2, data<span class="op">$</span>x1) <span class="op">*</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>y1, data<span class="op">$</span>x1))) <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>x1, data<span class="op">$</span>y1)<span class="op">^</span><span class="dv">2</span>))</code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="global-estimation.html#cb43-1"></a>(partialy1 &lt;-<span class="st"> </span>(<span class="kw">cor</span>(data<span class="op">$</span>y2, data<span class="op">$</span>y1) <span class="op">-</span><span class="st"> </span>(<span class="kw">cor</span>(data<span class="op">$</span>y2, data<span class="op">$</span>x1) <span class="op">*</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>y1, data<span class="op">$</span>x1))) <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>x1, data<span class="op">$</span>y1)<span class="op">^</span><span class="dv">2</span>))</span></code></pre></div>
 <pre><code>## [1] 0.6703465</code></pre>
-<p>As before, we can arrive at the same answer by looking at the (standardized) coefficients obtained through a multiple regression:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">lm</span>(y2 <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>y1, <span class="kw">as.data.frame</span>(<span class="kw">apply</span>(data, <span class="dv">2</span>, scale))))<span class="op">$</span>coefficients[<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>, <span class="dv">1</span>]</code></pre></div>
+<p>As before, we can arrive at the same answer by looking at the (standardized) coefficients obtained through multiple regression:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="global-estimation.html#cb45-1"></a><span class="kw">summary</span>(<span class="kw">lm</span>(y2 <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>y1, <span class="kw">as.data.frame</span>(<span class="kw">apply</span>(data, <span class="dv">2</span>, scale))))<span class="op">$</span>coefficients[<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>, <span class="dv">1</span>]</span></code></pre></div>
 <pre><code>##         x1         y1 
 ## -0.0183964  0.6703465</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">partialx1; partialy1</code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="global-estimation.html#cb47-1"></a>partialx1; partialy1</span></code></pre></div>
 <pre><code>## [1] -0.0183964</code></pre>
 <pre><code>## [1] 0.6703465</code></pre>
 <p>The regression procedure therefore produces partial coefficients in the case of multiple predictors.</p>
 <p>Another way of thinking about this is that the effect of <span class="math inline">\(x1\)</span> on <span class="math inline">\(y2\)</span> is computed AFTER having removed the effect of <span class="math inline">\(y1\)</span> on <span class="math inline">\(y2\)</span>. Procedurally, this can be done by first removing the variance in <span class="math inline">\(x1\)</span> explained by <span class="math inline">\(y1\)</span>, then regressing the residual values (i.e., the variance in <span class="math inline">\(y2\)</span> that is <em>unexplained</em> by <span class="math inline">\(y1\)</span>) against <span class="math inline">\(y2\)</span>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">residsx1 &lt;-<span class="st"> </span><span class="kw">residuals</span>(<span class="kw">lm</span>(x1 <span class="op">~</span><span class="st"> </span>y1, <span class="kw">as.data.frame</span>(<span class="kw">apply</span>(data, <span class="dv">2</span>, scale))))
-
-<span class="kw">summary</span>(<span class="kw">lm</span>(<span class="kw">scale</span>(data<span class="op">$</span>y2) <span class="op">~</span><span class="st"> </span>residsx1))<span class="op">$</span>coefficients[<span class="dv">2</span>, <span class="dv">1</span>]</code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="global-estimation.html#cb50-1"></a>residsx1 &lt;-<span class="st"> </span><span class="kw">residuals</span>(<span class="kw">lm</span>(x1 <span class="op">~</span><span class="st"> </span>y1, <span class="kw">as.data.frame</span>(<span class="kw">apply</span>(data, <span class="dv">2</span>, scale))))</span>
+<span id="cb50-2"><a href="global-estimation.html#cb50-2"></a></span>
+<span id="cb50-3"><a href="global-estimation.html#cb50-3"></a><span class="kw">summary</span>(<span class="kw">lm</span>(<span class="kw">scale</span>(data<span class="op">$</span>y2) <span class="op">~</span><span class="st"> </span>residsx1))<span class="op">$</span>coefficients[<span class="dv">2</span>, <span class="dv">1</span>]</span></code></pre></div>
 <pre><code>## [1] -0.0183964</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">partialx1</code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="global-estimation.html#cb52-1"></a>partialx1</span></code></pre></div>
 <pre><code>## [1] -0.0183964</code></pre>
 <p>Indeed, this iterative procedure gives us the same value as the former equation based on correlations and the output from the multiple regression.</p>
-<p>However, this raises the interesting notion of residual error. The second equation still has variance in <span class="math inline">\(y2\)</span> that is unexplained by either <span class="math inline">\(x1\)</span> or <span class="math inline">\(y1\)</span>. In other words, the model does not perfectly predict <span class="math inline">\(y2\)</span>. The idea of residual (unexplained) variance leads us the fifth rule of path coefficients.</p>
+<p>However, this raises the interesting notion of residual error. The second equation still has variance in <span class="math inline">\(y2\)</span> that is unassociated with variation in either <span class="math inline">\(x1\)</span> or <span class="math inline">\(y1\)</span>. In other words, the model does not perfectly predict <span class="math inline">\(y2\)</span>. The idea of residual (unexplained) variance leads us to the fifth rule of path coefficients.</p>
 </div>
 <div id="rule-5-errors-on-endogenous-variables-relate-the-unexplained-correlations-or-variances-arising-from-unmeasured-variables." class="section level3">
 <h3><span class="header-section-number">2.2.5</span> Rule 5: Errors on endogenous variables relate the unexplained correlations or variances arising from unmeasured variables.</h3>
-<p>Variables that have paths entering them (regardless of whether they also have paths emanating from them) are called <em>endogenous</em> variables. In this example, <span class="math inline">\(y1\)</span> and <span class="math inline">\(y2\)</span> are both endogenous variables (even though <span class="math inline">\(y1\)</span> goes onto also predict <span class="math inline">\(y2\)</span>) because both have arrows entering them.</p>
-<p>The variance explained by the model is captured by the <span class="math inline">\(R^2\)</span> statistics which is the ratio of explained variation to the total variation in <span class="math inline">\(y2\)</span>. It follows then that the unexplained or residual variance is <span class="math inline">\(1 - R^2\)</span>.</p>
+<p>Most researchers are familiar with the <span class="math inline">\(R^2\)</span> statistic, or the ratio of explained variation to the total variation in <span class="math inline">\(y2\)</span>. It follows then that the unexplained or residual variance is <span class="math inline">\(1 - R^2\)</span>.</p>
 <p>For example, the error variance on <span class="math inline">\(y2\)</span> is:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">summary</span>(<span class="kw">lm</span>(y2 <span class="op">~</span><span class="st"> </span>y1 <span class="op">+</span><span class="st"> </span>x1, <span class="kw">as.data.frame</span>(<span class="kw">apply</span>(data, <span class="dv">2</span>, scale))))<span class="op">$</span>r.squared</code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="global-estimation.html#cb54-1"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">summary</span>(<span class="kw">lm</span>(y2 <span class="op">~</span><span class="st"> </span>y1 <span class="op">+</span><span class="st"> </span>x1, <span class="kw">as.data.frame</span>(<span class="kw">apply</span>(data, <span class="dv">2</span>, scale))))<span class="op">$</span>r.squared</span></code></pre></div>
 <pre><code>## [1] 0.5674746</code></pre>
-<p>These values capture the other (unknown) sources that cause the correlation between <span class="math inline">\(y2\)</span> and the other variables to deviate from 1. In other words, if <span class="math inline">\(x1\)</span> is the <em>only</em> variable controlling <span class="math inline">\(y2\)</span>, then their correlation would be 1 and their prediction error would be 0 because we would have accounted for everything that affects <span class="math inline">\(y2\)</span>.</p>
+<p>This value captures the other (unknown) sources that cause the correlation between <span class="math inline">\(y2\)</span> and the other variables to deviate from 1. In other words, if <span class="math inline">\(x1\)</span> is the <em>only</em> variable controlling <span class="math inline">\(y2\)</span>, then their correlation would be 1 and their prediction error would be 0 because we would have accounted for everything that affects <span class="math inline">\(y2\)</span>.</p>
 <p>This idea of residual or unexplained variance is easily illustrated with the relationship between <span class="math inline">\(x1\)</span> and <span class="math inline">\(y1\)</span> (because there are no partial correlations to deal with), where the square-root of variance explained is simply the correlation coefficient, and 1 - the correlation is the unexplained correlation arising from other sources:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">summary</span>(<span class="kw">lm</span>(y1 <span class="op">~</span><span class="st"> </span>x1, <span class="kw">as.data.frame</span>(<span class="kw">apply</span>(data, <span class="dv">2</span>, scale))))<span class="op">$</span>r.squared)</code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="global-estimation.html#cb56-1"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">summary</span>(<span class="kw">lm</span>(y1 <span class="op">~</span><span class="st"> </span>x1, <span class="kw">as.data.frame</span>(<span class="kw">apply</span>(data, <span class="dv">2</span>, scale))))<span class="op">$</span>r.squared)</span></code></pre></div>
 <pre><code>## [1] 0.3035383</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>y1, data<span class="op">$</span>x1)</code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="global-estimation.html#cb58-1"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>y1, data<span class="op">$</span>x1)</span></code></pre></div>
 <pre><code>## [1] 0.3035383</code></pre>
 <p>In a path diagram, error variances are often represented as <span class="math inline">\(\zeta\)</span> with an arrow leading into the endogenous variable. The path coefficient representing the effect of <span class="math inline">\(\zeta\)</span> is often expressed as the error correlation: <span class="math inline">\(\sqrt(1 - R^2)\)</span>, in keeping with the presentation of the other (standardized) coefficients.</p>
 </div>
 <div id="rule-6-unanalyzed-residual-correlations-among-two-endogenous-variables-are-their-partial-correlations." class="section level3">
 <h3><span class="header-section-number">2.2.6</span> Rule 6: Unanalyzed (residual) correlations among two endogenous variables are their partial correlations.</h3>
 <p>Imagine we remove the path from <span class="math inline">\(y1 -&gt; y2\)</span>:</p>
-<div class="figure">
-<img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model3.png" />
-
-</div>
+<p><img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model3.png" /></p>
 <p>Both variables are endogenous and their relationship can still be quantified, just not in a directed way. If they were exogenous variables, the relationship would be their bivariate correlation (Rule #1), but in this case, we have to remove the effects of <span class="math inline">\(x1\)</span> on both variables.</p>
 <p><span class="math display">\[r_{y1y2\bullet x1} = \frac{r_{y1y2} - (r_{x1y1} \times r_{x1y2})}{\sqrt((1 - r_{x1y1}^2)(1 - r_{x1y2}^2))}\]</span></p>
 <p>This equation removes the effect <span class="math inline">\(x1\)</span> and scales by the shared variance between <span class="math inline">\(x1\)</span> and both endogenous variables.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(errory1y2 &lt;-<span class="st"> </span>(<span class="kw">cor</span>(data<span class="op">$</span>y1, data<span class="op">$</span>y2) <span class="op">-</span><span class="st"> </span>(<span class="kw">cor</span>(data<span class="op">$</span>x1, data<span class="op">$</span>y1) <span class="op">*</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>x1, data<span class="op">$</span>y2))) <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>((<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>x1, data<span class="op">$</span>y1)<span class="op">^</span><span class="dv">2</span>) <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>x1, data<span class="op">$</span>y2)<span class="op">^</span><span class="dv">2</span>)))</code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="global-estimation.html#cb60-1"></a>(errory1y2 &lt;-<span class="st"> </span>(<span class="kw">cor</span>(data<span class="op">$</span>y1, data<span class="op">$</span>y2) <span class="op">-</span><span class="st"> </span>(<span class="kw">cor</span>(data<span class="op">$</span>x1, data<span class="op">$</span>y1) <span class="op">*</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>x1, data<span class="op">$</span>y2))) <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>((<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>x1, data<span class="op">$</span>y1)<span class="op">^</span><span class="dv">2</span>) <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>x1, data<span class="op">$</span>y2)<span class="op">^</span><span class="dv">2</span>)))</span></code></pre></div>
 <pre><code>## [1] 0.5381952</code></pre>
 <p>As with the partial correlation, this value is the same as the correlation between the residuals of the two models:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(<span class="kw">cor</span>(
-  <span class="kw">resid</span>(<span class="kw">lm</span>(y1 <span class="op">~</span><span class="st"> </span>x1, <span class="kw">as.data.frame</span>(<span class="kw">apply</span>(data, <span class="dv">2</span>, scale)))),
-  <span class="kw">resid</span>(<span class="kw">lm</span>(y2 <span class="op">~</span><span class="st"> </span>x1, <span class="kw">as.data.frame</span>(<span class="kw">apply</span>(data, <span class="dv">2</span>, scale))))
-))</code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="global-estimation.html#cb62-1"></a>(<span class="kw">cor</span>(</span>
+<span id="cb62-2"><a href="global-estimation.html#cb62-2"></a>  <span class="kw">resid</span>(<span class="kw">lm</span>(y1 <span class="op">~</span><span class="st"> </span>x1, <span class="kw">as.data.frame</span>(<span class="kw">apply</span>(data, <span class="dv">2</span>, scale)))),</span>
+<span id="cb62-3"><a href="global-estimation.html#cb62-3"></a>  <span class="kw">resid</span>(<span class="kw">lm</span>(y2 <span class="op">~</span><span class="st"> </span>x1, <span class="kw">as.data.frame</span>(<span class="kw">apply</span>(data, <span class="dv">2</span>, scale))))</span>
+<span id="cb62-4"><a href="global-estimation.html#cb62-4"></a>))</span></code></pre></div>
 <pre><code>## [1] 0.5381952</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">errory1y2</code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="global-estimation.html#cb64-1"></a>errory1y2</span></code></pre></div>
 <pre><code>## [1] 0.5381952</code></pre>
-<p>Hence these are known as <em>correlated errors</em> and are represented by double-headed arrows between the errors of two endogenous variables. (Often the errors are omitted, and the graph simply depicts a double-headed arrow between the variables themselves, but the correlation is truly among their errors.)</p>
+<p>Hence these are known as <em>correlated errors</em> and are represented by double-headed arrows between the errors of two endogenous variables. (Often the errors or <span class="math inline">\(\zeta\)</span>’s are omittedin the diagram, and the graph simply depicts a double-headed arrow between the variables themselves, but the correlation is truly among their errors.)</p>
 <p>If the presence of <span class="math inline">\(x1\)</span> explains all of the variation in <span class="math inline">\(y1\)</span> and <span class="math inline">\(y2\)</span>, then their partial correlation will be 0. In this case, the two endogenous variables are said to be <em>conditionally independent</em>, or that they are unrelated conditional on the joint influence of <span class="math inline">\(x1\)</span>. If the two are conditionally independent, then the correlation between <span class="math inline">\(y1\)</span> and <span class="math inline">\(y2\)</span> is the product of the correlations between <span class="math inline">\(y1\)</span> and <span class="math inline">\(x1\)</span>, and <span class="math inline">\(y2\)</span> and <span class="math inline">\(x1\)</span>.</p>
 <p><span class="math display">\[r_{y1y2} = r_{y1x1} \times r_{y2x1}\]</span></p>
 <p>(If we replace this term in the previous equation, the numerator becomes 0 and so does the partial correlation.)</p>
 <p>Let’s calculate this value:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(data<span class="op">$</span>y1, data<span class="op">$</span>x1) <span class="op">*</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>y2, data<span class="op">$</span>x1)</code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="global-estimation.html#cb66-1"></a><span class="kw">cor</span>(data<span class="op">$</span>y1, data<span class="op">$</span>x1) <span class="op">*</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>y2, data<span class="op">$</span>x1)</span></code></pre></div>
 <pre><code>## [1] 0.3123451</code></pre>
 <p>Ah, the two are very different, implying that <span class="math inline">\(y1\)</span> and <span class="math inline">\(y2\)</span> are <em>not</em> conditionally independent given the joint influence of <span class="math inline">\(x1\)</span>. In other words, there are other, unmeasured sources of variance that are influencing the relationship between these two variables. This interpretation is a good way to think about the notion of correlated errors.</p>
-<p>The concept of conditional independence is critical in the implementation of local estimation, principally in the tests of directed separation that form the basis of the goodness-of-fit statistic, which we will revisit in Chapter 3.</p>
-<p>Now that we have derived all the quantities related to direct, indirect, and error variances/correlations, we have all the information necessary to calculate total effects.</p>
+<p>The concept of conditional independence is critical in the implementation of local estimation, principally in the tests of directed separation that form the basis of one goodness-of-fit statistic, which we will revisit in Chapter 3.</p>
+<p>Now that we have derived all the quantities related to direct, indirect, and error variances or correlations, we have all the information necessary to calculate total effects.</p>
 </div>
 <div id="rule-7-the-total-effect-one-variable-has-another-is-the-sum-of-its-direct-and-indirect-effects." class="section level3">
 <h3><span class="header-section-number">2.2.7</span> Rule 7: The total effect one variable has another is the sum of its direct and indirect effects.</h3>
-<p>If we return to out previous path model, which reinstates the path between <span class="math inline">\(y1 -&gt; y2\)</span>, the total effect of <span class="math inline">\(x1\)</span> on <span class="math inline">\(y2\)</span> includes the direct effect, as well as the indirect effect mediated by <span class="math inline">\(y1\)</span>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(totalx1 &lt;-<span class="st"> </span>partialx1 <span class="op">+</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>y1, data<span class="op">$</span>x1) <span class="op">*</span><span class="st"> </span>partialy1)</code></pre></div>
+<p>If we return to our previous path model, which reinstates the path between <span class="math inline">\(y1 -&gt; y2\)</span>, the total effect of <span class="math inline">\(x1\)</span> on <span class="math inline">\(y2\)</span> includes the direct effect as well as the indirect effect mediated by <span class="math inline">\(y1\)</span>.</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="global-estimation.html#cb68-1"></a>(totalx1 &lt;-<span class="st"> </span>partialx1 <span class="op">+</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>y1, data<span class="op">$</span>x1) <span class="op">*</span><span class="st"> </span>partialy1)</span></code></pre></div>
 <pre><code>## [1] 0.4484743</code></pre>
 <p>This value can be used to demonstrate the final rule.</p>
 </div>
 <div id="rule-8-the-total-effect-including-undirected-paths-is-equivalent-to-the-total-correlation." class="section level3">
 <h3><span class="header-section-number">2.2.8</span> Rule 8: The total effect (including undirected paths) is equivalent to the total correlation.</h3>
 <p>We can test this rule easily:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">totalx1 <span class="op">==</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>y2, data<span class="op">$</span>x1)</code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="global-estimation.html#cb70-1"></a>totalx1 <span class="op">==</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>y2, data<span class="op">$</span>x1)</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>Indeed, the total effect equals the correlation!</p>
 <p>If we consider the path model without the directed link between <span class="math inline">\(y1\)</span> and <span class="math inline">\(y2\)</span>, the correlation between <span class="math inline">\(y1\)</span> and <span class="math inline">\(y2\)</span> considers the total effect <em>and</em> undirected effects (i.e., correlated errors between the two endogenous variables):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(totaly1y2 &lt;-<span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>y1, data<span class="op">$</span>x1) <span class="op">*</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>y2, data<span class="op">$</span>x1) <span class="op">+</span><span class="st"> </span>errory1y2 <span class="op">*</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">summary</span>(<span class="kw">lm</span>(y1 <span class="op">~</span><span class="st"> </span>x1, data))<span class="op">$</span>r.squared) <span class="op">*</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">summary</span>(<span class="kw">lm</span>(y2 <span class="op">~</span><span class="st"> </span>x1, data))<span class="op">$</span>r.squared))</code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="global-estimation.html#cb72-1"></a>(totaly1y2 &lt;-<span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>y1, data<span class="op">$</span>x1) <span class="op">*</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>y2, data<span class="op">$</span>x1) <span class="op">+</span><span class="st"> </span>errory1y2 <span class="op">*</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">summary</span>(<span class="kw">lm</span>(y1 <span class="op">~</span><span class="st"> </span>x1, data))<span class="op">$</span>r.squared) <span class="op">*</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">summary</span>(<span class="kw">lm</span>(y2 <span class="op">~</span><span class="st"> </span>x1, data))<span class="op">$</span>r.squared))</span></code></pre></div>
 <pre><code>## [1] 0.6575341</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">totaly1y2 <span class="op">==</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>y1, data<span class="op">$</span>y2)</code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="global-estimation.html#cb74-1"></a>totaly1y2 <span class="op">==</span><span class="st"> </span><span class="kw">cor</span>(data<span class="op">$</span>y1, data<span class="op">$</span>y2)</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<p>This example closes our discussion of path coefficients.</p>
+<p>This example closes our discussion of path coefficients and their 8 rules.</p>
 <p>The major points to remember are:</p>
 <ul>
-<li>standardized coefficients reflect (partial) correlations</li>
-<li>the indirect effect of one variable on another is obtained by multiplying the individual path coefficients (standardized or unstandardized)</li>
-<li>the total effect is the sum of direct and indirect paths</li>
-<li>the bivariate correlation is the sum of the the total effect plus any undirected paths</li>
+<li>standardized coefficients reflect (partial) correlations;</li>
+<li>the indirect effect of one variable on another is obtained by multiplying the individual path coefficients (standardized or unstandardized);</li>
+<li>the total effect is the sum of direct and indirect paths;</li>
+<li>the bivariate correlation is the sum of the total effect plus any undirected paths.</li>
 </ul>
 <p>An understanding of covariances and correlations is essential to understanding the solutions provided by a global estimation approach to SEM.</p>
 </div>
@@ -426,21 +456,21 @@ std.model &lt;-<span class="st"> </span><span class="kw">lm</span>(y1 <span clas
 <div id="variance-based-structural-equation-modeling" class="section level2">
 <h2><span class="header-section-number">2.3</span> Variance-based Structural Equation Modeling</h2>
 <p>The classical approach to SEM is based on the the idea of variance and covariances. With &gt;2 variables, we can construct a variance-covariance matrix, where the diagonals are the variances of each variable and the off-diagonals are the covariances between each pair. Consider our last example:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cov</span>(data)</code></pre></div>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="global-estimation.html#cb76-1"></a><span class="kw">cov</span>(data)</span></code></pre></div>
 <pre><code>##            y1         x1         y2
 ## y1 0.07602083 0.07970883 0.07178090
 ## x1 0.07970883 0.17230020 0.07370632
 ## y2 0.07178090 0.07370632 0.15676481</code></pre>
-<p>returns the variance-covariance matrix for the three variables <span class="math inline">\(x1\)</span>, <span class="math inline">\(y1\)</span>, and <span class="math inline">\(y2\)</span>. We would call this the <em>observed global</em> variance-covariance matrix.</p>
-<p>The entire machinary behind covariance-based SEM is to reproduce that global variance-covariance matrix. In fact, all of covariance-based SEM can be boiled down into a simple equation:</p>
+<p>This code returns the variance-covariance matrix for the three variables <span class="math inline">\(x1\)</span>, <span class="math inline">\(y1\)</span>, and <span class="math inline">\(y2\)</span>. We would call this the <em>observed global</em> variance-covariance matrix.</p>
+<p>The entire machinery behind covariance-based SEM is to reproduce that global variance-covariance matrix. In fact, all of covariance-based SEM can be boiled down into this simple equation:</p>
 <p><span class="math display">\[\Sigma = \Sigma(\Phi)\]</span></p>
 <p>where <span class="math inline">\(\Sigma\)</span> is the observed variance-covariance matrix, and <span class="math inline">\(\Sigma(\Phi)\)</span> is the model-estimated covariance matrix expressed in terms of <span class="math inline">\(\Phi\)</span>, the matrix of model-estimated parameters (i.e., coefficients).</p>
-<p>In other words, this equation shows that the observed covariances can be understood in terms of statistical parameters that can be used to predict these same covariances. We have already shown that linear regression can be expressed in terms of these same principles, and so it follows that covariance-based SEM is simply a multivariate approach to regression.</p>
+<p>In other words, this equation shows that the observed covariances can be understood in terms of statistical parameters that can be used to predict these same covariances. We have already shown that linear regression can be expressed using variances and covariance, and so it follows that covariance-based SEM is simply a multivariate approach to regression.</p>
 <p>The question is: how do we arrive at <span class="math inline">\(\Sigma(\Phi)\)</span>, or more relevantly, how do we estimate the matrix of model parameters <span class="math inline">\(\Phi\)</span> that lead to the estimated variance-covariance matrix?</p>
-<p>The most common tool is <em>maximum-likelihood estimation</em>, which iteratively searches parameter space and continually refines estimates of parameter values such that the differences between the observed and expected variance-covariance matrices.</p>
+<p>The most common tool is <em>maximum-likelihood estimation</em>, which iteratively searches parameter space and continually refines estimates of parameter values such that the differences between the observed and expected variance-covariance matrices are minimized.</p>
 <p>The maximum-likelihood fitting function can be expressed as:</p>
 <p><span class="math display">\[F_{ML} = log|\hat{\Sigma}| + tr(S\hat{\Sigma}^{-1}) - log|S| - (p + q)\]</span></p>
-<p>where <span class="math inline">\(\Sigma\)</span> is the modeled covariance matrix, <span class="math inline">\(S\)</span> is the observed covariance matrix, <span class="math inline">\(p\)</span> is the number of endogenous variables, and <span class="math inline">\(q\)</span> is the number of exogenous variables. <span class="math inline">\(tr\)</span> is the trace of the matrix (sum of the diagonal) and the <span class="math inline">\(^{-1}\)</span> is the inverse of the matrix.</p>
+<p>where <span class="math inline">\(\Sigma\)</span> is the modeled covariance matrix, <span class="math inline">\(S\)</span> is the observed covariance matrix, <span class="math inline">\(p\)</span> is the number of endogenous variables, and <span class="math inline">\(q\)</span> is the number of exogenous variables. <span class="math inline">\(tr\)</span> is the trace of the matrix (sum of the diagonal) and the <span class="math inline">\(^{-1}\)</span> denotes the inverse of the matrix.</p>
 <p>Maximum-likelihood estimators have a few desireable properties, principally that they are invariant to the scales of the variables and provide unbiased estimates based on a few assumptions:</p>
 <ul>
 <li>variables must exhibit multivariate normality. Oftentimes this is the not case: dummy variables, interactions and other product terms have non-normal distributions. However, <span class="math inline">\(F_{ML}\)</span> is fairly robust to violations of multinormality, especially as the sample size grows large.</li>
@@ -452,55 +482,52 @@ std.model &lt;-<span class="st"> </span><span class="kw">lm</span>(y1 <span clas
 <div id="model-identifiability" class="section level2">
 <h2><span class="header-section-number">2.4</span> Model Identifiability</h2>
 <p>Like any statistical technique, having sufficient power to test your hypotheses is key to arriving at robust unbiased inferences about your data. This requirement is particularly relevant to SEM, which often evaluates multiple hypotheses simultaneously, and therefore requires more data than other approaches. In this section, we will briefly review the idea of model ‘identifiability’ and sample size requirements.</p>
-<p>A model is ‘identified’ if we can uniquely estimate each of its parameters. This not includes in the matrix of parameter estimates, but also their errors. In other words, we need at least as many ‘known’ pieces of information as ‘unknowns’ <em>at minimum</em> to be able to fit a model.</p>
+<p>A model is ‘identified’ if we can uniquely estimate each of its parameters. This not only includes in the matrix of parameter estimates but also their errors. In other words, we need at least as many ‘known’ pieces of information as ‘unknowns’ <em>at minimum</em> to be able to fit a model.</p>
 <p>Consider the following equation:</p>
 <p><span class="math display">\[a + b = 8\]</span></p>
 <p>We have 1 piece of known information, <span class="math inline">\(8\)</span>, and two unknowns, <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>. There are a number of solutions for <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> (e.g., 1 and 7, 2 and 6, etc), and thus the equation is not solvable. In this case, the model would be <em>underidentified</em> because we lack sufficient information to arrive at a unique solution.</p>
 <p>Now consider another equation, in addition to the first:</p>
 <p><span class="math display">\[a = 3b\]</span></p>
 <p>With this equation, we now have enough information to uniquely solve for <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>:</p>
-<p><span class="math display">\[(2b) + b = 8\]</span> <span class="math display">\[ 4b = 8\]</span> <span class="math display">\[b = 8 / 4 = 2\]</span></p>
-<p><span class="math display">\[a + 2 = 8\]</span> <span class="math display">\[a = 8 - 2 = 6\]</span></p>
+<p><span class="math display">\[(2b) + b = 8\]</span>
+<span class="math display">\[ 4b = 8\]</span>
+<span class="math display">\[b = 8 / 4 = 2\]</span></p>
+<p><span class="math display">\[a + 2 = 8\]</span>
+<span class="math display">\[a = 8 - 2 = 6\]</span></p>
 <p>Thus we have arrived at a single solution for <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>. We call this system of equations <em>just identified</em> since we have just enough information to solve for the unknowns.</p>
 <p>Finally, consider a third equation:</p>
 <p><span class="math display">\[2a - 4 = 4b\]</span></p>
-<p>We now have more pieces of known information than unknowns, since we have already arrived at a solution for both <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> based on the previous two equations. In this case, we call the system of the equations <em>overidentified</em> because we have more information than is necessary to arrive at unique solutions for our unknown variables. This is the desireable state, because that extra information can be used to provide additional insight.</p>
-<p>You may alternately hear models referred to as <em>saturated</em>. Such a model would be <em>just identified</em>; an <em>unsaturated</em> model would be <em>overidentified</em> and and an <em>oversaturated</em> model would be <em>underidentified</em>.</p>
+<p>We now have more pieces of known information than unknowns, since we have already arrived at a solution for both <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> based on the previous two equations. In this case, we call the system of the equations <em>overidentified</em> because we have more information than is necessary to arrive at unique solutions for our unknown variables. This is the desireable state, because that extra information can be used to provide additional insight, which we will elaborate on shortly.</p>
+<p>You may have also heard of models referred to as <em>saturated</em>. Such a model would be <em>just identified</em>; an <em>unsaturated</em> model would be <em>overidentified</em> and and an <em>oversaturated</em> model would be <em>underidentified</em>.</p>
 <p>There is a handy rule that can be used to quickly gauge whether a model is under-, just, or overidentified: the “t-rule.” The t-rule takes the following form:</p>
 <p><span class="math display">\[t \leq \frac{n(n+1)}{2}\]</span></p>
-<p>where <span class="math inline">\(t\)</span> is the number of unknowns (parameters to be estimated) and <span class="math inline">\(n\)</span> is the number of knowns (observed variables). The left hand side is how many pieces of information we want to know. The right hand side reflects the information we have to work with, and is equal to the number of unique cells in the observed variance-covariance matrix (diagonal = variance, and lower triangle = covariances).</p>
+<p>where <span class="math inline">\(t\)</span> is the number of unknowns (parameters to be estimated) and <span class="math inline">\(n\)</span> is the number of knowns (observed variables). The left hand side is how many pieces of information we want to know. The right hand side reflects the information we have to work with and is equal to the number of unique cells in the observed variance-covariance matrix (diagonal = variance, and lower triangle = covariances).</p>
 <p>Consider the simple mediation model from earlier:</p>
-<div class="figure">
-<img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model1.png" />
-
-</div>
+<p><img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model1.png" /></p>
 <p>In this model, we have several pieces of known information: <span class="math inline">\(x1\)</span>, <span class="math inline">\(y1\)</span>, and <span class="math inline">\(y2\)</span>. So <span class="math inline">\(n = 3\)</span> for this model.</p>
-<p>We need to estimate the parameters related each set of relationships (<span class="math inline">\(\gamma_{x1y1}\)</span> and <span class="math inline">\(\beta_{y1y2}\)</span>). These amount to the two covariances, but recall from the first section of this chapter that we also need the variances to derive those estimates (<span class="math inline">\(var_{x1}\)</span>, <span class="math inline">\(var_{y1}\)</span>, <span class="math inline">\(var_{y2}\)</span>). So the total number of unknowns is <span class="math inline">\(t = 5\)</span>.</p>
+<p>We need to estimate the parameters related each set of relationships (<span class="math inline">\(\gamma_{x1y1}\)</span> and <span class="math inline">\(\beta_{y1y2}\)</span>). These amount to the two covariances, but recall from the first section of this chapter that we need three variances to derive those estimates (<span class="math inline">\(var_{x1}\)</span>, <span class="math inline">\(var_{y1}\)</span>, <span class="math inline">\(var_{y2}\)</span>). So the total number of unknowns to be estimated is <span class="math inline">\(t = 5\)</span> (the three variances and the two regression parameters, or covariances).</p>
 <p>We can plug in these values to see if we meet the t-rule:</p>
 <p><span class="math display">\[5 \leq \frac{3(3+1)}{2} = 6\]</span></p>
 <p>In this case <span class="math inline">\(5 \leq 6\)</span> holds true and we have enough information to arrive at a unique solution. Note that the right hand side of the equation is the number of entries in the variance-covariance matrix: 3 variances (diagonal) plus 3 covariances (off-diagonal).</p>
 <p>Let’s consider our second model, which adds another path:</p>
-<div class="figure">
-<img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model2.png" />
-
-</div>
+<p><img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model2.png" /></p>
 <p>Now we must additionally estimate the path from <span class="math inline">\(x1\)</span> to <span class="math inline">\(y2\)</span> so our value of <span class="math inline">\(t = 5 + 1\)</span>. However, <span class="math inline">\(6 \leq 6\)</span> and so the t-rule is still satisfied. In this case, however, the model is just identified.</p>
 <p>Tallying the number of parameters to be estimated can sometimes be tricky because path diagrams are not always drawn with error variances on the endogenous variables. Additionally, multiple exogenous variables also have a covariance that must be estimated: this is depicted as a non-directional or double-headed error between every pair of exogenous variables. However, these double-headed arrows are rarely drawn, even though they exist. Thus it can be tricky to identify <span class="math inline">\(n\)</span> in the above equation. In such cases, it is valid to simply count the number of unique cells in the variance-covariance matrix (the diagonal and the lower off-diagonal).</p>
 <p>If we were to consider a more complex model, such as one with a feedback from <span class="math inline">\(y2\)</span> to <span class="math inline">\(y1\)</span> (in addition to the path from <span class="math inline">\(y1 -&gt; y2\)</span>) then we would not have enough information to solve the model, which would be <em>underidentified</em>.</p>
-<p>Models with bi-directional feedbacks (with separate arrows going in each direction, as opposed to a single double-headed arrow) are referred to as <em>non-recursive</em>. These feedbacks can also occur among variables, for instance: <span class="math inline">\(x1 -&gt; y1 -&gt; y2 -&gt; x1\)</span> would also be a non-recursive model. <em>Recursive</em> models, then, lack such feedbacks.</p>
+<p>Models with bidirectional feedbacks (with separate arrows going in each direction, as opposed to a single double-headed arrow) are referred to as <em>non-recursive</em>. These feedbacks can also occur among variables, for instance: <span class="math inline">\(x1 -&gt; y1 -&gt; y2 -&gt; x1\)</span> would also be a non-recursive model. <em>Recursive</em> models, then, lack such feedbacks and all causal effects are unidirectional.</p>
 <p>Identifiability of non-recursive is tricky. Such models must satisfy the <em>order condition</em>. This condition tests whether variables involved in the feedback have unique information. In our above example of <span class="math inline">\(y2\)</span> also affecting <span class="math inline">\(y1\)</span>, <span class="math inline">\(y1\)</span> has unique information in the form of <span class="math inline">\(x1\)</span> but <span class="math inline">\(y2\)</span> has no unique information, so it fails the order condition.</p>
 <p>The order condition can be evaluated using the following equation:</p>
 <p><span class="math display">\[G \leq H\]</span></p>
 <p>where <span class="math inline">\(G\)</span> = the number of incoming paths, and <span class="math inline">\(H\)</span> = the number of exogenous variables + the number of indirectly-connected endogenous variabls. In the previous example, <span class="math inline">\(G = 2\)</span> while <span class="math inline">\(H = 1\)</span>, so the model fails the order condition, as noted.</p>
 <p>Model identification is only the first step in determining whether a model can provide unique solutions: sample size can also restrict model fitting by not providing enough replication for the <span class="math inline">\(F_{ML}\)</span> function to arrive at a stable set of estimates for the path coefficients.</p>
 <p>The basic rule-of-thumb is that the level of replication should be <em>at least</em> 5 times the number of estimated coefficients (not error variances or other correlations). So in our previous path model, we are estimating two relationships, so we require at least <span class="math inline">\(n = 10\)</span> to fit that model.</p>
-<p>However, this value is a lower limit: ideally, replication is <em>5-20x</em> the number of estimated parameters. The larger the sample size, the more precise (unbiased) the estimates will be. This is true for all linear regressions, not just SEM.</p>
+<p>However, this value is a lower limit: ideally, replication is <em>5-20x</em> the number of estimated parameters. The larger the sample size, the more precise (unbiased) the estimates will be. This is true for all linear regressions, not just SEM, and so we adopt these guidelines here.</p>
 <p>Identifiability and replication are key in not only providing an actual solution, but also in providing extra information with which to evaluate model fit, the topic of the next section.</p>
 </div>
 <div id="goodness-of-fit-measures" class="section level2">
 <h2><span class="header-section-number">2.5</span> Goodness-of-fit Measures</h2>
 <p>As we have established, the purpose of covariance-based SEM is to reproduce the global observed variance-covariance matrix. However, given that our hypothesized relationships may not actually match the data, we must be prepared to evaluate how well the model-estimated variance-covariance matrix matches the observed variance-covariance matrix.</p>
-<p>Recall that in the previous section on Path Coefficients, we evaluated the error variance/correlation as reflecting outside sources of variation uncaptured by our measured variables. High error variances would lead to less accurate estimates of the relationships among variables, and thus a high level of disagreement among the observed and model-implied variance-covariance matrix.</p>
+<p>Recall that in the previous section on Path Coefficients, we evaluated the error variance or correlation as reflecting outside sources of variation uncaptured by our measured variables. High error variances would lead to less accurate estimates of the relationships among variables, and thus a high level of disagreement among the observed and model-implied variance-covariance matrix.</p>
 <p>Also recall our formula for the maximum-likelihood fitting function:</p>
 <p><span class="math display">\[F_{ML} = log|\hat{\Sigma}| + tr(S\hat{\Sigma}^{-1}) - log|S| - (p + q)\]</span></p>
 <p>where <span class="math inline">\(\Sigma\)</span> is the modeled covariance matrix, <span class="math inline">\(S\)</span> is the observed covariance matrix, <span class="math inline">\(p\)</span> is the number of endogenous variables, and <span class="math inline">\(q\)</span> is the number of exogenous variables. <span class="math inline">\(tr\)</span> is the trace of the matrix (sum of the diagonal) and the <span class="math inline">\(^{-1}\)</span> is the inverse of the matrix.</p>
@@ -508,67 +535,65 @@ std.model &lt;-<span class="st"> </span><span class="kw">lm</span>(y1 <span clas
 <p>Oppositely, a large value of <span class="math inline">\(F_{ML}\)</span> would imply increasing discrepancy between the observed and model-implied variance-covariance matrices. This could be interpreted as a ‘poor fit’ for the model.</p>
 <p>In fact, <span class="math inline">\(F_{ML}\)</span> is <span class="math inline">\(\chi^2\)</span>-distributed such that:</p>
 <p><span class="math display">\[\chi^2 = (n - 1)F_{ML}\]</span></p>
-<p>which allows us to actually quantify model fit. In this case <span class="math inline">\(n\)</span> refers to the sample size.</p>
-<p>We can then formally compare the <span class="math inline">\(\chi^2\)</span> statistic to the <span class="math inline">\(\chi^2\)</span>-distribution with some degrees of freedom to achieve a confidence level in the fit. The degrees of freedom are determined by model identification: just identified models will have 0 degrees of freedom (and thus no test is possible), and identified models will have <span class="math inline">\(n(n + 1)/2 - t\)</span> degrees of freedom (where <span class="math inline">\(n\)</span> are the number of knowns and <span class="math inline">\(t\)</span> the number of unknowns, from the t-rule).</p>
-<p>Failing to reject the null hypothesis that the <span class="math inline">\(\chi^2\)</span> statistic is different from 0 (perfect fit) implies a generally good representation of the data (<em>P</em> &gt; 0.05). Alternately, rejecting the null implies that the <span class="math inline">\(\chi^2\)</span> statistic is large, as is the discrepancy between the observed and modeled variance-covariance matrices, thus implying a poor fit to the data (<em>P</em> &lt; 0.05). Interpreting the outcome of the significance test is often tricky, as a significant <em>P</em>-value indicates <em>poor</em> fit, so be careful.</p>
-<p>The <span class="math inline">\(\chi^2\)</span> index also provides a way to gauge the relative fit of two models, one of which is nested within the other. The <em><span class="math inline">\(\chi^2\)</span> difference test</em> is simply the difference in <span class="math inline">\(\chi^2\)</span> values between the two models, with the degrees of freedom being the difference in the degrees of freedom between the two models. The resulting statistic can then be compared to a <span class="math inline">\(\chi^2\)</span> table to yield a significance value. Again, this test is for <em>nested</em> models. For non-nested models, other statistics allow for model comparisons, including AIC and BIC. An AIC or BIC score <span class="math inline">\(\geq2\)</span> is generally considered to indicate significant differneces among models, with smaller values indicating equivalency between the two models.</p>
+<p>which allows us to actually quantify model fit. (In this case <span class="math inline">\(n\)</span> refers to the sample size.)</p>
+<p>We can then formally compare the <span class="math inline">\(\chi^2\)</span> statistic to the <span class="math inline">\(\chi^2\)</span>-distribution with some degrees of freedom to achieve a confidence level in the fit. The degrees of freedom are determined by model identification: just identified models will have 0 degrees of freedom (and thus no goodness-of-fit test is possible), and identified models will have <span class="math inline">\(n(n + 1)/2 - t\)</span> degrees of freedom (where <span class="math inline">\(n\)</span> are the number of knowns and <span class="math inline">\(t\)</span> the number of unknowns, from the t-rule).</p>
+<p>Failing to reject the null hypothesis that the <span class="math inline">\(\chi^2\)</span> statistic is different from 0 (the ideal fit) implies a generally good representation of the data (<em>P</em> &gt; 0.05). Alternatively, rejecting the null implies that the <span class="math inline">\(\chi^2\)</span> statistic is large, as is the discrepancy between the observed and modeled variance-covariance matrices, thus implying a poor fit to the data (<em>P</em> &lt; 0.05). Interpreting the outcome of the significance test is often tricky: unlike testing whether regression parameters are significantly different from zero (something we are all familiar with), in this case, a significant <em>P</em>-value indicates <em>poor</em> fit, so be careful.</p>
+<p>The <span class="math inline">\(\chi^2\)</span> index also provides a way to gauge the relative fit of two models, one of which is nested within the other. The <em><span class="math inline">\(\chi^2\)</span> difference test</em> is simply the difference in <span class="math inline">\(\chi^2\)</span> values between the two models, with the degrees of freedom being the difference in the degrees of freedom between the two models. The resulting statistic can then be compared to a <span class="math inline">\(\chi^2\)</span> table to yield a significance value. Again, this test is for <em>nested</em> models. For non-nested models, other statistics allow for model comparisons, including AIC and BIC. An AIC or BIC score <span class="math inline">\(\geq2\)</span> is generally considered to indicate significant differences among models, with smaller values indicating equivalency between the two models.</p>
 <p><span class="math inline">\(\chi^2\)</span> tests tend to be affected by sample size, with larger samples more likely to generate poor fit due to small absolute deviations (note the scaling of <span class="math inline">\(F_{ML}\)</span> by <span class="math inline">\(n-1\)</span> in the above equation). As a result, there are several other fit indices for covariance-based SEM that attempt to correct for this problem:</p>
 <ul>
-<li><em>Root-mean squared error of approximation</em> (RMSEA): this statistic penalizes models based on sample size. An acceptable value is generally &lt;0.10 and a good value is anything &lt;0.8.</li>
+<li><em>Root-mean squared error of approximation</em> (RMSEA): this statistic penalizes models based on sample size. An ‘acceptable’ value is generally &lt;0.10 and a ‘good’ value is anything &lt;0.08.</li>
 <li><em>Comparative fit index</em> (CFI): this statistic considers the deviation from a ‘null’ model. In most cases, the null estimates all variances but sets the covariances to 0. A value &gt;0.9 is considered good.</li>
 <li><em>Standardized root-mean squared residual</em> (SRMR): the standardized difference between the observed and predicted correlations. A value &lt;0.08 is considered good.</li>
 </ul>
-<p>There are a vast and frankly unnecessary number of other fit statistics that have been developed which you may run across. This <a href="http://davidakenny.net/cm/fit.htm">website</a> has a fairly comprehensive overview.</p>
+<p>There are a vast and probably unnecessary number of other fit statistics that have been developed which you may run across. This <a href="http://davidakenny.net/cm/fit.htm">website</a> has a fairly comprehensive overview, in the event you encounter some of the more uncommon ones in the literature.</p>
 <p>What happens if the model doesn’t fit? Depending on the goals of your analysis (e.g., exploratory) you may wish to see which parts of your model have failed to be reproduced by the model-implied variance-covariance matrix. This can be achieved in two ways:</p>
 <ul>
 <li>examination correlation of model residuals: parameters with large residual correlations (difference between observed and expected) could suggest missing information or linkages.</li>
 <li><em>modification indices</em>, or the expected decrease in the <span class="math inline">\(\chi^2\)</span> if a missing path were to be included in the model. A high value of a modification index would suggest the missing path should be included. (Tests of directed separation, which we cover in the chapter on Local Estimation, provide similar insight and are returned automatically by <em>piecewiseSEM</em>.)</li>
 </ul>
-<p>Users should take caution when exploring these techniques as to avoid dredging the model. SEM is a technique that relies heavily on informed model specification: adding paths in that are suggested by the data but not anticipated by the user to achieve adequate fit, or comparing all sub-models using AIC, for example, might be appropriate in other applications, but ignore the basic philosophy behind SEM that relationships are tested bas don <em>a priori</em> knowledge.</p>
+<p>Users should take caution when exploring these techniques as to avoid dredging the model. SEM is a technique that relies heavily on informed model specification. Adding paths in that are suggested by the data but not anticipated by the user only in an effort to achieve adequate fit might be appropriate in other applications, but ignore the basic philosophy behind SEM that relationships are based on <em>a priori</em> knowledge and intuition.</p>
 </div>
 <div id="model-fitting-using-lavaan" class="section level2">
 <h2><span class="header-section-number">2.6</span> Model Fitting Using <em>lavaan</em></h2>
 <p>We now have all the pieces necessary to fit an SEM using a covariance-based approach. The package to do so is called <em>lavaan</em>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lavaan)</code></pre></div>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="global-estimation.html#cb78-1"></a><span class="kw">library</span>(lavaan)</span></code></pre></div>
 <p>To demonstrate the functionality of this package, let’s use the data from Grace &amp; Keeley (2006), which is included in the <em>piecewiseSEM</em> package:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(piecewiseSEM)
-
-<span class="kw">data</span>(keeley)</code></pre></div>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="global-estimation.html#cb79-1"></a><span class="kw">library</span>(piecewiseSEM)</span>
+<span id="cb79-2"><a href="global-estimation.html#cb79-2"></a></span>
+<span id="cb79-3"><a href="global-estimation.html#cb79-3"></a><span class="kw">data</span>(keeley)</span></code></pre></div>
 <p>In their study, Grace &amp; Keeley wanted to understand patterns in plant diversity following disturbance, in this case wildfires in California.</p>
 <div id="lavaan-vs-lm" class="section level3">
 <h3><span class="header-section-number">2.6.1</span> <em>lavaan</em> vs <code>lm</code></h3>
-<p>For purposes of exploration, let’s first consider the relationship between fire severity and stand age (with older stands having more combustible materials)</p>
-<div class="figure">
-<img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_sem1.png" />
-
-</div>
+<p>For purposes of exploration, let’s first consider the relationship between fire severity and stand age (with older stands having more combustible materials).</p>
+<p><img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_sem1.png" /></p>
 <p>This is both a linear regression but also a simple SEM, and thus both can be fit using packages in R.</p>
 <p>The package to fit the SEM using covariance-based methods is called <em>lavaan</em> (for LAtent VAriable ANalysis, which we will delve into in a later chapter). In <em>lavaan</em>, the syntax is the same as in other modeling functions in R with one key distinction: formulae are passed as character strings. To fit a model in <em>lavaan</em>, it’s first necessary to break down the component models by the endogenous (response) variables and code them as characters. For example:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keeley_formula1 &lt;-<span class="st"> &#39;firesev ~ age&#39;</span>
-
-<span class="kw">class</span>(keeley_formula1)</code></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="global-estimation.html#cb80-1"></a>keeley_formula1 &lt;-<span class="st"> &#39;firesev ~ age&#39;</span></span>
+<span id="cb80-2"><a href="global-estimation.html#cb80-2"></a></span>
+<span id="cb80-3"><a href="global-estimation.html#cb80-3"></a><span class="kw">class</span>(keeley_formula1)</span></code></pre></div>
 <pre><code>## [1] &quot;character&quot;</code></pre>
 <p>The function used to fit the model is called (unsurprisingly) <code>sem</code> and accepts the formula string and the dataset:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keeley_sem1 &lt;-<span class="st"> </span><span class="kw">sem</span>(keeley_formula1, <span class="dt">data =</span> keeley)</code></pre></div>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="global-estimation.html#cb82-1"></a>keeley_sem1 &lt;-<span class="st"> </span><span class="kw">sem</span>(keeley_formula1, <span class="dt">data =</span> keeley)</span></code></pre></div>
 <p>As with most other models, the function to retrieve the output is <code>summary</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(keeley_sem1)</code></pre></div>
-<pre><code>## lavaan 0.6-3 ended normally after 11 iterations
-## 
-##   Optimization method                           NLMINB
-##   Number of free parameters                          2
-## 
-##   Number of observations                            90
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="global-estimation.html#cb83-1"></a><span class="kw">summary</span>(keeley_sem1)</span></code></pre></div>
+<pre><code>## lavaan 0.6-7 ended normally after 11 iterations
 ## 
 ##   Estimator                                         ML
-##   Model Fit Test Statistic                       0.000
+##   Optimization method                           NLMINB
+##   Number of free parameters                          2
+##                                                       
+##   Number of observations                            90
+##                                                       
+## Model Test User Model:
+##                                                       
+##   Test statistic                                 0.000
 ##   Degrees of freedom                                 0
-##   Minimum Function Value               0.0000000000000
 ## 
 ## Parameter Estimates:
 ## 
+##   Standard errors                             Standard
 ##   Information                                 Expected
 ##   Information saturated (h1) model          Structured
-##   Standard Errors                             Standard
 ## 
 ## Regressions:
 ##                    Estimate  Std.Err  z-value  P(&gt;|z|)
@@ -579,33 +604,34 @@ std.model &lt;-<span class="st"> </span><span class="kw">lm</span>(y1 <span clas
 ##                    Estimate  Std.Err  z-value  P(&gt;|z|)
 ##    .firesev           2.144    0.320    6.708    0.000</code></pre>
 <p>The output is organized into a few sections. First is the likelihood optimization method, number of parameters, the total sample size for the model, the estimator (<span class="math inline">\(F_{ML}\)</span> is the default) and the fit statistic. The model has <span class="math inline">\(\chi^2 = 0\)</span> with 0 degrees of freedom: this is because we have as many knowns as unknowns, and thus the model is just identified or saturated. To show this, we can apply the t-rule: we must estimate the two variances of the variables plus their path coefficient (<span class="math inline">\(t = 3\)</span>) and know the values of the two variables (<span class="math inline">\(n = 2\)</span>). Recall the equation for the t-rule <span class="math inline">\(t \leq n(n + 1)/2\)</span>, so <span class="math inline">\(3 = 2(2+1)/2 = 6/2 = 3\)</span>, and therefore the model is saturated.</p>
-<p>Next up are the actual parameter estimates: the relationship between fire severity and stand age is <span class="math inline">\(\beta = 0.06\)</span> with <span class="math inline">\(P &lt; 0.001\)</span>. The model has reports the estimated error variance on the endogenous variable.</p>
+<p>Next up are the actual parameter estimates: the relationship between fire severity and stand age is <span class="math inline">\(\beta = 0.06\)</span> with <span class="math inline">\(P &lt; 0.001\)</span>. The model also reports the estimated error variance on the endogenous variable.</p>
 <p>We can dissect this output a little more. First, let’s fit the corresponding linear model using <code>lm</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keeley_mod &lt;-<span class="st"> </span><span class="kw">lm</span>(firesev <span class="op">~</span><span class="st"> </span>age, <span class="dt">data =</span> keeley)
-
-<span class="kw">summary</span>(keeley_mod)<span class="op">$</span>coefficients</code></pre></div>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="global-estimation.html#cb85-1"></a>keeley_mod &lt;-<span class="st"> </span><span class="kw">lm</span>(firesev <span class="op">~</span><span class="st"> </span>age, <span class="dt">data =</span> keeley)</span>
+<span id="cb85-2"><a href="global-estimation.html#cb85-2"></a></span>
+<span id="cb85-3"><a href="global-estimation.html#cb85-3"></a><span class="kw">summary</span>(keeley_mod)<span class="op">$</span>coefficients</span></code></pre></div>
 <pre><code>##               Estimate Std. Error  t value     Pr(&gt;|t|)
 ## (Intercept) 3.03920623 0.35543253 8.550726 3.448774e-13
 ## age         0.05967903 0.01249008 4.778113 7.027847e-06</code></pre>
 <p>You’ll notice that we get the same effect of age on fire severity <span class="math inline">\(\beta = 0.0596\)</span>, but we also get an intercept, which is missing from the previous input. We can force <em>lavaan</em> to return the intercept using the argument <code>meanstructure = T</code> to the <code>sem</code> function:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">sem</span>(keeley_formula1, keeley, <span class="dt">meanstructure =</span> T))</code></pre></div>
-<pre><code>## lavaan 0.6-3 ended normally after 14 iterations
-## 
-##   Optimization method                           NLMINB
-##   Number of free parameters                          3
-## 
-##   Number of observations                            90
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="global-estimation.html#cb87-1"></a><span class="kw">summary</span>(<span class="kw">sem</span>(keeley_formula1, keeley, <span class="dt">meanstructure =</span> T))</span></code></pre></div>
+<pre><code>## lavaan 0.6-7 ended normally after 14 iterations
 ## 
 ##   Estimator                                         ML
-##   Model Fit Test Statistic                       0.000
+##   Optimization method                           NLMINB
+##   Number of free parameters                          3
+##                                                       
+##   Number of observations                            90
+##                                                       
+## Model Test User Model:
+##                                                       
+##   Test statistic                                 0.000
 ##   Degrees of freedom                                 0
-##   Minimum Function Value               0.0000000000000
 ## 
 ## Parameter Estimates:
 ## 
+##   Standard errors                             Standard
 ##   Information                                 Expected
 ##   Information saturated (h1) model          Structured
-##   Standard Errors                             Standard
 ## 
 ## Regressions:
 ##                    Estimate  Std.Err  z-value  P(&gt;|z|)
@@ -621,43 +647,42 @@ std.model &lt;-<span class="st"> </span><span class="kw">lm</span>(y1 <span clas
 ##    .firesev           2.144    0.320    6.708    0.000</code></pre>
 <p>which now returns the estimate of the intercept for fire severity. This value is the same as returned by <code>lm</code>.</p>
 <p>Returning to our exploration of how path coefficients are calculated, the slope of a simple linear regression is <span class="math inline">\(b_{xy} = COV_{xy}/VAR_{x}\)</span>, which we can recover from the raw data:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cov</span>(keeley[, <span class="kw">c</span>(<span class="st">&quot;firesev&quot;</span>, <span class="st">&quot;age&quot;</span>)])[<span class="dv">2</span>, <span class="dv">1</span>]<span class="op">/</span><span class="kw">var</span>(keeley<span class="op">$</span>age)</code></pre></div>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="global-estimation.html#cb89-1"></a><span class="kw">cov</span>(keeley[, <span class="kw">c</span>(<span class="st">&quot;firesev&quot;</span>, <span class="st">&quot;age&quot;</span>)])[<span class="dv">2</span>, <span class="dv">1</span>]<span class="op">/</span><span class="kw">var</span>(keeley<span class="op">$</span>age)</span></code></pre></div>
 <pre><code>## [1] 0.05967903</code></pre>
 <p>Note that this value is the same returned from both <code>sem</code> and <code>lm</code>. Recall also for simple linear regression that the standardized coefficient is equal to the correlation:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(keeley<span class="op">$</span>firesev, keeley<span class="op">$</span>age)</code></pre></div>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="global-estimation.html#cb91-1"></a><span class="kw">cor</span>(keeley<span class="op">$</span>firesev, keeley<span class="op">$</span>age)</span></code></pre></div>
 <pre><code>## [1] 0.4538654</code></pre>
 <p>We can obtain the standardized coefficient from <code>lm</code> using the <code>coefs</code> function from <em>piecewiseSEM</em>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coefs</span>(keeley_mod)</code></pre></div>
-<pre><code>##   Response Predictor Estimate Std.Error DF Crit.Value P.Value Std.Estimate
-## 1  firesev       age   0.0597    0.0125 88     4.7781       0       0.4539
-##      
-## 1 ***</code></pre>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="global-estimation.html#cb93-1"></a><span class="kw">coefs</span>(keeley_mod)</span></code></pre></div>
+<pre><code>##   Response Predictor Estimate Std.Error DF Crit.Value P.Value Std.Estimate    
+## 1  firesev       age   0.0597    0.0125 88     4.7781       0       0.4539 ***</code></pre>
 <p>and indeed, it equals the bivariate correlation!</p>
 <p>To return the standardized coefficients using <em>lavaan</em> requires a separate function or another argument. The function is <code>standardizedsolution</code> and returns a table of the standardized coefficients:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">standardizedsolution</span>(keeley_sem1)</code></pre></div>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="global-estimation.html#cb95-1"></a><span class="kw">standardizedsolution</span>(keeley_sem1)</span></code></pre></div>
 <pre><code>##       lhs op     rhs est.std    se      z pvalue ci.lower ci.upper
 ## 1 firesev  ~     age   0.454 0.079  5.726      0    0.299    0.609
 ## 2 firesev ~~ firesev   0.794 0.072 11.035      0    0.653    0.935
 ## 3     age ~~     age   1.000 0.000     NA     NA    1.000    1.000</code></pre>
 <p>This output does not return the raw coefficients, however, or any other information about the model that is useful in interpretation. The obtain a single output, you can pass the argument <code>standardize = T</code> to <code>summary</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(keeley_sem1, <span class="dt">standardize =</span> T)</code></pre></div>
-<pre><code>## lavaan 0.6-3 ended normally after 11 iterations
-## 
-##   Optimization method                           NLMINB
-##   Number of free parameters                          2
-## 
-##   Number of observations                            90
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="global-estimation.html#cb97-1"></a><span class="kw">summary</span>(keeley_sem1, <span class="dt">standardize =</span> T)</span></code></pre></div>
+<pre><code>## lavaan 0.6-7 ended normally after 11 iterations
 ## 
 ##   Estimator                                         ML
-##   Model Fit Test Statistic                       0.000
+##   Optimization method                           NLMINB
+##   Number of free parameters                          2
+##                                                       
+##   Number of observations                            90
+##                                                       
+## Model Test User Model:
+##                                                       
+##   Test statistic                                 0.000
 ##   Degrees of freedom                                 0
-##   Minimum Function Value               0.0000000000000
 ## 
 ## Parameter Estimates:
 ## 
+##   Standard errors                             Standard
 ##   Information                                 Expected
 ##   Information saturated (h1) model          Structured
-##   Standard Errors                             Standard
 ## 
 ## Regressions:
 ##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
@@ -668,25 +693,26 @@ std.model &lt;-<span class="st"> </span><span class="kw">lm</span>(y1 <span clas
 ##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
 ##    .firesev           2.144    0.320    6.708    0.000    2.144    0.794</code></pre>
 <p>Now, a few columns are added at the end to report the standardized coefficients.</p>
-<p><code>standardizedsolution</code> also returned the error variance on fire severity, which is <span class="math inline">\(1 - R^2\)</span>. However, <em>lavaan</em> also doesn’t return the <span class="math inline">\(R^2\)</span> value by default, but can be retrieved using the argument <code>rsq = T</code> for <code>summary</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(keeley_sem1, <span class="dt">standardize =</span> T, <span class="dt">rsq =</span> T)</code></pre></div>
-<pre><code>## lavaan 0.6-3 ended normally after 11 iterations
-## 
-##   Optimization method                           NLMINB
-##   Number of free parameters                          2
-## 
-##   Number of observations                            90
+<p><code>standardizedsolution</code> also returned the error variance on fire severity, which is <span class="math inline">\(1 - R^2\)</span>. However, <em>lavaan</em> also doesn’t return the <span class="math inline">\(R^2\)</span> value by default, but can be retrieved using one more argument to <code>summary</code>, <code>rsq = T</code>:</p>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="global-estimation.html#cb99-1"></a><span class="kw">summary</span>(keeley_sem1, <span class="dt">standardize =</span> T, <span class="dt">rsq =</span> T)</span></code></pre></div>
+<pre><code>## lavaan 0.6-7 ended normally after 11 iterations
 ## 
 ##   Estimator                                         ML
-##   Model Fit Test Statistic                       0.000
+##   Optimization method                           NLMINB
+##   Number of free parameters                          2
+##                                                       
+##   Number of observations                            90
+##                                                       
+## Model Test User Model:
+##                                                       
+##   Test statistic                                 0.000
 ##   Degrees of freedom                                 0
-##   Minimum Function Value               0.0000000000000
 ## 
 ## Parameter Estimates:
 ## 
+##   Standard errors                             Standard
 ##   Information                                 Expected
 ##   Information saturated (h1) model          Structured
-##   Standard Errors                             Standard
 ## 
 ## Regressions:
 ##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
@@ -705,38 +731,37 @@ std.model &lt;-<span class="st"> </span><span class="kw">lm</span>(y1 <span clas
 <div id="sem-using-lavaan" class="section level3">
 <h3><span class="header-section-number">2.6.2</span> SEM using <em>lavaan</em></h3>
 <p>Now that we have covered the basics of <em>lavaan</em>, let’s fit a slightly more complicated SEM. This model is a simplified subset of the full model presented by Grace &amp; Keeley:</p>
-<div class="figure">
-<img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_sem2.png" />
-
-</div>
-<p>Here, we test the hypotheses that total cover of plants is a function of fire severity, which in turn is informed by how old the plants are in a particular plot (which we have already investigated using linear regression). This test is known as <em>full mediation</em>, in other words that the effect of age is fully mediated by fire severity (we will test another scenario shortly).</p>
-<p>Again, we must provide the formulae as a character string. This model can be broken down into two equation representing the two endogenous variables:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keeley_formula2 &lt;-<span class="st"> &#39;</span>
-<span class="st">firesev ~ age</span>
-<span class="st">cover ~ firesev</span>
-<span class="st">&#39;</span></code></pre></div>
-<p>Multiple equations will go on separate lines so that <em>lavaan</em> can properly parse the model.</p>
+<p><img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_sem2.png" /></p>
+<p>Here, we test the hypotheses that total cover of plants is a function of fire severity, which in turn is informed by how old the plants are in a particular plot (which we have already investigated using linear regression). This test is known as <em>full mediation</em>. In other words, the effect of age is fully mediated by fire severity (we will test another scenario shortly).</p>
+<p>Again, we must provide the formulae as a character string. This model can be broken down into two equations (placed on separate lines) representing the two endogenous variables:</p>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="global-estimation.html#cb101-1"></a>keeley_formula2 &lt;-<span class="st"> &#39;</span></span>
+<span id="cb101-2"><a href="global-estimation.html#cb101-2"></a><span class="st">firesev ~ age</span></span>
+<span id="cb101-3"><a href="global-estimation.html#cb101-3"></a><span class="st">cover ~ firesev</span></span>
+<span id="cb101-4"><a href="global-estimation.html#cb101-4"></a><span class="st">&#39;</span></span></code></pre></div>
+<p>NOTE: Multiple equations will go on separate lines so that <em>lavaan</em> can properly parse the model.</p>
 <p>Now let’s fit the SEM and examine the output:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keeley_sem2 &lt;-<span class="st"> </span><span class="kw">sem</span>(keeley_formula2, <span class="dt">data =</span> keeley)
-
-<span class="kw">summary</span>(keeley_sem2, <span class="dt">standardize =</span> T, <span class="dt">rsq =</span> T)</code></pre></div>
-<pre><code>## lavaan 0.6-3 ended normally after 19 iterations
-## 
-##   Optimization method                           NLMINB
-##   Number of free parameters                          4
-## 
-##   Number of observations                            90
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="global-estimation.html#cb102-1"></a>keeley_sem2 &lt;-<span class="st"> </span><span class="kw">sem</span>(keeley_formula2, <span class="dt">data =</span> keeley)</span>
+<span id="cb102-2"><a href="global-estimation.html#cb102-2"></a></span>
+<span id="cb102-3"><a href="global-estimation.html#cb102-3"></a><span class="kw">summary</span>(keeley_sem2, <span class="dt">standardize =</span> T, <span class="dt">rsq =</span> T)</span></code></pre></div>
+<pre><code>## lavaan 0.6-7 ended normally after 19 iterations
 ## 
 ##   Estimator                                         ML
-##   Model Fit Test Statistic                       3.297
+##   Optimization method                           NLMINB
+##   Number of free parameters                          4
+##                                                       
+##   Number of observations                            90
+##                                                       
+## Model Test User Model:
+##                                                       
+##   Test statistic                                 3.297
 ##   Degrees of freedom                                 1
 ##   P-value (Chi-square)                           0.069
 ## 
 ## Parameter Estimates:
 ## 
+##   Standard errors                             Standard
 ##   Information                                 Expected
 ##   Information saturated (h1) model          Structured
-##   Standard Errors                             Standard
 ## 
 ## Regressions:
 ##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
@@ -755,68 +780,64 @@ std.model &lt;-<span class="st"> </span><span class="kw">lm</span>(y1 <span clas
 ##     firesev           0.206
 ##     cover             0.191</code></pre>
 <p>The key difference from our previous application of <em>lavaan</em> is we now have extra information with which to compute the <span class="math inline">\(\chi^2\)</span> goodness-of-fit statistic. A quick application of the t-rule: unknowns = 3 variances + 2 path coefficients = 5, knowns = 3 variables, so <span class="math inline">\(5 &lt; 3(3+1)/2 = 6\)</span> leaving us 1 extra degree of freedom.</p>
-<p>Moreover, we fail to reject the null that the observed and model-implied variance-covariance matrices are significantly different (<span class="math inline">\(P = 0.069\)</span>). Thus, we have achieved adequate fit with this model.</p>
+<p>Moreover, we fail to reject the null that the observed and model-implied variance-covariance matrices are significantly different (<span class="math inline">\(P = 0.069\)</span>). Thus, we have achieved adequate fit with this model. A note here that the magnitude of the P-value does not reflect increasing fit, only increasing support for the notion that the observed and model-estimated covariances are not different.</p>
 <p>Incidentally, we can obtain other fit statistics using the <code>fitMeasures</code> function:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fitMeasures</span>(keeley_sem2)</code></pre></div>
-<pre><code>##                npar                fmin               chisq 
-##               4.000               0.018               3.297 
-##                  df              pvalue      baseline.chisq 
-##               1.000               0.069              43.143 
-##         baseline.df     baseline.pvalue                 cfi 
-##               3.000               0.000               0.943 
-##                 tli                nnfi                 rfi 
-##               0.828               0.828               0.771 
-##                 nfi                pnfi                 ifi 
-##               0.924               0.308               0.945 
-##                 rni                logl   unrestricted.logl 
-##               0.943            -176.348            -174.699 
-##                 aic                 bic              ntotal 
-##             360.696             370.695              90.000 
-##                bic2               rmsea      rmsea.ci.lower 
-##             358.071               0.160               0.000 
-##      rmsea.ci.upper        rmsea.pvalue                 rmr 
-##               0.365               0.101               0.245 
-##          rmr_nomean                srmr        srmr_bentler 
-##               0.245               0.062               0.062 
-## srmr_bentler_nomean                crmr         crmr_nomean 
-##               0.062               0.088               0.088 
-##          srmr_mplus   srmr_mplus_nomean               cn_05 
-##               0.062               0.062             105.849 
-##               cn_01                 gfi                agfi 
-##             182.093               0.966               0.798 
-##                pgfi                 mfi                ecvi 
-##               0.161               0.987               0.126</code></pre>
+<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="global-estimation.html#cb104-1"></a><span class="kw">fitMeasures</span>(keeley_sem2)</span></code></pre></div>
+<pre><code>##                npar                fmin               chisq                  df 
+##               4.000               0.018               3.297               1.000 
+##              pvalue      baseline.chisq         baseline.df     baseline.pvalue 
+##               0.069              43.143               3.000               0.000 
+##                 cfi                 tli                nnfi                 rfi 
+##               0.943               0.828               0.828               0.771 
+##                 nfi                pnfi                 ifi                 rni 
+##               0.924               0.308               0.945               0.943 
+##                logl   unrestricted.logl                 aic                 bic 
+##            -176.348            -174.699             360.696             370.695 
+##              ntotal                bic2               rmsea      rmsea.ci.lower 
+##              90.000             358.071               0.160               0.000 
+##      rmsea.ci.upper        rmsea.pvalue                 rmr          rmr_nomean 
+##               0.365               0.101               0.245               0.245 
+##                srmr        srmr_bentler srmr_bentler_nomean                crmr 
+##               0.062               0.062               0.062               0.088 
+##         crmr_nomean          srmr_mplus   srmr_mplus_nomean               cn_05 
+##               0.088               0.062               0.062             105.849 
+##               cn_01                 gfi                agfi                pgfi 
+##             182.093               0.966               0.798               0.161 
+##                 mfi                ecvi 
+##               0.987               0.126</code></pre>
 <p>Woah! We’re certainly not lacking in statistics.</p>
 <p>Returning to the summary output, we see the same coefficient for <span class="math inline">\(firesev ~ age\)</span> and a new estimate for <span class="math inline">\(cover ~ firesev\)</span>. In this case, more severe fires reduce cover (not unexpectedly).</p>
 <p>Now that we have multiple linkages, we can also compute the indirect effect of age on cover. Recall from Rule 3 of path coefficients that the indirect effects along a compound path are the product of the individual path coefficients: <span class="math inline">\(0.454 * -0.437 = -0.198\)</span>.</p>
 <p>We can obtain this value by modifying the model formula to include these calculations directly. This involves giving a name to the coefficients in the model strings, then adding a new line indicating their product using the operator <code>:=</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keeley_formula2.<span class="dv">1</span> &lt;-<span class="st"> &#39;</span>
-<span class="st">firesev ~ B1 * age</span>
-<span class="st">cover ~ B2 * firesev</span>
-
-<span class="st">indirect := B1 * B2</span>
-<span class="st">&#39;</span>
-
-keeley_sem2.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">sem</span>(keeley_formula2.<span class="dv">1</span>, keeley)
-
-<span class="kw">summary</span>(keeley_sem2.<span class="dv">1</span>, <span class="dt">standardize =</span> T)</code></pre></div>
-<pre><code>## lavaan 0.6-3 ended normally after 19 iterations
-## 
-##   Optimization method                           NLMINB
-##   Number of free parameters                          4
-## 
-##   Number of observations                            90
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="global-estimation.html#cb106-1"></a>keeley_formula2<span class="fl">.1</span> &lt;-<span class="st"> &#39;</span></span>
+<span id="cb106-2"><a href="global-estimation.html#cb106-2"></a><span class="st">firesev ~ B1 * age</span></span>
+<span id="cb106-3"><a href="global-estimation.html#cb106-3"></a><span class="st">cover ~ B2 * firesev</span></span>
+<span id="cb106-4"><a href="global-estimation.html#cb106-4"></a></span>
+<span id="cb106-5"><a href="global-estimation.html#cb106-5"></a><span class="st">indirect := B1 * B2</span></span>
+<span id="cb106-6"><a href="global-estimation.html#cb106-6"></a><span class="st">&#39;</span></span>
+<span id="cb106-7"><a href="global-estimation.html#cb106-7"></a></span>
+<span id="cb106-8"><a href="global-estimation.html#cb106-8"></a>keeley_sem2<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">sem</span>(keeley_formula2<span class="fl">.1</span>, keeley)</span>
+<span id="cb106-9"><a href="global-estimation.html#cb106-9"></a></span>
+<span id="cb106-10"><a href="global-estimation.html#cb106-10"></a><span class="kw">summary</span>(keeley_sem2<span class="fl">.1</span>, <span class="dt">standardize =</span> T)</span></code></pre></div>
+<pre><code>## lavaan 0.6-7 ended normally after 19 iterations
 ## 
 ##   Estimator                                         ML
-##   Model Fit Test Statistic                       3.297
+##   Optimization method                           NLMINB
+##   Number of free parameters                          4
+##                                                       
+##   Number of observations                            90
+##                                                       
+## Model Test User Model:
+##                                                       
+##   Test statistic                                 3.297
 ##   Degrees of freedom                                 1
 ##   P-value (Chi-square)                           0.069
 ## 
 ## Parameter Estimates:
 ## 
+##   Standard errors                             Standard
 ##   Information                                 Expected
 ##   Information saturated (h1) model          Structured
-##   Standard Errors                             Standard
 ## 
 ## Regressions:
 ##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
@@ -834,42 +855,40 @@ keeley_sem2.<span class="dv">1</span> &lt;-<span class="st"> </span><span class=
 ##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
 ##     indirect         -0.005    0.002   -3.336    0.001   -0.005   -0.198</code></pre>
 <p>Indeed, the indirect path coefficient is the same as computed above.</p>
-<p>Naming coefficients can come in handy when specifying, for example, fixed values for specific purposes (e.g., Multigroup Modeling, Chapter 6).</p>
+<p>Naming coefficients can come in handy when specifying, for example, fixed values for specific purposes (e.g., multigroup modeling).</p>
 </div>
-<div id="testing-alternate-structure-using-lavaan" class="section level3">
-<h3><span class="header-section-number">2.6.3</span> Testing Alternate Structure using <em>lavaan</em></h3>
+<div id="testing-alternative-structures-using-lavaan" class="section level3">
+<h3><span class="header-section-number">2.6.3</span> Testing Alternative Structures using <em>lavaan</em></h3>
 <p>There is another possible configuration of these variables which includes a directed path between age and cover:</p>
-<div class="figure">
-<img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_sem2_alt.png" />
-
-</div>
+<p><img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_sem2_alt.png" /></p>
 <p>This type of model tests <em>partial mediation</em>, or the idea that the effect of age is partially mediated by fire severity, but there is still a direct effect between age and cover.</p>
 <p>Let’s fit the partial mediation model:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keeley_formula3 &lt;-<span class="st"> &#39;</span>
-<span class="st">firesev ~ age</span>
-<span class="st">cover ~ firesev + age</span>
-<span class="st">&#39;</span>
-
-keeley_sem3 &lt;-<span class="st"> </span><span class="kw">sem</span>(keeley_formula3, <span class="dt">data =</span> keeley)
-
-<span class="kw">summary</span>(keeley_sem3, <span class="dt">standardize =</span> T)</code></pre></div>
-<pre><code>## lavaan 0.6-3 ended normally after 20 iterations
-## 
-##   Optimization method                           NLMINB
-##   Number of free parameters                          5
-## 
-##   Number of observations                            90
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="global-estimation.html#cb108-1"></a>keeley_formula3 &lt;-<span class="st"> &#39;</span></span>
+<span id="cb108-2"><a href="global-estimation.html#cb108-2"></a><span class="st">firesev ~ age</span></span>
+<span id="cb108-3"><a href="global-estimation.html#cb108-3"></a><span class="st">cover ~ firesev + age</span></span>
+<span id="cb108-4"><a href="global-estimation.html#cb108-4"></a><span class="st">&#39;</span></span>
+<span id="cb108-5"><a href="global-estimation.html#cb108-5"></a></span>
+<span id="cb108-6"><a href="global-estimation.html#cb108-6"></a>keeley_sem3 &lt;-<span class="st"> </span><span class="kw">sem</span>(keeley_formula3, <span class="dt">data =</span> keeley)</span>
+<span id="cb108-7"><a href="global-estimation.html#cb108-7"></a></span>
+<span id="cb108-8"><a href="global-estimation.html#cb108-8"></a><span class="kw">summary</span>(keeley_sem3, <span class="dt">standardize =</span> T)</span></code></pre></div>
+<pre><code>## lavaan 0.6-7 ended normally after 20 iterations
 ## 
 ##   Estimator                                         ML
-##   Model Fit Test Statistic                       0.000
+##   Optimization method                           NLMINB
+##   Number of free parameters                          5
+##                                                       
+##   Number of observations                            90
+##                                                       
+## Model Test User Model:
+##                                                       
+##   Test statistic                                 0.000
 ##   Degrees of freedom                                 0
-##   Minimum Function Value               0.0000000000000
 ## 
 ## Parameter Estimates:
 ## 
+##   Standard errors                             Standard
 ##   Information                                 Expected
 ##   Information saturated (h1) model          Structured
-##   Standard Errors                             Standard
 ## 
 ## Regressions:
 ##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
@@ -884,9 +903,9 @@ keeley_sem3 &lt;-<span class="st"> </span><span class="kw">sem</span>(keeley_for
 ##    .firesev           2.144    0.320    6.708    0.000    2.144    0.794
 ##    .cover             0.078    0.012    6.708    0.000    0.078    0.780</code></pre>
 <p>Ah, we have a problem: the model is saturated, so there are no degrees of freedom leftover with which to test model fit.</p>
-<p>We can, however, test whether this model is more or less supported than the partial mediation model using the <span class="math inline">\(\chi^2\)</span> difference test:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(keeley_sem2, keeley_sem3)</code></pre></div>
-<pre><code>## Chi Square Difference Test
+<p>We can, however, use the <span class="math inline">\(\chi^2\)</span> test to determine whether this model is more or less supported than the partial mediation model, which is called using the function <code>anova</code>:</p>
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="global-estimation.html#cb110-1"></a><span class="kw">anova</span>(keeley_sem2, keeley_sem3)</span></code></pre></div>
+<pre><code>## Chi-Squared Difference Test
 ## 
 ##             Df   AIC   BIC  Chisq Chisq diff Df diff Pr(&gt;Chisq)  
 ## keeley_sem3  0 359.4 371.9 0.0000                                
@@ -894,7 +913,7 @@ keeley_sem3 &lt;-<span class="st"> </span><span class="kw">sem</span>(keeley_for
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>(Note that the <span class="math inline">\(\chi^2\)</span> statistic and associated degrees of freedom are still 0 for the model testing partial mediation.)</p>
-<p>We can see from this output that we fail to reject the null that the models are significantly different (<span class="math inline">\(P = 0.069\)</span>). Because these are nested models, it is also fair to compare them using AIC/BIC. In both cases, the models are deemed equivalent and the more parsimonious model (full mediation) would be preferred. Moreover, examining the output of the model of partial mediation reveals a non-significant effect of age on cover (<span class="math inline">\(P = 0.067\)</span>). Together, these pieces of information would suggest that plant cover is not directly effect by stand age, but rather the effect of age is entirely mediated through the severity of burns.</p>
+<p>We can see from this output that we fail to reject the null that the models are significantly different (<span class="math inline">\(P = 0.069\)</span>). Because these are nested models, it is also fair to compare them using AIC/BIC. In both cases, the models are deemed equivalent and the more parsimonious model (full mediation) would be preferred. Moreover, examining the output of the model of partial mediation reveals a non-significant effect of age on cover (<span class="math inline">\(P = 0.067\)</span>). Together, these pieces of information would suggest that plant cover is not directly affected by stand age, but rather the effect of age is entirely mediated through the severity of burns.</p>
 </div>
 </div>
 <div id="references" class="section level2">
@@ -914,11 +933,13 @@ keeley_sem3 &lt;-<span class="st"> </span><span class="kw">sem</span>(keeley_for
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
@@ -926,12 +947,11 @@ gitbook.start({
 "github": false,
 "facebook": true,
 "twitter": true,
-"google": false,
 "linkedin": false,
 "weibo": false,
 "instapaper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -943,6 +963,10 @@ gitbook.start({
 "text": null
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },
@@ -959,10 +983,11 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
+    var src = "true";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
     script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();

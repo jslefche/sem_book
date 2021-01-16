@@ -1,7 +1,7 @@
 ---
 title: "Composite Variables"
 author: "Jon Lefcheck"
-date: "March 17, 2019"
+date: "January 16, 2021"
 output: html_document
 ---
 
@@ -9,21 +9,21 @@ output: html_document
 
 ## What is a Composite Variable?
 
-Composite variables are another way (besides latent variables) to represent complex concepts in structural equation modeling. The most important distinction between the two is that, while latent variables *give rise to* measurable manifestations of an unobservable concept, composite variables *arise from the* total combined influence of measured variables. 
+Composite variables are another way besides latent variables to represent complex multivariate concepts in structural equation modeling. The most important distinction between the two is that, while latent variables *give rise to* measurable manifestations of an unobservable concept, composite variables *arise from* the total combined influence of measured variables. 
 
 Consider the following composite variable $\eta$:
 
 ![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/composite_variable_composite.png)
 
-Here the arrows are leading *into*, not out of, $\eta$, indicating that the composite variable is made up of the influences of the three observed variables. Note: in this and other presentations, the composite is denoted by a hexagon, but can sometimes be an oval as it can technically be a form of a latent variable.
+Here, the arrows are leading *into*, not out of, $\eta$, indicating that the composite variable is made up of the influences of the three observed variables. Note: in this and other presentations, the composite is denoted by a hexagon, but can sometimes be an oval as it can technically be a form of a latent variable.
 
-If the composite is *entirely* made up of the three influences, it can be said to have no error. An example might be the two levels of a treatment (present/absent) that lead into a single composite variable called 'Treatment.' In this case, there are no other levels of treatment because you, as the investigator, did not apply any. Thus the composite 'treatment' captures the full universe of treatment possibilities given the data.
+If the composite is *entirely* made up of the three influences, it can be said to have no error. An example might be the two levels of a treatment that lead into a single composite variable called 'Treatment.' In this case, there are no other levels of treatment because you, as the investigator, did not apply any. Thus the composite 'treatment' captures the full universe of treatment possibilities given the data.
 
 In other cases, the property might arise from the collective influence of variables but is not without error. For example, the idea of soil condition arises from different aspects of the soil: its pH, moisture, grain size, and so on. However, one might measure only some of these, and thus there remain other factors (nutrient content, etc.) that might contribute to the notion of soil condition. In this case, the composite *would* have error and is therefore known as a *latent composite*.
 
-The benefit of such an approach is that complicated ideas can be distilled into discrete *blocks* that are easier to present and discuss. For example, it is easier to talk about the effects of the experimental treatment on soil condition, rather than the effect of treatment 1 on soil moisture, the effect of treatment 1 on soil pH, the effect of treatment 1 on soil grain size, and so on.
+The benefit of such an approach is that complicated constructs can be distilled into discrete *blocks* that are easier to present and discuss. For example, it is easier to talk about the effects of the experimental treatment on soil condition, rather than the effect of treatment 1 on soil moisture, the effect of treatment 1 on soil pH, the effect of treatment 1 on soil grain size, and so on.
 
-In this way, the composite harkens back to the early meta-model, or broad conceptual relationships that inform the parameterization of the structural path model. In fact, in populating the meta-model, you may wish to consider those broad concepts as composites when fitting the model, rather than modeling all relationships among all observed variables.
+In this way, the composite harkens back to the early meta-model, or broad conceptual relationships that inform the parameterization of the structural path model. In fact, in populating the meta-model, you may wish to consider those broad concepts as composites (or latents) when fitting the model, rather than modeling all relationships among all observed variables.
 
 Selecting between latent and composite variables comes down to the concept in question, the presumed direction of causality, and the nature of the indicators.
 
@@ -31,7 +31,7 @@ For the soil example, consider: is it that there is a common difference among so
 
 Another way of thinking about this is whether the indicators are interchangeable. In other words, does soil pH tell us the same information as soil moisture? If so, then they might be indicators of the same latent phenomenon. If not, and they contain unique information, then they likely combine to form a composite variable.
 
-Finally, do the indicators co-vary? If they are under common control of a latent variable, then changing one should alter all the others. If they are relatively independent--for example, one can change grain size without changing nutrient content--then causation likely flows into a composite (rather than out of a latent) variable.
+Finally, do the indicators co-vary? If they are under common control of a latent variable, then changing one should alter all the others. If they are relatively independent--for example, one could change grain size without changing nutrient content--then causation likely flows into a composite (rather than out of a latent) variable.
 
 Now that we have defined a composite variable, let's see how to make one.
 
@@ -45,9 +45,9 @@ The weights for the composite are easily acquired as they are the values that ma
 
 In fact, statistical composites can be boiled down to the coefficients from a multiple regression:
 
-(1) The ML fitting function chooses parameter estimates for each predictor that maximize the likelihood of obseving the response. 
-(2) Those parameter values serve as the loadings for the indicators of the composite variable. 
-(3) The data for each indicator are multipled by their loading and summed to generate the *factor scores* for the composite variable, which is then used in the structural model.
+(1) The maximum-likelihood fitting function chooses parameter estimates for each predictor that maximize the likelihood of observing the response;
+(2) Those parameter values serve as the loadings for the indicators of the composite variable; 
+(3) The data for each indicator are multiplied by their loading and summed to generate the *factor scores* for the composite variable, which is then used in the structural model.
 
 Let's demonstrate using some random data:
 
@@ -71,7 +71,7 @@ beta_x2 <-  summary(model)$coefficients[3, 1]
 composite <- beta_x1 * x1 + beta_x2 * x2
 ```
 
-These values can then used to predict the response:
+These summed values can then used to predict the response:
 
 
 ```r
@@ -97,7 +97,7 @@ summary(lm(y ~ composite))
 ## F-statistic: 1.545 on 1 and 48 DF,  p-value: 0.2199
 ```
 
-Note how the unstandardized coefficient is 1. This is because we the composite is in units of the predicted values of the response. Thus, the coefficient is really only interpretable in standardized units.
+Note how the unstandardized coefficient is 1. This is because the composite is in units of the predicted values of the response. Thus, the coefficient is really only interpretable in standardized units.
 
 Let's alternately fit this composite model with *lavaan* and fix the loadings of $x1$ and $x2$ to the values from the multiple regression:
 
@@ -117,23 +117,25 @@ summary(comp_model1, standardize = T)
 ```
 
 ```
-## lavaan 0.6-3 ended normally after 14 iterations
-## 
-##   Optimization method                           NLMINB
-##   Number of free parameters                          2
-## 
-##   Number of observations                            50
+## lavaan 0.6-7 ended normally after 14 iterations
 ## 
 ##   Estimator                                         ML
-##   Model Fit Test Statistic                       0.000
+##   Optimization method                           NLMINB
+##   Number of free parameters                          2
+##                                                       
+##   Number of observations                            50
+##                                                       
+## Model Test User Model:
+##                                                       
+##   Test statistic                                 0.000
 ##   Degrees of freedom                                 1
 ##   P-value (Chi-square)                           0.999
 ## 
 ## Parameter Estimates:
 ## 
+##   Standard errors                             Standard
 ##   Information                                 Expected
 ##   Information saturated (h1) model          Structured
-##   Standard Errors                             Standard
 ## 
 ## Composites:
 ##                    Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
@@ -152,9 +154,9 @@ summary(comp_model1, standardize = T)
 ##     composite         0.000                               0.000    0.000
 ```
 
-We see from the output that the estimated loadings for our two indicators are the same values we provided, and consequently the understandardized coefficient is 1. However, the unstandardized coefficient is 0.177 and it is this value that we would present (although its non-significant, given that these are fake data).
+We see from the output that the estimated loadings for our two indicators are the same values we provided, and consequently the understandardized coefficient is 1. However, the standardized coefficient is 0.177 and it is this value that we would present (although its non-significant, given that these are fake data).
 
-Let's suppose we didn't know the loadings from the multiple regression. We run into the same issue of identifiability as when constructing latent variables, so we must fix the first loading to 1. This will also define the scale of the composite. NOTE: *lavaan* does not do this automatically (as for latents), so we will have to implement it manually.
+Let's suppose we didn't know the loadings from the multiple regression. We run into the same issue of identifiability as when constructing latent variables, so we must fix the first loading to 1. This will also define the scale of the composite. NOTE: *lavaan* does not do this automatically (as it goes for latents), so we will have to implement it manually.
 
 
 ```r
@@ -168,7 +170,22 @@ comp_model2 <- sem(comp_formula2, data.frame(y, x1, x2))
 ```
 
 ```
-## Warning in lavaan::lavaan(model = comp_formula2, data = data.frame(y, x1, :
+## Warning in lav_model_estimate(lavmodel = lavmodel, lavpartable = lavpartable, :
+## lavaan WARNING: the optimizer warns that a solution has NOT been found!
+```
+
+```
+## Warning in lav_model_estimate(lavmodel = lavmodel, lavpartable = lavpartable, :
+## lavaan WARNING: the optimizer warns that a solution has NOT been found!
+```
+
+```
+## Warning in lav_model_estimate(lavmodel = lavmodel, lavpartable = lavpartable, :
+## lavaan WARNING: the optimizer warns that a solution has NOT been found!
+```
+
+```
+## Warning in lav_model_estimate(lavmodel = lavmodel, lavpartable = lavpartable, :
 ## lavaan WARNING: the optimizer warns that a solution has NOT been found!
 ```
 
@@ -190,23 +207,24 @@ summary(comp_model3, standardize = T)
 ```
 
 ```
-## lavaan 0.6-3 ended normally after 22 iterations
-## 
-##   Optimization method                           NLMINB
-##   Number of free parameters                          3
-## 
-##   Number of observations                            50
+## lavaan 0.6-7 ended normally after 22 iterations
 ## 
 ##   Estimator                                         ML
-##   Model Fit Test Statistic                       0.000
+##   Optimization method                           NLMINB
+##   Number of free parameters                          3
+##                                                       
+##   Number of observations                            50
+##                                                       
+## Model Test User Model:
+##                                                       
+##   Test statistic                                 0.000
 ##   Degrees of freedom                                 0
-##   Minimum Function Value               0.0000000000000
 ## 
 ## Parameter Estimates:
 ## 
+##   Standard errors                             Standard
 ##   Information                                 Expected
 ##   Information saturated (h1) model          Structured
-##   Standard Errors                             Standard
 ## 
 ## Composites:
 ##                    Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
@@ -225,15 +243,15 @@ summary(comp_model3, standardize = T)
 ##     composite         0.000                               0.000    0.000
 ```
 
-Here the model converges because the true loading (0.579) is close enough to 1 for the maximum-likelihood fitting function to find it.
+Here the model converges because the true loading (0.579) is close enough to 1 for the maximum-likelihood fitting function to find it within a certain number of iterations.
 
-Note that the unstandardized coefficient is no longer 1: this is because the scale of the composite has been set to that of the second indicator. However, the standardized coefficient is different from what we know the true relationship to be (0.236 vs. 0.177). 
+Note that the unstandardized coefficient is no longer 1: this is because the scale of the composite has been set to that of the second indicator. 
 
-For this reason, it is generally recommended that one compute the loadings by hand and fix them in the model. This has an added benefit we will get to in a later section. But first let's explore a real-world example.
+For reasons of model convergence, it is generally recommended that one compute the loadings by hand and fix them in the model. This has an added benefit we will get to in a later section. But first let's explore a real-world example.
 
 ## Grace & Keeley Revisited: A Worked Example
 
-Recall from the chapters on global and local estimation that Grace & Keeley (2006) were interested in the factors that mediated recovery of shrublands post-fire disturbance. In those chapters, we fitdifferent sub-models of their larger model, and we'll fit a different sub-model yet again in this chapter for simplicity.
+Recall from the chapters on global and local estimation that Grace & Keeley (2006) were interested in the factors that mediated recovery of shrublands post-fire disturbance. In those chapters, we fit different sub-models of their larger model, and we'll fit a different sub-model yet again in this chapter for simplicity.
 
 In their model, they used plant cover to predict plant species richness. Let's assume for a moment that the relationship between cover and richness may be non-linear: its not until a certain amount of cover that rarer species begin to appear, for example. In this case, we might suppose there are both linear $cover$ and non-linear $cover^2$ components to the model. Composite variables are a nice way to summarize both the linear and non-linear effects.
 
@@ -312,7 +330,7 @@ summary(lm(rich ~ composite, data = data.frame(keeley, composite)))
 ## F-statistic: 16.73 on 1 and 88 DF,  p-value: 9.507e-05
 ```
 
-As would be expected from the multiple regression, the composite term significantly predicts richness ($P < 0.001$). Let's use the `coefs` function from *piecewiseSEM* to obtain the standardized coefficient:
+As would be expected from the multiple regression, the composite term significantly predicts richness (*P* < 0.001). Let's use the `coefs` function from *piecewiseSEM* to obtain the standardized coefficient:
 
 
 ```r
@@ -320,13 +338,11 @@ coefs(lm(rich ~ composite, data = data.frame(keeley, composite)))
 ```
 
 ```
-##   Response Predictor Estimate Std.Error DF Crit.Value P.Value Std.Estimate
-## 1     rich composite        1    0.2445 88     4.0904   1e-04       0.3997
-##      
-## 1 ***
+##   Response Predictor Estimate Std.Error DF Crit.Value P.Value Std.Estimate    
+## 1     rich composite        1    0.2445 88     4.0904   1e-04       0.3997 ***
 ```
 
-So a 1 SD change in the total cover effect would result in a 0.400 SD change in plant richness.
+So a 1 standard deviation change in the total cover effect would result in a 0.40 standard deviation change in plant richness.
 
 We can alternately fit the model with *lavaan* using the same coefficients from the multiple regression:
 
@@ -347,23 +363,25 @@ summary(keeley_model1, standardize = T)
 ```
 
 ```
-## lavaan 0.6-3 ended normally after 20 iterations
-## 
-##   Optimization method                           NLMINB
-##   Number of free parameters                          5
-## 
-##   Number of observations                            90
+## lavaan 0.6-7 ended normally after 20 iterations
 ## 
 ##   Estimator                                         ML
-##   Model Fit Test Statistic                       0.000
+##   Optimization method                           NLMINB
+##   Number of free parameters                          5
+##                                                       
+##   Number of observations                            90
+##                                                       
+## Model Test User Model:
+##                                                       
+##   Test statistic                                 0.000
 ##   Degrees of freedom                                 1
 ##   P-value (Chi-square)                           1.000
 ## 
 ## Parameter Estimates:
 ## 
+##   Standard errors                             Standard
 ##   Information                                 Expected
 ##   Information saturated (h1) model          Structured
-##   Standard Errors                             Standard
 ## 
 ## Composites:
 ##                    Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
@@ -389,9 +407,9 @@ summary(keeley_model1, standardize = T)
 ##     coversq           0.233    0.035    6.708    0.000    0.233    1.000
 ```
 
-We obtain the same standardized coefficient (0.400) as through the manual calculation.
+Which leads us to the same standardized coefficient (0.40) as through the manual calculation.
 
-Finally, let's incorporate the  effect of fire severity on cover. Now the composite is endogenous because it is affected by fire severity, and goes on to predict richness. 
+Finally, let's incorporate the effect of fire severity on cover and richness. Now the composite is endogenous because it is affected by fire severity, and goes on to predict richness. 
 
 ![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/composite_variable_keeley_endo.png)
 
@@ -411,29 +429,31 @@ cover ~~ coversq
 firesev ~~ coversq
 '
 
-keeley_model2 <- sem(keeley_formula2, data.frame(keeley, composite))
+keeley_model2 <- sem(keeley_formula2, keeley)
 
 summary(keeley_model2, standardize = T, rsq = T)
 ```
 
 ```
-## lavaan 0.6-3 ended normally after 53 iterations
-## 
-##   Optimization method                           NLMINB
-##   Number of free parameters                          9
-## 
-##   Number of observations                            90
+## lavaan 0.6-7 ended normally after 53 iterations
 ## 
 ##   Estimator                                         ML
-##   Model Fit Test Statistic                       0.065
+##   Optimization method                           NLMINB
+##   Number of free parameters                          9
+##                                                       
+##   Number of observations                            90
+##                                                       
+## Model Test User Model:
+##                                                       
+##   Test statistic                                 0.065
 ##   Degrees of freedom                                 1
 ##   P-value (Chi-square)                           0.799
 ## 
 ## Parameter Estimates:
 ## 
+##   Standard errors                             Standard
 ##   Information                                 Expected
 ##   Information saturated (h1) model          Structured
-##   Standard Errors                             Standard
 ## 
 ## Composites:
 ##                    Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
@@ -472,13 +492,13 @@ summary(keeley_model2, standardize = T, rsq = T)
 
 Note that the squared and unsquared terms for $cover$ have correlated errors, because they are both driven by the underlying values of cover. Also, because the squared term is not a 'true' variable in the model but a convenience for us to explore this non-linearity, we must treat $cover$ and $cover^2$ as exogenous even though they are part of an endogenous composite. *lavaan* automatically models correlations among exogenous variables, but will not do so for the composite indicators unless told explicitly. In this case, then, we must manually control for the correlation between $cover^2$ and $cover$ and $firesev$.
 
-Here, we find a good-fitting model ($P = 0.80$). Moreover, we obtain the standardized coefficient for the effect of fire severity on cover $\gamma = -0.437$ and of the composite on richness $\beta = 0.292$ controlling for fire severity, which is the total non-linear effect of cover.
+Here, we find a good-fitting model (*P* = 0.80). Moreover, we obtain the standardized coefficient for the effect of fire severity on cover $\gamma = -0.437$ and of the composite on richness $\beta = 0.292$ controlling for fire severity, which is the total non-linear effect of cover.
 
-To otain the indirect effect then, we multiply these paths plus the standardized loading $cover$ on the composite: $-0.437 * 3.048 * 0.292 =  -0.389$.  
+To otain the indirect effect then, we multiply these paths plus the standardized loading $cover$ on the composite: $-0.437 * 3.048 * 0.292 = -0.389$.  
 
 ## Composites in *piecewiseSEM*
 
-For the moment, composites are not directly implemented in *piecewiseSEM* with special syntax like in *lavan*, but we hope to introduce that functionality soon. In the interim, they are easy to compute them by hand, as we have shown above, extract the predicted scores, and use them as any other predictor.
+For the moment, composites are not directly implemented in *piecewiseSEM* with special syntax like in *lavaan*, but we hope to introduce that functionality soon. In the interim, they are easy to compute them by hand, as we have shown above, extract the predicted scores, and use them as any other predictor.
 
 Let's examine this with the Keeley model as above:
 
@@ -487,7 +507,7 @@ Let's examine this with the Keeley model as above:
 keeley$composite <- composite
 
 keeley_psem <- psem(
-  lm(firesev ~ cover, keeley),
+  lm(cover ~ firesev, keeley),
   lm(rich ~ composite + firesev, keeley)
 )
 
@@ -499,45 +519,44 @@ summary(keeley_psem, .progressBar = FALSE)
 ## Structural Equation Model of keeley_psem 
 ## 
 ## Call:
-##   firesev ~ cover
+##   cover ~ firesev
 ##   rich ~ composite + firesev
 ## 
-##     AIC      BIC
-##  19.913   37.412
+##     AIC
+##  765.393
 ## 
 ## ---
 ## Tests of directed separation:
 ## 
-##              Independ.Claim Test.Type DF Crit.Value P.Value 
-##          rich ~ cover + ...      coef 86    -0.2497  0.8034 
-##   firesev ~ composite + ...      coef 87    -1.8710  0.0647 
+##            Independ.Claim Test.Type DF Crit.Value P.Value    
+##   cover ~ composite + ...      coef 87    11.6011  0.0000 ***
+##        rich ~ cover + ...      coef 86    -0.2497  0.8034    
 ## 
+## --
 ## Global goodness-of-fit:
 ## 
-##   Fisher's C = 5.913 with P-value = 0.206 and on 4 degrees of freedom
+## Chi-Squared = 84.206 with P-value = 0 and on 2 degrees of freedom
+## Fisher's C = 86.213 with P-value = 0 and on 4 degrees of freedom
 ## 
 ## ---
 ## Coefficients:
 ## 
-##   Response Predictor Estimate Std.Error DF Crit.Value P.Value Std.Estimate
-##    firesev     cover  -2.2769    0.4994 88    -4.5594  0.0000      -0.4371
-##       rich composite   0.7314    0.2698 87     2.7108  0.0081       0.2923
-##       rich   firesev  -2.1323    0.9859 87    -2.1629  0.0333      -0.2332
-##      
-##   ***
-##    **
-##     *
+##   Response Predictor Estimate Std.Error DF Crit.Value P.Value Std.Estimate    
+##      cover   firesev  -0.0839    0.0184 88    -4.5594  0.0000      -0.4371 ***
+##       rich composite   0.7314    0.2698 87     2.7108  0.0081       0.2923  **
+##       rich   firesev  -2.1323    0.9859 87    -2.1629  0.0333      -0.2332   *
 ## 
 ##   Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05
 ## 
+## ---
 ## Individual R-squared:
 ## 
 ##   Response method R.squared
-##    firesev   none      0.19
+##      cover   none      0.19
 ##       rich   none      0.20
 ```
 
-Note that we get the same standardized coefficients as in *lavaan*!
+Note that we get the same standardized coefficients as in *lavaan*! There is, however, deviation in the goodness-of-fit that are accounted for by differences in how the composite is constructed and the correlated errors among the indicator and $firesev$ which are not possible to model in *piecewiseSEM* yet.
 
 ## References
 

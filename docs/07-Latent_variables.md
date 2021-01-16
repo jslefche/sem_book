@@ -1,7 +1,7 @@
 ---
 title: "Latent Variable Modeling"
 author: "Jon Lefcheck"
-date: "March 17, 2019"
+date: "January 16, 2021"
 output: html_document
 ---
 
@@ -9,7 +9,7 @@ output: html_document
 
 ## Introduction to Latent Variable Modeling
 
-*Latent variables* are variables that are unobserved, but whose influence can be summarized through one or more *indicator variables*. They are useful for capturing complex or conceptual properties of a system that are difficult to quantify or measure directly. Early applications of latent variables, for example, focused on modeling the effects of 'general intelligence,' which is an abstract concept that is impossible to actually measure, but can be approximated using scores from different tests of cognitive performance (e.g., memory, verbal, spatial, etc.).
+*Latent variables* are variables that are unobserved, but whose influence can be summarized through one or more *indicator variables*. They are useful for capturing complex or conceptual properties of a system that are difficult to quantify or measure directly. Early applications of latent variables, for example, focused on modeling the effects of 'general intelligence,' which is an abstract concept that is impossible to actually measure, but that can be approximated using scores from different tests of cognitive performance (e.g., memory, verbal, spatial, etc.).
 
 Consider the following simple example of a latent variable $\xi$, in this case exogenous and informed only by a single predictor $x$:
 
@@ -17,7 +17,7 @@ Consider the following simple example of a latent variable $\xi$, in this case e
 
 Here, the latent variable is indicated by the circle and the single indicator variable $x$ is indicated by the square box, as are all observed variables. You'll note a few curiosities compared to observed-variable models. 
 
-First, the direction of causality is reversed from what you might expect: *from* the latent variables *to* the observed variable. This is because the indicator variable is an _emergent_ manifestion of the underlying phenomenon represented by the latent variable.
+First, the direction of causality is reversed from what you might expect: *from* the latent variables *to* the observed variable. This is because the indicator variable is an _emergent_ manifestation of the underlying phenomenon represented by the latent variable.
 
 Second, there is an error $\delta$ associated with the indicator. This implies that the indicator is often an imperfect approximation of the latent construct. In other words, there are presumably other factors influencing the correlation between the observed and latent variable.
 
@@ -27,15 +27,15 @@ The latent variable can be related to the indicator variable using the following
   
 Here, the values of $x$ are the result of the latent variable proportional to $\lambda$ (its effect on $x$) plus some error $\delta_{x}$.
   
-A simple example of a latent-indicator relationship would be body size (latent) and body mass (indicator). There are obviously many aspects to body size that may be difficult to quantify, such as shape, volume, relief, and so on. However, body mass is a simple, measurable consequence of these unmeasured characteristics, and thus can be thought to latently indicate body size. However, because we often can't perfectly measure body mass of every individual in the population we are interested in, we must incorporate sampling error into our model of body size.
+A simple example of a latent-indicator relationship would be body size (latent) and body mass (indicator). There are obviously many aspects to body size that may be difficult to quantify, such as shape, volume, relief, and so on. Body mass is a simple, measurable consequence of these unmeasured characteristics, and thus can be thought to latently indicate the concept of size. However, because we often can't perfectly measure body mass of every individual in the population in which we are interested, we must incorporate sampling error into our model of body size, indicated by the $\delta_{x}$.
 
 This example reinforces the point that latent variables are used to represent concepts. Body size is often invoked in lots of ecological hypotheses (e.g., metabolic theory, Bergmann's rule), but is almost always represented as some easily measurable quantity such as body mass rather than the complex, multidimensional construct that it is in reality. Latent variable modeling allows us to better approach that multidimensional construct by modeling a series of indicator variables that arise from the general concept of body size (e.g., mass, length, width, etc.). It therefore is a powerful tool that is better positioned to integrate theory and observation than relying on one or few surrogates.
 
-However, some care should be taken when constructing latent variables. Just because we call a latent variable something does not always mean it *is* that thing. For example, the latent variable body size as indicated by total abundance might appear legitimate--high abundances may constrain body sizes under limited resources--but is abundance *really* an indicator of this phenomenon? Can we go on to evaluate ecological theory about metabolic scaling on the basis of abundances? Kind of a stretch. So care should be taken when selecting/naming latent variables and identifying appropriate indicators (known as the *naming fallacy*). In other words: _be sure the latent variable reflects the actual properties captured by the indicator variables!_ The degree to which the indicators represent the phenomenon captured by the latent variable is termed *validity* and is a qualitative justification of the latent construct.
+However, some care should be taken when constructing latent variables. Just because we call a latent variable something does not always mean it *is* that thing. For example, the latent variable body size as indicated by total abundance might appear legitimate--high abundances may constrain body sizes under limited resources--but is abundance *really* an indicator of this phenomenon? Can we go on to evaluate ecological theory about metabolic scaling on the basis of abundances? Kind of a stretch. So care should be taken when selecting or naming latent variables and identifying appropriate indicators (known as the *naming fallacy*). In other words: _be sure the latent variable reflects the actual properties captured by the indicator variables!_ The degree to which the indicators represent the phenomenon captured by the latent variable is termed *validity* and is a qualitative justification of the latent construct.
 
-In contrast, *reliability* of the latent variable provides quantitative values with which to gauge how well an indicator reflects the latent variable. Reliability implies that the same values of the indicator would be obtained if they were continually resampled again and again. In other words, reliable indicators approach the true population mean that is the (theoretical) product of the latent variable: a perfect indicator would generate the same values every time so they would have a correlation $r = 1$. Of course, rarely do we sample an entire population or so well, and there will inevitably be some differences among our samples leading to deviations in $r$ away from 1. 
+In contrast, the *reliability* of the latent variable captures how well an indicator reflects the latent variable through a quantitative value. High reliability implies that the same values of the indicator would be obtained if they were continually resampled again and again. In other words, reliable indicators approach the true population mean that is the (theoretical) product of the latent variable: a perfect indicator would yield the same values every time so they would all have a correlation $r = 1$. Of course, rarely do we sample an entire population so well or so exhaustively, and there will inevitably be some differences among our samples leading to deviations in $r$ away from 1. 
 
-From this correlation, we can obtain a path coefficient from the latent to the indicator variable. Recall from the "fifth rule of path coefficients" in the chapter on global estimation the the coefficient on the path from the error variance $\zeta$ is the square-root of the unexplained variance. In this case, we want the opposite: we want the *shared* variance between the latent and indicator variable (a lot of shared variance is what makes a good indicator!). As in the case of the error path, the path coefficient from the latent variable to the indicator is often expressed in its standardized form: the square-root of the reliability. This value is also known as the *loading*.
+From the actual observed correlation among repeated measures of $x$, we can obtain a path coefficient from the latent variable to the indicator. Recall from the fifth rule of path coefficients that the coefficient on the path from the error variance $\zeta$ is the square-root of the unexplained variance. In this case, we want the opposite: we want the *shared* variance between the latent and indicator variable (a lot of shared variance is what makes a good indicator!). As in the case of the error path, the path coefficient from the latent variable to the indicator is often expressed in its standardized form: the square-root of the reliability. This value is also called the *loading*.
 
 From the reliability, we can also obtain the standardized error term $\delta_{x}$. This is the unshared variance, or 1 - the reliability. For the unstandardized form, one can apply the following equation:
 
@@ -73,7 +73,7 @@ for(i in 1:ncol(combos)) cors <- c(cors, cor(x.list[[combos[1, i]]], x.list[[com
 ## [1] 0.804403
 ```
 
-From this value $r = 0.804$, we can obtain the path coefficient and the (standardized error variance):
+From this value $r = 0.804$, we can obtain the path coefficient and the (standardized) error variance:
 
 
 ```r
@@ -100,7 +100,7 @@ sqrt(r) # path coefficient
 ## [1] 0.213149
 ```
   
-In summary: the standardized coefficient (the loading) linking indicator to latent variables is the square-root of the relability. The standardized error variance is 1 - reliability.
+In summary: the standardized coefficient (the loading) linking indicator to latent variables is the square-root of the reliability. The standardized error variance is 1 - reliability.
 
 So far, we have only dealt with latent variables as exogenous (predictor) variables, but they can also act as endogenous (response) variables. Here is an example endogenous latent variable:
 
@@ -108,7 +108,7 @@ So far, we have only dealt with latent variables as exogenous (predictor) variab
 
 The graph looks roughly similar, with some changes in the parameters: the error variance on $y$ is now $\epsilon_{y}$, while the latent variable itself is represented as $\eta$ and it has its own error $\zeta$. The presence of this additional error presents a challenge: we simply don't have enough information to estimate all the unknowns here. 
 
-In this case, we assume no measurement error on $y$ such that $\epsilon_{y} = 0$. Consequently, $y$ becomes a perfect indicator of $\eta$ such that the reliability is total and $\lambda_{y} = 1$. We will get the calculation of $\zeta$ now because involves the value of the path(s) leading into the endogenous $\eta$.
+In this case, we assume no measurement error on $y$ such that $\epsilon_{y} = 0$. Consequently, $y$ becomes a perfect indicator of $\eta$ such that the reliability is total and $\lambda_{y} = 1$. We will get the calculation of $\zeta$ now because this involves the values of one or more paths leading into the endogenous $\eta$.
 
 ## Application of Latent Variables to Path Models
 
@@ -122,7 +122,7 @@ As before, let's fix the error of $y$ to be 0 so that the loading on $\eta = 1$.
 
 We can solve the path coefficient $\gamma$ by knowing the regression coefficient (correlation) between the raw values of $x$ and $y$ and adjusting by the loading of $x$ on $\xi$.
 
-Let's return to our previous example and generate some data for $y$, then estimate the (standardized) coefficient, or correlation:
+Let's return to our previous example and generate some data for $y$, then estimate the standardized coefficient or correlation:
 
 
 ```r
@@ -170,7 +170,7 @@ Which, for our example, is:
 ## [1] 0.6065565
 ```
 
-So the new estimate of the coefficient between the two latent variables is $\gamma = 0.607$ which of course is different from $b = 0.544$. This is because the measurement error in $x$ was formerly lumped in to the prediction error of $y$. By removing it, we have improved the estimate of the true effect of $x$ on $y$! Not accounting for measurement error, then, results in a downward bias in both the coefficients and the variance explained.
+So the new estimate of the coefficient between the two latent variables is $\gamma = 0.607$ which of course is different from $b = 0.544$. This is because the measurement error in $x$ was formerly lumped in to the prediction error of $y$. By removing it, we have improved the estimate of the true effect of $x$ on $y$ and validated our assumption about the error variance of $y$. Not accounting for measurement error, then, results in a downward bias in both the coefficients and the variance explained.
 
 From this value, we can obtain the unexplained variance, or $\zeta$. Recall that the error $\delta_{x}$ is 1 - the explained variance, where the explained variance is the reliability. Here, we can transfer this knowledge such that: $\zeta = 1 - \gamma^2$:
 
@@ -192,7 +192,7 @@ From this value, we can obtain the unexplained variance, or $\zeta$. Recall that
 ## [1] 0.7040515
 ```
 
-The error variance has decreased from 0.704 to 0.632 relative to the linear model, again, as a consequence of removing the measurement error in $x$. So, by incorporating the error in $x$ into our model, we have improved our estimate of the relationship between $x$ and $y$ *and* therefore decreased the unexplained variance.
+The error variance has decreased from 0.704 to 0.632 relative to the linear model, again, as a consequence of removing the measurement error in $x$ in the predictions of $y$ and improving our estimate of the true relationship between the two.
 
 ## Latent Variables in *lavaan*
 
@@ -225,23 +225,24 @@ summary(latent_model1, standardize = T, rsq = T)
 ```
 
 ```
-## lavaan 0.6-3 ended normally after 22 iterations
-## 
-##   Optimization method                           NLMINB
-##   Number of free parameters                          3
-## 
-##   Number of observations                            50
+## lavaan 0.6-7 ended normally after 22 iterations
 ## 
 ##   Estimator                                         ML
-##   Model Fit Test Statistic                       0.000
+##   Optimization method                           NLMINB
+##   Number of free parameters                          3
+##                                                       
+##   Number of observations                            50
+##                                                       
+## Model Test User Model:
+##                                                       
+##   Test statistic                                 0.000
 ##   Degrees of freedom                                 0
-##   Minimum Function Value               0.0000000000000
 ## 
 ## Parameter Estimates:
 ## 
+##   Standard errors                             Standard
 ##   Information                                 Expected
 ##   Information saturated (h1) model          Structured
-##   Standard Errors                             Standard
 ## 
 ## Latent Variables:
 ##                    Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
@@ -275,7 +276,7 @@ The standardized loading on $xi = 0.895$ which is very close to the value we cal
 
 With respect to the regression coefficient, *lavaan* returned a standardized $\gamma = 0.608$ while we obtained $\gamma = 0.607$. Very close! Similarly the standardized error variance on $\eta$ is $\zeta = 0.630$, which is also very close to $1 - \gamma^2 = 0.632$. Naturally, then, the explained variances are also nearly identical, being 1 - error variance.
 
-So, all in all, for single indicator latent variables, we are able to almost exactly reproduce the output from *lavaan* (slight deviations are due to the ML algorithm vs `lm`, as in our example for local estimation). 
+So, all in all, for single indicator latent variables, we are able to almost exactly reproduce the output from *lavaan* (slight deviations are due to the optimization algorithms to solve the maximum-likelihood fitting function).
 
 One could alternately fix the error of the exogenous latent variable and incorporate measurement error of $y$:
 
@@ -316,22 +317,24 @@ summary(latent_model2, standardize = T, rsq = T)
 ```
 
 ```
-## lavaan 0.6-3 ended normally after 11 iterations
-## 
-##   Optimization method                           NLMINB
-##   Number of free parameters                          3
-## 
-##   Number of observations                            50
+## lavaan 0.6-7 ended normally after 11 iterations
 ## 
 ##   Estimator                                         ML
-##   Model Fit Test Statistic                       0.000
+##   Optimization method                           NLMINB
+##   Number of free parameters                          3
+##                                                       
+##   Number of observations                            50
+##                                                       
+## Model Test User Model:
+##                                                       
+##   Test statistic                                 0.000
 ##   Degrees of freedom                                 0
 ## 
 ## Parameter Estimates:
 ## 
+##   Standard errors                             Standard
 ##   Information                                 Expected
 ##   Information saturated (h1) model          Structured
-##   Standard Errors                             Standard
 ## 
 ## Latent Variables:
 ##                    Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
@@ -363,19 +366,17 @@ Here, because we did not specify it, the error variance of $x$ has automatically
 
 To start, the standardized $\gamma = 0.590$, which is different than the $\gamma = 0.608$ we obtained when incorporating measurement error on $x$, but also different than the standardized coefficient from a simple linear regression $b = 0.544$. 
 
-The error variance on $\eta$ ($\zeta = 0.652$) is also lower than the unexplained variance from the linear regression ($1 - R^2 = 0.704$), but higher than in the latent variable model incorpoting error on $x$ ($\zeta = 0.630$).
+The error variance on $\eta$ ($\zeta = 0.652$) is also lower than the unexplained variance from the linear regression ($1 - R^2 = 0.704$), but higher than in the latent variable model incorporating error on $x$ ($\zeta = 0.630$).
 
-The *unstandardized coefficient*, however, is unchanged: $\beta = 0.792$. This is in contrast to the earlier latent variable model, where the unstandardized estimate was 0.989.
+Thus, we see that incorporating measurement error in endogenous latent variables resolves *some* of the downward bias in the unstandardized coefficient and error variance.
 
-Thus, we see that incorporating measurement error in endogenous latent variables resolves some of the downward bias in the unstandardized coefficient and error variance, but not the unstandardized coefficient. This difference emphasizes the need to report both standardized and unstandardized coefficients when constructing a path model! (Other justifications are discussed in the chapter on path coefficients.)
-
-For the moment, latent variables are restricted to covariance-based SEM, although we are working to extend some concepts using the piecewise framework. *lavaan*, however, provides an easier, robust framework that easily extends to multi-indicator latent variables, and so we will use it from here on out.
+For the moment, latent variables are restricted to covariance-based SEM, although new work by Shipley and Douma have extended latent variable modeling to a graph theoretic approachk. For the time being, however, *lavaan*  provides an easier, robust framework that easily extends to multi-indicator latent variables, and so we will use it from here on out.
 
 ## Multi-indicator Latent Variables 
 
-Accounting for measurement error requires some estimate of reliability. Often, we don't *have* a measure of reliability, because we don't design our experiments to obtain one. In such cases, it might be recommended to revert to a non-latent variable approach where the path coefficients are simpy regression coefficients that don't incorporate any measurement error.
+Accounting for measurement error requires some estimate of reliability. Often, we don't *have* a measure of reliability, because we don't design our experiments to repeatedly sample the indicator variable to obtain one. In such cases, it might be recommended to revert to a non-latent variable approach where the path coefficients are simlpy regression coefficients that don't incorporate any measurement error.
 
-Another solution is to incorporate multiple indicator variables to provide a different measure of reliability. In this case, the correlation is not derived from multiple samples of the same indicator, but *among* indicators. It also acts as a check against indicators that do not inform the latent variable, as such variables will provide low reliability estimates.
+Another solution is to incorporate multiple indicator variables to provide a different measure of reliability. In this case, the correlation is not derived from multiple samples of the same indicator, but *among* indicators. It also acts as a check against indicators that do not inform the latent variable, as such variables will provide low reliability estimates because they are (presumably) not being generated by that same underlying latent variable.
 
 This approach also provides a conceptual advantage: we often choose a single indicator as a surrogate for a latent concept (e.g., body mass for body size). Including more indicators helps to generalize this phenomenon by testing that the result is not an impact of the choice of any single indicator.
 
@@ -386,31 +387,31 @@ Consider an exogenous latent variable indicated by two variables, $x1$ and $x1$.
   $$x1 = \lambda_{1}\xi + \delta_{x1}$$
   $$x2 = \lambda_{2}\xi + \delta_{x1}$$
 
-We know the values of $x1$ and $x2$ and the correlation between them. To estimate values for the latent construct $\xi$ we need to estimate $lambda_{1}$, $\lambda_{2}$, $\delta_{x1}$ and $\delta_{x2}$. This model fails the t-rule, which, if you recall, is:
+We know the values of $x1$ and $x2$ and the correlation between them. To estimate values for the latent construct $\xi$ we need to estimate $\lambda_{1}$, $\lambda_{2}$, $\delta_{x1}$ and $\delta_{x2}$. This model fails the t-rule, which, if you recall, is:
 
   $$t \leq \frac{n(n+1)}{2}$$
   
 where $t = 4$ is the number of unknowns, and $n = 2$ is the number of knowns. In this example, $t = 4 \leq 3$ does not hold.
 
-Since $\delta = 1 - \lambda^2$, we need only solve for the two $\lambda$s, but we only have 1 piece of information: the correlation. The solution is to set the loadings to be equal: $lambda_{1} = \lambda_{2}$. This is because, with only this information, we have no reason to suspect one indicator is more correlated with the latent variable than the other. Its important to note here that the two must be *positively* correlated (or scaled to be so), otherwise setting them to be equal is not a valid assumption.
+Since $\delta = 1 - \lambda^2$, we need only solve for the two $\lambda$s, but we only have one piece of information: the correlation. The solution is to set the loadings to be equal: $\lambda_{1} = \lambda_{2}$. This is because, with only this information, we have no reason to suspect one indicator is more correlated with the latent variable than the other. Its important to note here that the two must be *positively* correlated (or scaled to be so), otherwise setting them to be equal is not a valid assumption.
 
-We know from our "ninth rule of path coefficients" that the correlation equals the sum of the direct and indirect pathways. The only path connecting $x1$ and $x2$ is through $\epsilon$, and the value of the compound path is the product of the two individual pathways (Rule 3). Thus, the correlation $r_{x1,x2} = lambda_{1} \times \lambda_{2}$. Given the assumption that the two loadings are equal, $r_{x1,x2} = \lambda^2$ and thus $\lambda = \sqrt(r_{x1,x2})$.
+We know from our "ninth rule of path coefficients" that the correlation equals the sum of the direct and indirect pathways. The only path connecting $x1$ and $x2$ is through $\epsilon$, and the value of the compound path is the product of the two individual pathways (Rule 3). Thus, the correlation $r_{x1,x2} = \lambda_{1} \times \lambda_{2}$. Given the assumption that the two loadings are equal, $r_{x1,x2} = \lambda^2$ and thus $\lambda = \sqrt(r_{x1,x2})$.
 
-We can scale this procedure for >2 indicators by setting just the 2 loadings to be equal: this will give us the necessary information (along with Rule 8 of path coefficients) to generate unique solutions for the other loadings. It is for this reason that at least three indicators are preferred for multi-indicator latent variables: it lessens the impact of the assumption that two loadings are equal.
+We can scale this procedure for >2 indicators by setting just the two loadings to be equal: this will give us the necessary information (along with Rule 8 of path coefficients) to generate unique solutions for the other loadings. It is for this reason that at least three indicators are preferred for multi-indicator latent variables: it lessens the impact of the assumption that two of the loadings are equal.
 
-A ptentially better--and easier--solution is to fix one of the loadings to be 1. If, for example, we fix $\lambda_{1} = 1$ then we know that $\lambda_{2} = r_{x1,x2} / \lambda_{1} = r_{x1,x2} / 1 = r_{x1,x2}$. 
+A potentially better--and easier--solution is to fix one of the loadings to be 1. If, for example, we fix $\lambda_{1} = 1$ then we know that $\lambda_{2} = r_{x1,x2} / \lambda_{1} = r_{x1,x2} / 1 = r_{x1,x2}$. 
 
-This choice has another consequence: because it is unmeasured, we also need to provide a scale for our multi-indicator latent variable. This can be done by fixing the variance $\zeta = 1$ or by fixing one of the unstandardized loadings to 1. Both accomplish the same objective.
+This choice has another consequence: because it is unmeasured, we also need to provide a scale for our multi-indicator latent variable. This can be done by fixing the variance $\zeta = 1$ or by fixing one of the unstandardized loadings to 1 (wherein the scale will be in units of that indicator). Both accomplish the same objective.
 
 Finally, we can obtain an integrated estimate of reliability from multi-indicator latent variables using the following equation:
 
-  $$\rho_{xi,xj} = \frac{(\sum\lambda_{j})^2}{(\sum\lambda_{j})^2 + \sum\epsilon_{j}} $$
+  $$\rho = \frac{(\sum\lambda_{j})^2}{(\sum\lambda_{j})^2 + \sum\epsilon_{j}} $$
 
-where $j$ is the number of indicator variables.
+where $j$ is the index of each indicator variable.
   
 For the record, a reliability index > 0.9 is considered 'excellent', > 0.8 to be 'good', and so on. Anything < 0.5 is considered to be no different than random chance, and so indicators with such a low degree of correlation should be avoided. 
 
-In fact, it is always recommended to inspect the correlation matrix among indicator variables to screen for potentially unrelated indicators. It may also help to identify indicators that are highly correlated, moreso than the other indicators. Such high correlations might suggest another common cause (such as the same measurement instrument, same observer, evolutionary constraints, etc.). In this case, it would be recommended to indicate a 'correlated error' among the two indicators indicating an underlying driver of their higher-than-average association than just the latent construct.
+In fact, it is always recommended to inspect the correlation matrix among indicator variables to screen for potentially unrelated indicators. It may also help to identify indicators that are highly correlated, moreso than the other indicators. Such high correlations might suggest another common cause (such as the same measurement instrument, same observer, evolutionary constraints, etc.). In this case, it would be recommended to indicate a 'correlated error' among the two indicators indicating a separate underlying driver of their higher-than-average association than the specified latent construct.
 
 When we get into the realm of multi-indicator latent variables, it becomes impossible to decompose partial relationships as we have previously for observed variable models. Instead, maximum-likelihood functions are necessary to iteratively test and optimize the parameters that describe the relationships between observed and unobserved quantities.
 
@@ -436,7 +437,7 @@ Let's first explore this latent construct before getting into the structural mod
 
 
 ```r
-travis <- read.csv("./data/travis.csv")
+travis <- read.csv("https://raw.githubusercontent.com/jslefche/sem_book/master/data/travis.csv")
 
 cor(travis[, 4:8])
 ```
@@ -450,7 +451,7 @@ cor(travis[, 4:8])
 ## leafwdth  0.6457378 0.6026302 0.7296621 0.9687725 1.0000000
 ```
 
-The correlations range from 0.65-0.93, suggesting that these variables may be generated by the same process. There is one excessive correlation between leaf height and width, potentially suggesting influence by another process (hint).
+The correlations range from 0.65-0.93, suggesting that many of these variables may be generated by the same process. There is one excessive correlation between leaf height and width, potentially suggesting influence by another process (hint hint).
 
 Now that we have qualitatively assessed the *validity* of the latent model, let's fit it and examine the output:
 
@@ -471,23 +472,25 @@ summary(travis_latent_model1)
 ```
 
 ```
-## lavaan 0.6-3 ended normally after 82 iterations
-## 
-##   Optimization method                           NLMINB
-##   Number of free parameters                         10
-## 
-##   Number of observations                            23
+## lavaan 0.6-7 ended normally after 82 iterations
 ## 
 ##   Estimator                                         ML
-##   Model Fit Test Statistic                      51.106
+##   Optimization method                           NLMINB
+##   Number of free parameters                         10
+##                                                       
+##   Number of observations                            23
+##                                                       
+## Model Test User Model:
+##                                                       
+##   Test statistic                                51.106
 ##   Degrees of freedom                                 5
 ##   P-value (Chi-square)                           0.000
 ## 
 ## Parameter Estimates:
 ## 
+##   Standard errors                             Standard
 ##   Information                                 Expected
 ##   Information saturated (h1) model          Structured
-##   Standard Errors                             Standard
 ## 
 ## Latent Variables:
 ##                    Estimate  Std.Err  z-value  P(>|z|)
@@ -508,9 +511,9 @@ summary(travis_latent_model1)
 ##     performance     135.763   67.580    2.009    0.045
 ```
 
-Note that the first loading has been restricted to 1 for purposes of identifiability.
+Note that the first loading has been restricted to 1  (the default in *lavaan*) for purposes of identifiability.
 
-First, we note that the model is a poor fit ($P < 0.001$). We can explore why this is using modification indices:
+First, we note that the model is a poor fit (*P* < 0.001). We can explore why this is using modification indices:
 
 
 ```r
@@ -531,7 +534,7 @@ print(modindices(travis_latent_model1))
 ## 21    leafht ~~  leafwdth 37.862  17.177  17.177   26.752   26.752
 ```
 
-Recall that the value of the modification index (`mi` in the output) is the expected *decrease* in the model $\chi^2$. Here, a larger number would lead to a better fit if that path were included. It seems there is a strong implied correlation between leaf height and leaf width, presumably arising from common constraints on how the leaves of *Spartina* have evolved and the limited variety of shapes they can take, and *not* the plant's performance.
+Recall that the value of the modification index (`mi` in the output) is the expected *decrease* in the model $\chi^2$. Here, a larger number would lead to a better fit if that path were included. It seems there is a strong implied correlation between leaf height and leaf width, presumably arising from common constraints on how the leaves of *Spartina* have evolved and the limited variety of shapes they can take, and *not* from the plant's performance.
 
 We can introduce this correlation into the model and re-fit:
 
@@ -548,23 +551,25 @@ summary(travis_latent_model2)
 ```
 
 ```
-## lavaan 0.6-3 ended normally after 81 iterations
-## 
-##   Optimization method                           NLMINB
-##   Number of free parameters                         11
-## 
-##   Number of observations                            23
+## lavaan 0.6-7 ended normally after 81 iterations
 ## 
 ##   Estimator                                         ML
-##   Model Fit Test Statistic                       7.410
+##   Optimization method                           NLMINB
+##   Number of free parameters                         11
+##                                                       
+##   Number of observations                            23
+##                                                       
+## Model Test User Model:
+##                                                       
+##   Test statistic                                 7.410
 ##   Degrees of freedom                                 4
 ##   P-value (Chi-square)                           0.116
 ## 
 ## Parameter Estimates:
 ## 
+##   Standard errors                             Standard
 ##   Information                                 Expected
 ##   Information saturated (h1) model          Structured
-##   Standard Errors                             Standard
 ## 
 ## Latent Variables:
 ##                    Estimate  Std.Err  z-value  P(>|z|)
@@ -590,7 +595,7 @@ summary(travis_latent_model2)
 ##     performance     246.382   77.658    3.173    0.002
 ```
 
-Ah-ha! Introducing this correlated error has now reduced the $\chi^2$ statistic to an acceptably low level ($P = 0.116$). Thus, we have arrived at a legitimate latent construct of plant performance, which we can now use to evaluate some broader hypotheses.
+Ah-ha! Introducing this correlated error has now reduced the $\chi^2$ statistic to an acceptably low level to achieve an adequate model fit (*P* = 0.116). Thus, we fail to reject our latent construct of plant performance, which we can now use to evaluate some broader hypotheses.
 
 If you recall, the authors' original intent was to explore how native vs. non-native genotypes of *Spartina* influenced performance, which they quantified using a measure of genetic distance from the local population. To test this hypothesis, let's fit the following path model: 
 
@@ -617,23 +622,25 @@ summary(travis_path_model1)
 ```
 
 ```
-## lavaan 0.6-3 ended normally after 107 iterations
-## 
-##   Optimization method                           NLMINB
-##   Number of free parameters                         12
-## 
-##   Number of observations                            23
+## lavaan 0.6-7 ended normally after 107 iterations
 ## 
 ##   Estimator                                         ML
-##   Model Fit Test Statistic                      12.237
+##   Optimization method                           NLMINB
+##   Number of free parameters                         12
+##                                                       
+##   Number of observations                            23
+##                                                       
+## Model Test User Model:
+##                                                       
+##   Test statistic                                12.237
 ##   Degrees of freedom                                 8
 ##   P-value (Chi-square)                           0.141
 ## 
 ## Parameter Estimates:
 ## 
+##   Standard errors                             Standard
 ##   Information                                 Expected
 ##   Information saturated (h1) model          Structured
-##   Standard Errors                             Standard
 ## 
 ## Latent Variables:
 ##                    Estimate  Std.Err  z-value  P(>|z|)
@@ -664,7 +671,7 @@ summary(travis_path_model1)
 ##    .performance     120.509   39.656    3.039    0.002
 ```
 
-It seems that this model fits the data well ($P = 0.141$) and the relationship of interest, between genetic distance and performance, is highly significant ($P < 0.001$). In this case, the more unlike the local population the transplants were (greater genetic distance), the worse they performed.
+It seems that this model fits the data well (*P* = 0.141) and the relationship of interest (between $geneticdist$ and $performance$) is highly significant (*P* < 0.001). In this case, the more distant the genotypes of the local population from which the transplants were taken (i.e., a greater genetic distance), the worse they performed.
 
 ## References
 Travis, S. E., & Grace, J. B. (2010). Predicting performance for ecological restoration: a case study using Spartina alterniflora. Ecological Applications, 20(1), 192-204.

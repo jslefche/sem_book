@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3 Local Estimation | Structural Equation Modeling in R for Ecology and Evolution</title>
+  <meta name="description" content="3 Local Estimation | Structural Equation Modeling in R for Ecology and Evolution" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3 Local Estimation | Structural Equation Modeling in R for Ecology and Evolution" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  <meta name="github-repo" content="jslefche/sem_book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3 Local Estimation | Structural Equation Modeling in R for Ecology and Evolution" />
+  
+  
+  
+
+<meta name="author" content="Jonathan Lefcheck" />
+
+
+<meta name="date" content="2021-01-14" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="global-estimation.html"/>
+<link rel="next" href="coefficients.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface</a></li>
+<li class="chapter" data-level="2" data-path="global-estimation.html"><a href="global-estimation.html"><i class="fa fa-check"></i><b>2</b> Global Estimation</a><ul>
+<li class="chapter" data-level="2.1" data-path="global-estimation.html"><a href="global-estimation.html#what-is-covariance"><i class="fa fa-check"></i><b>2.1</b> What is (Co)variance?</a></li>
+<li class="chapter" data-level="2.2" data-path="global-estimation.html"><a href="global-estimation.html#regression-coefficients"><i class="fa fa-check"></i><b>2.2</b> Regression Coefficients</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="global-estimation.html"><a href="global-estimation.html#rule-1-unspecified-relationships-among-exogenous-variables-are-simply-their-bivariate-correlations."><i class="fa fa-check"></i><b>2.2.1</b> Rule 1: Unspecified relationships among exogenous variables are simply their bivariate correlations.</a></li>
+<li class="chapter" data-level="2.2.2" data-path="global-estimation.html"><a href="global-estimation.html#rule-2-when-two-variables-are-connected-by-a-single-path-the-coefficient-of-that-path-is-the-regression-coefficient."><i class="fa fa-check"></i><b>2.2.2</b> Rule 2: When two variables are connected by a single path, the coefficient of that path is the regression coefficient.</a></li>
+<li class="chapter" data-level="2.2.3" data-path="global-estimation.html"><a href="global-estimation.html#rule-3-the-strength-of-a-compound-path-one-that-includes-multiple-links-is-the-product-of-the-individual-coefficients."><i class="fa fa-check"></i><b>2.2.3</b> Rule 3: The strength of a compound path (one that includes multiple links) is the product of the individual coefficients.</a></li>
+<li class="chapter" data-level="2.2.4" data-path="global-estimation.html"><a href="global-estimation.html#rule-4.-when-variables-are-connected-by-more-than-one-pathway-each-pathway-is-the-partial-regression-coefficient."><i class="fa fa-check"></i><b>2.2.4</b> Rule 4. When variables are connected by more than one pathway, each pathway is the ‘partial’ regression coefficient.</a></li>
+<li class="chapter" data-level="2.2.5" data-path="global-estimation.html"><a href="global-estimation.html#rule-5-errors-on-endogenous-variables-relate-the-unexplained-correlations-or-variances-arising-from-unmeasured-variables."><i class="fa fa-check"></i><b>2.2.5</b> Rule 5: Errors on endogenous variables relate the unexplained correlations or variances arising from unmeasured variables.</a></li>
+<li class="chapter" data-level="2.2.6" data-path="global-estimation.html"><a href="global-estimation.html#rule-6-unanalyzed-residual-correlations-among-two-endogenous-variables-are-their-partial-correlations."><i class="fa fa-check"></i><b>2.2.6</b> Rule 6: Unanalyzed (residual) correlations among two endogenous variables are their partial correlations.</a></li>
+<li class="chapter" data-level="2.2.7" data-path="global-estimation.html"><a href="global-estimation.html#rule-7-the-total-effect-one-variable-has-another-is-the-sum-of-its-direct-and-indirect-effects."><i class="fa fa-check"></i><b>2.2.7</b> Rule 7: The total effect one variable has another is the sum of its direct and indirect effects.</a></li>
+<li class="chapter" data-level="2.2.8" data-path="global-estimation.html"><a href="global-estimation.html#rule-8-the-total-effect-including-undirected-paths-is-equivalent-to-the-total-correlation."><i class="fa fa-check"></i><b>2.2.8</b> Rule 8: The total effect (including undirected paths) is equivalent to the total correlation.</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="global-estimation.html"><a href="global-estimation.html#variance-based-structural-equation-modeling"><i class="fa fa-check"></i><b>2.3</b> Variance-based Structural Equation Modeling</a></li>
+<li class="chapter" data-level="2.4" data-path="global-estimation.html"><a href="global-estimation.html#model-identifiability"><i class="fa fa-check"></i><b>2.4</b> Model Identifiability</a></li>
+<li class="chapter" data-level="2.5" data-path="global-estimation.html"><a href="global-estimation.html#goodness-of-fit-measures"><i class="fa fa-check"></i><b>2.5</b> Goodness-of-fit Measures</a></li>
+<li class="chapter" data-level="2.6" data-path="global-estimation.html"><a href="global-estimation.html#model-fitting-using-lavaan"><i class="fa fa-check"></i><b>2.6</b> Model Fitting Using <em>lavaan</em></a><ul>
+<li class="chapter" data-level="2.6.1" data-path="global-estimation.html"><a href="global-estimation.html#lavaan-vs-lm"><i class="fa fa-check"></i><b>2.6.1</b> <em>lavaan</em> vs <code>lm</code></a></li>
+<li class="chapter" data-level="2.6.2" data-path="global-estimation.html"><a href="global-estimation.html#sem-using-lavaan"><i class="fa fa-check"></i><b>2.6.2</b> SEM using <em>lavaan</em></a></li>
+<li class="chapter" data-level="2.6.3" data-path="global-estimation.html"><a href="global-estimation.html#testing-alternative-structures-using-lavaan"><i class="fa fa-check"></i><b>2.6.3</b> Testing Alternative Structures using <em>lavaan</em></a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="global-estimation.html"><a href="global-estimation.html#references"><i class="fa fa-check"></i><b>2.7</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="local-estimation.html"><a href="local-estimation.html"><i class="fa fa-check"></i><b>3</b> Local Estimation</a><ul>
+<li class="chapter" data-level="3.1" data-path="local-estimation.html"><a href="local-estimation.html#global-vs.-local-estimation"><i class="fa fa-check"></i><b>3.1</b> Global vs. local estimation</a></li>
+<li class="chapter" data-level="3.2" data-path="local-estimation.html"><a href="local-estimation.html#tests-of-directed-separation"><i class="fa fa-check"></i><b>3.2</b> Tests of directed separation</a></li>
+<li class="chapter" data-level="3.3" data-path="local-estimation.html"><a href="local-estimation.html#a-log-likelihood-approach-to-assessing-model-fit"><i class="fa fa-check"></i><b>3.3</b> A Log-Likelihood Approach to Assessing Model Fit</a></li>
+<li class="chapter" data-level="3.4" data-path="local-estimation.html"><a href="local-estimation.html#model-fitting-using-piecewisesem"><i class="fa fa-check"></i><b>3.4</b> Model fitting using <em>piecewiseSEM</em></a></li>
+<li class="chapter" data-level="3.5" data-path="local-estimation.html"><a href="local-estimation.html#extensions-to-generalized-mixed-effects-models"><i class="fa fa-check"></i><b>3.5</b> Extensions to Generalized Mixed Effects Models</a></li>
+<li class="chapter" data-level="3.6" data-path="local-estimation.html"><a href="local-estimation.html#extensions-to-non-linear-models"><i class="fa fa-check"></i><b>3.6</b> Extensions to Non-linear Models</a></li>
+<li class="chapter" data-level="3.7" data-path="local-estimation.html"><a href="local-estimation.html#a-special-case-where-graph-theory-fails"><i class="fa fa-check"></i><b>3.7</b> A Special Case: Where Graph Theory Fails</a></li>
+<li class="chapter" data-level="3.8" data-path="local-estimation.html"><a href="local-estimation.html#references-1"><i class="fa fa-check"></i><b>3.8</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="coefficients.html"><a href="coefficients.html"><i class="fa fa-check"></i><b>4</b> Coefficients</a><ul>
+<li class="chapter" data-level="4.1" data-path="coefficients.html"><a href="coefficients.html#unstandardized-and-standardized-coefficients"><i class="fa fa-check"></i><b>4.1</b> Unstandardized and Standardized Coefficients</a></li>
+<li class="chapter" data-level="4.2" data-path="coefficients.html"><a href="coefficients.html#scale-standardization"><i class="fa fa-check"></i><b>4.2</b> Scale Standardization</a></li>
+<li class="chapter" data-level="4.3" data-path="coefficients.html"><a href="coefficients.html#range-standardization"><i class="fa fa-check"></i><b>4.3</b> Range Standardization</a></li>
+<li class="chapter" data-level="4.4" data-path="coefficients.html"><a href="coefficients.html#binomial-response-models"><i class="fa fa-check"></i><b>4.4</b> Binomial Response Models</a></li>
+<li class="chapter" data-level="4.5" data-path="coefficients.html"><a href="coefficients.html#scaling-to-other-non-normal-distributions"><i class="fa fa-check"></i><b>4.5</b> Scaling to Other Non-Normal Distributions</a></li>
+<li class="chapter" data-level="4.6" data-path="coefficients.html"><a href="coefficients.html#references-2"><i class="fa fa-check"></i><b>4.6</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="categorical-variables.html"><a href="categorical-variables.html"><i class="fa fa-check"></i><b>5</b> Categorical Variables</a><ul>
+<li class="chapter" data-level="5.1" data-path="categorical-variables.html"><a href="categorical-variables.html#introduction-to-exogenous-categorical-variables"><i class="fa fa-check"></i><b>5.1</b> Introduction to Exogenous Categorical Variables</a></li>
+<li class="chapter" data-level="5.2" data-path="categorical-variables.html"><a href="categorical-variables.html#exogenous-categorical-variables-as-marginal-means"><i class="fa fa-check"></i><b>5.2</b> Exogenous Categorical Variables as Marginal Means</a></li>
+<li class="chapter" data-level="5.3" data-path="categorical-variables.html"><a href="categorical-variables.html#exogenous-categorical-variables-as-marginal-means-a-worked-example"><i class="fa fa-check"></i><b>5.3</b> Exogenous Categorical Variables as Marginal Means: A Worked Example</a></li>
+<li class="chapter" data-level="5.4" data-path="categorical-variables.html"><a href="categorical-variables.html#endogenous-categorical-variables"><i class="fa fa-check"></i><b>5.4</b> Endogenous Categorical Variables</a></li>
+<li class="chapter" data-level="5.5" data-path="categorical-variables.html"><a href="categorical-variables.html#references-3"><i class="fa fa-check"></i><b>5.5</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html"><i class="fa fa-check"></i><b>6</b> Multigroup Analysis</a><ul>
+<li class="chapter" data-level="6.1" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#introduction-to-multigroup-analysis"><i class="fa fa-check"></i><b>6.1</b> Introduction to Multigroup Analysis</a></li>
+<li class="chapter" data-level="6.2" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#multigroup-analysis-using-global-estimation"><i class="fa fa-check"></i><b>6.2</b> Multigroup Analysis using Global Estimation</a></li>
+<li class="chapter" data-level="6.3" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#multigroup-analysis-using-local-estimation"><i class="fa fa-check"></i><b>6.3</b> Multigroup Analysis Using Local Estimation</a></li>
+<li class="chapter" data-level="6.4" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#grace-jutila-1999-a-worked-example"><i class="fa fa-check"></i><b>6.4</b> Grace &amp; Jutila (1999): A Worked Example</a></li>
+<li class="chapter" data-level="6.5" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#references-4"><i class="fa fa-check"></i><b>6.5</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html"><i class="fa fa-check"></i><b>7</b> Latent Variable Modeling</a><ul>
+<li class="chapter" data-level="7.1" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#introduction-to-latent-variable-modeling"><i class="fa fa-check"></i><b>7.1</b> Introduction to Latent Variable Modeling</a></li>
+<li class="chapter" data-level="7.2" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#application-of-latent-variables-to-path-models"><i class="fa fa-check"></i><b>7.2</b> Application of Latent Variables to Path Models</a></li>
+<li class="chapter" data-level="7.3" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#latent-variables-in-lavaan"><i class="fa fa-check"></i><b>7.3</b> Latent Variables in <em>lavaan</em></a></li>
+<li class="chapter" data-level="7.4" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#multi-indicator-latent-variables"><i class="fa fa-check"></i><b>7.4</b> Multi-indicator Latent Variables</a></li>
+<li class="chapter" data-level="7.5" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#confirmatory-factor-analysis"><i class="fa fa-check"></i><b>7.5</b> Confirmatory Factor Analysis</a></li>
+<li class="chapter" data-level="7.6" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#travis-grace-2010-an-example"><i class="fa fa-check"></i><b>7.6</b> Travis &amp; Grace (2010): An Example</a></li>
+<li class="chapter" data-level="7.7" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#references-5"><i class="fa fa-check"></i><b>7.7</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="composite-variables.html"><a href="composite-variables.html"><i class="fa fa-check"></i><b>8</b> Composite Variables</a><ul>
+<li class="chapter" data-level="8.1" data-path="composite-variables.html"><a href="composite-variables.html#what-is-a-composite-variable"><i class="fa fa-check"></i><b>8.1</b> What is a Composite Variable?</a></li>
+<li class="chapter" data-level="8.2" data-path="composite-variables.html"><a href="composite-variables.html#constructing-a-composite-variable"><i class="fa fa-check"></i><b>8.2</b> Constructing a Composite Variable</a></li>
+<li class="chapter" data-level="8.3" data-path="composite-variables.html"><a href="composite-variables.html#grace-keeley-revisited-a-worked-example"><i class="fa fa-check"></i><b>8.3</b> Grace &amp; Keeley Revisited: A Worked Example</a></li>
+<li class="chapter" data-level="8.4" data-path="composite-variables.html"><a href="composite-variables.html#composites-in-piecewisesem"><i class="fa fa-check"></i><b>8.4</b> Composites in <em>piecewiseSEM</em></a></li>
+<li class="chapter" data-level="8.5" data-path="composite-variables.html"><a href="composite-variables.html#references-6"><i class="fa fa-check"></i><b>8.5</b> References</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Structural Equation Modeling in R for Ecology and Evolution</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="local-estimation" class="section level1">
+<h1><span class="header-section-number">3</span> Local Estimation</h1>
+<div id="global-vs.-local-estimation" class="section level2">
+<h2><span class="header-section-number">3.1</span> Global vs. local estimation</h2>
+<p>In the previous chapter, we explored the use of structural equation modeling to estimate relationships among a network of variables based on attempts to reproduce a single variance-covariance matrix. We refer to this approach as <em>global estimation</em> because the variance-covariance matrix captures relationships among <em>all</em> variables in the model at once.</p>
+<p>This previous approach comes with a number of assumptions about the data, notably that they are multivariate normal and sufficiently replicated to generate unbiased parameter estimates. However, most data–particularly ecological data–violate these assumptions. Given the difficulty with which the data are collected and the complexity of the proposed relationships, issues with power are often encountered.</p>
+<p>While variance-covariance based methods have been extended to consider special cases such as non-normality, an alternative estimation procedure was proposed in 2000 by Shipley based on concepts from graph theory. In this method, relationships for each endogenous (response) variable are estimated separately, which is why we call it <em>local estimation</em> or <em>piecewise SEM</em>, due to the nature by which the model is <em>pieced</em> together.</p>
+<p>Recall that global estimation assumes linear relationships, and indeed we have seen in the previous chapter that fitting a SEM and comparing the output with that from a linear model can yield the same results. Local estimation takes the latter approach: fitting a linear model for each response and then stringing together the inferences, rather than trying to estimate all relationships at once. Thus, piecewise SEM is more like putting together a puzzle piece by piece, rather than painting the image on a single canvas.</p>
+<p>This approach imparts great flexibility because the assumptions pertaining to each response can be evaluated and addressed individually rather than treating every variable as arising from the same data-generating process.</p>
+<p>For example, generalized linear models can be fit for data that are non-Gaussian such as count (e.g., abundance), proportion (e.g., survival), or binary outcomes (e.g., presence-absence). Mixed-effects or hierarchical models can be fit for data that are nested or adhere to some predefined structure. Similarly, non-independence (such as spatial, temporal, or phylogenetic) can be incorporated into the model structure to provide more robust parameter estimates. Moreover, only enough data is needed to be able to fit and estimate each individual regression. In doing so, Shipley’s method relaxes many of the assumptions associated with global estimation and better reflects the types and quantity of data collected by modern ecologists.</p>
+<p>A key point to be made is that the piecewise approach does not absolve the user of all assumptions associated with the statistical tests. The data must still meet the assumption of the individual models: for example, most linear regression assume constant variance and independence of errors. Such assumptions still hold, but they can be easily evaluated using the suite of tools already available for said models (e.g., histograms of residuals plots, Q-Q plots, etc.).</p>
+<p>However, recall that the goodness-of-fit measures for variance-covariance based structural equation models derive from comparison of the observed vs. estimated variance-covariance matrix. Because local estimation produces a separate variance-covariance matrix for each modeled response, there is no immediate extension from global methods. Instead, Shipley proposed a new test based on <em>directed acyclic graphs</em> (or DAGs).</p>
+<p>DAGs are the pictorial representation of the hypothesized causal relationships: in other words, the path diagram. It’s important to point out quickly that DAGs assume <em>recursive</em> relationships, or the absence of feedback loops or bidirectional relationships. Thus, local estimation is unsuitable for such approaches and one must resort to a global approach (with some additional conditions for such model structures).</p>
+<p>There is a rich literature pertaining to DAGs, principally in their estimation and evaluation, and Shipley has drawn on this to propose a new index of model fit.</p>
+<p>More recently, Shipley and Douma have introduced a more flexible method based on log-likelihood that produces a <span class="math inline">\(\chi^2\)</span> statistic whose interpretation is much closer to that of global estimation, but further relaxes assumptions by allowing for model assessment and comparison for any models fit using maximum likelihood estimation.</p>
+</div>
+<div id="tests-of-directed-separation" class="section level2">
+<h2><span class="header-section-number">3.2</span> Tests of directed separation</h2>
+<p>In global estimation, comparison of the observed vs. estimated variance-covariance matrix through the <span class="math inline">\(\chi^2\)</span> statistic asks whether the model-implied relationships deviate substantially from the relationships present in the data. If not, then the model is assumed to fit well, and we can go on to use it for inference.</p>
+<p>Another way of thinking about model fit is to ask: are we missing any important paths? Recall that structural equation modeling requires careful specification of a hypothesized structure. In the case of underidentified models (those where there are more pieces of known information than parameters to be estimated), this means there are missing relationships that could be present but were not included. Paths might be excluded because there is no <em>a priori</em> reason or mechanism to suspect a causal relationship. Recall that <em>modification indices</em> can be used to test the change in the <span class="math inline">\(\chi^2\)</span> statistic (i.e., how well the model fits) with the inclusion of these missing paths.</p>
+<p>The <em>tests of directed separation</em> evaluate this hypothesis more directly by actually fitting the missing relationships to test whether the path coefficients are significantly different from zero, and there whether we are justified in excluding them. This question is actually implicit in the <span class="math inline">\(\chi^2\)</span> statistic: a substantial deviation from the observed correlations suggests that we’re missing information in our model that could bring our estimates more in line with our observations.</p>
+<p>Two variables are said to be <em>d-separated</em> if they are statistically independent conditional on their joint influences. Let’s unpack this statement:</p>
+<p>First, the “two variables” are <em>unrelated</em> in the hypothesized causal model: in other words, there is not a directed path already connecting them. Second, we test for “statistical dependence” in our model all the time: the <em>P</em>-values associated with the path coefficients, for example, test whether the effect is significantly different than zero. Statistical <em>independence</em> then asks whether the two variables are significantly <em>unrelated</em>, or that that their relationship is in fact no different from zero. Finally, “conditional on their joint influences” means that the test for statistical independence must account for contributions from already specified influences. In other words, the test must consider the <em>partial</em> effect of one variable on the other if either or both are already connected to other variables in the model.</p>
+<p>Procedurally, this evaluation is quite easy: identify the sets of missing relationships, test whether the effect is not significantly different from zero (<em>P</em> &gt; 0.05) controlling for covariates already specified in the model, and combine those inferences to gauge the overall trustworthiness of the model.</p>
+<p>Let’s consider a simple path diagram:</p>
+<p><img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model1.png" /></p>
+<p>In this case, we have specified two sets of directed relationships: <span class="math inline">\(x1 -&gt; y1\)</span> and <span class="math inline">\(y1 -&gt; y2\)</span>.</p>
+<p>If we apply the t-rule from the chapter on global estimation, we have <span class="math inline">\(3(3+1)/2\)</span> or 6 pieces of known information (the variances on the 3 variables + the 3 sets of covariances). We want to estimate the 2 parameters <span class="math inline">\(\gamma_{x1y1}\)</span> and <span class="math inline">\(\beta_{y1y2}\)</span> and the variances on the 3 variables (we can get their covariances from that). Thus we have 6 known values to estimate 5 unknown values, and the model is <em>overidentified</em>. We noted in the chapter on global estimation that the number of leftover known values can be used as degrees of freedom in the <span class="math inline">\(\chi^2\)</span> goodness-of-fit test. In this case, there is 1 degree of freedom, so likewise, we can go on to test model fit.</p>
+<p>This 1 degree of freedom actually corresponds to the missing relationship between <span class="math inline">\(x1 -&gt; y2\)</span>. This is the <em>independence claim</em> we wish to test: that there is in fact no relationship between <span class="math inline">\(x1\)</span> and <span class="math inline">\(y2\)</span>. However, the effect of <span class="math inline">\(x1\)</span> on <span class="math inline">\(y2\)</span> must be independent (or the partial effect) of the known influence of <span class="math inline">\(y1\)</span>. Thus, we are testing the partial effect of <span class="math inline">\(x1\)</span> on <span class="math inline">\(y2\)</span> given <span class="math inline">\(y1\)</span>. You may see this claim written in the following notation: <span class="math inline">\(x1 | y2 (y1)\)</span> where the bar separates the two variables in the claim, and any conditioning variables follow in parantheses. (Shipley actually puts the two variables in parentheses followed by the conditioning variables in brackets: <span class="math inline">\((x1, y2) | {y1}\)</span>, for the record.)</p>
+<p>In this simple example, there is one conditioning variable for the single independence claim. This one independence claim constitutes what is called the <em>basis set</em>, which is the minimum number of independence claims derived from a path diagram. The key word to take away here is <em>minimum</em>.</p>
+<p>We could have just as easily tested the claim <span class="math inline">\(y2 | x1 (y1)\)</span>, which is the same relationship but in the opposite direction. However, the statistical test or <em>P</em>-value associated with this relationship is the same regardless of the direction. In other words, the partial effect of <span class="math inline">\(x1\)</span> on <span class="math inline">\(y2\)</span> is the same as <span class="math inline">\(y2\)</span> on <span class="math inline">\(x1\)</span> (although there is a caveat to this claim for GLM, which we will address later). In such a case, we would include only the one claim rather than both claims that provide the same information.</p>
+<p><em>Therefore, our first rule of directed separation is: the sum number of independence claims in the basis set cannot be derived from some combination of the others within it.</em></p>
+<p>As an aside, if we add this claim back into the model, we would have no missing paths. Thus, no independence claims or tests of directed separation would be possible. As is the case with <span class="math inline">\(\chi^2\)</span>, we would not have any leftover information with which to test model fit. This does not preclude fitting the model and drawing inference, only that its goodness-of-fit cannot be assessed. However, there are other qualitative ways of assessing model fit, such as looking that proportion of variance or deviance explained for each endogenous variable (i.e., <span class="math inline">\(R^2\)</span>) and assessing the significance of the individual paths. If a high proportion of variance is explained in all endogenous variable and there are significant path coefficients, it follows that residual error is low, and it’s safe to assume that there are no other variables out there that can further clarify the model structure. Nevertheless, you should be open about why you chose to fit a just identified model, and why you are not reporting any goodness-of-fit statitsics.</p>
+<p>As path diagrams become more complex, the natural question is: how far back do you go in terms of conditioning? Take the following example:</p>
+<p><img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/local_estimation_model1.png" /></p>
+<p>There are several missing paths: <span class="math inline">\(x1 -&gt; y2\)</span>, <span class="math inline">\(x1 -&gt; y3\)</span> and <span class="math inline">\(y1 -&gt; y3\)</span>.</p>
+<p>Let’s consider the independence claim <span class="math inline">\(x1 -&gt; y3\)</span>. Based on our last example, <span class="math inline">\(y2\)</span> must be included as a conditioning variable due to its direct influence on <span class="math inline">\(y3\)</span>, but what about <span class="math inline">\(y1\)</span>? It has an indirect influence on <span class="math inline">\(y3\)</span> through <span class="math inline">\(y2\)</span>. However, by having included <span class="math inline">\(y2\)</span> in the independence claim, we have already (theoretically) incorporated the indirect influence of <span class="math inline">\(y1\)</span> in the form of variation in <span class="math inline">\(y2\)</span>. In other words, any effect of <span class="math inline">\(y1\)</span> would change <span class="math inline">\(y2\)</span> before <span class="math inline">\(y3\)</span>, and the variance in <span class="math inline">\(y2\)</span> is already considered in the independence claim. So the full claim would be simply: <span class="math inline">\(x1 | y3 (y2)\)</span>.</p>
+<p><em>Our second rule of the d-sep test is: conditioning variables consist of only those variables <em>immediate</em> to the two variables whose independence is being evaluated.</em></p>
+<p>In other words, we assume that the effects of any other downstream variables are captured in the variance contributed by the immediate ancestors, and we can therefore ignore them. Upstream variables (those occuring later in the path diagram) are never considered as conditioning variables, for the obvious reason that they have no directed effect on the preceding variables.</p>
+<p>For the claim <span class="math inline">\(y1 -&gt; y3\)</span> above, there are now two conditioning variables: <span class="math inline">\(y2\)</span> (on <span class="math inline">\(y3\)</span>) and also <span class="math inline">\(x1\)</span> (on <span class="math inline">\(y1\)</span>). So the final independence claim would be: <span class="math inline">\(y1 | y3 (x1, y1)\)</span>.</p>
+<p>The full basis set for this diagram would then be:</p>
+<ul>
+<li><span class="math inline">\(x1 | y3 (y2)\)</span></li>
+<li><span class="math inline">\(y1 | y3 (y2, x1)\)</span></li>
+<li><span class="math inline">\(x1 | y2 (y1)\)</span></li>
+</ul>
+<p>Deriving the basis set can be difficult but mercifully is automated in the <em>piecewiseSEM</em> package. This package makes some choices about the basis set that deviate from the recommendations of Shipley. For example, consider the following path diagram:</p>
+<p><img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/local_estimation_model2.png" /></p>
+<p>The basis set includes the unspecified paths from <span class="math inline">\(x1 | y2 (y1)\)</span> and <span class="math inline">\(x2 | y2 (y1)\)</span>. But what about <span class="math inline">\(x1 | x2\)</span>?</p>
+<p>Shipley would include this claim in the basis set. However, several argument could be made against it along several fronts.</p>
+<p>First, unlike <span class="math inline">\(y2\)</span> which very clearly is an effect (i.e., has a directed path flowing into it), there is no expectation of a cause-effect relationship between the two exogenous variables <span class="math inline">\(x1\)</span> and <span class="math inline">\(x2\)</span>. In fact, such a relationship may yield nonsensical claims (e.g., between study area and month) or claims where directionality is confounded in one direction (e.g., latitude drives variation in species richness, but species richness does not change the latitude of the Earth). If the purpose of the test is to evaluate linkages that were originally deemed irrelevant, is it really that useful to test non-mechanistic or impossible links? If we did indeed recover a significant correlation between study area and month, is that mechanistically meaningful? Why should the area over which the study was conducted change due to the time of the study? And should we therefore reject a model due to a totally spurious relationship? These are tough questions with no clear answer. From a personal perspective, I believe the tests of directed separation should be diagnostic: should I have included this path? Did it provide useful information? Including non-informative claims because they can be evaluated simply inflates type II error (i.e., you are more likely to falsely accept the model) with no real benefit to the identifying underlying causal processes.</p>
+<p>Second, and more practically, there is no easy way for the user to specify the distributional and other assumptions associated with exogenous variables in the same way they can for endogenous variables. By virtue of modeling <span class="math inline">\(y2\)</span> in a directed path (from <span class="math inline">\(y1\)</span>), the user has made it clear in the coding of the model how that response should be treated. However, no where in the regression models is there information on how <span class="math inline">\(x1\)</span> should be treated: is it binomial? Hierarchical? Polynomial? Asking the user to code this information would vastly inflate the amount of code necessary to run tests, and combined with the above, would yield little insight for a potentially very large hindrance.</p>
+<p>Nevertheless, independence claims could be added back into the basis set if the user decides they disagree with this perspective.</p>
+<p>Now that we are comfortable identifying missing paths and constructing the basis set, the next step is to test them for statistical independence. This can be done by taking the response as it is treated in the original model, and swapping the predictors with those in the independence claim. The way, the assumptions of the endogenous variable are preserved. So, for example, if <span class="math inline">\(y3\)</span> in the previous path model is binomally-distributed as a function of <span class="math inline">\(y2\)</span>, then any independence claims involving <span class="math inline">\(y2\)</span> would also treat is as binomial.</p>
+<p>Once the model is fit, statistical independence is assessed with a t-, F-, or other test. If the resulting <em>P</em>-value is &gt;0.05, then we fail to reject the null hypothesis that the two variables are conditionally independent. In this case, a high <em>P</em>-value is a <em>good</em> thing: it indicates that we were justified in excluding that relationship from our path diagram in the first place, because the data don’t support a strong linkage between those variables within some tolerance for error.</p>
+<p>Shipley’s most important contribution was to show that the <em>P</em>-values can be summed to construct a fit index analogous to the <span class="math inline">\(\chi^2\)</span> statistic from global estimation: Fisher’s <em>C</em> statistic, which is calculated as:</p>
+<p><span class="math display">\[C = -2{\sum_{i=1}^k ln(p_i)}\]</span></p>
+<p>where <span class="math inline">\(k\)</span> is the number of independence claims in the basis set, <em>i</em> is the <em>i</em>th claim, and <em>p</em> is the <em>P</em>-value from the corresponding significance test.</p>
+<p>Furthermore, Shipley showed that <em>C</em> is <span class="math inline">\(\chi^2\)</span> distributed with 2<span class="math inline">\(k\)</span> degrees of freedom. Thus, a model-wide <em>P</em>-value can be obtained by comparing the value to a <span class="math inline">\(\chi^2\)</span> table with the appropriate degrees of freedom.</p>
+<p>As with the <span class="math inline">\(\chi^2\)</span> test in global estimation, a model-wide <em>P</em> &gt; 0.05 is desirable because it implies that the hypothesized structure is supported by the data. In other words, no potentially significant missing paths were excluded.</p>
+<p>Like the <span class="math inline">\(\chi^2\)</span> difference test, the <em>C</em> statistic can be used to compare nested models. Shipley later showed that the the <em>C</em> statistic can also be used to compute an AIC score for the SEM:</p>
+<p><span class="math display">\[AIC = C + 2K\]</span></p>
+<p>where <span class="math inline">\(K\)</span> is the likelihood degrees of freedom (not <span class="math inline">\(k\)</span>, the number of claims in the basis set). A further variant for small sample sizes, <span class="math inline">\(AIC_c\)</span>, can be obtained by adding an additional penalty:</p>
+<p><span class="math display">\[AIC_c = C + 2K\frac{n}{(n - K - 1)}\]</span></p>
+<p>It’s important to point out that, like the <span class="math inline">\(\chi^2\)</span> statistic for global estimation, the <em>C</em> statistic can be affected by sample size, but not in as direct a way. As sample size increases, the probability of recovering a “significant” <em>P</em>-vaue increases, reducing the potential for a good-fitting model. Similarly, more complex models may lead to a kind of “overfitting” where significant d-sep tests are obscured by many more non-significant values leading to strong support for the (potentially incorrect) model structure. Paradoxically, poor sample size can also lead to a good-fitting model because the tests lack the power to detect an actual effect (high Type II error), leading to the paradoxical situation of a well-supported model whose paths are all non-significant. Such biases should be considered when reporting the results of the test, and the tolerance of error (i.e., <span class="math inline">\(\alpha\)</span>) could be adjusted for larger datasets.</p>
+<p>In this way, the tests of directed separation may be usefully diagnostic by drawing attention to the specific relationships that could be re-inserted into the model, which would have the added benefit of improving model fit by removing those significant <em>P</em>-values from the basis set. Whether this is advisable depends on the goal of the exercise: in an “exploratory” mode, for example, adding paths might be useful <em>if</em> they are theoretically justifiable. I would not, however, recommend selecting all non-significant paths and reinserting them into the model to improve model fit, or iteratively re-adding paths until adequate fit is achieved. Keep in mind that those paths were not included in the original path diagram because you, the user, did not consider them important. Why would you put them back into the model? Rather, perhaps it is the original model structure or the data that is inadequate, and you should consider alternative formulations, additional covariates, or other modifications to better reflect the reality suggested by the data.</p>
+</div>
+<div id="a-log-likelihood-approach-to-assessing-model-fit" class="section level2">
+<h2><span class="header-section-number">3.3</span> A Log-Likelihood Approach to Assessing Model Fit</h2>
+<p>Recently, Shipley and Douma developed an alternative index of model fit using maximum likelihood. You will recall from the chapter on global estimation that maximum likelihood estimation searches over parameter space for the values of the coefficients <span class="math inline">\(\theta\)</span> that maximize the probability <span class="math inline">\(P\)</span> of having observed your data <span class="math inline">\(X\)</span>. The likelihood <span class="math inline">\(L\)</span> of the model is therefore the value produced by this function when <span class="math inline">\(P\)</span> is maximized by the model-estimated coefficients <span class="math inline">\(\hat{\theta}\)</span>: <span class="math inline">\(L(\hat{\theta} | X)\)</span>.</p>
+<p>This is often reported as the log-likelihood (the log of this value) as it simplifies the calculation of the fitting function for common statistical distributions: <span class="math inline">\(log(L(\hat{\theta} | X))\)</span>.</p>
+<p>Each component model in the SEM produces a log-likelihood, assuming it is fit using maximum likelihood estimation. The log-likelihood of the full set of structural equations <span class="math inline">\(M\)</span> is therefore the sum of the individual log-likelihood values for each of the submodels (based on Markov decomposition of the joint probability distribution):</p>
+<p><span class="math display">\[log(L_M(\theta | X)) = {\sum_{i=1}^k log(L_i(\theta_i | X_i)}\]</span></p>
+<p>This global quantity summarizes the likelihood associated with ALL of the coefficients across all models.</p>
+<p>Recall from the global estimation chapter that the objective there is to minimize the discrepancy between the model estimated and observed variance-covariance matrices. This is essentially testing whether the covariance between unlinked variables is zero. Take this model from that chapter:</p>
+<p><img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_model1.png" /></p>
+<p>Here, the assumption is that the covariance between <span class="math inline">\(x1\)</span> and <span class="math inline">\(y2\)</span> is zero. In other words, by omitting a direct path between them, we are claiming that they are conditionally independent or causally unrelated. Deviations from this assumption will cause the model-estimated variance-covariance matrix to pull away from from the observed matrix, causing the <span class="math inline">\(F_{ML}\)</span> to increase, the likelihood to decline, and the fit to become increasingly poor.</p>
+<p>In a piecewise context, we could rewrite the structural equation <span class="math inline">\(y2 ~ y1\)</span> to be <span class="math inline">\(y2 ~ y1 + 0*x1\)</span> to reflect our assumption that the coefficient for the relationship between <span class="math inline">\(x1\)</span> and <span class="math inline">\(y2\)</span> is zero. This is different from the equation <span class="math inline">\(y2 ~ y1 + x1\)</span>, which would produce an estimate for this relationship. In the d-sep tests, we actually fit this second model and extract the <em>P</em>-value associated with this estimate. If <em>P</em>&gt;0.05, we validate our original assumption that the two are independent, conditional on <span class="math inline">\(y1\)</span>. But it could just as easily <em>not</em> be zero, and we would reject the fit of the model.</p>
+<p>We can also produce a log-likelihood for this second model that allows <span class="math inline">\(x1\)</span> to vary freely. A likelihood ratio test would then allow us to tell whether the second model was more or less likely within some tolerance for error. If the second model is <em>more</em> likely, they we were incorrect in assuming the relationship between <span class="math inline">\(x1\)</span> and <span class="math inline">\(y2\)</span> is zero, and our original formulation could be considered a poor representation of the data.</p>
+<p>Shipley and Douma showed that this procedure can be extended to the entire SEM, first by incorporating ALL missing paths (or the variables whose covariances we assume to be 0), then taking the difference in log-likelihoods for each submodel between the proposed model and the one with all paths accounted for, and finally summarizing these differences to get an overall index of model fit.</p>
+<p>How, then, to re-fit the models including the missing parameters? We already have a handy blueprint in the form of the basis set, which tells us which relationships are missing. We can reparameterize the models to include the missing paths specified in the basis set, extract the log-likelihood, and compare that value to the log-likelihood of the original models. Because this procedure would require all variables to be linked, this procedure is essentially fitting a fully saturated model (i.e., all variables are linked) and comparing it to a nested model where some paths are missing. Note that this test is not possible for models that are already saturated, which is also true for global estimation.</p>
+<p>If we assume the fully saturated model <span class="math inline">\(M_2\)</span> and the proposed (nested) model <span class="math inline">\(M_1\)</span>, Shipley and Douma show that the <span class="math inline">\(\chi^2\)</span> statistic can be computed as follows:</p>
+<p><span class="math display">\[\chi^2_ML = -2(log(L(M_1)) - log(L(M_2))\]</span>
+Which can be compared to a <span class="math inline">\(\chi^2\)</span> distribution with <span class="math inline">\(k\)</span> degrees of freedom, where <span class="math inline">\(k\)</span> is the sum of the differences in the likelihood degrees of freedom (number of likelihood-estimated parameters) between each of the submodels in <span class="math inline">\(M1\)</span> and <span class="math inline">\(M2\)</span>. If we allow the previously unestimated paths to freely vary, but this in turn does not improve the likelihood of the model, then this {^2} value becomes increasingly smaller. In this way, the procedure is the exact analogue of the classic <span class="math inline">\(F_{ML}\)</span> in global estimation, we also seeks to minimize these differences between two matrices. As we shall see, they actually produce identical results when we assume normality.</p>
+<p>As AIC is simply the log-likelihood penalized for complexity, Shipley and Douma go on to show that a model-wide AIC value can be derived as the sum of the AIC values for each submodel <em>i</em> in <span class="math inline">\(M1\)</span>:</p>
+<p><span class="math display">\[AIC_{M1} = {\sum_{i=1}^v AIC_i}\]</span>
+Note that this is <em>not</em> the <em>difference</em> in AIC values between the proposed and saturated models. Additionally, a corrected <span class="math inline">\(AIC_c\)</span> can be substituted for small sample sizes.</p>
+<p>Note that the AIC obtained from the d-sep tests cannot be compared with that derived from likelihood, and vice versa.</p>
+<p>What is useful about this method is that it brings the technique more in parity with variance-covariance based SEM, and solves several outstanding issues associated with the d-sep tests, namely:</p>
+<ul>
+<li>d-sep tests consider only changes in topology so it is only useful when comparing models that differ in their independence claims, whereas a log-likelihood approach considers all changes to the model above and beyond the DAG, such as changing the underlying distribution (which changes the maximum likelihood fitting function) or random effects.</li>
+<li>this method can be applied for all models fit using maximum likelihood, including truly non-linear approaches such as generalized additive models (GAMs). Note, however, that GAMs do not produce traditional linear coefficients (but rather fitted smoothing functions), so there are still downsides with respect to paramterizing the DAG and drawing inference.</li>
+<li>it omits issues associated with reporting <em>P</em>-values for mixed models where the denominator degrees of freedom are unclear (see: <em>lme4</em>).</li>
+</ul>
+<p>This method cannot be used when the conditions for maximum likelihood are not met, such as for regresson on distance matrices, and so in these cases, only test of directed separation are possible. Nevertheless, log-likelihood based {^2} is an incredibly useful addition and will likely become the default goodness-of-fit metric moving forward due to its flexibility and similarity to traditional methods.</p>
+</div>
+<div id="model-fitting-using-piecewisesem" class="section level2">
+<h2><span class="header-section-number">3.4</span> Model fitting using <em>piecewiseSEM</em></h2>
+<p>Fitting a piecewise structural equation model is as simple as fitting each regression separately: if you can fit an <code>lm</code> in R, you have already fit a SEM!</p>
+<p>The package of course is <em>piecewiseSEM</em>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="local-estimation.html#cb1-1"></a><span class="kw">library</span>(piecewiseSEM)</span></code></pre></div>
+<p>And let’s return to the data from Grace &amp; Keeley (2006) that we explored in the chapter on global estimation:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="local-estimation.html#cb2-1"></a><span class="kw">data</span>(keeley)</span></code></pre></div>
+<p>As a reminder, Grace &amp; Keeley wanted to understand patterns in plant diversity following disturbance, in this case wildfires in California.</p>
+<p>In the end of the global estimation chapter, we tested for full mediation using the following model:</p>
+<p><img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/global_estimation_keeley_sem2.png" /></p>
+<p>As in <em>lavaan</em>, it’s first necessary to break down the list of structural equations. Unlike <em>lavaan</em> these are not coded as character strings, but instead as full-fledged linear models. You can see where coding each model separately will impart greater flexibility, for example, by fitting a GLM, mixed-effects model, and so on.</p>
+<p>Rather than using the function <code>sem</code>, the list of models are put together using the function <code>psem</code> which is the primary workhouse of the <em>piecewiseSEM</em> package.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="local-estimation.html#cb3-1"></a>keeley_psem &lt;-<span class="st"> </span><span class="kw">psem</span>(</span>
+<span id="cb3-2"><a href="local-estimation.html#cb3-2"></a>  <span class="kw">lm</span>(cover <span class="op">~</span><span class="st"> </span>firesev, <span class="dt">data =</span> keeley),</span>
+<span id="cb3-3"><a href="local-estimation.html#cb3-3"></a>  <span class="kw">lm</span>(firesev <span class="op">~</span><span class="st"> </span>age, <span class="dt">data =</span> keeley),</span>
+<span id="cb3-4"><a href="local-estimation.html#cb3-4"></a>  <span class="dt">data =</span> keeley)</span></code></pre></div>
+<p>Note: It’s not necessary to pass a <code>data</code> argument to <code>psem</code> but it can help alleviate errors in certain cases.</p>
+<p>Before we get to the model fitting, let’s just examine the <code>psem</code> object by itself:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="local-estimation.html#cb4-1"></a>keeley_psem</span></code></pre></div>
+<pre><code>## Structural Equations of x :
+## lm: cover ~ firesev
+## lm: firesev ~ age
+## 
+## Data:
+##   distance elev  abiotic age   hetero firesev     cover rich
+## 1 53.40900 1225 60.67103  40 0.757065    3.50 1.0387974   51
+## 2 37.03745   60 40.94291  25 0.491340    4.05 0.4775924   31
+## 3 53.69565  200 50.98805  15 0.844485    2.60 0.9489357   71
+## 4 53.69565  200 61.15633  15 0.690847    2.90 1.1949002   64
+## 5 51.95985  970 46.66807  23 0.545628    4.30 1.2981890   68
+## 6 51.95985  970 39.82357  24 0.652895    4.00 1.1734866   34
+## ...with  84  more rows
+## 
+## [1] &quot;class(psem)&quot;</code></pre>
+<p>It returns the submodels, their classes (in this case <code>lm</code>), and a snippet of the data.</p>
+<p>The first step is to derive the basis set using the function <code>basisSet</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="local-estimation.html#cb6-1"></a><span class="kw">basisSet</span>(keeley_psem)</span></code></pre></div>
+<pre><code>## $`1`
+## [1] &quot;age | cover ( firesev )&quot;</code></pre>
+<p>Here, there is a single independence claim representing the missing path from <span class="math inline">\(age -&gt; cover\)</span> conditional on the influence of <span class="math inline">\(firesev\)</span> on <span class="math inline">\(cover\)</span>.</p>
+<p>Now to evaluate the tests of directed separation using the function <code>dSep</code>:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="local-estimation.html#cb8-1"></a><span class="kw">dSep</span>(keeley_psem, <span class="dt">.progressBar =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<pre><code>##      Independ.Claim Test.Type DF Crit.Value    P.Value 
+## 1 cover ~ age + ...      coef 87   -1.80184 0.07503437</code></pre>
+<p>Note that the output is the same as if we evaluated the independence claim ourselves:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="local-estimation.html#cb10-1"></a><span class="kw">summary</span>(<span class="kw">lm</span>(cover <span class="op">~</span><span class="st"> </span>firesev <span class="op">+</span><span class="st"> </span>age, <span class="dt">data =</span> keeley))<span class="op">$</span>coefficients[<span class="dv">3</span>, ]</span></code></pre></div>
+<pre><code>##     Estimate   Std. Error      t value     Pr(&gt;|t|) 
+## -0.004832969  0.002682241 -1.801839905  0.075034374</code></pre>
+<p>Now, we can compute the Fisher’s <em>C</em> statistic using the <em>P</em>-value obtained from the d-sep test. Recall that the degrees of freedom for the test is twice the number of independence claims, so in this case <span class="math inline">\(2*1 = 2\)</span>. We can use these values to compare the statistic to a <span class="math inline">\(\chi^2\)</span> distribution to get a model-wide <em>P</em>-value:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="local-estimation.html#cb12-1"></a>(C &lt;-<span class="st"> </span><span class="dv">-2</span> <span class="op">*</span><span class="st"> </span><span class="kw">log</span>(<span class="kw">summary</span>(<span class="kw">lm</span>(cover <span class="op">~</span><span class="st"> </span>firesev <span class="op">+</span><span class="st"> </span>age, <span class="dt">data =</span> keeley))<span class="op">$</span>coefficients[<span class="dv">3</span>, <span class="dv">4</span>]))</span></code></pre></div>
+<pre><code>## [1] 5.179618</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="local-estimation.html#cb14-1"></a><span class="dv">1</span><span class="op">-</span><span class="kw">pchisq</span>(C, <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## [1] 0.07503437</code></pre>
+<p>So in this case, we would fail to reject the model as <em>P</em>&gt;0.05. Note that in the case of a single independence claim, the model-wide <em>P</em>-value is the same as the <em>P</em>-value for the individual claim.</p>
+<p>Alternatively, we could just use the function <code>fisherC</code> which constructs the statistic for us:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="local-estimation.html#cb16-1"></a><span class="kw">fisherC</span>(keeley_psem)</span></code></pre></div>
+<pre><code>##   Fisher.C df P.Value
+## 1     5.18  2   0.075</code></pre>
+<p>Let’s now compute the log-likelihood based <span class="math inline">\(\chi^2\)</span> statistic to see if we get the same answer. To do so, we must first create the saturated model, which in this case would involve fitting a path between <span class="math inline">\(age\)</span> and <span class="math inline">\(cover\)</span>:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="local-estimation.html#cb18-1"></a>keeley_psem2 &lt;-<span class="st"> </span><span class="kw">psem</span>(</span>
+<span id="cb18-2"><a href="local-estimation.html#cb18-2"></a>  <span class="kw">lm</span>(cover <span class="op">~</span><span class="st"> </span>firesev <span class="op">+</span><span class="st"> </span>age, <span class="dt">data =</span> keeley),</span>
+<span id="cb18-3"><a href="local-estimation.html#cb18-3"></a>  <span class="kw">lm</span>(firesev <span class="op">~</span><span class="st"> </span>age, <span class="dt">data =</span> keeley),</span>
+<span id="cb18-4"><a href="local-estimation.html#cb18-4"></a>  <span class="dt">data =</span> keeley</span>
+<span id="cb18-5"><a href="local-estimation.html#cb18-5"></a>)</span></code></pre></div>
+<p>From here, we can get the log-likelihoods of both submodels using the <code>logLik</code> function for each SEM, take their difference, and construct the <span class="math inline">\(\chi^2\)</span> statistic:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="local-estimation.html#cb19-1"></a>LL_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">logLik</span>(<span class="kw">lm</span>(cover <span class="op">~</span><span class="st"> </span>firesev, <span class="dt">data =</span> keeley)) <span class="op">-</span><span class="st"> </span><span class="kw">logLik</span>(<span class="kw">lm</span>(cover <span class="op">~</span><span class="st"> </span>firesev <span class="op">+</span><span class="st"> </span>age, <span class="dt">data =</span> keeley))</span>
+<span id="cb19-2"><a href="local-estimation.html#cb19-2"></a></span>
+<span id="cb19-3"><a href="local-estimation.html#cb19-3"></a>LL_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">logLik</span>(<span class="kw">lm</span>(firesev <span class="op">~</span><span class="st"> </span>age, <span class="dt">data =</span> keeley)) <span class="op">-</span><span class="st"> </span><span class="kw">logLik</span>(<span class="kw">lm</span>(firesev <span class="op">~</span><span class="st"> </span>age, <span class="dt">data =</span> keeley))</span>
+<span id="cb19-4"><a href="local-estimation.html#cb19-4"></a></span>
+<span id="cb19-5"><a href="local-estimation.html#cb19-5"></a>(ChiSq &lt;-<span class="st"> </span><span class="dv">-2</span><span class="op">*</span><span class="kw">sum</span>(<span class="kw">as.numeric</span>(LL_<span class="dv">1</span>), <span class="kw">as.numeric</span>(LL_<span class="dv">2</span>)))</span></code></pre></div>
+<pre><code>## [1] 3.297429</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="local-estimation.html#cb21-1"></a>DF &lt;-<span class="st"> </span><span class="dv">1</span> <span class="co"># one additional parameter estimated in the saturated model</span></span>
+<span id="cb21-2"><a href="local-estimation.html#cb21-2"></a></span>
+<span id="cb21-3"><a href="local-estimation.html#cb21-3"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">pchisq</span>(ChiSq, DF)</span></code></pre></div>
+<pre><code>## [1] 0.06938839</code></pre>
+<p>So we would also fail to reject the model based on the <em>P</em>-value obtained from this test. We can more easily obtain the same output using the function <code>LLchisq</code> on the original (unsaturated) model:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="local-estimation.html#cb23-1"></a><span class="kw">LLchisq</span>(keeley_psem)</span></code></pre></div>
+<pre><code>##   Chisq df P.Value
+## 1 3.297  1   0.069</code></pre>
+<p>Note for models assuming multivariate normality (as we have here), the {^2} statistic and <em>P</em>-value are actually the same as we obtain from <em>lavaan</em>:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="local-estimation.html#cb25-1"></a><span class="kw">library</span>(lavaan)</span></code></pre></div>
+<pre><code>## This is lavaan 0.6-7</code></pre>
+<pre><code>## lavaan is BETA software! Please report any bugs.</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="local-estimation.html#cb28-1"></a>keeley_formula &lt;-<span class="st"> &#39;</span></span>
+<span id="cb28-2"><a href="local-estimation.html#cb28-2"></a><span class="st">firesev ~ age</span></span>
+<span id="cb28-3"><a href="local-estimation.html#cb28-3"></a><span class="st">cover ~ firesev</span></span>
+<span id="cb28-4"><a href="local-estimation.html#cb28-4"></a><span class="st">&#39;</span></span>
+<span id="cb28-5"><a href="local-estimation.html#cb28-5"></a></span>
+<span id="cb28-6"><a href="local-estimation.html#cb28-6"></a>keeley_sem &lt;-<span class="st"> </span><span class="kw">sem</span>(keeley_formula, <span class="dt">data =</span> keeley)</span>
+<span id="cb28-7"><a href="local-estimation.html#cb28-7"></a></span>
+<span id="cb28-8"><a href="local-estimation.html#cb28-8"></a>fit &lt;-<span class="st"> </span><span class="kw">lavInspect</span>(keeley_sem, <span class="st">&quot;fit&quot;</span>)</span>
+<span id="cb28-9"><a href="local-estimation.html#cb28-9"></a></span>
+<span id="cb28-10"><a href="local-estimation.html#cb28-10"></a>fit[<span class="st">&quot;chisq&quot;</span>]; fit[<span class="st">&quot;pvalue&quot;</span>]</span></code></pre></div>
+<pre><code>##    chisq 
+## 3.297429</code></pre>
+<pre><code>##     pvalue 
+## 0.06938839</code></pre>
+<p>Note that we can also obtain an AIC score for the model. The default is based on the log-likelihood <span class="math inline">\(\chi^2\)</span> and we shall see why in a minute:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="local-estimation.html#cb31-1"></a><span class="kw">AIC</span>(keeley_psem)</span></code></pre></div>
+<pre><code>## [1] 364.696</code></pre>
+<p>To get the AIC value based on the Fisher’s <em>C</em> statistic and the d-sep tests, we can add the following argument:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="local-estimation.html#cb33-1"></a><span class="kw">AIC</span>(keeley_psem, <span class="dt">AIC.type =</span> <span class="st">&quot;dsep&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] 17.18</code></pre>
+<p>Ah, a fully saturated or just identified model will yield a <em>C</em> statistic of 0. Based on Shipley’s equation above, the AIC score reduces to <span class="math inline">\(2K\)</span>, or twice the likelihood degrees of freedom. This is in contrast to alternative formulation, which is based on actual likelihoods. Therefore, in situations where one wishes to compare a model that is fully saturated, we advise using the default <span class="math inline">\(\chi^2\)</span>-based value.</p>
+<p>This exercise was a long workaround to reveal that all the above can be executed simultaneously using the <code>summary</code> function on the SEM object:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="local-estimation.html#cb35-1"></a><span class="kw">summary</span>(keeley_psem, <span class="dt">.progressBar =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<pre><code>## 
+## Structural Equation Model of keeley_psem 
+## 
+## Call:
+##   cover ~ firesev
+##   firesev ~ age
+## 
+##     AIC
+##  364.696
+## 
+## ---
+## Tests of directed separation:
+## 
+##      Independ.Claim Test.Type DF Crit.Value P.Value 
+##   cover ~ age + ...      coef 87    -1.8018   0.075 
+## 
+## --
+## Global goodness-of-fit:
+## 
+## Chi-Squared = 3.297 with P-value = 0.069 and on 1 degrees of freedom
+## Fisher&#39;s C = 5.18 with P-value = 0.075 and on 2 degrees of freedom
+## 
+## ---
+## Coefficients:
+## 
+##   Response Predictor Estimate Std.Error DF Crit.Value P.Value Std.Estimate    
+##      cover   firesev  -0.0839    0.0184 88    -4.5594       0      -0.4371 ***
+##    firesev       age   0.0597    0.0125 88     4.7781       0       0.4539 ***
+## 
+##   Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05
+## 
+## ---
+## Individual R-squared:
+## 
+##   Response method R.squared
+##      cover   none      0.19
+##    firesev   none      0.21</code></pre>
+<p>The output should look very familar to the output from other summary calls, like <code>summary.lm</code>. The d-sep tests, <span class="math inline">\(\chi^2\)</span> and Fisher’s C tests of goodness-of-fit, and AIC are all reported.</p>
+<p>Additionally, model coefficients are returned. Unlike <em>lavaan</em>, the standardized estimates are provided by default. Also unlike <em>lavaan</em>, the individual model <span class="math inline">\(R^2\)</span> values are also returned by default. Both sets of statistics are key for inference, and thus we have decided to make them available with any further arguments passed to <code>summary</code>.</p>
+<p>We can compare the <em>piecewiseSEM</em> output to the <em>lavaan</em> output:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="local-estimation.html#cb37-1"></a><span class="kw">library</span>(lavaan)</span>
+<span id="cb37-2"><a href="local-estimation.html#cb37-2"></a></span>
+<span id="cb37-3"><a href="local-estimation.html#cb37-3"></a>sem1 &lt;-<span class="st"> &#39;</span></span>
+<span id="cb37-4"><a href="local-estimation.html#cb37-4"></a><span class="st">firesev ~ age</span></span>
+<span id="cb37-5"><a href="local-estimation.html#cb37-5"></a><span class="st">cover ~ firesev</span></span>
+<span id="cb37-6"><a href="local-estimation.html#cb37-6"></a><span class="st">&#39;</span></span>
+<span id="cb37-7"><a href="local-estimation.html#cb37-7"></a></span>
+<span id="cb37-8"><a href="local-estimation.html#cb37-8"></a>keeley_sem1 &lt;-<span class="st"> </span><span class="kw">sem</span>(sem1, keeley)</span>
+<span id="cb37-9"><a href="local-estimation.html#cb37-9"></a></span>
+<span id="cb37-10"><a href="local-estimation.html#cb37-10"></a><span class="kw">summary</span>(keeley_sem1, <span class="dt">standardize =</span> T, <span class="dt">rsq =</span> T)</span></code></pre></div>
+<pre><code>## lavaan 0.6-7 ended normally after 19 iterations
+## 
+##   Estimator                                         ML
+##   Optimization method                           NLMINB
+##   Number of free parameters                          4
+##                                                       
+##   Number of observations                            90
+##                                                       
+## Model Test User Model:
+##                                                       
+##   Test statistic                                 3.297
+##   Degrees of freedom                                 1
+##   P-value (Chi-square)                           0.069
+## 
+## Parameter Estimates:
+## 
+##   Standard errors                             Standard
+##   Information                                 Expected
+##   Information saturated (h1) model          Structured
+## 
+## Regressions:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+##   firesev ~                                                             
+##     age               0.060    0.012    4.832    0.000    0.060    0.454
+##   cover ~                                                               
+##     firesev          -0.084    0.018   -4.611    0.000   -0.084   -0.437
+## 
+## Variances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+##    .firesev           2.144    0.320    6.708    0.000    2.144    0.794
+##    .cover             0.081    0.012    6.708    0.000    0.081    0.809
+## 
+## R-Square:
+##                    Estimate
+##     firesev           0.206
+##     cover             0.191</code></pre>
+<p>Again, because we are making the same assumptions as for global estimation (i.e., multivariate normality), all of the output will be identical (or nearly identical based on rounding and optimization differences).</p>
+<p>Of course, we might expect greater divergence between the two methods if we were to incorporate different distributions and more complex model structures, which we will explore now.</p>
+</div>
+<div id="extensions-to-generalized-mixed-effects-models" class="section level2">
+<h2><span class="header-section-number">3.5</span> Extensions to Generalized Mixed Effects Models</h2>
+<p>Let’s turn to the example from Shipley (2009) on tree survival. In this (hypothetical) study, individual trees are followed for 36 years at 20 sites and measured for date of bud burst (Date), cumulative degree days until first bud burst (DD), growth, and survival.</p>
+<p>It’s important to note that these data have multiple levels of hierarchical structure: between sites, between individuals within sites, between years within individuals within sites. They also have non-normal responses: survival is measured as a binary outcome (alive or dead).</p>
+<p>Shipley hypothesized these variables are related in the following way:</p>
+<p><img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/local_estimation_shipley_sem.png" /></p>
+<p>Let’s first treat the data as normal and independent using <em>lavaan</em>:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="local-estimation.html#cb39-1"></a><span class="kw">data</span>(shipley)</span>
+<span id="cb39-2"><a href="local-estimation.html#cb39-2"></a></span>
+<span id="cb39-3"><a href="local-estimation.html#cb39-3"></a>shipley_model &lt;-<span class="st"> &#39;</span></span>
+<span id="cb39-4"><a href="local-estimation.html#cb39-4"></a><span class="st">DD ~ lat</span></span>
+<span id="cb39-5"><a href="local-estimation.html#cb39-5"></a><span class="st">Date ~ DD</span></span>
+<span id="cb39-6"><a href="local-estimation.html#cb39-6"></a><span class="st">Growth ~ Date</span></span>
+<span id="cb39-7"><a href="local-estimation.html#cb39-7"></a><span class="st">Live ~ Growth</span></span>
+<span id="cb39-8"><a href="local-estimation.html#cb39-8"></a><span class="st">&#39;</span></span>
+<span id="cb39-9"><a href="local-estimation.html#cb39-9"></a></span>
+<span id="cb39-10"><a href="local-estimation.html#cb39-10"></a>shipley_sem &lt;-<span class="st"> </span><span class="kw">sem</span>(shipley_model, shipley)</span>
+<span id="cb39-11"><a href="local-estimation.html#cb39-11"></a></span>
+<span id="cb39-12"><a href="local-estimation.html#cb39-12"></a><span class="kw">summary</span>(shipley_sem, <span class="dt">standardize =</span> T, <span class="dt">rsq =</span> T)</span></code></pre></div>
+<pre><code>## lavaan 0.6-7 ended normally after 27 iterations
+## 
+##   Estimator                                         ML
+##   Optimization method                           NLMINB
+##   Number of free parameters                          8
+##                                                       
+##                                                   Used       Total
+##   Number of observations                          1431        1900
+##                                                                   
+## Model Test User Model:
+##                                                       
+##   Test statistic                                38.433
+##   Degrees of freedom                                 6
+##   P-value (Chi-square)                           0.000
+## 
+## Parameter Estimates:
+## 
+##   Standard errors                             Standard
+##   Information                                 Expected
+##   Information saturated (h1) model          Structured
+## 
+## Regressions:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+##   DD ~                                                                  
+##     lat              -0.860    0.023  -37.923    0.000   -0.860   -0.708
+##   Date ~                                                                
+##     DD               -0.517    0.016  -32.525    0.000   -0.517   -0.652
+##   Growth ~                                                              
+##     Date              0.173    0.020    8.508    0.000    0.173    0.219
+##   Live ~                                                                
+##     Growth            0.006    0.001    9.854    0.000    0.006    0.252
+## 
+## Variances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+##    .DD               52.628    1.967   26.749    0.000   52.628    0.499
+##    .Date             38.080    1.424   26.749    0.000   38.080    0.575
+##    .Growth           38.981    1.457   26.749    0.000   38.981    0.952
+##    .Live              0.025    0.001   26.749    0.000    0.025    0.936
+## 
+## R-Square:
+##                    Estimate
+##     DD                0.501
+##     Date              0.425
+##     Growth            0.048
+##     Live              0.064</code></pre>
+<p>First, we notice the goodness-of-fit can be estimated, but the model is a poor fit (<em>P</em>&lt;0.001). The paths are all significant but this doesn’t do us much good considering the model is not suitable for inference.</p>
+<p>Instead of fiddling with modification indices and trying to rejigger the model strcuture, let’s analyze the same path diagram using a piecewise approach and recognizing both the hierarchical structure AND non-normality of the data. For this we will use two common packages for mixed-effects models, <em>lme4</em> and <em>nlme</em>:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="local-estimation.html#cb41-1"></a><span class="kw">library</span>(nlme)</span>
+<span id="cb41-2"><a href="local-estimation.html#cb41-2"></a><span class="kw">library</span>(lme4)</span>
+<span id="cb41-3"><a href="local-estimation.html#cb41-3"></a></span>
+<span id="cb41-4"><a href="local-estimation.html#cb41-4"></a>shipley_psem &lt;-<span class="st"> </span><span class="kw">psem</span>(</span>
+<span id="cb41-5"><a href="local-estimation.html#cb41-5"></a></span>
+<span id="cb41-6"><a href="local-estimation.html#cb41-6"></a>  <span class="kw">lme</span>(DD <span class="op">~</span><span class="st"> </span>lat, <span class="dt">random =</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>site <span class="op">/</span><span class="st"> </span>tree, <span class="dt">na.action =</span> na.omit,</span>
+<span id="cb41-7"><a href="local-estimation.html#cb41-7"></a>  <span class="dt">data =</span> shipley),</span>
+<span id="cb41-8"><a href="local-estimation.html#cb41-8"></a></span>
+<span id="cb41-9"><a href="local-estimation.html#cb41-9"></a>  <span class="kw">lme</span>(Date <span class="op">~</span><span class="st"> </span>DD, <span class="dt">random =</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>site <span class="op">/</span><span class="st"> </span>tree, <span class="dt">na.action =</span> na.omit,</span>
+<span id="cb41-10"><a href="local-estimation.html#cb41-10"></a>  <span class="dt">data =</span> shipley),</span>
+<span id="cb41-11"><a href="local-estimation.html#cb41-11"></a></span>
+<span id="cb41-12"><a href="local-estimation.html#cb41-12"></a>  <span class="kw">lme</span>(Growth <span class="op">~</span><span class="st"> </span>Date, <span class="dt">random =</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>site <span class="op">/</span><span class="st"> </span>tree, <span class="dt">na.action =</span> na.omit,</span>
+<span id="cb41-13"><a href="local-estimation.html#cb41-13"></a>  <span class="dt">data =</span> shipley),</span>
+<span id="cb41-14"><a href="local-estimation.html#cb41-14"></a></span>
+<span id="cb41-15"><a href="local-estimation.html#cb41-15"></a>  <span class="kw">glmer</span>(Live <span class="op">~</span><span class="st"> </span>Growth <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>site) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>tree),</span>
+<span id="cb41-16"><a href="local-estimation.html#cb41-16"></a>  <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>), <span class="dt">data =</span> shipley)</span>
+<span id="cb41-17"><a href="local-estimation.html#cb41-17"></a></span>
+<span id="cb41-18"><a href="local-estimation.html#cb41-18"></a>  )</span>
+<span id="cb41-19"><a href="local-estimation.html#cb41-19"></a></span>
+<span id="cb41-20"><a href="local-estimation.html#cb41-20"></a><span class="kw">summary</span>(shipley_psem, <span class="dt">.progressBar =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<pre><code>## 
+## Structural Equation Model of shipley_psem 
+## 
+## Call:
+##   DD ~ lat
+##   Date ~ DD
+##   Growth ~ Date
+##   Live ~ Growth
+## 
+##     AIC
+##  21745.782
+## 
+## ---
+## Tests of directed separation:
+## 
+##       Independ.Claim Test.Type   DF Crit.Value P.Value 
+##     Date ~ lat + ...      coef   18    -0.0798  0.9373 
+##   Growth ~ lat + ...      coef   18    -0.8929  0.3837 
+##     Live ~ lat + ...      coef 1431     1.0280  0.3039 
+##    Growth ~ DD + ...      coef 1329    -0.2967  0.7667 
+##      Live ~ DD + ...      coef 1431     1.0046  0.3151 
+##    Live ~ Date + ...      coef 1431    -1.5617  0.1184 
+## 
+## --
+## Global goodness-of-fit:
+## 
+## Chi-Squared = NA with P-value = NA and on 6 degrees of freedom
+## Fisher&#39;s C = 11.536 with P-value = 0.484 and on 12 degrees of freedom
+## 
+## ---
+## Coefficients:
+## 
+##   Response Predictor Estimate Std.Error   DF Crit.Value P.Value Std.Estimate    
+##         DD       lat  -0.8355    0.1194   18    -6.9960       0      -0.6877 ***
+##       Date        DD  -0.4976    0.0049 1330  -100.8757       0      -0.6281 ***
+##     Growth      Date   0.3007    0.0266 1330    11.2917       0       0.3824 ***
+##       Live    Growth   0.3479    0.0584 1431     5.9552       0       0.7866 ***
+## 
+##   Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05
+## 
+## ---
+## Individual R-squared:
+## 
+##   Response method Marginal Conditional
+##         DD   none     0.49        0.70
+##       Date   none     0.41        0.98
+##     Growth   none     0.11        0.84
+##       Live  delta     0.16        0.18</code></pre>
+<p>The immediately obvious difference based on Fisher’s <em>C</em> is that the model is no longer a poor fit: we have 12 degrees of freedom corresponding to 6 independence claims, all of which have <em>P</em> &gt; 0.05. Therefore, the model-wide <em>P</em> = 0.484, and we would therefore reject the null that the data do not support the hypothesized model structure.</p>
+<p>Moreover, while the direction of the parameter estimates remain the same, they vary considerably in their magnitudes (e.g., <span class="math inline">\(\beta_{date, DD} = -0.652\)</span> for <em>lavaan</em> and <span class="math inline">\(\beta_{date, DD} = -0.497\)</span> in <em>piecewiseSEM</em>).</p>
+<p>The model <span class="math inline">\(R^2\)</span>s are all higher as well, for fixed-effects only (marginal) and especially for fixed- and random-effects together (conditional).</p>
+<p>Thus, by addressing the non-independence of the data, we have converged on support for the hypothesized model structure, more accurate parameter estimates, and a higher proportion of explained variance than was possible using <em>lavaan</em>.</p>
+<p>Note, however, that the model does not report a <span class="math inline">\(\chi^2\)</span> statistic, and issues a warning about convergence. When one or more of submodels in the saturated SEM fail to converge, it may produce invalid likelihood estimates that lead to the situation where <span class="math inline">\(\chi^2\)</span>&lt;0. Since this is not permissible, the function returns <code>NA</code> for the <span class="math inline">\(\chi^2\)</span> statistic and associated <em>P</em>-value. Potential solutions include tweaking model optimizers to ensure a convergent solution, or relying on Fisher’s <em>C</em>.</p>
+</div>
+<div id="extensions-to-non-linear-models" class="section level2">
+<h2><span class="header-section-number">3.6</span> Extensions to Non-linear Models</h2>
+<p>One of the benefits noted above for the newer log-likelihood based goodness-of-fit procedure is that it can be extended to truly non-linear models, such as generalized additive models (GAMs), where maximum likelihood estimation is applied. Let’s now work through an example extending to GAMs.</p>
+<p>We’ll work from the random dataset generated in the supplements for the paper by Shipley and Douma. First, let’s generate the data using their code:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="local-estimation.html#cb43-1"></a><span class="kw">set.seed</span>(<span class="dv">100</span>)</span>
+<span id="cb43-2"><a href="local-estimation.html#cb43-2"></a>n &lt;-<span class="st"> </span><span class="dv">100</span></span>
+<span id="cb43-3"><a href="local-estimation.html#cb43-3"></a>x1 &lt;-<span class="st"> </span><span class="kw">rchisq</span>(n, <span class="dv">7</span>)</span>
+<span id="cb43-4"><a href="local-estimation.html#cb43-4"></a>mu2 &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">*</span>x1<span class="op">/</span>(<span class="dv">5</span> <span class="op">+</span><span class="st"> </span>x1)</span>
+<span id="cb43-5"><a href="local-estimation.html#cb43-5"></a>x2 &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, mu2, <span class="dv">1</span>)</span>
+<span id="cb43-6"><a href="local-estimation.html#cb43-6"></a>x2[x2 <span class="op">&lt;=</span><span class="st"> </span><span class="dv">0</span>] &lt;-<span class="st"> </span><span class="fl">0.1</span></span>
+<span id="cb43-7"><a href="local-estimation.html#cb43-7"></a>x3 &lt;-<span class="st"> </span><span class="kw">rpois</span>(n, <span class="dt">lambda =</span> (<span class="fl">0.5</span><span class="op">*</span>x2))</span>
+<span id="cb43-8"><a href="local-estimation.html#cb43-8"></a>x4 &lt;-<span class="st"> </span><span class="kw">rpois</span>(n, <span class="dt">lambda =</span> (<span class="fl">0.5</span><span class="op">*</span>x2))</span>
+<span id="cb43-9"><a href="local-estimation.html#cb43-9"></a>p.x5 &lt;-<span class="st"> </span><span class="kw">exp</span>(<span class="op">-</span><span class="fl">0.5</span><span class="op">*</span>x3 <span class="op">+</span><span class="st"> </span><span class="fl">0.5</span><span class="op">*</span>x4)<span class="op">/</span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">exp</span>(<span class="op">-</span><span class="fl">0.5</span><span class="op">*</span>x3 <span class="op">+</span><span class="st"> </span><span class="fl">0.5</span><span class="op">*</span>x4))</span>
+<span id="cb43-10"><a href="local-estimation.html#cb43-10"></a>x5 &lt;-<span class="st"> </span><span class="kw">rbinom</span>(n, <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">prob =</span> p.x5)</span>
+<span id="cb43-11"><a href="local-estimation.html#cb43-11"></a>dat2 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x1 =</span> x1, <span class="dt">x2 =</span> x2, <span class="dt">x3 =</span> x3, <span class="dt">x4 =</span> x4, <span class="dt">x5 =</span> x5)</span></code></pre></div>
+<p>You’ll note that there is a mix of linear and non-linear variables, including Poisson- and binomial-distributions.</p>
+<p>Now let’s consider the SEM from their paper (Figure 1a):</p>
+<p><img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/local_estimation_gam_sem.png" /></p>
+<p>In the paper, Shipley and Douma first fit a strictly linear SEM assuming multivariate normality, which we will also do here:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="local-estimation.html#cb44-1"></a>shipley_psem2 &lt;-<span class="st"> </span><span class="kw">psem</span>(</span>
+<span id="cb44-2"><a href="local-estimation.html#cb44-2"></a>  <span class="kw">lm</span>(x2 <span class="op">~</span><span class="st"> </span>x1, <span class="dt">data =</span> dat2),</span>
+<span id="cb44-3"><a href="local-estimation.html#cb44-3"></a>  <span class="kw">lm</span>(x3 <span class="op">~</span><span class="st"> </span>x2, <span class="dt">data =</span> dat2),</span>
+<span id="cb44-4"><a href="local-estimation.html#cb44-4"></a>  <span class="kw">lm</span>(x4 <span class="op">~</span><span class="st"> </span>x2, <span class="dt">data =</span> dat2),</span>
+<span id="cb44-5"><a href="local-estimation.html#cb44-5"></a>  <span class="kw">lm</span>(x5 <span class="op">~</span><span class="st"> </span>x3 <span class="op">+</span><span class="st"> </span>x4, <span class="dt">data =</span> dat2)</span>
+<span id="cb44-6"><a href="local-estimation.html#cb44-6"></a>)</span>
+<span id="cb44-7"><a href="local-estimation.html#cb44-7"></a></span>
+<span id="cb44-8"><a href="local-estimation.html#cb44-8"></a><span class="kw">LLchisq</span>(shipley_psem2)</span></code></pre></div>
+<pre><code>##   Chisq df P.Value
+## 1 4.143  5   0.529</code></pre>
+<p>We see that, despite having generated data that is inherently non-normal and non-linear, the model is actually a good fit to the data with a <em>P</em>-value of 0.529.</p>
+<p>Nevertheless, we know we can do better, both by including non-Gaussian distributions and also through the application of generalized additive models, which model the response not as a linear function of the predictors, but through smoothing functions that allow for non-linear relationships to emerge.</p>
+<p>Let’s re-fit the model using a mix of GLMs and GAMs:</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="local-estimation.html#cb46-1"></a><span class="kw">library</span>(mgcv)</span></code></pre></div>
+<pre><code>## This is mgcv 1.8-33. For overview type &#39;help(&quot;mgcv-package&quot;)&#39;.</code></pre>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="local-estimation.html#cb48-1"></a>shipley_psem3 &lt;-<span class="st"> </span><span class="kw">psem</span>(</span>
+<span id="cb48-2"><a href="local-estimation.html#cb48-2"></a>  <span class="kw">gam</span>(x2 <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(x1), <span class="dt">data =</span> dat2, <span class="dt">family =</span> gaussian),</span>
+<span id="cb48-3"><a href="local-estimation.html#cb48-3"></a>  <span class="kw">glm</span>(x3 <span class="op">~</span><span class="st"> </span>x2, <span class="dt">data =</span> dat2, <span class="dt">family =</span> poisson),</span>
+<span id="cb48-4"><a href="local-estimation.html#cb48-4"></a>  <span class="kw">gam</span>(x4 <span class="op">~</span><span class="st"> </span>x2, <span class="dt">data =</span> dat2, <span class="dt">family =</span> poisson),</span>
+<span id="cb48-5"><a href="local-estimation.html#cb48-5"></a>  <span class="kw">glm</span>(x5 <span class="op">~</span><span class="st"> </span>x3 <span class="op">+</span><span class="st"> </span>x4, <span class="dt">data =</span> dat2, <span class="dt">family =</span> binomial)</span>
+<span id="cb48-6"><a href="local-estimation.html#cb48-6"></a>)</span>
+<span id="cb48-7"><a href="local-estimation.html#cb48-7"></a></span>
+<span id="cb48-8"><a href="local-estimation.html#cb48-8"></a><span class="kw">LLchisq</span>(shipley_psem3)</span></code></pre></div>
+<pre><code>##   Chisq df P.Value
+## 1 3.346  5   0.647</code></pre>
+<p>This model also has adequate fit, with a <em>P</em>-value of 0.647. Note that these are the same values reported in Table 2. How to choose among them? Let’s compute the AIC scores (based on log-likelihoods) for both and compare them:</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="local-estimation.html#cb50-1"></a><span class="kw">AIC</span>(shipley_psem2, shipley_psem3)</span></code></pre></div>
+<pre><code>##       df     AIC
+## x 13.000 1240.20
+## y 11.563 1190.75</code></pre>
+<p>We see that the second SEM–the one that better addresses the underlying forms of the data–has much higher support than the straight linear SEM, with the <span class="math inline">\(\Delta AIC = 49.45\)</span>. Thus, we would far and away choose the second model, in line with how Shipley and Douma have designed their simulation.</p>
+<p>Now let’s examine the summary output for this second model:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="local-estimation.html#cb52-1"></a><span class="kw">summary</span>(shipley_psem3)</span></code></pre></div>
+<pre><code>## Warning: Categorical or non-linear variables detected. Please refer to
+## documentation for interpretation of Estimates!</code></pre>
+<pre><code>## 
+## Structural Equation Model of shipley_psem3 
+## 
+## Call:
+##   x2 ~ s(x1)
+##   x3 ~ x2
+##   x4 ~ x2
+##   x5 ~ x3 + x4
+## 
+##     AIC
+##  1190.750
+## 
+## ---
+## Tests of directed separation:
+## 
+##  No independence claims present. Tests of directed separation not possible.
+## 
+## --
+## Global goodness-of-fit:
+## 
+## Chi-Squared = 3.346 with P-value = 0.647 and on 5 degrees of freedom
+## Fisher&#39;s C = NA with P-value = NA and on 0 degrees of freedom
+## 
+## ---
+## Coefficients:
+## 
+##   Response Predictor Estimate Std.Error       DF Crit.Value P.Value Std.Estimate
+##         x2     s(x1)        -         -   3.2242    41.2590   0e+00            -
+##         x3        x2   0.1464    0.0373  98.0000     3.9248   1e-04            1
+##         x4        x2   0.1741     0.038 100.0000     4.5856   0e+00            1
+##         x5        x3  -0.5083    0.1521  97.0000    -3.3414   8e-04      -0.4037
+##         x5        x4   0.4587    0.1388  97.0000     3.3047   1e-03       0.4414
+##      
+##   ***
+##   ***
+##   ***
+##   ***
+##   ***
+## 
+##   Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05
+## 
+## ---
+## Individual R-squared:
+## 
+##   Response     method R.squared
+##         x2       none      0.57
+##         x3 nagelkerke      0.15
+##         x4       none      0.14
+##         x5 nagelkerke      0.28</code></pre>
+<p>Most of this should look familiar. Note that the output does not report estimates or standard errors for the smoothed variables. This is because, as noted previously, these are not linear coefficients but instead smoothing functions and there is not a single value relating how, for example, <span class="math inline">\(x1\)</span> changes with <span class="math inline">\(x2\)</span>. Therefore, calculation of direct and indirect effects is not possible using GAMs, which could make them less than ideal when the goal is to compare the strength of various pathways within a model.</p>
+<p>However, it is possible, as we have shown here, to compare among models and validate the topology of the DAG, which in many cases is sufficient to test hypotheses. Those seeking to understand how <span class="math inline">\(x1\)</span> changes non-linearly with <span class="math inline">\(x2\)</span> would then have to present additional predicted plots of this relationship in addition to the path diagram.</p>
+</div>
+<div id="a-special-case-where-graph-theory-fails" class="section level2">
+<h2><span class="header-section-number">3.7</span> A Special Case: Where Graph Theory Fails</h2>
+<p>In the majority of cases, as we have established, the direction of the independence claim doesn’t matter because, while the coefficients will differ, their <em>P</em>-values will be identical. Thus it doesn’t matter if you test <span class="math inline">\(y | x\)</span> or <span class="math inline">\(x | y\)</span> because the claim will yield the same significance test. EXCEPT when intermediate endogenous variables are non-normally distributed.</p>
+<p>Consider the following SEM:</p>
+<p><img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/local_estimation_glm_sem.png" /></p>
+<p>In this SEM, there are two independence claims:</p>
+<ul>
+<li><span class="math inline">\(y3 | x1 (y1, y2)\)</span></li>
+<li><span class="math inline">\(y2 | y1 (x1)\)</span></li>
+</ul>
+<p>In the second independence claim, if both variables were normally distributed, the significance value is the same whether the test is conducted as <span class="math inline">\(y2 | y1 (x1)\)</span> or <span class="math inline">\(y1 | y2 (x1)\)</span>. This is NOT true, however, when one or both of the responses are fit to a non-normal distribution. This is because the response is now transformed via a <em>link function</em> <span class="math inline">\(g(\mu)\)</span> (see chapter on coefficients), and the parameter estimates–and their standard errors–are now expressed on the link scale. This transformation means the <em>P</em>-value obtained by regressing <span class="math inline">\(y1 ~ y2\)</span> is NOT the same as the one obtained by regressing <span class="math inline">\(y2 ~ y1\)</span>.</p>
+<p>To show this is true, let’s generate some Poisson-distributed data and model using both LM and GLM with a log-link:</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="local-estimation.html#cb55-1"></a><span class="kw">set.seed</span>(<span class="dv">87</span>)</span>
+<span id="cb55-2"><a href="local-estimation.html#cb55-2"></a></span>
+<span id="cb55-3"><a href="local-estimation.html#cb55-3"></a>glmdat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x1 =</span> <span class="kw">runif</span>(<span class="dv">50</span>), <span class="dt">y1 =</span> <span class="kw">rpois</span>(<span class="dv">50</span>, <span class="dv">10</span>), <span class="dt">y2 =</span> <span class="kw">rpois</span>(<span class="dv">50</span>, <span class="dv">50</span>), <span class="dt">y3 =</span> <span class="kw">runif</span>(<span class="dv">50</span>))</span>
+<span id="cb55-4"><a href="local-estimation.html#cb55-4"></a></span>
+<span id="cb55-5"><a href="local-estimation.html#cb55-5"></a><span class="co"># LM</span></span>
+<span id="cb55-6"><a href="local-estimation.html#cb55-6"></a><span class="kw">summary</span>(<span class="kw">lm</span>(y1 <span class="op">~</span><span class="st"> </span>y2 <span class="op">+</span><span class="st"> </span>x1, glmdat))<span class="op">$</span>coefficients[<span class="dv">2</span>, <span class="dv">4</span>]</span></code></pre></div>
+<pre><code>## [1] 0.03377718</code></pre>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="local-estimation.html#cb57-1"></a><span class="kw">summary</span>(<span class="kw">lm</span>(y2 <span class="op">~</span><span class="st"> </span>y1 <span class="op">+</span><span class="st"> </span>x1, glmdat))<span class="op">$</span>coefficients[<span class="dv">2</span>, <span class="dv">4</span>]</span></code></pre></div>
+<pre><code>## [1] 0.03377718</code></pre>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="local-estimation.html#cb59-1"></a><span class="co"># GLM</span></span>
+<span id="cb59-2"><a href="local-estimation.html#cb59-2"></a><span class="kw">summary</span>(<span class="kw">glm</span>(y1 <span class="op">~</span><span class="st"> </span>y2 <span class="op">+</span><span class="st"> </span>x1, <span class="st">&quot;poisson&quot;</span>, glmdat))<span class="op">$</span>coefficients[<span class="dv">2</span>, <span class="dv">4</span>] </span></code></pre></div>
+<pre><code>## [1] 0.03479666</code></pre>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="local-estimation.html#cb61-1"></a><span class="kw">summary</span>(<span class="kw">glm</span>(y2 <span class="op">~</span><span class="st"> </span>y1 <span class="op">+</span><span class="st"> </span>x1, <span class="st">&quot;poisson&quot;</span>, glmdat))<span class="op">$</span>coefficients[<span class="dv">2</span>, <span class="dv">4</span>]</span></code></pre></div>
+<pre><code>## [1] 0.08586767</code></pre>
+<p>In the case of <code>lm</code> the <em>P</em>-value is identical regardless of the direction, and moreover is &lt; 0.05, thus–depending on the outcome of the other claim–we might reject the model.</p>
+<p>In contrast, when <span class="math inline">\(y1\)</span> and <span class="math inline">\(y2\)</span> are modeled as Poisson-distributed, the <em>P</em>-value is alternatingly &lt; and &gt;= 0.05. Thus, depending on how the claim is specified, we might or might not reject the model. A big difference!</p>
+<p>Note that the log-likelihoods are also different for GLM:</p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="local-estimation.html#cb63-1"></a><span class="kw">logLik</span>(<span class="kw">glm</span>(y1 <span class="op">~</span><span class="st"> </span>y2 <span class="op">+</span><span class="st"> </span>x1, <span class="st">&quot;poisson&quot;</span>, glmdat))</span></code></pre></div>
+<pre><code>## &#39;log Lik.&#39; -128.8009 (df=3)</code></pre>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="local-estimation.html#cb65-1"></a><span class="kw">logLik</span>(<span class="kw">glm</span>(y2 <span class="op">~</span><span class="st"> </span>y1 <span class="op">+</span><span class="st"> </span>x1, <span class="st">&quot;poisson&quot;</span>, glmdat))</span></code></pre></div>
+<pre><code>## &#39;log Lik.&#39; -158.0841 (df=3)</code></pre>
+<p><em>piecewiseSEM</em> solves this by providing three options to the user.</p>
+<ol style="list-style-type: decimal">
+<li><p>We can specify the directionality of the test if, for instance, it makes greater biological sense to test <span class="math inline">\(y1\)</span> against <span class="math inline">\(y2\)</span> instead of the reverse (for example: abundance drives species richness, not vice versa); or</p></li>
+<li><p>We can remove that path from the basis set and instead specify it as a correlated error using <code>%~~%</code>. This circumvents the issue altogether but it may not make sense to assume both variables are generated by some underlying process; or</p></li>
+<li><p>We can conduct <em>both</em> tests and choose the most conservative (i.e., lowest) <em>P</em>-value or maximum difference in the log-likelihoods.</p></li>
+</ol>
+<p>These options are returned by <code>summary</code> in the event the above scenario is identified in the SEM:</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="local-estimation.html#cb67-1"></a>glmsem &lt;-<span class="st"> </span><span class="kw">psem</span>(</span>
+<span id="cb67-2"><a href="local-estimation.html#cb67-2"></a>  <span class="kw">glm</span>(y1 <span class="op">~</span><span class="st"> </span>x1, <span class="st">&quot;poisson&quot;</span>, glmdat),</span>
+<span id="cb67-3"><a href="local-estimation.html#cb67-3"></a>  <span class="kw">glm</span>(y2 <span class="op">~</span><span class="st"> </span>x1, <span class="st">&quot;poisson&quot;</span>, glmdat),</span>
+<span id="cb67-4"><a href="local-estimation.html#cb67-4"></a>  <span class="kw">lm</span>(y3 <span class="op">~</span><span class="st"> </span>y1 <span class="op">+</span><span class="st"> </span>y2, glmdat)</span>
+<span id="cb67-5"><a href="local-estimation.html#cb67-5"></a>)</span>
+<span id="cb67-6"><a href="local-estimation.html#cb67-6"></a></span>
+<span id="cb67-7"><a href="local-estimation.html#cb67-7"></a><span class="kw">summary</span>(glmsem)</span></code></pre></div>
+<pre><code>## Error: 
+## Non-linearities detected in the basis set where P-values are not symmetrical. 
+## This can bias the outcome of the tests of directed separation.
+##  
+## Offending independence claims: 
+##  y2 &lt;- y1 *OR* y2 -&gt; y1 
+##  
+## Option 1: Specify directionality using argument &#39;direction = c()&#39; in &#39;summary&#39;.
+##  
+## Option 2: Remove path from the basis set by specifying as a correlated error using &#39;%~~%&#39; in &#39;psem&#39;.
+##  
+## Option 3 (recommended): Use argument &#39;conserve = TRUE&#39; in &#39;summary&#39; to compute both tests, and return the most conservative P-value.</code></pre>
+<p>In option 1, the directionality can be specified using <code>direction = c()</code> as an additional argument to <code>summary</code>.</p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="local-estimation.html#cb69-1"></a><span class="kw">summary</span>(glmsem, <span class="dt">direction =</span> <span class="kw">c</span>(<span class="st">&quot;y1 &lt;- y2&quot;</span>), <span class="dt">.progressBar =</span> F)<span class="op">$</span>dTable</span></code></pre></div>
+<pre><code>##   Independ.Claim Test.Type DF Crit.Value P.Value 
+## 1  y3 ~ x1 + ...      coef 46    -0.7187  0.4760 
+## 2  y2 ~ y1 + ...      coef 47     1.7176  0.0859</code></pre>
+<p>In option 2, the SEM can be updated to remove that test by specifying it as a correlated error.</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="local-estimation.html#cb71-1"></a><span class="kw">summary</span>(<span class="kw">update</span>(glmsem, y1 <span class="op">%~~%</span><span class="st"> </span>y2), <span class="dt">.progressBar =</span> F)</span></code></pre></div>
+<pre><code>## 
+## Structural Equation Model of update(glmsem, y1 %~~% y2) 
+## 
+## Call:
+##   y1 ~ x1
+##   y2 ~ x1
+##   y3 ~ y1 + y2
+##   y1 ~~ y2
+## 
+##     AIC
+##  609.236
+## 
+## ---
+## Tests of directed separation:
+## 
+##   Independ.Claim Test.Type DF Crit.Value P.Value 
+##    y3 ~ x1 + ...      coef 46    -0.7187   0.476 
+## 
+## --
+## Global goodness-of-fit:
+## 
+## Chi-Squared = 0.558 with P-value = 0.455 and on 1 degrees of freedom
+## Fisher&#39;s C = 1.485 with P-value = 0.476 and on 2 degrees of freedom
+## 
+## ---
+## Coefficients:
+## 
+##   Response Predictor Estimate Std.Error DF Crit.Value P.Value Std.Estimate  
+##         y1        x1  -0.1007    0.1573 48    -0.6402  0.5221      -1.0000  
+##         y2        x1   0.0252    0.0737 48     0.3423  0.7322       1.0000  
+##         y3        y1  -0.0160    0.0128 47    -1.2511  0.2171      -0.1830  
+##         y3        y2   0.0144    0.0074 47     1.9416  0.0582       0.2839  
+##       ~~y1      ~~y2   0.3155         - 50     2.2792  0.0136       0.3155 *
+## 
+##   Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05
+## 
+## ---
+## Individual R-squared:
+## 
+##   Response     method R.squared
+##         y1 nagelkerke      0.01
+##         y2 nagelkerke      0.00
+##         y3       none      0.08</code></pre>
+<p>Note that the claim no longer appears in the section for the tests of directed separation.</p>
+<p>Finally, option 3 can be invoked by specifying <code>conserve = T</code> as an additional argument</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="local-estimation.html#cb73-1"></a><span class="kw">summary</span>(glmsem, <span class="dt">conserve =</span> T, <span class="dt">.progressBar =</span> F)<span class="op">$</span>dTable</span></code></pre></div>
+<pre><code>##   Independ.Claim Test.Type DF Crit.Value P.Value  
+## 1  y3 ~ x1 + ...      coef 46    -0.7187  0.4760  
+## 3  y1 ~ y2 + ...      coef 47     2.1107  0.0348 *</code></pre>
+<p>The user should be vigilant for these kinds of situations and ensure that both the specified paths AND the independence claims all make biological sense. In the case where the underlying assumptions of the d-sep tests can bias the goodness-of-fit statistic, <em>piecewiseSEM</em> should automatically alert the user and suggest solutions.</p>
+</div>
+<div id="references-1" class="section level2">
+<h2><span class="header-section-number">3.8</span> References</h2>
+<p>Shipley, Bill. “A new inferential test for path models based on directed acyclic graphs.” Structural Equation Modeling 7.2 (2000): 206-218.</p>
+<p>Shipley, Bill. “Confirmatory path analysis in a generalized multilevel context.” Ecology 90.2 (2009): 363-368.</p>
+<p>Shipley, Bill. “The AIC model selection method applied to path analytic models compared using ad‐separation test.” Ecology 94.3 (2013): 560-564.</p>
+<p>Lefcheck, Jonathan S. “piecewiseSEM: Piecewise structural equation modelling in r for ecology, evolution, and systematics.” Methods in Ecology and Evolution 7.5 (2016): 573-579.</p>
+<p>Shipley, Bill, and Jacob C. Douma. “Generalized AIC and chi‐squared statistics for path models consistent with directed acyclic graphs.” Ecology 101.3 (2020): e02960.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="global-estimation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="coefficients.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -278,7 +278,7 @@ mass ~ elev
 
 jutila_lavaan4 <- sem(jutila_model4, meadows, group = "grazed")
 
-anova(jutila_lavaan, jutila_lavaan4)
+anova(jutila_lavaan_free, jutila_lavaan4)
 ```
 
 Of these two paths, it seems the first: $elev -> rich$, is not significantly different from the "free" model, implying that this path could be constrained. Oppositely, the significant difference between the "free" model and one in which the $mass -> rich$ path is constrained suggests that constraining this path is not supported.

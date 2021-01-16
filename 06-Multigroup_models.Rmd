@@ -1,7 +1,7 @@
 ---
 title: "Multigroup Analysis"
 author: "Jon Lefcheck"
-date: "March 17, 2019"
+date: "January 16, 2021"
 output: html_document
 ---
 
@@ -13,27 +13,29 @@ Often in ecology we wish to compare the results from two or more groups. These g
 
 Historically, such a goal would be captured through the application of a statistical interaction. For example, does the effect of pesticide on invertebrate biomass change as function of where the pesticide is applied? This model might look something like this:
 
-  $$biomass = pesticide * location$$
+  $$biomass = pesticide \times location$$
   
-A significant interaction between $pesticide \times location$ would indicate that the effect of pesticide applicaiton on invertebrate biomass indeed varies by location. It would of course then be up to the author to use their knowledge of the system to speculate why this is.
+A significant interaction between $pesticide \times location$ would indicate that the effect of pesticide application on invertebrate biomass indeed varies by location. It would of course then be up to the author to use their knowledge of the system to speculate why this is.
 
-In the event that the interaction is not statistically significant, then the author would conclude that the effect of pesticide is invariant to location, and could instead generalize the effects of pesticide such that it's expected to have the same magnitude of effect regardless of where it's applied.
+In the event that the interaction is not statistically significant, the author would conclude that the effect of pesticide is invariant to location. The author could instead generalize the effects of pesticide, such that it's expected to have the same magnitude of effect regardless of where it's applied.
 
-A *multigroup model* is essentially the same principle, but instead of focusing on a single response, the interaction is applied across a structural equation model. In other words, it asks if not just one, but *all* coefficients are the same or different across groups. In a sense, it can be thought of as a "model-wide" interaction, and in fact, this is how we will treat it later using a piecewise approach.
+A *multigroup model* is essentially the same principle, but instead of focusing on a single response, the interaction is applied across the entire structural equation model. In other words, it asks if not just one but *all* coefficients are the same or different across groups. In a sense, it can be thought of as a "model-wide" interaction, and, in fact, this is how we will treat it later using a piecewise approach.
 
-Of course, you might ask: why not simply fit the same model structure to different subsets of the data? Unfortunately, this would not allow you to identify *which* paths change based on the group and which do not--which could be key insight. Rather, one would have to compare the magnitude and standard errors of each pair of coefficients manually, rather than through a formal statistical procedure.
+Of course, you might ask: why not simply fit the same model structure to different subsets of the data? Unfortunately, this would not allow you to identify *which* paths change based on the group and which do not, which could be key insight. Rather, one would have to compare the magnitude and standard errors of each pair of coefficients manually, rather than through a formal statistical procedure.
 
-The application of multigroup models differs between a global estimation (i.e., variance-covariance-based SEM) and local estimation (i.e., piecewise SEM), but adhere to the same idea of identifying which paths have the same effect across groups and which paths vary depending on the group.
+The application of multigroup models differs between a global estimation (i.e., variance-covariance based SEM) and local estimation (i.e., piecewise SEM), but they adhere to the same idea of identifying which paths have the same effect across groups and which paths vary depending on the group.
 
-In this chapter, we will work through both approaches, and then compare/contrast the output.
+In this chapter, we will work through both approaches and then compare/contrast the output.
 
 ## Multigroup Analysis using Global Estimation
 
-Multigroup modeling using global estimation begins with the estimation of two models: one in which all parameters are allowed to differ between groups, and one in which all parameters are fixed to those obtained from analysis of the pooled data across groups. We call the first model the "free" model since all parameters are free to vary, and the second the "constrained" model since each path, regardless of its group, is constrained to a single value determined by the entire dataset.
+Multigroup modeling using global estimation begins with the estimation of two models: one in which all parameters are allowed to differ *between* groups, and one in which all parameters are fixed to those obtained from analysis of the pooled data *across* groups. We call the first model the "free" model since all parameters are free to vary and the second the "constrained" model since each path, regardless of its group, is constrained to a single value determined by the entire dataset.
 
-If the two models are not significantly different, and the latter fits the data well, then one can assume there is no variation in the path coefficients by group and multigroup approach is not necessary. In this case, the output from the constrained model would be reported. If they are, then the exercise shifts towards understanding which paths are the same and which are different. This is achieved by sequentially constraining the coefficients of each path and re-fitting the model.
+If the two models are not significantly different, and the latter fits the data well, then one can assume there is no variation in the path coefficients by group and multigroup approach is not necessary. In this case, the output from the constrained model would be reported. 
 
-Let's illustrate this procedure using a random example using three variables--$x$, $y$, and $z$--in two groups: "a" and "b":
+If they are, then the exercise shifts towards understanding which paths are the same and which are different. This is achieved by sequentially constraining the coefficients of each path and re-fitting the model.
+
+Let's illustrate this procedure using a random example using three variables--$x$, $y$, and $z$--in two groups: "a" and "b."
 
 ```{r}
 set.seed(111)
@@ -43,10 +45,9 @@ dat <- data.frame(x = runif(100), group = rep(letters[1:2], each = 50))
 dat$y <- dat$x + runif(100)
 
 dat$z <- dat$y + runif(100)
-
 ```
 
-In this example, we suppose a simple mediation model: $x -> y -> z$, and that all three variables are correlated to some degree so that this path model makes sense.
+In this example, we suppose a simple mediation model: $x -> y -> z$, and that all three variables are correlated to some degree so that this model makes sense.
 
 We can use *lavaan* to fit the "free" model. The key is allowing the coefficients to vary by specifying the `group =` argument:
 
@@ -69,7 +70,7 @@ summary(multigroup1)
 
 Note that, unlike the typical *lavaan* output, the printout is now organized by group, with separate coefficients for each path in each group. Because this model is allowed to vary, the coefficient for the $x -> y$ path in group "a" is different, for example, from that reported for group "b".
 
-Next, we fit the constrained model by specifying the additional argument `group.equal = c("intercepts", "regressions")`. This argument fixes both the intercepts and path coefficients in each groups to be the same.
+Next, we fit the constrained model by specifying the additional argument `group.equal = c("intercepts", "regressions")`. This argument fixes both the intercepts and path coefficients in each group to be the same.
 
 ```{r, message = FALSE, warning = FALSE}
 multigroup1.constrained <- sem(multigroup.model, dat, group = "group", group.equal = c("intercepts", "regressions"))
@@ -77,7 +78,7 @@ multigroup1.constrained <- sem(multigroup.model, dat, group = "group", group.equ
 summary(multigroup1.constrained)
 ```
 
-This output is slightly different from the first: the coefficients are reported by group, but they are now the same between groups (e.g., $x -> y$ in group "a" = $x -> y$ in group "b"). The constrained paths are indicated by a parenthetical next to the path (e.g., `(.p1.)` for path 1).
+This output is slightly different from the first: the coefficients are reported by group, but they are now identical between groups (e.g., $\gamma_x$ in group "a" = $\gamma_x$ in group "b"). The constrained paths are indicated by a parenthetical next to the path (e.g., `(.p1.)` for path 1).
 
 Both the constrained and free models fit the data well based on the $\chi^2$ statistic, and we can formally compare the two using a Chi-squared difference test:
 
@@ -85,9 +86,9 @@ Both the constrained and free models fit the data well based on the $\chi^2$ sta
 anova(multigroup1, multigroup1.constrained)
 ```
 
-The significant *P*-value implies that the free and constrained models are significantly different. In other words, some paths vary while others do not. If the models were *not* significantly different, then one would conclude that the constrained model is equivalent to the free model. In other words, the coefficients would not vary by group and it would be fair to analyze the pooled data in a single global model.
+The significant *P*-value implies that the free and constrained models are significantly different. In other words, some paths vary while others may not. If the models were *not* significantly different, then one would conclude that the constrained model is equivalent to the free model, or that the coefficients would not vary by group, and it would be fair to analyze the pooled data in a single global model.
 
-However, this is the not the case for this example, and we can now undergo the processing of introducing and releasing constraints to try and identify which path varies between groups. In this simplified example, we have two choices: $x -> y$, and $y -> z$. Let's focus on $x -> y$ first.
+However, this is the not the case for this example, and we can now undergo the process of introducing and releasing constraints to try and identify *which* path varies between groups. In this simplified example, we have two choices: $x -> y$, and $y -> z$. Let's focus on $x -> y$ first.
 
 We can introduce a single constraint by modifying the model formula and re-fitting the model:
 
@@ -98,7 +99,6 @@ z ~ y
 '
 
 multigroup2 <- sem(multigroup.model2, dat, group = "group")
-
 ```
 
 The string `c("b1", "b1")` gives the path the name `b1` and ensures the coefficient is equal between the two groups (hence the two entries).
@@ -109,7 +109,7 @@ If we use a Chi-squared difference test as before:
 anova(multigroup1, multigroup2)
 ```
 
-...we find that the models are still significantly different, implying that the path between $x -> y$ should not be constrained, and that it should be left to vary among groups.
+We find that the models are still significantly different, implying that the path between $x -> y$ should not be constrained and instead that it should be left to vary among groups.
 
 We can repeat this exercise with the second path, $y -> z$:
 
@@ -121,28 +121,26 @@ z ~ c("b2", "b2") * y
 
 multigroup3 <- sem(multigroup.model3, dat, group = "group")
 
-summary(multigroup3)
-
 anova(multigroup1, multigroup3)
 ```
 
-In this case, there is *not* a significant difference between the two models, implying that the is no difference in the fit of the constrained model and the unstrained model, and that this constraint is valid. 
+In this case, there is *not* a significant difference between the two models (*P* = 0.23), implying that the is no difference in the fit of the constrained model and the unstrained model and that this constraint is valid. 
 
-Thus, if we were to select a model from which to draw inference, we would select the third model in which $x -> y$ is allowed to vary and $y -> z$ is constrained among groups. It's key to note that this model also fits the data well based on the $\chi^2$ statistic; if not, then like all poor-fitting path models (multigroup or otherwise), it would be unwise to present and draw conclusions from it.
+If we were to select across these three alternatives, we would select the third model in which $x -> y$ is allowed to vary and $y -> z$ is constrained among groups. It's key to note that this model also fits the data well based on the $\chi^2$ statistic; if not, then like all poor-fitting path models (multigroup or otherwise) it would be unwise to present and draw conclusions from it.
 
 This exercise of relaxing and imposing constraints is potentially very exploratory and could become exhaustive with more complicated models (i.e., one with lots of paths to potentially constrain/relax). Users should refrain from constraining and relaxing all paths and then choosing the most parsimonious model. Instead, choosing which paths to constrain should be motivated by the question: for example, we might expect some effects to be universal (e.g., temperature on metabolic rate) but not others (e.g., the effect of pesticide may vary depending on the history of application at various sites).
 
-Critically, the degrees of freedom for the model do *not* change based on the number of groups because coefficients are estimated from variance-covariance matrices with the same dimensions. However, sample size must be sufficiently large to estimate all the parameters with minimal bias. While this is true for all structural equation models, it is especially true where parameters are estimated from covariances derived from different subsets (groups) that do not have the same representative as across the full dataset.
+Critically, the degrees of freedom for the model do *not* change based on the number of groups because coefficients are estimated from variance-covariance matrices with the same dimensions. However, sample size must be sufficiently large to estimate all the parameters within each group with minimal bias. While this is true for all structural equation models, it is especially true where parameters are estimated from covariances derived from different subsets (groups) that do not have the same replication.
 
-Standardized coefficients also present a challenge. Because variances are likely to be unequal among groups, the standardized coefficient must be computed on a per group basis, even if the unstandardized coefficient is constrained to the global value. Both packages for SEM will do this automatically, so you may notice that the standardized solutions may--and more than often will--vary even among constrained paths.
+Standardized coefficients also present a challenge. Because variances are likely to be unequal among groups (unless they are drawn from the same population), the standardized coefficient must be computed on a per group basis, even if the unstandardized coefficient is constrained to the global value. Both packages for SEM will do this automatically, so you may notice that the standardized solutions may--and more than often will--vary even among constrained paths.
 
 ## Multigroup Analysis Using Local Estimation
 
 The goal of multigroup analysis using local estimation is identical to that of global estimation: to identify whether a single global model is sufficient to describe the data, or whether some or all paths vary by some grouping variable. The difference lies in execution: while *lavaan* is a back-and-forth manual process of relaxing and constraining paths, *piecewiseSEM* tests constraints and automatically selects the best output for your data. 
 
-The upside is that the arduous and somewhat cumbersome process of specifying constraints is taken care of; the downside is that manually constraining particular paths is not possible at this time.
+The upside is that the arduous and somewhat cumbersome process of specifying constraints is taken care of; the downside is that manually constraining particular paths is not possible at this time, although forthcoming work by Shipley and Douma will make this possible.
 
-The first step in the local estimation process is to implement a model-wide interaction. In other words, every term in the model interacts with the grouping variable. If the interaction is significant, then the path is free to vary by group; if not, then the path takes on the estimate from the global dataset. In this way, the piecewise multigroup procedure breaks down into a series of classic interaction terms: it is literally and figuratively a model-wide interaction.
+The first step in the local estimation process is to implement a model-wide interaction. In other words, every term in the model interacts with the grouping variable. If the interaction is significant, then the path is free to vary by group; if not, then the path takes on the estimate from the global dataset. In this way, the piecewise multigroup procedure breaks down into a series of classic interaction terms: it is literally and figuratively the model-wide interaction we discussed at the beginning of this chapter
 
 Consider our previous example fitted using *lavaan*. In a piecewise approach, we would first model the interaction between $x \times group$ to see whether the effect of $x$ on $y$ should vary by group:
 
@@ -177,11 +175,11 @@ The `multigroup` function has an argument `group =` which, as in *lavaan*, accep
 (pmultigroup <- multigroup(pmodel, group = "group"))
 ```
 
-If we examine the output, we see the output table of model-wide interactions. It's important to note that the package uses `car::Anova` with `type = "II"` sums-of-squares to estimate the interactions by default, but other types (e.g., type III) are accepted using the `test.type = ` argument (or type I using the base `anova` function).
+If we examine the output, we see the output table of model-wide interactions. It's important to note that the package uses `car::Anova` with `type = "II"` sums-of-squares to estimate the interactions by default, but other types (e.g., type III) are accepted using the `test.type =` argument (or type I using the base `anova` function).
 
-As above, only the path from x -> y is significantly different among groups. In this case, the function explicitly reports that the path `y -> z constrained to the global model`.
+As above, only the path from $x$ -> $y$ is significantly different among groups. In this case, the function explicitly reports that the path `y -> z constrained to the global model`.
 
-Next, as in *lavaan*, are the coefficient tables for each group. Values that have been constrained are the same between the two models, while the unconstrained path from $x -> y$ is different between groups "a" and "b".
+Next, as in *lavaan*, are the coefficient tables for each group. Values that have been constrained are the same between the two models and indicated with a `c` at the end of the row, while the unconstrained path from $x -> y$ is different between groups "a" and "b".
 
 It's important to note that the standardized coefficients *do* differ for each group even though the paths are constrained. Again, this is because the variance differs between groups. Thus the standardization:
 
@@ -194,7 +192,7 @@ Finally, near the top is the global goodness-of-fit test based on Fisher's *C*. 
 For comparison's sake, let's look at the output from the *lavaan* multigroup model and the *piecewiseSEM* one:
 
 ```{r}
-summary(multigroup3)
+standardizedSolution(multigroup3)
 
 pmultigroup$group.coefs
 ```
@@ -205,7 +203,7 @@ You'll note that the outputs are roughly equivalent (owing to slight differences
 
 Let's now turn to a real example from Grace & Jutila (1999). While the original paper fit a far more complicated model than we will, the following simplified model demonstrates the approach well.
 
-In their study, the authors were interested in the controls of on plant species' density in Finnish meadows. In this worked example, we will consider only elevation and total biomass in their effects on density, plus an effect of elevation on biomass:
+In their study, the authors were interested in the controls of on plant species density in Finnish meadows. In this worked example, we will consider only elevation and total biomass in their effects on density, plus an effect of elevation on biomass:
 
 ![](https://raw.githubusercontent.com/jslefche/sem_book/master/img/multigroup_jutila_sem.png)
 
@@ -225,24 +223,24 @@ rich ~ elev + mass
 mass ~ elev
 '
 
-jutila_lavaan <- sem(jutila_model, meadows, group = "grazed")
+jutila_lavaan_free <- sem(jutila_model, meadows, group = "grazed")
 
-summary(jutila_lavaan)
+summary(jutila_lavaan_free)
 ```
 
-In this example, the model fit can't be determined because the model is saturated (df = 0). This is key moving forward because constraining paths will free up degrees of freedom with which to evaluate model fit.
+In this example, the model goodness-of-fit fit can't be determined because the model is saturated (df = 0). This is key moving forward because constraining paths will free up degrees of freedom with which to obtain a test statistic.
+
+Also note the warning message above variances being a factor 1000 times larger than others. This can be problematic for the estimation of the variance-covariance matrix. The simple solution is the use the function `scale` or add/subtract a constant to reduce these values before fitting the model.
 
 Let's begin by constraining all paths:
 
 ```{r, message = FALSE, warning = FALSE}
-jutila_lavaan2 <- sem(jutila_model, meadows, group = "grazed", group.equal = c("intercepts", "regressions"))
+jutila_lavaan_constrained <- sem(jutila_model, meadows, group = "grazed", group.equal = c("intercepts", "regressions"))
 
-summary(jutila_lavaan2)
-
-anova(jutila_lavaan2)
+anova(jutila_lavaan_free, jutila_lavaan_constrained)
 ```
 
-The model is significantly different from the unconstrained model we fit previously, implying that some paths could be constrained. Moreover, by constraining the coefficients, we now have 5 degrees of freedom to evaluate model fit. However, it is a poor fit, implying that some path coefficients must vary among groups.
+The model is significantly different from the unconstrained model we fit previously (*P* < 0.001), implying that some paths could be constrained. Note that, by constraining all the coefficients, we now have 5 degrees of freedom to evaluate model fit. (However, if we were to examine it, we would find that it is a poor fit, implying that some path coefficients must vary among groups.)
 
 The next step is to sequentially relax and constrain paths:
 
@@ -252,12 +250,12 @@ rich ~ elev + mass
 mass ~ c("b1", "b1") * elev
 '
 
-jutila_lavaan3 <- sem(jutila_model2, meadows, group = "grazed")
+jutila_lavaan2 <- sem(jutila_model2, meadows, group = "grazed")
 
-anova(jutila_lavaan, jutila_lavaan3)
+anova(jutila_lavaan_free, jutila_lavaan2)
 ```
 
-The model is still a poor fit, and it is significantly different from the "free" model. In this case, we would conclude that the $elev -> mass$ path should not be constrained.
+The model is still a poor fit, and it is significantly different from the "free" model (*P* = 0.005). In this case, we would conclude that the $elev -> mass$ path should *not* be constrained.
 
 Let's repeat for the next two paths:
 
@@ -268,9 +266,9 @@ rich ~ c("b2", "b2") * elev + mass
 mass ~ elev
 '
 
-jutila_lavaan4 <- sem(jutila_model3, meadows, group = "grazed")
+jutila_lavaan3 <- sem(jutila_model3, meadows, group = "grazed")
 
-anova(jutila_lavaan, jutila_lavaan4)
+anova(jutila_lavaan_free, jutila_lavaan3)
 
 # mass -> rich
 jutila_model4 <- '
@@ -278,17 +276,17 @@ rich ~ elev + c("b3", "b3") * mass
 mass ~ elev
 '
 
-jutila_lavaan5 <- sem(jutila_model4, meadows, group = "grazed")
+jutila_lavaan4 <- sem(jutila_model4, meadows, group = "grazed")
 
-anova(jutila_lavaan, jutila_lavaan5)
+anova(jutila_lavaan, jutila_lavaan4)
 ```
 
-Of these two paths, it seems the first: $elev -> rich$, is not significantly different from the "free" model, implying that this path could be constrained. Oppositely, it seems the significant difference between the "free" model and one in which the $mass -> rich$ path is constrained is not supported
+Of these two paths, it seems the first: $elev -> rich$, is not significantly different from the "free" model, implying that this path could be constrained. Oppositely, the significant difference between the "free" model and one in which the $mass -> rich$ path is constrained suggests that constraining this path is not supported.
 
 Let's check the fit of the model with the one constrait on $elev -> rich$:
 
 ```{r}
-summary(jutila_lavaan4)
+summary(jutila_lavaan3)
 ```
 
 Now the model fits the data well (*P* = 0.330), and we have, through an iterative procedure of imposing and relaxing constraints, determined which paths differ among groups ($elev -> mass$, $mass -> rich$) and which do *not* ($elev -> rich$).
@@ -304,9 +302,9 @@ jutila_psem <- psem(
 multigroup(jutila_psem, group = "grazed")
 ```
 
-As in our analysis in *lavaan*, the `multigroup` function has identified the $elev -> rich$ path as the only one in which coefficients do not differ among groups (denoted by a `c` next to the output). Thus, in the output, that coefficient is the same between groups; otherwise, the coefficients vary depending on whether the meadows is grazed or ungrazed. Moreover, it seems some of the paths differ in their statistical significance: the $rich -> mass$ is not significant in the grazed meadows, but is significant in the ungrazed meadows. So not only do the coefficients differ, but the model structure as well!
+As in our analysis in *lavaan*, the `multigroup` function has identified the $elev -> rich$ path as the only one in which coefficients do not differ among groups (again, denoted by a `c` next to the output). Thus, in the output, that coefficient is the same between groups; otherwise, the coefficients vary depending on whether the meadows is grazed or ungrazed. Moreover, it seems some of the paths differ in their statistical significance: the $rich -> mass$ is not significant in the grazed meadows, but is significant in the ungrazed meadows. So not only do the coefficients differ, but the model structure as well.
 
-You'll note that the *piecewiseSEM* output does not return a goodness-of-fit test because the model is saturated (i.e., no missing paths). While constraints are incorporated in terms of offsets (i.e., fixing model coefficients), unlike global estimation, this does not provide new information with which to test goodness-of-fit. This is a limitation of local estimation that extends beyond multigroup modeling to any piecewise model.
+You'll note that the *piecewiseSEM* output does not return a goodness-of-fit test because the model is saturated (i.e., no missing paths). While constraints are incorporated in terms of offsets (i.e., fixing model coefficients), unlike global estimation, this procedure does not provide new information with which to test goodness-of-fit. This is a limitation of local estimation that extends beyond multigroup modeling to any piecewise model.
 
 To draw inference about the study system, we would say that two paths differ among groups and one path does not. We would then report the two path models parameterized using the coefficient output (with the $elev -> rich$ path having the same coefficient in both groups). We would conclude that richness is affected by elevation and biomass under ungrazed conditions, but not under grazed conditions, where only elevation directly influences richness.
 

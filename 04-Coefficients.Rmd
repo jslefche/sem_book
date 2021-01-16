@@ -105,7 +105,7 @@ For a worked example, we have now entered fully into the realm of *piecewiseSEM*
 coefs(xy_model, standardize = "range")$Std.Estimate
 ```
 
-In both cases, we obtain a $b = 0.0981$ suggesting that a full shift in $x$ along its range would only result in a predicted shift of 10% along the range of $y$.
+In both cases, we obtain a $b = 0.098$ suggesting that a full shift in $x$ along its range would only result in a predicted shift of about 10% along the range of $y$.
 
 Both scale and relevant range-standardization only apply when the response is normally-distributed. If not, we must make some assumptions in order to obtain standardized coefficients. Let's start with binomial responses, which are the trickiest case.
 

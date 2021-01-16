@@ -1,36 +1,4 @@
 
-#######
-
-[7.1 Introduction to Latent Variable Modeling]
-
-[Missing noun: "from the latent" should be "from the latent variable"]
-
-[Current]     From this correlation, we can obtain a path coefficient from the latent to the indicator variable.
-[Recommended] From this correlation, we can obtain a path coefficient from the latent variable to the indicator variable.
-
-#######
-
-[Get rid of slash as a stand-in for "or"]
-
-[Current]     So care should be taken when selecting/naming latent variables
-[Recommended] So care should be taken when selecting or naming latent variables
-
-#######
-
-[Repeated word: "the the" should be "the"]
-
-[Current]     in the chapter on global estimation the the coefficient
-[Recommended] in the chapter on global estimation the coefficient
-
-#######
-
-[Missing demonstrative pronoun: "this", 
-remove parenthetical "s" from "path(s)"]
-
-[Current]     We will get the calculation of [zeta] now because involves the value of the path(s) leading into the endogenous [nyu].
-[Recommended] We will get the calculation of [zeta] now because this involves the values of one or more paths leading into the endogenous [nyu].
-
-#######
 
 [7.3 Latent Variables in lavaan]
 

@@ -117,11 +117,11 @@ summary(comp_model1, standardize = T)
 ```
 
 ```
-## lavaan 0.6-7 ended normally after 14 iterations
+## lavaan 0.6-9 ended normally after 14 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                          2
+##   Number of model parameters                         2
 ##                                                       
 ##   Number of observations                            50
 ##                                                       
@@ -156,7 +156,7 @@ summary(comp_model1, standardize = T)
 
 We see from the output that the estimated loadings for our two indicators are the same values we provided, and consequently the understandardized coefficient is 1. However, the standardized coefficient is 0.177 and it is this value that we would present (although its non-significant, given that these are fake data).
 
-Let's suppose we didn't know the loadings from the multiple regression. We run into the same issue of identifiability as when constructing latent variables, so we must fix the first loading to 1. This will also define the scale of the composite. NOTE: *lavaan* does not do this automatically (as it goes for latents), so we will have to implement it manually.
+Let's suppose we didn't know the loadings from the multiple regression. We run into the same issue of identifiability as when constructing latent variables, so we must fix the first loading to 1. This will also define the scale of the composite. NOTE: *lavaan* does not do this automatically (as it does for latents), so we will have to implement it manually.
 
 
 ```r
@@ -170,23 +170,8 @@ comp_model2 <- sem(comp_formula2, data.frame(y, x1, x2))
 ```
 
 ```
-## Warning in lav_model_estimate(lavmodel = lavmodel, lavpartable = lavpartable, :
-## lavaan WARNING: the optimizer warns that a solution has NOT been found!
-```
-
-```
-## Warning in lav_model_estimate(lavmodel = lavmodel, lavpartable = lavpartable, :
-## lavaan WARNING: the optimizer warns that a solution has NOT been found!
-```
-
-```
-## Warning in lav_model_estimate(lavmodel = lavmodel, lavpartable = lavpartable, :
-## lavaan WARNING: the optimizer warns that a solution has NOT been found!
-```
-
-```
-## Warning in lav_model_estimate(lavmodel = lavmodel, lavpartable = lavpartable, :
-## lavaan WARNING: the optimizer warns that a solution has NOT been found!
+## Warning in lavaan::lavaan(model = comp_formula2, data = data.frame(y, x1, : lavaan WARNING:
+##     the optimizer warns that a solution has NOT been found!
 ```
 
 It seems that, because the true loading of $x1$ on the composite is far from 1 (we know it is actually -0.498), we have received a non-convergence error!
@@ -207,11 +192,11 @@ summary(comp_model3, standardize = T)
 ```
 
 ```
-## lavaan 0.6-7 ended normally after 22 iterations
+## lavaan 0.6-9 ended normally after 22 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                          3
+##   Number of model parameters                         3
 ##                                                       
 ##   Number of observations                            50
 ##                                                       
@@ -363,11 +348,11 @@ summary(keeley_model1, standardize = T)
 ```
 
 ```
-## lavaan 0.6-7 ended normally after 20 iterations
+## lavaan 0.6-9 ended normally after 20 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                          5
+##   Number of model parameters                         5
 ##                                                       
 ##   Number of observations                            90
 ##                                                       
@@ -435,11 +420,11 @@ summary(keeley_model2, standardize = T, rsq = T)
 ```
 
 ```
-## lavaan 0.6-7 ended normally after 53 iterations
+## lavaan 0.6-9 ended normally after 53 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                          9
+##   Number of model parameters                         9
 ##                                                       
 ##   Number of observations                            90
 ##                                                       

@@ -1,7 +1,7 @@
 --- 
 title: "Structural Equation Modeling in R for Ecology and Evolution"
 author: "Jonathan Lefcheck"
-date: "2021-01-16"
+date: "2021-08-06"
 site: bookdown::bookdown_site
 output: bookdown::gitbook
 documentclass: book
@@ -20,6 +20,6 @@ Check back often, as this book is a "living resource:" as new functionality is a
 
 I would also say that this book is not a peer-reviewed resource, and has been somewhat cobbled together over late night coding sessions prepping for morning lectures. So please take everything here with a grain of salt, and do not hesitate to reach out if you find an errors, typos, or other issues.
 
-I am, however, indebted to Christopher Shannon, Audrey Barker-Plotkin, and others for their careful reading and editorial and technical corrections.
+I am, however, indebted to Christopher Shannon, Audrey Barker-Plotkin, Scott Meyers, Liangzhe Chen, and others for their careful reading and for providing excellent editorial and technical corrections.
 
 Happy coding!

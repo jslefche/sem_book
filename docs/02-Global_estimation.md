@@ -617,7 +617,7 @@ Now consider another equation, in addition to the first:
   
 With this equation, we now have enough information to uniquely solve for $a$ and $b$:
 
-  $$(2b) + b = 8$$
+  $$(3b) + b = 8$$
   $$ 4b = 8$$
   $$b = 8 / 4 = 2$$
   
@@ -781,11 +781,11 @@ summary(keeley_sem1)
 ```
 
 ```
-## lavaan 0.6-7 ended normally after 11 iterations
+## lavaan 0.6-9 ended normally after 11 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                          2
+##   Number of model parameters                         2
 ##                                                       
 ##   Number of observations                            90
 ##                                                       
@@ -837,11 +837,11 @@ summary(sem(keeley_formula1, keeley, meanstructure = T))
 ```
 
 ```
-## lavaan 0.6-7 ended normally after 14 iterations
+## lavaan 0.6-9 ended normally after 14 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                          3
+##   Number of model parameters                         3
 ##                                                       
 ##   Number of observations                            90
 ##                                                       
@@ -930,11 +930,11 @@ summary(keeley_sem1, standardize = T)
 ```
 
 ```
-## lavaan 0.6-7 ended normally after 11 iterations
+## lavaan 0.6-9 ended normally after 11 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                          2
+##   Number of model parameters                         2
 ##                                                       
 ##   Number of observations                            90
 ##                                                       
@@ -969,11 +969,11 @@ summary(keeley_sem1, standardize = T, rsq = T)
 ```
 
 ```
-## lavaan 0.6-7 ended normally after 11 iterations
+## lavaan 0.6-9 ended normally after 11 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                          2
+##   Number of model parameters                         2
 ##                                                       
 ##   Number of observations                            90
 ##                                                       
@@ -1034,11 +1034,11 @@ summary(keeley_sem2, standardize = T, rsq = T)
 ```
 
 ```
-## lavaan 0.6-7 ended normally after 19 iterations
+## lavaan 0.6-9 ended normally after 19 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                          4
+##   Number of model parameters                         4
 ##                                                       
 ##   Number of observations                            90
 ##                                                       
@@ -1131,11 +1131,11 @@ summary(keeley_sem2.1, standardize = T)
 ```
 
 ```
-## lavaan 0.6-7 ended normally after 19 iterations
+## lavaan 0.6-9 ended normally after 19 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                          4
+##   Number of model parameters                         4
 ##                                                       
 ##   Number of observations                            90
 ##                                                       
@@ -1195,11 +1195,11 @@ summary(keeley_sem3, standardize = T)
 ```
 
 ```
-## lavaan 0.6-7 ended normally after 20 iterations
+## lavaan 0.6-9 ended normally after 20 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                          5
+##   Number of model parameters                         5
 ##                                                       
 ##   Number of observations                            90
 ##                                                       

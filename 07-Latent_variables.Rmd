@@ -220,10 +220,10 @@ This approach also provides a conceptual advantage: we often choose a single ind
 
 Multiple indicators raises a new problem, though: identifiability. Remember from the chapter on global estimation that we must have enough known pieces of information to estimate all the unknown quantities implied by the model. Latent variable models must also follow the "t-rule."
 
-Consider an exogenous latent variable indicated by two variables, $x1$ and $x1$. We can break this latent variable into two equations:
+Consider an exogenous latent variable indicated by two variables, $x1$ and $x2$. We can break this latent variable into two equations:
 
   $$x1 = \lambda_{1}\xi + \delta_{x1}$$
-  $$x2 = \lambda_{2}\xi + \delta_{x1}$$
+  $$x2 = \lambda_{2}\xi + \delta_{x2}$$
 
 We know the values of $x1$ and $x2$ and the correlation between them. To estimate values for the latent construct $\xi$ we need to estimate $\lambda_{1}$, $\lambda_{2}$, $\delta_{x1}$ and $\delta_{x2}$. This model fails the t-rule, which, if you recall, is:
 

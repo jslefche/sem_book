@@ -124,7 +124,7 @@ multigroup3 <- sem(multigroup.model3, dat, group = "group")
 anova(multigroup1, multigroup3)
 ```
 
-In this case, there is *not* a significant difference between the two models (*P* = 0.23), implying that the is no difference in the fit of the constrained model and the unstrained model and that this constraint is valid. 
+In this case, there is *not* a significant difference between the two models (*P* = 0.23), implying that the is no difference in the fit of the constrained model and the unconstrained model and that this constraint is valid. 
 
 If we were to select across these three alternatives, we would select the third model in which $x -> y$ is allowed to vary and $y -> z$ is constrained among groups. It's key to note that this model also fits the data well based on the $\chi^2$ statistic; if not, then like all poor-fitting path models (multigroup or otherwise) it would be unwise to present and draw conclusions from it.
 

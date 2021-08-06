@@ -73,9 +73,9 @@ Let's consider the independence claim $x1 -> y3$. Based on our last example, $y2
 
 _Our second rule of the d-sep test is:  conditioning variables consist of only those variables *immediate* to the two variables whose independence is being evaluated._ 
 
-In other words, we assume that the effects of any other downstream variables are captured in the variance contributed by the immediate ancestors, and we can therefore ignore them. Upstream variables (those occuring later in the path diagram) are never considered as conditioning variables, for the obvious reason that they have no directed effect on the preceding variables.
+In other words, we assume that the effects of any other downstream variables are captured in the variance contributed by the immediate ancestors, and we can therefore ignore them. Upstream variables (those occurring later in the path diagram *beyond* both variables included in the claim) are never considered as conditioning variables, for the obvious reason that causes cannot precede effects.
 
-For the claim $y1 -> y3$ above, there are now two conditioning variables: $y2$ (on $y3$) and also $x1$ (on $y1$). So the final independence claim would be: $y1 | y3 (x1, y1)$.
+For the claim $y1 -> y3$ above, there are now two conditioning variables: $y2$ (on $y3$) and also $x1$ (on $y1$). So the final independence claim would be: $y1 | y3 (x1, y1)$. Note that the effect of $y1$ on $y2$ is not included, because it is too ancestral.
 
 The full basis set for this diagram would then be:
 

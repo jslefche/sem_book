@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>5 Categorical Variables | Structural Equation Modeling in R for Ecology and Evolution</title>
-  <meta name="description" content="5 Categorical Variables | Structural Equation Modeling in R for Ecology and Evolution" />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <title>5 Categorical Variables | Composite Variables</title>
+  <meta name="description" content="5 Categorical Variables | Composite Variables" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="5 Categorical Variables | Structural Equation Modeling in R for Ecology and Evolution" />
+  <meta property="og:title" content="5 Categorical Variables | Composite Variables" />
   <meta property="og:type" content="book" />
   
   
@@ -16,12 +16,12 @@
   <meta name="github-repo" content="jslefche/sem_book" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="5 Categorical Variables | Structural Equation Modeling in R for Ecology and Evolution" />
+  <meta name="twitter:title" content="5 Categorical Variables | Composite Variables" />
   
   
   
 
-<meta name="author" content="Jonathan Lefcheck" />
+<meta name="author" content="Jon Lefcheck" />
 
 
 <meta name="date" content="2021-01-16" />
@@ -33,6 +33,7 @@
   
 <link rel="prev" href="coefficients.html"/>
 <link rel="next" href="multigroup-analysis.html"/>
+<script src="libs/header-attrs-2.9/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -50,22 +51,23 @@
 
 
 
-<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
 <style type="text/css">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -85,7 +87,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {   }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -118,6 +120,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 </head>
 
 <body>
@@ -131,9 +134,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <ul class="summary">
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface</a></li>
-<li class="chapter" data-level="2" data-path="global-estimation.html"><a href="global-estimation.html"><i class="fa fa-check"></i><b>2</b> Global Estimation</a><ul>
+<li class="chapter" data-level="2" data-path="global-estimation.html"><a href="global-estimation.html"><i class="fa fa-check"></i><b>2</b> Global Estimation</a>
+<ul>
 <li class="chapter" data-level="2.1" data-path="global-estimation.html"><a href="global-estimation.html#what-is-covariance"><i class="fa fa-check"></i><b>2.1</b> What is (Co)variance?</a></li>
-<li class="chapter" data-level="2.2" data-path="global-estimation.html"><a href="global-estimation.html#regression-coefficients"><i class="fa fa-check"></i><b>2.2</b> Regression Coefficients</a><ul>
+<li class="chapter" data-level="2.2" data-path="global-estimation.html"><a href="global-estimation.html#regression-coefficients"><i class="fa fa-check"></i><b>2.2</b> Regression Coefficients</a>
+<ul>
 <li class="chapter" data-level="2.2.1" data-path="global-estimation.html"><a href="global-estimation.html#rule-1-unspecified-relationships-among-exogenous-variables-are-simply-their-bivariate-correlations."><i class="fa fa-check"></i><b>2.2.1</b> Rule 1: Unspecified relationships among exogenous variables are simply their bivariate correlations.</a></li>
 <li class="chapter" data-level="2.2.2" data-path="global-estimation.html"><a href="global-estimation.html#rule-2-when-two-variables-are-connected-by-a-single-path-the-coefficient-of-that-path-is-the-regression-coefficient."><i class="fa fa-check"></i><b>2.2.2</b> Rule 2: When two variables are connected by a single path, the coefficient of that path is the regression coefficient.</a></li>
 <li class="chapter" data-level="2.2.3" data-path="global-estimation.html"><a href="global-estimation.html#rule-3-the-strength-of-a-compound-path-one-that-includes-multiple-links-is-the-product-of-the-individual-coefficients."><i class="fa fa-check"></i><b>2.2.3</b> Rule 3: The strength of a compound path (one that includes multiple links) is the product of the individual coefficients.</a></li>
@@ -146,14 +151,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3" data-path="global-estimation.html"><a href="global-estimation.html#variance-based-structural-equation-modeling"><i class="fa fa-check"></i><b>2.3</b> Variance-based Structural Equation Modeling</a></li>
 <li class="chapter" data-level="2.4" data-path="global-estimation.html"><a href="global-estimation.html#model-identifiability"><i class="fa fa-check"></i><b>2.4</b> Model Identifiability</a></li>
 <li class="chapter" data-level="2.5" data-path="global-estimation.html"><a href="global-estimation.html#goodness-of-fit-measures"><i class="fa fa-check"></i><b>2.5</b> Goodness-of-fit Measures</a></li>
-<li class="chapter" data-level="2.6" data-path="global-estimation.html"><a href="global-estimation.html#model-fitting-using-lavaan"><i class="fa fa-check"></i><b>2.6</b> Model Fitting Using <em>lavaan</em></a><ul>
+<li class="chapter" data-level="2.6" data-path="global-estimation.html"><a href="global-estimation.html#model-fitting-using-lavaan"><i class="fa fa-check"></i><b>2.6</b> Model Fitting Using <em>lavaan</em></a>
+<ul>
 <li class="chapter" data-level="2.6.1" data-path="global-estimation.html"><a href="global-estimation.html#lavaan-vs-lm"><i class="fa fa-check"></i><b>2.6.1</b> <em>lavaan</em> vs <code>lm</code></a></li>
 <li class="chapter" data-level="2.6.2" data-path="global-estimation.html"><a href="global-estimation.html#sem-using-lavaan"><i class="fa fa-check"></i><b>2.6.2</b> SEM using <em>lavaan</em></a></li>
 <li class="chapter" data-level="2.6.3" data-path="global-estimation.html"><a href="global-estimation.html#testing-alternative-structures-using-lavaan"><i class="fa fa-check"></i><b>2.6.3</b> Testing Alternative Structures using <em>lavaan</em></a></li>
 </ul></li>
 <li class="chapter" data-level="2.7" data-path="global-estimation.html"><a href="global-estimation.html#references"><i class="fa fa-check"></i><b>2.7</b> References</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="local-estimation.html"><a href="local-estimation.html"><i class="fa fa-check"></i><b>3</b> Local Estimation</a><ul>
+<li class="chapter" data-level="3" data-path="local-estimation.html"><a href="local-estimation.html"><i class="fa fa-check"></i><b>3</b> Local Estimation</a>
+<ul>
 <li class="chapter" data-level="3.1" data-path="local-estimation.html"><a href="local-estimation.html#global-vs.-local-estimation"><i class="fa fa-check"></i><b>3.1</b> Global vs. local estimation</a></li>
 <li class="chapter" data-level="3.2" data-path="local-estimation.html"><a href="local-estimation.html#tests-of-directed-separation"><i class="fa fa-check"></i><b>3.2</b> Tests of directed separation</a></li>
 <li class="chapter" data-level="3.3" data-path="local-estimation.html"><a href="local-estimation.html#a-log-likelihood-approach-to-assessing-model-fit"><i class="fa fa-check"></i><b>3.3</b> A Log-Likelihood Approach to Assessing Model Fit</a></li>
@@ -163,32 +170,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.7" data-path="local-estimation.html"><a href="local-estimation.html#a-special-case-where-graph-theory-fails"><i class="fa fa-check"></i><b>3.7</b> A Special Case: Where Graph Theory Fails</a></li>
 <li class="chapter" data-level="3.8" data-path="local-estimation.html"><a href="local-estimation.html#references-1"><i class="fa fa-check"></i><b>3.8</b> References</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="coefficients.html"><a href="coefficients.html"><i class="fa fa-check"></i><b>4</b> Coefficients</a><ul>
+<li class="chapter" data-level="4" data-path="coefficients.html"><a href="coefficients.html"><i class="fa fa-check"></i><b>4</b> Coefficients</a>
+<ul>
 <li class="chapter" data-level="4.1" data-path="coefficients.html"><a href="coefficients.html#unstandardized-and-standardized-coefficients"><i class="fa fa-check"></i><b>4.1</b> Unstandardized and Standardized Coefficients</a></li>
 <li class="chapter" data-level="4.2" data-path="coefficients.html"><a href="coefficients.html#scale-standardization"><i class="fa fa-check"></i><b>4.2</b> Scale Standardization</a></li>
 <li class="chapter" data-level="4.3" data-path="coefficients.html"><a href="coefficients.html#range-standardization"><i class="fa fa-check"></i><b>4.3</b> Range Standardization</a></li>
-<li class="chapter" data-level="4.4" data-path="coefficients.html"><a href="coefficients.html#binomial-response-models"><i class="fa fa-check"></i><b>4.4</b> Binomial Response Models</a><ul>
+<li class="chapter" data-level="4.4" data-path="coefficients.html"><a href="coefficients.html#binomial-response-models"><i class="fa fa-check"></i><b>4.4</b> Binomial Response Models</a>
+<ul>
 <li class="chapter" data-level="4.4.1" data-path="coefficients.html"><a href="coefficients.html#latent-theoretic-approach"><i class="fa fa-check"></i><b>4.4.1</b> Latent Theoretic Approach</a></li>
 <li class="chapter" data-level="4.4.2" data-path="coefficients.html"><a href="coefficients.html#observation-empirical-approach"><i class="fa fa-check"></i><b>4.4.2</b> Observation-Empirical Approach</a></li>
 </ul></li>
 <li class="chapter" data-level="4.5" data-path="coefficients.html"><a href="coefficients.html#scaling-to-other-non-normal-distributions"><i class="fa fa-check"></i><b>4.5</b> Scaling to Other Non-Normal Distributions</a></li>
 <li class="chapter" data-level="4.6" data-path="coefficients.html"><a href="coefficients.html#references-2"><i class="fa fa-check"></i><b>4.6</b> References</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="categorical-variables.html"><a href="categorical-variables.html"><i class="fa fa-check"></i><b>5</b> Categorical Variables</a><ul>
+<li class="chapter" data-level="5" data-path="categorical-variables.html"><a href="categorical-variables.html"><i class="fa fa-check"></i><b>5</b> Categorical Variables</a>
+<ul>
 <li class="chapter" data-level="5.1" data-path="categorical-variables.html"><a href="categorical-variables.html#introduction-to-exogenous-categorical-variables"><i class="fa fa-check"></i><b>5.1</b> Introduction to Exogenous Categorical Variables</a></li>
 <li class="chapter" data-level="5.2" data-path="categorical-variables.html"><a href="categorical-variables.html#exogenous-categorical-variables-as-marginal-means"><i class="fa fa-check"></i><b>5.2</b> Exogenous Categorical Variables as Marginal Means</a></li>
 <li class="chapter" data-level="5.3" data-path="categorical-variables.html"><a href="categorical-variables.html#exogenous-categorical-variables-as-marginal-means-a-worked-example"><i class="fa fa-check"></i><b>5.3</b> Exogenous Categorical Variables as Marginal Means: A Worked Example</a></li>
 <li class="chapter" data-level="5.4" data-path="categorical-variables.html"><a href="categorical-variables.html#endogenous-categorical-variables"><i class="fa fa-check"></i><b>5.4</b> Endogenous Categorical Variables</a></li>
 <li class="chapter" data-level="5.5" data-path="categorical-variables.html"><a href="categorical-variables.html#references-3"><i class="fa fa-check"></i><b>5.5</b> References</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html"><i class="fa fa-check"></i><b>6</b> Multigroup Analysis</a><ul>
+<li class="chapter" data-level="6" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html"><i class="fa fa-check"></i><b>6</b> Multigroup Analysis</a>
+<ul>
 <li class="chapter" data-level="6.1" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#introduction-to-multigroup-analysis"><i class="fa fa-check"></i><b>6.1</b> Introduction to Multigroup Analysis</a></li>
 <li class="chapter" data-level="6.2" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#multigroup-analysis-using-global-estimation"><i class="fa fa-check"></i><b>6.2</b> Multigroup Analysis using Global Estimation</a></li>
 <li class="chapter" data-level="6.3" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#multigroup-analysis-using-local-estimation"><i class="fa fa-check"></i><b>6.3</b> Multigroup Analysis Using Local Estimation</a></li>
 <li class="chapter" data-level="6.4" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#grace-jutila-1999-a-worked-example"><i class="fa fa-check"></i><b>6.4</b> Grace &amp; Jutila (1999): A Worked Example</a></li>
 <li class="chapter" data-level="6.5" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#references-4"><i class="fa fa-check"></i><b>6.5</b> References</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html"><i class="fa fa-check"></i><b>7</b> Latent Variable Modeling</a><ul>
+<li class="chapter" data-level="7" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html"><i class="fa fa-check"></i><b>7</b> Latent Variable Modeling</a>
+<ul>
 <li class="chapter" data-level="7.1" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#introduction-to-latent-variable-modeling"><i class="fa fa-check"></i><b>7.1</b> Introduction to Latent Variable Modeling</a></li>
 <li class="chapter" data-level="7.2" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#application-of-latent-variables-to-path-models"><i class="fa fa-check"></i><b>7.2</b> Application of Latent Variables to Path Models</a></li>
 <li class="chapter" data-level="7.3" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#latent-variables-in-lavaan"><i class="fa fa-check"></i><b>7.3</b> Latent Variables in <em>lavaan</em></a></li>
@@ -197,7 +209,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.6" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#travis-grace-2010-an-example"><i class="fa fa-check"></i><b>7.6</b> Travis &amp; Grace (2010): An Example</a></li>
 <li class="chapter" data-level="7.7" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#references-5"><i class="fa fa-check"></i><b>7.7</b> References</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="composite-variables.html"><a href="composite-variables.html"><i class="fa fa-check"></i><b>8</b> Composite Variables</a><ul>
+<li class="chapter" data-level="8" data-path="composite-variables.html"><a href="composite-variables.html"><i class="fa fa-check"></i><b>8</b> Composite Variables</a>
+<ul>
 <li class="chapter" data-level="8.1" data-path="composite-variables.html"><a href="composite-variables.html#what-is-a-composite-variable"><i class="fa fa-check"></i><b>8.1</b> What is a Composite Variable?</a></li>
 <li class="chapter" data-level="8.2" data-path="composite-variables.html"><a href="composite-variables.html#constructing-a-composite-variable"><i class="fa fa-check"></i><b>8.2</b> Constructing a Composite Variable</a></li>
 <li class="chapter" data-level="8.3" data-path="composite-variables.html"><a href="composite-variables.html#grace-keeley-revisited-a-worked-example"><i class="fa fa-check"></i><b>8.3</b> Grace &amp; Keeley Revisited: A Worked Example</a></li>
@@ -213,7 +226,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Structural Equation Modeling in R for Ecology and Evolution</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Composite Variables</a>
           </h1>
         </div>
 
@@ -221,11 +234,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="categorical-variables" class="section level1">
+<div id="categorical-variables" class="section level1" number="5">
 <h1><span class="header-section-number">5</span> Categorical Variables</h1>
 <p>While SEM was initially derived to consider only continuous variables (and indeed most applications still do), it’s often the case–especially in ecology–that the observed variables are discrete. For example: binary (yes/no, failure/success, etc.), nominal (site 1, site 2), or ordinal levels (small &lt; medium &lt; large). Newer advances in modeling allow for the incorporation, either directly or in a more roundabout fashion, of categorical variables into SEM.</p>
 <p>There are two way that categorical variables could be included: as exogenous (predictors) or endogenous (responses). We will deal with the simpler case of exogenous categorical variables first, as they pose not so much of a computational issue but a conceptual one.</p>
-<div id="introduction-to-exogenous-categorical-variables" class="section level2">
+<div id="introduction-to-exogenous-categorical-variables" class="section level2" number="5.1">
 <h2><span class="header-section-number">5.1</span> Introduction to Exogenous Categorical Variables</h2>
 <p>Recall that a linear regression predicting y has the following standard form:</p>
 <p><span class="math display">\[y = \alpha + \beta_{1}*x_{1} + \epsilon\]</span></p>
@@ -248,18 +261,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 <p>A alternate approach draws on this final point and involves testing and reporting the model-estimated or marginal means.</p>
 </div>
-<div id="exogenous-categorical-variables-as-marginal-means" class="section level2">
+<div id="exogenous-categorical-variables-as-marginal-means" class="section level2" number="5.2">
 <h2><span class="header-section-number">5.2</span> Exogenous Categorical Variables as Marginal Means</h2>
 <p>All models can be used for prediction. In multiple regression, the predicted values of one variable are often computed while holding the values of other variables at their mean. Marginal means are the averages of these predictions. In other words, they are the expected average value of one predictor given the other co-variables in the model.</p>
 <p>For categorical variables, marginal means are particularly useful because they provide an estimated mean for each level of each factor.</p>
 <p>Consider a simple example with a single response and two groups “a” and “b”:</p>
-<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb213-1"><a href="categorical-variables.html#cb213-1"></a><span class="kw">set.seed</span>(<span class="dv">111</span>)</span>
-<span id="cb213-2"><a href="categorical-variables.html#cb213-2"></a></span>
-<span id="cb213-3"><a href="categorical-variables.html#cb213-3"></a>dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">y =</span> <span class="kw">runif</span>(<span class="dv">100</span>), <span class="dt">group =</span> letters[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>])</span>
-<span id="cb213-4"><a href="categorical-variables.html#cb213-4"></a></span>
-<span id="cb213-5"><a href="categorical-variables.html#cb213-5"></a>model &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>group, dat)</span>
-<span id="cb213-6"><a href="categorical-variables.html#cb213-6"></a></span>
-<span id="cb213-7"><a href="categorical-variables.html#cb213-7"></a><span class="kw">summary</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="categorical-variables.html#cb212-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">111</span>)</span>
+<span id="cb212-2"><a href="categorical-variables.html#cb212-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb212-3"><a href="categorical-variables.html#cb212-3" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">runif</span>(<span class="dv">100</span>), <span class="at">group =</span> letters[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>])</span>
+<span id="cb212-4"><a href="categorical-variables.html#cb212-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb212-5"><a href="categorical-variables.html#cb212-5" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> group, dat)</span>
+<span id="cb212-6"><a href="categorical-variables.html#cb212-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb212-7"><a href="categorical-variables.html#cb212-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = y ~ group, data = dat)
@@ -279,50 +292,50 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Multiple R-squared:  0.02429,    Adjusted R-squared:  0.01433 
 ## F-statistic:  2.44 on 1 and 98 DF,  p-value: 0.1215</code></pre>
 <p>Note that the summary output gives a simple coefficient, which is the effect of group “b” on y in the absence of group “a”. As we established above, the intercept is simply the average of y in group “a”:</p>
-<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb215-1"><a href="categorical-variables.html#cb215-1"></a><span class="kw">summary</span>(model)<span class="op">$</span>coefficients[<span class="dv">1</span>, <span class="dv">1</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb214-1"><a href="categorical-variables.html#cb214-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)<span class="sc">$</span>coefficients[<span class="dv">1</span>, <span class="dv">1</span>]</span></code></pre></div>
 <pre><code>## [1] 0.4467679</code></pre>
-<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="categorical-variables.html#cb217-1"></a><span class="kw">mean</span>(<span class="kw">subset</span>(dat, group <span class="op">==</span><span class="st"> &quot;a&quot;</span>)<span class="op">$</span>y)</span></code></pre></div>
+<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb216-1"><a href="categorical-variables.html#cb216-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">subset</span>(dat, group <span class="sc">==</span> <span class="st">&quot;a&quot;</span>)<span class="sc">$</span>y)</span></code></pre></div>
 <pre><code>## [1] 0.4467679</code></pre>
 <p>The marginal means are the expected average value of y in group “a” AND group “b”.</p>
-<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="categorical-variables.html#cb219-1"></a><span class="kw">predict</span>(model, <span class="kw">data.frame</span>(<span class="dt">group =</span> <span class="st">&quot;a&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb218-1"><a href="categorical-variables.html#cb218-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(model, <span class="fu">data.frame</span>(<span class="at">group =</span> <span class="st">&quot;a&quot;</span>))</span></code></pre></div>
 <pre><code>##         1 
 ## 0.4467679</code></pre>
-<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="categorical-variables.html#cb221-1"></a><span class="kw">predict</span>(model, <span class="kw">data.frame</span>(<span class="dt">group =</span> <span class="st">&quot;b&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="categorical-variables.html#cb220-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(model, <span class="fu">data.frame</span>(<span class="at">group =</span> <span class="st">&quot;b&quot;</span>))</span></code></pre></div>
 <pre><code>##       1 
 ## 0.53228</code></pre>
 <p>Because this is a simple linear regression, these values are simply the means of the two subsets of the data, because they are not controlling for any other covariates:</p>
-<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="categorical-variables.html#cb223-1"></a><span class="kw">mean</span>(<span class="kw">subset</span>(dat, group <span class="op">==</span><span class="st"> &quot;a&quot;</span>)<span class="op">$</span>y)</span></code></pre></div>
+<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb222-1"><a href="categorical-variables.html#cb222-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">subset</span>(dat, group <span class="sc">==</span> <span class="st">&quot;a&quot;</span>)<span class="sc">$</span>y)</span></code></pre></div>
 <pre><code>## [1] 0.4467679</code></pre>
-<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb225-1"><a href="categorical-variables.html#cb225-1"></a><span class="kw">mean</span>(<span class="kw">subset</span>(dat, group <span class="op">==</span><span class="st"> &quot;b&quot;</span>)<span class="op">$</span>y)</span></code></pre></div>
+<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb224-1"><a href="categorical-variables.html#cb224-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">subset</span>(dat, group <span class="sc">==</span> <span class="st">&quot;b&quot;</span>)<span class="sc">$</span>y)</span></code></pre></div>
 <pre><code>## [1] 0.53228</code></pre>
 <p>Let’s see what happens we add a continuous covariate:</p>
-<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb227-1"><a href="categorical-variables.html#cb227-1"></a>dat<span class="op">$</span>x &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">100</span>)</span>
-<span id="cb227-2"><a href="categorical-variables.html#cb227-2"></a></span>
-<span id="cb227-3"><a href="categorical-variables.html#cb227-3"></a>model &lt;-<span class="st"> </span><span class="kw">update</span>(model, . <span class="op">~</span><span class="st"> </span>. <span class="op">+</span><span class="st"> </span>x)</span></code></pre></div>
+<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb226-1"><a href="categorical-variables.html#cb226-1" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">100</span>)</span>
+<span id="cb226-2"><a href="categorical-variables.html#cb226-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb226-3"><a href="categorical-variables.html#cb226-3" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">update</span>(model, . <span class="sc">~</span> . <span class="sc">+</span> x)</span></code></pre></div>
 <p>Here, the marginal mean must be evaluated while holding the covariate <span class="math inline">\(x\)</span> at its mean value:</p>
-<div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb228-1"><a href="categorical-variables.html#cb228-1"></a><span class="kw">predict</span>(model, <span class="kw">data.frame</span>(<span class="dt">group =</span> <span class="st">&quot;a&quot;</span>, <span class="dt">x =</span> <span class="kw">mean</span>(dat<span class="op">$</span>x)))</span></code></pre></div>
+<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb227-1"><a href="categorical-variables.html#cb227-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(model, <span class="fu">data.frame</span>(<span class="at">group =</span> <span class="st">&quot;a&quot;</span>, <span class="at">x =</span> <span class="fu">mean</span>(dat<span class="sc">$</span>x)))</span></code></pre></div>
 <pre><code>##         1 
 ## 0.4450597</code></pre>
-<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="categorical-variables.html#cb230-1"></a><span class="kw">mean</span>(<span class="kw">subset</span>(dat, group <span class="op">==</span><span class="st"> &quot;a&quot;</span>)<span class="op">$</span>y)</span></code></pre></div>
+<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb229-1"><a href="categorical-variables.html#cb229-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">subset</span>(dat, group <span class="sc">==</span> <span class="st">&quot;a&quot;</span>)<span class="sc">$</span>y)</span></code></pre></div>
 <pre><code>## [1] 0.4467679</code></pre>
 <p>You’ll note that this value is now different than the mean of the subset of the data because, again, it controls for the effect of <span class="math inline">\(x\)</span> on <span class="math inline">\(y\)</span>.</p>
 <p>This procedure gets increasingly complicated with both the number of factor levels and the number of covariates. The <em>emmeans</em> package provides an easy way to compute marginal means:</p>
-<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="categorical-variables.html#cb232-1"></a><span class="kw">library</span>(emmeans)</span>
-<span id="cb232-2"><a href="categorical-variables.html#cb232-2"></a></span>
-<span id="cb232-3"><a href="categorical-variables.html#cb232-3"></a><span class="kw">emmeans</span>(model, <span class="dt">specs =</span> <span class="st">&quot;group&quot;</span>) <span class="co"># where specs is the variable or list of variables whose means are to be estimated</span></span></code></pre></div>
+<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb231-1"><a href="categorical-variables.html#cb231-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(emmeans)</span>
+<span id="cb231-2"><a href="categorical-variables.html#cb231-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb231-3"><a href="categorical-variables.html#cb231-3" aria-hidden="true" tabindex="-1"></a><span class="fu">emmeans</span>(model, <span class="at">specs =</span> <span class="st">&quot;group&quot;</span>) <span class="co"># where specs is the variable or list of variables whose means are to be estimated</span></span></code></pre></div>
 <pre><code>##  group emmean     SE df lower.CL upper.CL
 ##  a      0.445 0.0389 97    0.368    0.522
 ##  b      0.534 0.0389 97    0.457    0.611
 ## 
 ## Confidence level used: 0.95</code></pre>
 <p>You’ll note that the output value for group “a” gives the same as using the <code>predict</code> function above, but also returns the marginal mean for group “b” while also controlling for <span class="math inline">\(x\)</span>:</p>
-<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="categorical-variables.html#cb234-1"></a><span class="kw">predict</span>(model, <span class="kw">data.frame</span>(<span class="dt">group =</span> <span class="st">&quot;b&quot;</span>, <span class="dt">x =</span> <span class="kw">mean</span>(dat<span class="op">$</span>x)))</span></code></pre></div>
+<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb233-1"><a href="categorical-variables.html#cb233-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(model, <span class="fu">data.frame</span>(<span class="at">group =</span> <span class="st">&quot;b&quot;</span>, <span class="at">x =</span> <span class="fu">mean</span>(dat<span class="sc">$</span>x)))</span></code></pre></div>
 <pre><code>##         1 
 ## 0.5339882</code></pre>
 <p>and so is a handy wrapper for complex models.</p>
 <p>The <code>emmeans</code> function goes onto to provide lower and upper confidence intervals, which provides an additional level of information, namely whether each mean differs significantly from zero. Coupled with ANOVA test for differences among categories, the marginal means provide key information that is otherwise lacking, namely whether and <em>how</em> the response value changes based on the factor level. It is import</p>
 <p>The <em>emmeans</em> package provides additional functionality by conducting post-hoc tests of differences among the means of each factor level:</p>
-<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb236-1"><a href="categorical-variables.html#cb236-1"></a><span class="kw">emmeans</span>(model, <span class="kw">list</span>(pairwise <span class="op">~</span><span class="st"> </span>group))</span></code></pre></div>
+<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb235-1"><a href="categorical-variables.html#cb235-1" aria-hidden="true" tabindex="-1"></a><span class="fu">emmeans</span>(model, <span class="fu">list</span>(pairwise <span class="sc">~</span> group))</span></code></pre></div>
 <pre><code>## $`emmeans of group`
 ##  group emmean     SE df lower.CL upper.CL
 ##  a      0.445 0.0389 97    0.368    0.522
@@ -332,13 +345,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 
 ## $`pairwise differences of group`
 ##  1     estimate     SE df t.ratio p.value
-##  a - b  -0.0889 0.0552 97 -1.611  0.1105</code></pre>
+##  a - b  -0.0889 0.0552 97  -1.611  0.1105</code></pre>
 <p>You’ll note a second output which is the pairwise contrast between the means of groups “a” and “b” with an associated significance test.</p>
 <p>These pairwise Tukey tests provide the final level of information, which is whether the response in each level varies significantly from the other levels.</p>
 <p>To adapt this to SEM, the <code>coefs</code> function in <em>piecewiseSEM</em> adopts a two-tiered approach by first computing the significance of the categorical variable using ANOVA, and then reports the marginal means and post-hoc tests:</p>
-<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb238-1"><a href="categorical-variables.html#cb238-1"></a><span class="kw">library</span>(piecewiseSEM)</span>
-<span id="cb238-2"><a href="categorical-variables.html#cb238-2"></a></span>
-<span id="cb238-3"><a href="categorical-variables.html#cb238-3"></a><span class="kw">coefs</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb237-1"><a href="categorical-variables.html#cb237-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(piecewiseSEM)</span>
+<span id="cb237-2"><a href="categorical-variables.html#cb237-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb237-3"><a href="categorical-variables.html#cb237-3" aria-hidden="true" tabindex="-1"></a><span class="fu">coefs</span>(model)</span></code></pre></div>
 <pre><code>##   Response Predictor Estimate Std.Error DF Crit.Value P.Value Std.Estimate    
 ## 1        y         x   0.0567     0.093 97     0.6094  0.5437       0.0613    
 ## 2        y     group        -         -  1     2.5946  0.1105            -    
@@ -347,28 +360,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>In this output, we retrieve the normal output for the continuous <span class="math inline">\(x\)</span> including a standardized effect size. The significance test from the ANOVA is reported in the row corresponding to the group effect, and below that are the marginal means for each level of the grouping factor. Note that there are no standardized estimates for either the ANOVA effect or the marginal means, because as we have established, these are not linear coefficients and therefore cannot be standardized as usual.</p>
 <p>This solution provides a measure of whether the path between the exogenous categorical variable and the response is significant as well as parameters for each level in the form of the model-estimated marginal means.</p>
 </div>
-<div id="exogenous-categorical-variables-as-marginal-means-a-worked-example" class="section level2">
+<div id="exogenous-categorical-variables-as-marginal-means-a-worked-example" class="section level2" number="5.3">
 <h2><span class="header-section-number">5.3</span> Exogenous Categorical Variables as Marginal Means: A Worked Example</h2>
 <p>Let’s consider an example from Bowen et al. (2017). In this study, the authors were interested in how different microbiomes of the salt marsh plant <em>Phragmites australis</em> drive ecosystem functioning, and ultimately the production of aboveground biomass. In this case, they considered three microbial communities: those from a native North American lineage, from Gulf Coast lineage, and an introduced lineage. There were additional genotypes within each community type, necessitating the application of random effects to account for intraspecific variation.</p>
 <p>We will fit a simplified version of their full path diagram, focusing only on aboveground biomass (although they test the effect on belowground biomass in their study as well).</p>
 <p><img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/categorical_variables_bowen_sem.png" /></p>
 <p>In this case, the variable “<em>Phragmites</em> status” corresponds to the three community types and can’t be represented using a single coefficient. Thus, the marginal-means approach is ideal to elucidate the effect of each community type on both proximate and ultimate ecosystem properties while testing the overall significance of this path.</p>
 <p>Let’s read in the data and construct the model:</p>
-<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="categorical-variables.html#cb240-1"></a>bowen &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/jslefche/sem_book/master/data/bowen.csv&quot;</span>)</span>
-<span id="cb240-2"><a href="categorical-variables.html#cb240-2"></a></span>
-<span id="cb240-3"><a href="categorical-variables.html#cb240-3"></a>bowen &lt;-<span class="st"> </span><span class="kw">na.omit</span>(bowen)</span>
-<span id="cb240-4"><a href="categorical-variables.html#cb240-4"></a></span>
-<span id="cb240-5"><a href="categorical-variables.html#cb240-5"></a><span class="kw">library</span>(nlme)</span>
-<span id="cb240-6"><a href="categorical-variables.html#cb240-6"></a></span>
-<span id="cb240-7"><a href="categorical-variables.html#cb240-7"></a>bowen_sem &lt;-<span class="st"> </span><span class="kw">psem</span>(</span>
-<span id="cb240-8"><a href="categorical-variables.html#cb240-8"></a>  <span class="kw">lme</span>(observed_otus <span class="op">~</span><span class="st"> </span>status, <span class="dt">random =</span> <span class="op">~</span><span class="dv">1</span><span class="op">|</span>Genotype, <span class="dt">data =</span> bowen, <span class="dt">method =</span> <span class="st">&quot;ML&quot;</span>),</span>
-<span id="cb240-9"><a href="categorical-variables.html#cb240-9"></a>  <span class="kw">lme</span>(RNA.DNA <span class="op">~</span><span class="st"> </span>status <span class="op">+</span><span class="st"> </span>observed_otus, <span class="dt">random =</span> <span class="op">~</span><span class="dv">1</span><span class="op">|</span>Genotype, <span class="dt">data =</span> bowen, <span class="dt">method =</span> <span class="st">&quot;ML&quot;</span>), </span>
-<span id="cb240-10"><a href="categorical-variables.html#cb240-10"></a>  <span class="kw">lme</span>(below.C <span class="op">~</span><span class="st"> </span>observed_otus <span class="op">+</span><span class="st"> </span>status, <span class="dt">random =</span> <span class="op">~</span><span class="dv">1</span><span class="op">|</span>Genotype, <span class="dt">data =</span> bowen, <span class="dt">method =</span> <span class="st">&quot;ML&quot;</span>), </span>
-<span id="cb240-11"><a href="categorical-variables.html#cb240-11"></a>  <span class="kw">lme</span>(abovebiomass_g <span class="op">~</span><span class="st"> </span>RNA.DNA <span class="op">+</span><span class="st"> </span>observed_otus <span class="op">+</span><span class="st"> </span>belowCN <span class="op">+</span><span class="st"> </span>status, <span class="dt">random =</span> <span class="op">~</span><span class="dv">1</span><span class="op">|</span>Genotype, <span class="dt">data =</span> bowen, <span class="dt">method =</span> <span class="st">&quot;ML&quot;</span>),</span>
-<span id="cb240-12"><a href="categorical-variables.html#cb240-12"></a>  <span class="dt">data =</span> bowen</span>
-<span id="cb240-13"><a href="categorical-variables.html#cb240-13"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb239"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb239-1"><a href="categorical-variables.html#cb239-1" aria-hidden="true" tabindex="-1"></a>bowen <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/jslefche/sem_book/master/data/bowen.csv&quot;</span>)</span>
+<span id="cb239-2"><a href="categorical-variables.html#cb239-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb239-3"><a href="categorical-variables.html#cb239-3" aria-hidden="true" tabindex="-1"></a>bowen <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(bowen)</span>
+<span id="cb239-4"><a href="categorical-variables.html#cb239-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb239-5"><a href="categorical-variables.html#cb239-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nlme)</span>
+<span id="cb239-6"><a href="categorical-variables.html#cb239-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb239-7"><a href="categorical-variables.html#cb239-7" aria-hidden="true" tabindex="-1"></a>bowen_sem <span class="ot">&lt;-</span> <span class="fu">psem</span>(</span>
+<span id="cb239-8"><a href="categorical-variables.html#cb239-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lme</span>(observed_otus <span class="sc">~</span> status, <span class="at">random =</span> <span class="sc">~</span><span class="dv">1</span><span class="sc">|</span>Genotype, <span class="at">data =</span> bowen, <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>),</span>
+<span id="cb239-9"><a href="categorical-variables.html#cb239-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lme</span>(RNA.DNA <span class="sc">~</span> status <span class="sc">+</span> observed_otus, <span class="at">random =</span> <span class="sc">~</span><span class="dv">1</span><span class="sc">|</span>Genotype, <span class="at">data =</span> bowen, <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>), </span>
+<span id="cb239-10"><a href="categorical-variables.html#cb239-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lme</span>(below.C <span class="sc">~</span> observed_otus <span class="sc">+</span> status, <span class="at">random =</span> <span class="sc">~</span><span class="dv">1</span><span class="sc">|</span>Genotype, <span class="at">data =</span> bowen, <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>), </span>
+<span id="cb239-11"><a href="categorical-variables.html#cb239-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lme</span>(abovebiomass_g <span class="sc">~</span> RNA.DNA <span class="sc">+</span> observed_otus <span class="sc">+</span> belowCN <span class="sc">+</span> status, <span class="at">random =</span> <span class="sc">~</span><span class="dv">1</span><span class="sc">|</span>Genotype, <span class="at">data =</span> bowen, <span class="at">method =</span> <span class="st">&quot;ML&quot;</span>),</span>
+<span id="cb239-12"><a href="categorical-variables.html#cb239-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> bowen</span>
+<span id="cb239-13"><a href="categorical-variables.html#cb239-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>And let’s retrieve the output:</p>
-<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb241-1"><a href="categorical-variables.html#cb241-1"></a><span class="kw">summary</span>(bowen_sem, <span class="dt">.progressBar =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="categorical-variables.html#cb240-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(bowen_sem, <span class="at">.progressBar =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <pre><code>## Warning: Categorical or non-linear variables detected. Please refer to
 ## documentation for interpretation of Estimates!</code></pre>
 <pre><code>## 
@@ -461,7 +474,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The linkage between microbial community type (<span class="math inline">\(status\)</span>) and richness (<span class="math inline">\(observed_otus\)</span>) is non-significant, but the other paths are significant. Examination of the marginal means indicates microbial activity (<span class="math inline">\(RNA.DNA\)</span>) and belowground carbon (<span class="math inline">\(below.C\)</span>) are generally highest in <em>Phragmites</em> with native microbial communities based on the post-hoc tests. However, none of these properties appear to influence the ultimate production of biomass (<span class="math inline">\(abovebiomass_g\)</span>). Rather, that property appears to be entirely controlled by the plant microbiome type (<span class="math inline">\(status\)</span>): those with the introduced microbial community have significantly higher aboveground biomass based on their marginal mean after controlling for microbial activity and soil nutrients.</p>
 <p>Thus, despite a multi-level categorical predictor (<span class="math inline">\(status\)</span>), the two-step procedure of ANOVA and calculation of marginal means allows for a more mechanistic understanding of the drivers of plant biomass in this species.</p>
 </div>
-<div id="endogenous-categorical-variables" class="section level2">
+<div id="endogenous-categorical-variables" class="section level2" number="5.4">
 <h2><span class="header-section-number">5.4</span> Endogenous Categorical Variables</h2>
 <p>Endogenous categorical variables are far trickier, and at the moment, are not implemented in <em>piecewiseSEM</em>.</p>
 <p>In the case of endogenous categorical variables in a piecewise framework, there are really only two solutions:</p>
@@ -471,7 +484,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 <p>Nominal variables (i.e., levels are not ordered) could be modeled using multinomial regression, although this method would have to be executed by hand. An alternative is to use the factor levels to construct a <em>composite variable</em>, the subject of a later chapter. <em>lavaan</em> provides a robust alternative in the form of confirmatory factor analysis (see <a href="http://lavaan.ugent.be/tutorial/cat.html">http://lavaan.ugent.be/tutorial/cat.html</a>). In <em>piecewiseSEM</em>, composites must be constructed by hand, although this procedure is not hugely prohibitive.</p>
 </div>
-<div id="references-3" class="section level2">
+<div id="references-3" class="section level2" number="5.5">
 <h2><span class="header-section-number">5.5</span> References</h2>
 <p>Bowen, J. L., Kearns, P. J., Byrnes, J. E., Wigginton, S., Allen, W. J., Greenwood, M., … &amp; Meyerson, L. A. (2017). Lineage overwhelms environmental conditions in determining rhizosphere bacterial community structure in a cosmopolitan invasive plant. Nature communications, 8(1), 433.</p>
 
@@ -506,6 +519,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {

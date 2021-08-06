@@ -96,7 +96,7 @@ summary(comp_model1, standardize = T)
 
 We see from the output that the estimated loadings for our two indicators are the same values we provided, and consequently the understandardized coefficient is 1. However, the standardized coefficient is 0.177 and it is this value that we would present (although its non-significant, given that these are fake data).
 
-Let's suppose we didn't know the loadings from the multiple regression. We run into the same issue of identifiability as when constructing latent variables, so we must fix the first loading to 1. This will also define the scale of the composite. NOTE: *lavaan* does not do this automatically (as it goes for latents), so we will have to implement it manually.
+Let's suppose we didn't know the loadings from the multiple regression. We run into the same issue of identifiability as when constructing latent variables, so we must fix the first loading to 1. This will also define the scale of the composite. NOTE: *lavaan* does not do this automatically (as it does for latents), so we will have to implement it manually.
 
 ```{r}
 comp_formula2 <- '

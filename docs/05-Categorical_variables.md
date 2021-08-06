@@ -225,7 +225,7 @@ emmeans(model, list(pairwise ~ group))
 ## 
 ## $`pairwise differences of group`
 ##  1     estimate     SE df t.ratio p.value
-##  a - b  -0.0889 0.0552 97 -1.611  0.1105
+##  a - b  -0.0889 0.0552 97  -1.611  0.1105
 ```
 
 You'll note a second output which is the pairwise contrast between the means of groups "a" and "b" with an associated significance test. 

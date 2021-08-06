@@ -73,9 +73,9 @@ Let's consider the independence claim $x1 -> y3$. Based on our last example, $y2
 
 _Our second rule of the d-sep test is:  conditioning variables consist of only those variables *immediate* to the two variables whose independence is being evaluated._ 
 
-In other words, we assume that the effects of any other downstream variables are captured in the variance contributed by the immediate ancestors, and we can therefore ignore them. Upstream variables (those occuring later in the path diagram) are never considered as conditioning variables, for the obvious reason that they have no directed effect on the preceding variables.
+In other words, we assume that the effects of any other downstream variables are captured in the variance contributed by the immediate ancestors, and we can therefore ignore them. Upstream variables (those occurring later in the path diagram *beyond* both variables included in the claim) are never considered as conditioning variables, for the obvious reason that causes cannot precede effects.
 
-For the claim $y1 -> y3$ above, there are now two conditioning variables: $y2$ (on $y3$) and also $x1$ (on $y1$). So the final independence claim would be: $y1 | y3 (x1, y1)$.
+For the claim $y1 -> y3$ above, there are now two conditioning variables: $y2$ (on $y3$) and also $x1$ (on $y1$). So the final independence claim would be: $y1 | y3 (x1, y1)$. Note that the effect of $y1$ on $y2$ is not included, because it is too ancestral.
 
 The full basis set for this diagram would then be:
 
@@ -360,11 +360,8 @@ library(lavaan)
 ```
 
 ```
-## This is lavaan 0.6-7
-```
-
-```
-## lavaan is BETA software! Please report any bugs.
+## This is lavaan 0.6-9
+## lavaan is FREE software! Please report any bugs.
 ```
 
 ```r
@@ -398,7 +395,8 @@ AIC(keeley_psem)
 ```
 
 ```
-## [1] 364.696
+##       AIC K  n
+## 1 364.696 6 90
 ```
 To get the AIC value based on the Fisher's *C* statistic and the d-sep tests, we can add the following argument:
 
@@ -408,7 +406,8 @@ AIC(keeley_psem, AIC.type = "dsep")
 ```
 
 ```
-## [1] 17.18
+##     AIC K  n
+## 1 17.18 6 90
 ```
 
 Ah, a fully saturated or just identified model will yield a *C* statistic of 0. Based on Shipley's equation above, the AIC score reduces to $2K$, or twice the likelihood degrees of freedom. This is in contrast to alternative formulation, which is based on actual likelihoods. Therefore, in situations where one wishes to compare a model that is fully saturated, we advise using the default $\chi^2$-based value.
@@ -481,11 +480,11 @@ summary(keeley_sem1, standardize = T, rsq = T)
 ```
 
 ```
-## lavaan 0.6-7 ended normally after 19 iterations
+## lavaan 0.6-9 ended normally after 19 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                          4
+##   Number of model parameters                         4
 ##                                                       
 ##   Number of observations                            90
 ##                                                       
@@ -552,11 +551,11 @@ summary(shipley_sem, standardize = T, rsq = T)
 ```
 
 ```
-## lavaan 0.6-7 ended normally after 27 iterations
+## lavaan 0.6-9 ended normally after 27 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                          8
+##   Number of model parameters                         8
 ##                                                       
 ##                                                   Used       Total
 ##   Number of observations                          1431        1900
@@ -744,7 +743,7 @@ library(mgcv)
 ```
 
 ```
-## This is mgcv 1.8-33. For overview type 'help("mgcv-package")'.
+## This is mgcv 1.8-36. For overview type 'help("mgcv-package")'.
 ```
 
 ```r
@@ -770,9 +769,9 @@ AIC(shipley_psem2, shipley_psem3)
 ```
 
 ```
-##       df     AIC
-## x 13.000 1240.20
-## y 11.563 1190.75
+##       AIC      K   n
+## 1 1240.20 13.000 100
+## 2 1190.75 11.563 100
 ```
 
 We see that the second SEM--the one that better addresses the underlying forms of the data--has much higher support than the straight linear SEM, with the $\Delta AIC = 49.45$. Thus, we would far and away choose the second model, in line with how Shipley and Douma have designed their simulation.
@@ -836,7 +835,7 @@ summary(shipley_psem3)
 ## 
 ##   Response     method R.squared
 ##         x2       none      0.57
-##         x3 nagelkerke      0.15
+##         x3 nagelkerke      0.21
 ##         x4       none      0.14
 ##         x5 nagelkerke      0.28
 ```

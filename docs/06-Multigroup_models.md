@@ -72,11 +72,11 @@ summary(multigroup1)
 ```
 
 ```
-## lavaan 0.6-7 ended normally after 38 iterations
+## lavaan 0.6-9 ended normally after 38 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                         12
+##   Number of model parameters                        12
 ##                                                       
 ##   Number of observations per group:                   
 ##     a                                               50
@@ -150,11 +150,11 @@ summary(multigroup1.constrained)
 ```
 
 ```
-## lavaan 0.6-7 ended normally after 29 iterations
+## lavaan 0.6-9 ended normally after 29 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                         12
+##   Number of model parameters                        12
 ##   Number of equality constraints                     4
 ##                                                       
 ##   Number of observations per group:                   
@@ -295,7 +295,7 @@ anova(multigroup1, multigroup3)
 ## multigroup3  3 94.823 123.48 1.5230     1.4309       1     0.2316
 ```
 
-In this case, there is *not* a significant difference between the two models (*P* = 0.23), implying that the is no difference in the fit of the constrained model and the unstrained model and that this constraint is valid. 
+In this case, there is *not* a significant difference between the two models (*P* = 0.23), implying that the is no difference in the fit of the constrained model and the unconstrained model and that this constraint is valid. 
 
 If we were to select across these three alternatives, we would select the third model in which $x -> y$ is allowed to vary and $y -> z$ is constrained among groups. It's key to note that this model also fits the data well based on the $\chi^2$ statistic; if not, then like all poor-fitting path models (multigroup or otherwise) it would be unwise to present and draw conclusions from it.
 
@@ -437,23 +437,23 @@ standardizedSolution(multigroup3)
 ```
 
 ```
-##    lhs op rhs group est.std    se      z pvalue ci.lower ci.upper
-## 1    y  ~   x     1   0.556 0.090  6.197  0.000    0.380    0.732
-## 2    z  ~   y     1   0.728 0.054 13.556  0.000    0.623    0.833
-## 3    y ~~   y     1   0.690 0.100  6.912  0.000    0.495    0.886
-## 4    z ~~   z     1   0.470 0.078  6.014  0.000    0.317    0.623
-## 5    x ~~   x     1   1.000 0.000     NA     NA    1.000    1.000
-## 6    y ~1         1   2.012 0.406  4.953  0.000    1.216    2.808
-## 7    z ~1         1   1.336 0.259  5.158  0.000    0.828    1.844
-## 8    x ~1         1   1.971 0.000     NA     NA    1.971    1.971
-## 9    y  ~   x     2   0.792 0.044 18.167  0.000    0.707    0.878
-## 10   z  ~   y     2   0.843 0.036 23.508  0.000    0.773    0.913
-## 11   y ~~   y     2   0.372 0.069  5.387  0.000    0.237    0.508
-## 12   z ~~   z     2   0.289 0.060  4.782  0.000    0.171    0.408
-## 13   x ~~   x     2   1.000 0.000     NA     NA    1.000    1.000
-## 14   y ~1         2   0.742 0.213  3.480  0.001    0.324    1.160
-## 15   z ~1         2   1.045 0.210  4.976  0.000    0.633    1.456
-## 16   x ~1         2   1.650 0.000     NA     NA    1.650    1.650
+##    lhs op rhs group label est.std    se      z pvalue ci.lower ci.upper
+## 1    y  ~   x     1         0.556 0.090  6.197  0.000    0.380    0.732
+## 2    z  ~   y     1    b2   0.728 0.054 13.556  0.000    0.623    0.833
+## 3    y ~~   y     1         0.690 0.100  6.912  0.000    0.495    0.886
+## 4    z ~~   z     1         0.470 0.078  6.014  0.000    0.317    0.623
+## 5    x ~~   x     1         1.000 0.000     NA     NA    1.000    1.000
+## 6    y ~1         1         2.012 0.406  4.953  0.000    1.216    2.808
+## 7    z ~1         1         1.336 0.259  5.158  0.000    0.828    1.844
+## 8    x ~1         1         1.971 0.000     NA     NA    1.971    1.971
+## 9    y  ~   x     2         0.792 0.044 18.167  0.000    0.707    0.878
+## 10   z  ~   y     2    b2   0.843 0.036 23.508  0.000    0.773    0.913
+## 11   y ~~   y     2         0.372 0.069  5.387  0.000    0.237    0.508
+## 12   z ~~   z     2         0.289 0.060  4.782  0.000    0.171    0.408
+## 13   x ~~   x     2         1.000 0.000     NA     NA    1.000    1.000
+## 14   y ~1         2         0.742 0.213  3.480  0.001    0.324    1.160
+## 15   z ~1         2         1.045 0.210  4.976  0.000    0.633    1.456
+## 16   x ~1         2         1.650 0.000     NA     NA    1.650    1.650
 ```
 
 ```r
@@ -512,11 +512,11 @@ summary(jutila_lavaan_free)
 ```
 
 ```
-## lavaan 0.6-7 ended normally after 53 iterations
+## lavaan 0.6-9 ended normally after 53 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                         14
+##   Number of model parameters                        14
 ##                                                       
 ##   Number of observations per group:                   
 ##     1                                              165
@@ -688,11 +688,11 @@ summary(jutila_lavaan3)
 ```
 
 ```
-## lavaan 0.6-7 ended normally after 53 iterations
+## lavaan 0.6-9 ended normally after 53 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                         14
+##   Number of model parameters                        14
 ##   Number of equality constraints                     1
 ##                                                       
 ##   Number of observations per group:                   
@@ -754,7 +754,7 @@ summary(jutila_lavaan3)
 ## Variances:
 ##                    Estimate   Std.Err  z-value  P(>|z|)
 ##    .rich              14.423    1.484    9.721    0.000
-##    .mass           43567.993       NA
+##    .mass           43567.993
 ```
 
 Now the model fits the data well (*P* = 0.330), and we have, through an iterative procedure of imposing and relaxing constraints, determined which paths differ among groups ($elev -> mass$, $mass -> rich$) and which do *not* ($elev -> rich$).

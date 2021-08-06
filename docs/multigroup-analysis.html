@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>6 Multigroup Analysis | Structural Equation Modeling in R for Ecology and Evolution</title>
-  <meta name="description" content="6 Multigroup Analysis | Structural Equation Modeling in R for Ecology and Evolution" />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <title>6 Multigroup Analysis | Composite Variables</title>
+  <meta name="description" content="6 Multigroup Analysis | Composite Variables" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="6 Multigroup Analysis | Structural Equation Modeling in R for Ecology and Evolution" />
+  <meta property="og:title" content="6 Multigroup Analysis | Composite Variables" />
   <meta property="og:type" content="book" />
   
   
@@ -16,12 +16,12 @@
   <meta name="github-repo" content="jslefche/sem_book" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="6 Multigroup Analysis | Structural Equation Modeling in R for Ecology and Evolution" />
+  <meta name="twitter:title" content="6 Multigroup Analysis | Composite Variables" />
   
   
   
 
-<meta name="author" content="Jonathan Lefcheck" />
+<meta name="author" content="Jon Lefcheck" />
 
 
 <meta name="date" content="2021-01-16" />
@@ -33,6 +33,7 @@
   
 <link rel="prev" href="categorical-variables.html"/>
 <link rel="next" href="latent-variable-modeling.html"/>
+<script src="libs/header-attrs-2.9/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -50,22 +51,23 @@
 
 
 
-<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
 <style type="text/css">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -85,7 +87,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {   }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -118,6 +120,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 </head>
 
 <body>
@@ -131,9 +134,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <ul class="summary">
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface</a></li>
-<li class="chapter" data-level="2" data-path="global-estimation.html"><a href="global-estimation.html"><i class="fa fa-check"></i><b>2</b> Global Estimation</a><ul>
+<li class="chapter" data-level="2" data-path="global-estimation.html"><a href="global-estimation.html"><i class="fa fa-check"></i><b>2</b> Global Estimation</a>
+<ul>
 <li class="chapter" data-level="2.1" data-path="global-estimation.html"><a href="global-estimation.html#what-is-covariance"><i class="fa fa-check"></i><b>2.1</b> What is (Co)variance?</a></li>
-<li class="chapter" data-level="2.2" data-path="global-estimation.html"><a href="global-estimation.html#regression-coefficients"><i class="fa fa-check"></i><b>2.2</b> Regression Coefficients</a><ul>
+<li class="chapter" data-level="2.2" data-path="global-estimation.html"><a href="global-estimation.html#regression-coefficients"><i class="fa fa-check"></i><b>2.2</b> Regression Coefficients</a>
+<ul>
 <li class="chapter" data-level="2.2.1" data-path="global-estimation.html"><a href="global-estimation.html#rule-1-unspecified-relationships-among-exogenous-variables-are-simply-their-bivariate-correlations."><i class="fa fa-check"></i><b>2.2.1</b> Rule 1: Unspecified relationships among exogenous variables are simply their bivariate correlations.</a></li>
 <li class="chapter" data-level="2.2.2" data-path="global-estimation.html"><a href="global-estimation.html#rule-2-when-two-variables-are-connected-by-a-single-path-the-coefficient-of-that-path-is-the-regression-coefficient."><i class="fa fa-check"></i><b>2.2.2</b> Rule 2: When two variables are connected by a single path, the coefficient of that path is the regression coefficient.</a></li>
 <li class="chapter" data-level="2.2.3" data-path="global-estimation.html"><a href="global-estimation.html#rule-3-the-strength-of-a-compound-path-one-that-includes-multiple-links-is-the-product-of-the-individual-coefficients."><i class="fa fa-check"></i><b>2.2.3</b> Rule 3: The strength of a compound path (one that includes multiple links) is the product of the individual coefficients.</a></li>
@@ -146,14 +151,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3" data-path="global-estimation.html"><a href="global-estimation.html#variance-based-structural-equation-modeling"><i class="fa fa-check"></i><b>2.3</b> Variance-based Structural Equation Modeling</a></li>
 <li class="chapter" data-level="2.4" data-path="global-estimation.html"><a href="global-estimation.html#model-identifiability"><i class="fa fa-check"></i><b>2.4</b> Model Identifiability</a></li>
 <li class="chapter" data-level="2.5" data-path="global-estimation.html"><a href="global-estimation.html#goodness-of-fit-measures"><i class="fa fa-check"></i><b>2.5</b> Goodness-of-fit Measures</a></li>
-<li class="chapter" data-level="2.6" data-path="global-estimation.html"><a href="global-estimation.html#model-fitting-using-lavaan"><i class="fa fa-check"></i><b>2.6</b> Model Fitting Using <em>lavaan</em></a><ul>
+<li class="chapter" data-level="2.6" data-path="global-estimation.html"><a href="global-estimation.html#model-fitting-using-lavaan"><i class="fa fa-check"></i><b>2.6</b> Model Fitting Using <em>lavaan</em></a>
+<ul>
 <li class="chapter" data-level="2.6.1" data-path="global-estimation.html"><a href="global-estimation.html#lavaan-vs-lm"><i class="fa fa-check"></i><b>2.6.1</b> <em>lavaan</em> vs <code>lm</code></a></li>
 <li class="chapter" data-level="2.6.2" data-path="global-estimation.html"><a href="global-estimation.html#sem-using-lavaan"><i class="fa fa-check"></i><b>2.6.2</b> SEM using <em>lavaan</em></a></li>
 <li class="chapter" data-level="2.6.3" data-path="global-estimation.html"><a href="global-estimation.html#testing-alternative-structures-using-lavaan"><i class="fa fa-check"></i><b>2.6.3</b> Testing Alternative Structures using <em>lavaan</em></a></li>
 </ul></li>
 <li class="chapter" data-level="2.7" data-path="global-estimation.html"><a href="global-estimation.html#references"><i class="fa fa-check"></i><b>2.7</b> References</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="local-estimation.html"><a href="local-estimation.html"><i class="fa fa-check"></i><b>3</b> Local Estimation</a><ul>
+<li class="chapter" data-level="3" data-path="local-estimation.html"><a href="local-estimation.html"><i class="fa fa-check"></i><b>3</b> Local Estimation</a>
+<ul>
 <li class="chapter" data-level="3.1" data-path="local-estimation.html"><a href="local-estimation.html#global-vs.-local-estimation"><i class="fa fa-check"></i><b>3.1</b> Global vs. local estimation</a></li>
 <li class="chapter" data-level="3.2" data-path="local-estimation.html"><a href="local-estimation.html#tests-of-directed-separation"><i class="fa fa-check"></i><b>3.2</b> Tests of directed separation</a></li>
 <li class="chapter" data-level="3.3" data-path="local-estimation.html"><a href="local-estimation.html#a-log-likelihood-approach-to-assessing-model-fit"><i class="fa fa-check"></i><b>3.3</b> A Log-Likelihood Approach to Assessing Model Fit</a></li>
@@ -163,32 +170,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.7" data-path="local-estimation.html"><a href="local-estimation.html#a-special-case-where-graph-theory-fails"><i class="fa fa-check"></i><b>3.7</b> A Special Case: Where Graph Theory Fails</a></li>
 <li class="chapter" data-level="3.8" data-path="local-estimation.html"><a href="local-estimation.html#references-1"><i class="fa fa-check"></i><b>3.8</b> References</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="coefficients.html"><a href="coefficients.html"><i class="fa fa-check"></i><b>4</b> Coefficients</a><ul>
+<li class="chapter" data-level="4" data-path="coefficients.html"><a href="coefficients.html"><i class="fa fa-check"></i><b>4</b> Coefficients</a>
+<ul>
 <li class="chapter" data-level="4.1" data-path="coefficients.html"><a href="coefficients.html#unstandardized-and-standardized-coefficients"><i class="fa fa-check"></i><b>4.1</b> Unstandardized and Standardized Coefficients</a></li>
 <li class="chapter" data-level="4.2" data-path="coefficients.html"><a href="coefficients.html#scale-standardization"><i class="fa fa-check"></i><b>4.2</b> Scale Standardization</a></li>
 <li class="chapter" data-level="4.3" data-path="coefficients.html"><a href="coefficients.html#range-standardization"><i class="fa fa-check"></i><b>4.3</b> Range Standardization</a></li>
-<li class="chapter" data-level="4.4" data-path="coefficients.html"><a href="coefficients.html#binomial-response-models"><i class="fa fa-check"></i><b>4.4</b> Binomial Response Models</a><ul>
+<li class="chapter" data-level="4.4" data-path="coefficients.html"><a href="coefficients.html#binomial-response-models"><i class="fa fa-check"></i><b>4.4</b> Binomial Response Models</a>
+<ul>
 <li class="chapter" data-level="4.4.1" data-path="coefficients.html"><a href="coefficients.html#latent-theoretic-approach"><i class="fa fa-check"></i><b>4.4.1</b> Latent Theoretic Approach</a></li>
 <li class="chapter" data-level="4.4.2" data-path="coefficients.html"><a href="coefficients.html#observation-empirical-approach"><i class="fa fa-check"></i><b>4.4.2</b> Observation-Empirical Approach</a></li>
 </ul></li>
 <li class="chapter" data-level="4.5" data-path="coefficients.html"><a href="coefficients.html#scaling-to-other-non-normal-distributions"><i class="fa fa-check"></i><b>4.5</b> Scaling to Other Non-Normal Distributions</a></li>
 <li class="chapter" data-level="4.6" data-path="coefficients.html"><a href="coefficients.html#references-2"><i class="fa fa-check"></i><b>4.6</b> References</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="categorical-variables.html"><a href="categorical-variables.html"><i class="fa fa-check"></i><b>5</b> Categorical Variables</a><ul>
+<li class="chapter" data-level="5" data-path="categorical-variables.html"><a href="categorical-variables.html"><i class="fa fa-check"></i><b>5</b> Categorical Variables</a>
+<ul>
 <li class="chapter" data-level="5.1" data-path="categorical-variables.html"><a href="categorical-variables.html#introduction-to-exogenous-categorical-variables"><i class="fa fa-check"></i><b>5.1</b> Introduction to Exogenous Categorical Variables</a></li>
 <li class="chapter" data-level="5.2" data-path="categorical-variables.html"><a href="categorical-variables.html#exogenous-categorical-variables-as-marginal-means"><i class="fa fa-check"></i><b>5.2</b> Exogenous Categorical Variables as Marginal Means</a></li>
 <li class="chapter" data-level="5.3" data-path="categorical-variables.html"><a href="categorical-variables.html#exogenous-categorical-variables-as-marginal-means-a-worked-example"><i class="fa fa-check"></i><b>5.3</b> Exogenous Categorical Variables as Marginal Means: A Worked Example</a></li>
 <li class="chapter" data-level="5.4" data-path="categorical-variables.html"><a href="categorical-variables.html#endogenous-categorical-variables"><i class="fa fa-check"></i><b>5.4</b> Endogenous Categorical Variables</a></li>
 <li class="chapter" data-level="5.5" data-path="categorical-variables.html"><a href="categorical-variables.html#references-3"><i class="fa fa-check"></i><b>5.5</b> References</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html"><i class="fa fa-check"></i><b>6</b> Multigroup Analysis</a><ul>
+<li class="chapter" data-level="6" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html"><i class="fa fa-check"></i><b>6</b> Multigroup Analysis</a>
+<ul>
 <li class="chapter" data-level="6.1" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#introduction-to-multigroup-analysis"><i class="fa fa-check"></i><b>6.1</b> Introduction to Multigroup Analysis</a></li>
 <li class="chapter" data-level="6.2" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#multigroup-analysis-using-global-estimation"><i class="fa fa-check"></i><b>6.2</b> Multigroup Analysis using Global Estimation</a></li>
 <li class="chapter" data-level="6.3" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#multigroup-analysis-using-local-estimation"><i class="fa fa-check"></i><b>6.3</b> Multigroup Analysis Using Local Estimation</a></li>
 <li class="chapter" data-level="6.4" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#grace-jutila-1999-a-worked-example"><i class="fa fa-check"></i><b>6.4</b> Grace &amp; Jutila (1999): A Worked Example</a></li>
 <li class="chapter" data-level="6.5" data-path="multigroup-analysis.html"><a href="multigroup-analysis.html#references-4"><i class="fa fa-check"></i><b>6.5</b> References</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html"><i class="fa fa-check"></i><b>7</b> Latent Variable Modeling</a><ul>
+<li class="chapter" data-level="7" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html"><i class="fa fa-check"></i><b>7</b> Latent Variable Modeling</a>
+<ul>
 <li class="chapter" data-level="7.1" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#introduction-to-latent-variable-modeling"><i class="fa fa-check"></i><b>7.1</b> Introduction to Latent Variable Modeling</a></li>
 <li class="chapter" data-level="7.2" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#application-of-latent-variables-to-path-models"><i class="fa fa-check"></i><b>7.2</b> Application of Latent Variables to Path Models</a></li>
 <li class="chapter" data-level="7.3" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#latent-variables-in-lavaan"><i class="fa fa-check"></i><b>7.3</b> Latent Variables in <em>lavaan</em></a></li>
@@ -197,7 +209,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.6" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#travis-grace-2010-an-example"><i class="fa fa-check"></i><b>7.6</b> Travis &amp; Grace (2010): An Example</a></li>
 <li class="chapter" data-level="7.7" data-path="latent-variable-modeling.html"><a href="latent-variable-modeling.html#references-5"><i class="fa fa-check"></i><b>7.7</b> References</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="composite-variables.html"><a href="composite-variables.html"><i class="fa fa-check"></i><b>8</b> Composite Variables</a><ul>
+<li class="chapter" data-level="8" data-path="composite-variables.html"><a href="composite-variables.html"><i class="fa fa-check"></i><b>8</b> Composite Variables</a>
+<ul>
 <li class="chapter" data-level="8.1" data-path="composite-variables.html"><a href="composite-variables.html#what-is-a-composite-variable"><i class="fa fa-check"></i><b>8.1</b> What is a Composite Variable?</a></li>
 <li class="chapter" data-level="8.2" data-path="composite-variables.html"><a href="composite-variables.html#constructing-a-composite-variable"><i class="fa fa-check"></i><b>8.2</b> Constructing a Composite Variable</a></li>
 <li class="chapter" data-level="8.3" data-path="composite-variables.html"><a href="composite-variables.html#grace-keeley-revisited-a-worked-example"><i class="fa fa-check"></i><b>8.3</b> Grace &amp; Keeley Revisited: A Worked Example</a></li>
@@ -213,7 +226,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Structural Equation Modeling in R for Ecology and Evolution</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Composite Variables</a>
           </h1>
         </div>
 
@@ -221,9 +234,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="multigroup-analysis" class="section level1">
+<div id="multigroup-analysis" class="section level1" number="6">
 <h1><span class="header-section-number">6</span> Multigroup Analysis</h1>
-<div id="introduction-to-multigroup-analysis" class="section level2">
+<div id="introduction-to-multigroup-analysis" class="section level2" number="6.1">
 <h2><span class="header-section-number">6.1</span> Introduction to Multigroup Analysis</h2>
 <p>Often in ecology we wish to compare the results from two or more groups. These groups could reflect experimental treatments, different sites, different sexes, or any number of types of organization. The ultimate goal of such an analysis is to ask whether the relationships among predictor and response variables vary by group.</p>
 <p>Historically, such a goal would be captured through the application of a statistical interaction. For example, does the effect of pesticide on invertebrate biomass change as function of where the pesticide is applied? This model might look something like this:</p>
@@ -235,36 +248,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The application of multigroup models differs between a global estimation (i.e., variance-covariance based SEM) and local estimation (i.e., piecewise SEM), but they adhere to the same idea of identifying which paths have the same effect across groups and which paths vary depending on the group.</p>
 <p>In this chapter, we will work through both approaches and then compare/contrast the output.</p>
 </div>
-<div id="multigroup-analysis-using-global-estimation" class="section level2">
+<div id="multigroup-analysis-using-global-estimation" class="section level2" number="6.2">
 <h2><span class="header-section-number">6.2</span> Multigroup Analysis using Global Estimation</h2>
 <p>Multigroup modeling using global estimation begins with the estimation of two models: one in which all parameters are allowed to differ <em>between</em> groups, and one in which all parameters are fixed to those obtained from analysis of the pooled data <em>across</em> groups. We call the first model the “free” model since all parameters are free to vary and the second the “constrained” model since each path, regardless of its group, is constrained to a single value determined by the entire dataset.</p>
 <p>If the two models are not significantly different, and the latter fits the data well, then one can assume there is no variation in the path coefficients by group and multigroup approach is not necessary. In this case, the output from the constrained model would be reported.</p>
 <p>If they are, then the exercise shifts towards understanding which paths are the same and which are different. This is achieved by sequentially constraining the coefficients of each path and re-fitting the model.</p>
 <p>Let’s illustrate this procedure using a random example using three variables–<span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span>, and <span class="math inline">\(z\)</span>–in two groups: “a” and “b.”</p>
-<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb244-1"><a href="multigroup-analysis.html#cb244-1"></a><span class="kw">set.seed</span>(<span class="dv">111</span>)</span>
-<span id="cb244-2"><a href="multigroup-analysis.html#cb244-2"></a></span>
-<span id="cb244-3"><a href="multigroup-analysis.html#cb244-3"></a>dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">runif</span>(<span class="dv">100</span>), <span class="dt">group =</span> <span class="kw">rep</span>(letters[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="dt">each =</span> <span class="dv">50</span>))</span>
-<span id="cb244-4"><a href="multigroup-analysis.html#cb244-4"></a></span>
-<span id="cb244-5"><a href="multigroup-analysis.html#cb244-5"></a>dat<span class="op">$</span>y &lt;-<span class="st"> </span>dat<span class="op">$</span>x <span class="op">+</span><span class="st"> </span><span class="kw">runif</span>(<span class="dv">100</span>)</span>
-<span id="cb244-6"><a href="multigroup-analysis.html#cb244-6"></a></span>
-<span id="cb244-7"><a href="multigroup-analysis.html#cb244-7"></a>dat<span class="op">$</span>z &lt;-<span class="st"> </span>dat<span class="op">$</span>y <span class="op">+</span><span class="st"> </span><span class="kw">runif</span>(<span class="dv">100</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb243"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb243-1"><a href="multigroup-analysis.html#cb243-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">111</span>)</span>
+<span id="cb243-2"><a href="multigroup-analysis.html#cb243-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb243-3"><a href="multigroup-analysis.html#cb243-3" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">runif</span>(<span class="dv">100</span>), <span class="at">group =</span> <span class="fu">rep</span>(letters[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="at">each =</span> <span class="dv">50</span>))</span>
+<span id="cb243-4"><a href="multigroup-analysis.html#cb243-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb243-5"><a href="multigroup-analysis.html#cb243-5" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>y <span class="ot">&lt;-</span> dat<span class="sc">$</span>x <span class="sc">+</span> <span class="fu">runif</span>(<span class="dv">100</span>)</span>
+<span id="cb243-6"><a href="multigroup-analysis.html#cb243-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb243-7"><a href="multigroup-analysis.html#cb243-7" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>z <span class="ot">&lt;-</span> dat<span class="sc">$</span>y <span class="sc">+</span> <span class="fu">runif</span>(<span class="dv">100</span>)</span></code></pre></div>
 <p>In this example, we suppose a simple mediation model: <span class="math inline">\(x -&gt; y -&gt; z\)</span>, and that all three variables are correlated to some degree so that this model makes sense.</p>
 <p>We can use <em>lavaan</em> to fit the “free” model. The key is allowing the coefficients to vary by specifying the <code>group =</code> argument:</p>
-<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb245-1"><a href="multigroup-analysis.html#cb245-1"></a>multigroup.model &lt;-<span class="st"> &#39;</span></span>
-<span id="cb245-2"><a href="multigroup-analysis.html#cb245-2"></a><span class="st">y ~ x</span></span>
-<span id="cb245-3"><a href="multigroup-analysis.html#cb245-3"></a><span class="st">z ~ y</span></span>
-<span id="cb245-4"><a href="multigroup-analysis.html#cb245-4"></a><span class="st">&#39;</span></span>
-<span id="cb245-5"><a href="multigroup-analysis.html#cb245-5"></a></span>
-<span id="cb245-6"><a href="multigroup-analysis.html#cb245-6"></a><span class="kw">library</span>(lavaan)</span>
-<span id="cb245-7"><a href="multigroup-analysis.html#cb245-7"></a></span>
-<span id="cb245-8"><a href="multigroup-analysis.html#cb245-8"></a>multigroup1 &lt;-<span class="st"> </span><span class="kw">sem</span>(multigroup.model, dat, <span class="dt">group =</span> <span class="st">&quot;group&quot;</span>) </span></code></pre></div>
+<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb244-1"><a href="multigroup-analysis.html#cb244-1" aria-hidden="true" tabindex="-1"></a>multigroup.model <span class="ot">&lt;-</span> <span class="st">&#39;</span></span>
+<span id="cb244-2"><a href="multigroup-analysis.html#cb244-2" aria-hidden="true" tabindex="-1"></a><span class="st">y ~ x</span></span>
+<span id="cb244-3"><a href="multigroup-analysis.html#cb244-3" aria-hidden="true" tabindex="-1"></a><span class="st">z ~ y</span></span>
+<span id="cb244-4"><a href="multigroup-analysis.html#cb244-4" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;</span></span>
+<span id="cb244-5"><a href="multigroup-analysis.html#cb244-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb244-6"><a href="multigroup-analysis.html#cb244-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lavaan)</span>
+<span id="cb244-7"><a href="multigroup-analysis.html#cb244-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb244-8"><a href="multigroup-analysis.html#cb244-8" aria-hidden="true" tabindex="-1"></a>multigroup1 <span class="ot">&lt;-</span> <span class="fu">sem</span>(multigroup.model, dat, <span class="at">group =</span> <span class="st">&quot;group&quot;</span>) </span></code></pre></div>
 <p>We can then obtain the summary of the multigroup analysis:</p>
-<div class="sourceCode" id="cb246"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb246-1"><a href="multigroup-analysis.html#cb246-1"></a><span class="kw">summary</span>(multigroup1)</span></code></pre></div>
-<pre><code>## lavaan 0.6-7 ended normally after 38 iterations
+<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb245-1"><a href="multigroup-analysis.html#cb245-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(multigroup1)</span></code></pre></div>
+<pre><code>## lavaan 0.6-9 ended normally after 38 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                         12
+##   Number of model parameters                        12
 ##                                                       
 ##   Number of observations per group:                   
 ##     a                                               50
@@ -326,14 +339,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##    .z                 0.081    0.016    5.000    0.000</code></pre>
 <p>Note that, unlike the typical <em>lavaan</em> output, the printout is now organized by group, with separate coefficients for each path in each group. Because this model is allowed to vary, the coefficient for the <span class="math inline">\(x -&gt; y\)</span> path in group “a” is different, for example, from that reported for group “b”.</p>
 <p>Next, we fit the constrained model by specifying the additional argument <code>group.equal = c("intercepts", "regressions")</code>. This argument fixes both the intercepts and path coefficients in each group to be the same.</p>
-<div class="sourceCode" id="cb248"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb248-1"><a href="multigroup-analysis.html#cb248-1"></a>multigroup1.constrained &lt;-<span class="st"> </span><span class="kw">sem</span>(multigroup.model, dat, <span class="dt">group =</span> <span class="st">&quot;group&quot;</span>, <span class="dt">group.equal =</span> <span class="kw">c</span>(<span class="st">&quot;intercepts&quot;</span>, <span class="st">&quot;regressions&quot;</span>))</span>
-<span id="cb248-2"><a href="multigroup-analysis.html#cb248-2"></a></span>
-<span id="cb248-3"><a href="multigroup-analysis.html#cb248-3"></a><span class="kw">summary</span>(multigroup1.constrained)</span></code></pre></div>
-<pre><code>## lavaan 0.6-7 ended normally after 29 iterations
+<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="multigroup-analysis.html#cb247-1" aria-hidden="true" tabindex="-1"></a>multigroup1.constrained <span class="ot">&lt;-</span> <span class="fu">sem</span>(multigroup.model, dat, <span class="at">group =</span> <span class="st">&quot;group&quot;</span>, <span class="at">group.equal =</span> <span class="fu">c</span>(<span class="st">&quot;intercepts&quot;</span>, <span class="st">&quot;regressions&quot;</span>))</span>
+<span id="cb247-2"><a href="multigroup-analysis.html#cb247-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb247-3"><a href="multigroup-analysis.html#cb247-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(multigroup1.constrained)</span></code></pre></div>
+<pre><code>## lavaan 0.6-9 ended normally after 29 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                         12
+##   Number of model parameters                        12
 ##   Number of equality constraints                     4
 ##                                                       
 ##   Number of observations per group:                   
@@ -396,7 +409,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##    .z                 0.083    0.017    5.000    0.000</code></pre>
 <p>This output is slightly different from the first: the coefficients are reported by group, but they are now identical between groups (e.g., <span class="math inline">\(\gamma_x\)</span> in group “a” = <span class="math inline">\(\gamma_x\)</span> in group “b”). The constrained paths are indicated by a parenthetical next to the path (e.g., <code>(.p1.)</code> for path 1).</p>
 <p>Both the constrained and free models fit the data well based on the <span class="math inline">\(\chi^2\)</span> statistic, and we can formally compare the two using a Chi-squared difference test:</p>
-<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb250-1"><a href="multigroup-analysis.html#cb250-1"></a><span class="kw">anova</span>(multigroup1, multigroup1.constrained)</span></code></pre></div>
+<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb249-1"><a href="multigroup-analysis.html#cb249-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(multigroup1, multigroup1.constrained)</span></code></pre></div>
 <pre><code>## Chi-Squared Difference Test
 ## 
 ##                         Df    AIC    BIC  Chisq Chisq diff Df diff Pr(&gt;Chisq)  
@@ -407,15 +420,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The significant <em>P</em>-value implies that the free and constrained models are significantly different. In other words, some paths vary while others may not. If the models were <em>not</em> significantly different, then one would conclude that the constrained model is equivalent to the free model, or that the coefficients would not vary by group, and it would be fair to analyze the pooled data in a single global model.</p>
 <p>However, this is the not the case for this example, and we can now undergo the process of introducing and releasing constraints to try and identify <em>which</em> path varies between groups. In this simplified example, we have two choices: <span class="math inline">\(x -&gt; y\)</span>, and <span class="math inline">\(y -&gt; z\)</span>. Let’s focus on <span class="math inline">\(x -&gt; y\)</span> first.</p>
 <p>We can introduce a single constraint by modifying the model formula and re-fitting the model:</p>
-<div class="sourceCode" id="cb252"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb252-1"><a href="multigroup-analysis.html#cb252-1"></a>multigroup.model2 &lt;-<span class="st"> &#39;</span></span>
-<span id="cb252-2"><a href="multigroup-analysis.html#cb252-2"></a><span class="st">y ~ c(&quot;b1&quot;, &quot;b1&quot;) * x</span></span>
-<span id="cb252-3"><a href="multigroup-analysis.html#cb252-3"></a><span class="st">z ~ y</span></span>
-<span id="cb252-4"><a href="multigroup-analysis.html#cb252-4"></a><span class="st">&#39;</span></span>
-<span id="cb252-5"><a href="multigroup-analysis.html#cb252-5"></a></span>
-<span id="cb252-6"><a href="multigroup-analysis.html#cb252-6"></a>multigroup2 &lt;-<span class="st"> </span><span class="kw">sem</span>(multigroup.model2, dat, <span class="dt">group =</span> <span class="st">&quot;group&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb251-1"><a href="multigroup-analysis.html#cb251-1" aria-hidden="true" tabindex="-1"></a>multigroup.model2 <span class="ot">&lt;-</span> <span class="st">&#39;</span></span>
+<span id="cb251-2"><a href="multigroup-analysis.html#cb251-2" aria-hidden="true" tabindex="-1"></a><span class="st">y ~ c(&quot;b1&quot;, &quot;b1&quot;) * x</span></span>
+<span id="cb251-3"><a href="multigroup-analysis.html#cb251-3" aria-hidden="true" tabindex="-1"></a><span class="st">z ~ y</span></span>
+<span id="cb251-4"><a href="multigroup-analysis.html#cb251-4" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;</span></span>
+<span id="cb251-5"><a href="multigroup-analysis.html#cb251-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb251-6"><a href="multigroup-analysis.html#cb251-6" aria-hidden="true" tabindex="-1"></a>multigroup2 <span class="ot">&lt;-</span> <span class="fu">sem</span>(multigroup.model2, dat, <span class="at">group =</span> <span class="st">&quot;group&quot;</span>)</span></code></pre></div>
 <p>The string <code>c("b1", "b1")</code> gives the path the name <code>b1</code> and ensures the coefficient is equal between the two groups (hence the two entries).</p>
 <p>If we use a Chi-squared difference test as before:</p>
-<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb253-1"><a href="multigroup-analysis.html#cb253-1"></a><span class="kw">anova</span>(multigroup1, multigroup2)</span></code></pre></div>
+<div class="sourceCode" id="cb252"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb252-1"><a href="multigroup-analysis.html#cb252-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(multigroup1, multigroup2)</span></code></pre></div>
 <pre><code>## Chi-Squared Difference Test
 ## 
 ##             Df    AIC    BIC  Chisq Chisq diff Df diff Pr(&gt;Chisq)  
@@ -425,32 +438,32 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>We find that the models are still significantly different, implying that the path between <span class="math inline">\(x -&gt; y\)</span> should not be constrained and instead that it should be left to vary among groups.</p>
 <p>We can repeat this exercise with the second path, <span class="math inline">\(y -&gt; z\)</span>:</p>
-<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb255-1"><a href="multigroup-analysis.html#cb255-1"></a>multigroup.model3 &lt;-<span class="st"> &#39;</span></span>
-<span id="cb255-2"><a href="multigroup-analysis.html#cb255-2"></a><span class="st">y ~ x</span></span>
-<span id="cb255-3"><a href="multigroup-analysis.html#cb255-3"></a><span class="st">z ~ c(&quot;b2&quot;, &quot;b2&quot;) * y</span></span>
-<span id="cb255-4"><a href="multigroup-analysis.html#cb255-4"></a><span class="st">&#39;</span></span>
-<span id="cb255-5"><a href="multigroup-analysis.html#cb255-5"></a></span>
-<span id="cb255-6"><a href="multigroup-analysis.html#cb255-6"></a>multigroup3 &lt;-<span class="st"> </span><span class="kw">sem</span>(multigroup.model3, dat, <span class="dt">group =</span> <span class="st">&quot;group&quot;</span>)</span>
-<span id="cb255-7"><a href="multigroup-analysis.html#cb255-7"></a></span>
-<span id="cb255-8"><a href="multigroup-analysis.html#cb255-8"></a><span class="kw">anova</span>(multigroup1, multigroup3)</span></code></pre></div>
+<div class="sourceCode" id="cb254"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb254-1"><a href="multigroup-analysis.html#cb254-1" aria-hidden="true" tabindex="-1"></a>multigroup.model3 <span class="ot">&lt;-</span> <span class="st">&#39;</span></span>
+<span id="cb254-2"><a href="multigroup-analysis.html#cb254-2" aria-hidden="true" tabindex="-1"></a><span class="st">y ~ x</span></span>
+<span id="cb254-3"><a href="multigroup-analysis.html#cb254-3" aria-hidden="true" tabindex="-1"></a><span class="st">z ~ c(&quot;b2&quot;, &quot;b2&quot;) * y</span></span>
+<span id="cb254-4"><a href="multigroup-analysis.html#cb254-4" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;</span></span>
+<span id="cb254-5"><a href="multigroup-analysis.html#cb254-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb254-6"><a href="multigroup-analysis.html#cb254-6" aria-hidden="true" tabindex="-1"></a>multigroup3 <span class="ot">&lt;-</span> <span class="fu">sem</span>(multigroup.model3, dat, <span class="at">group =</span> <span class="st">&quot;group&quot;</span>)</span>
+<span id="cb254-7"><a href="multigroup-analysis.html#cb254-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb254-8"><a href="multigroup-analysis.html#cb254-8" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(multigroup1, multigroup3)</span></code></pre></div>
 <pre><code>## Chi-Squared Difference Test
 ## 
 ##             Df    AIC    BIC  Chisq Chisq diff Df diff Pr(&gt;Chisq)
 ## multigroup1  2 95.392 126.65 0.0921                              
 ## multigroup3  3 94.823 123.48 1.5230     1.4309       1     0.2316</code></pre>
-<p>In this case, there is <em>not</em> a significant difference between the two models (<em>P</em> = 0.23), implying that the is no difference in the fit of the constrained model and the unstrained model and that this constraint is valid.</p>
+<p>In this case, there is <em>not</em> a significant difference between the two models (<em>P</em> = 0.23), implying that the is no difference in the fit of the constrained model and the unconstrained model and that this constraint is valid.</p>
 <p>If we were to select across these three alternatives, we would select the third model in which <span class="math inline">\(x -&gt; y\)</span> is allowed to vary and <span class="math inline">\(y -&gt; z\)</span> is constrained among groups. It’s key to note that this model also fits the data well based on the <span class="math inline">\(\chi^2\)</span> statistic; if not, then like all poor-fitting path models (multigroup or otherwise) it would be unwise to present and draw conclusions from it.</p>
 <p>This exercise of relaxing and imposing constraints is potentially very exploratory and could become exhaustive with more complicated models (i.e., one with lots of paths to potentially constrain/relax). Users should refrain from constraining and relaxing all paths and then choosing the most parsimonious model. Instead, choosing which paths to constrain should be motivated by the question: for example, we might expect some effects to be universal (e.g., temperature on metabolic rate) but not others (e.g., the effect of pesticide may vary depending on the history of application at various sites).</p>
 <p>Critically, the degrees of freedom for the model do <em>not</em> change based on the number of groups because coefficients are estimated from variance-covariance matrices with the same dimensions. However, sample size must be sufficiently large to estimate all the parameters within each group with minimal bias. While this is true for all structural equation models, it is especially true where parameters are estimated from covariances derived from different subsets (groups) that do not have the same replication.</p>
 <p>Standardized coefficients also present a challenge. Because variances are likely to be unequal among groups (unless they are drawn from the same population), the standardized coefficient must be computed on a per group basis, even if the unstandardized coefficient is constrained to the global value. Both packages for SEM will do this automatically, so you may notice that the standardized solutions may–and more than often will–vary even among constrained paths.</p>
 </div>
-<div id="multigroup-analysis-using-local-estimation" class="section level2">
+<div id="multigroup-analysis-using-local-estimation" class="section level2" number="6.3">
 <h2><span class="header-section-number">6.3</span> Multigroup Analysis Using Local Estimation</h2>
 <p>The goal of multigroup analysis using local estimation is identical to that of global estimation: to identify whether a single global model is sufficient to describe the data, or whether some or all paths vary by some grouping variable. The difference lies in execution: while <em>lavaan</em> is a back-and-forth manual process of relaxing and constraining paths, <em>piecewiseSEM</em> tests constraints and automatically selects the best output for your data.</p>
 <p>The upside is that the arduous and somewhat cumbersome process of specifying constraints is taken care of; the downside is that manually constraining particular paths is not possible at this time, although forthcoming work by Shipley and Douma will make this possible.</p>
 <p>The first step in the local estimation process is to implement a model-wide interaction. In other words, every term in the model interacts with the grouping variable. If the interaction is significant, then the path is free to vary by group; if not, then the path takes on the estimate from the global dataset. In this way, the piecewise multigroup procedure breaks down into a series of classic interaction terms: it is literally and figuratively the model-wide interaction we discussed at the beginning of this chapter</p>
 <p>Consider our previous example fitted using <em>lavaan</em>. In a piecewise approach, we would first model the interaction between <span class="math inline">\(x \times group\)</span> to see whether the effect of <span class="math inline">\(x\)</span> on <span class="math inline">\(y\)</span> should vary by group:</p>
-<div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb257-1"><a href="multigroup-analysis.html#cb257-1"></a><span class="kw">anova</span>(<span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>x <span class="op">*</span><span class="st"> </span>group, dat))</span></code></pre></div>
+<div class="sourceCode" id="cb256"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb256-1"><a href="multigroup-analysis.html#cb256-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(<span class="fu">lm</span>(y <span class="sc">~</span> x <span class="sc">*</span> group, dat))</span></code></pre></div>
 <pre><code>## Analysis of Variance Table
 ## 
 ## Response: y
@@ -463,7 +476,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>In this case, the effect of <span class="math inline">\(x\)</span> on <span class="math inline">\(y\)</span> depends on <span class="math inline">\(group\)</span> (a significant interaction term). We would then estimate the effect of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> for each subset of the data, and report the coefficients separately. =</p>
 <p>Next, we evaluate the effect of <span class="math inline">\(y\)</span> on <span class="math inline">\(z\)</span> by group:</p>
-<div class="sourceCode" id="cb259"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb259-1"><a href="multigroup-analysis.html#cb259-1"></a><span class="kw">anova</span>(<span class="kw">lm</span>(z <span class="op">~</span><span class="st"> </span>y <span class="op">*</span><span class="st"> </span>group, dat))</span></code></pre></div>
+<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb258-1"><a href="multigroup-analysis.html#cb258-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(<span class="fu">lm</span>(z <span class="sc">~</span> y <span class="sc">*</span> group, dat))</span></code></pre></div>
 <pre><code>## Analysis of Variance Table
 ## 
 ## Response: z
@@ -476,14 +489,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>The second interaction between <span class="math inline">\(y \times group\)</span> in predicting <span class="math inline">\(z\)</span> is non-significant, indicating that the effect of <span class="math inline">\(y\)</span> on <span class="math inline">\(z\)</span> does <em>not</em> depend on <span class="math inline">\(group\)</span>. We would then estimate the effect of <span class="math inline">\(y\)</span> on <span class="math inline">\(z\)</span> using the entire dataset and report that single constrained coefficient across all groups.</p>
 <p>The implementation of this approach in <em>piecewiseSEM</em> is very straightforward: first, build the model using <code>psem</code>, then use the function <code>multigroup</code> to perform the multigroup analysis.</p>
-<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb261-1"><a href="multigroup-analysis.html#cb261-1"></a><span class="kw">library</span>(piecewiseSEM)</span>
-<span id="cb261-2"><a href="multigroup-analysis.html#cb261-2"></a></span>
-<span id="cb261-3"><a href="multigroup-analysis.html#cb261-3"></a>pmodel &lt;-<span class="st"> </span><span class="kw">psem</span>(</span>
-<span id="cb261-4"><a href="multigroup-analysis.html#cb261-4"></a>  <span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>x, dat),</span>
-<span id="cb261-5"><a href="multigroup-analysis.html#cb261-5"></a>  <span class="kw">lm</span>(z <span class="op">~</span><span class="st"> </span>y, dat)</span>
-<span id="cb261-6"><a href="multigroup-analysis.html#cb261-6"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb260-1"><a href="multigroup-analysis.html#cb260-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(piecewiseSEM)</span>
+<span id="cb260-2"><a href="multigroup-analysis.html#cb260-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb260-3"><a href="multigroup-analysis.html#cb260-3" aria-hidden="true" tabindex="-1"></a>pmodel <span class="ot">&lt;-</span> <span class="fu">psem</span>(</span>
+<span id="cb260-4"><a href="multigroup-analysis.html#cb260-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(y <span class="sc">~</span> x, dat),</span>
+<span id="cb260-5"><a href="multigroup-analysis.html#cb260-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(z <span class="sc">~</span> y, dat)</span>
+<span id="cb260-6"><a href="multigroup-analysis.html#cb260-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>The <code>multigroup</code> function has an argument <code>group =</code> which, as in <em>lavaan</em>, accepts the column name of the grouping factor:</p>
-<div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb262-1"><a href="multigroup-analysis.html#cb262-1"></a>(pmultigroup &lt;-<span class="st"> </span><span class="kw">multigroup</span>(pmodel, <span class="dt">group =</span> <span class="st">&quot;group&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb261-1"><a href="multigroup-analysis.html#cb261-1" aria-hidden="true" tabindex="-1"></a>(pmultigroup <span class="ot">&lt;-</span> <span class="fu">multigroup</span>(pmodel, <span class="at">group =</span> <span class="st">&quot;group&quot;</span>))</span></code></pre></div>
 <pre><code>## 
 ## Structural Equation Model of pmodel 
 ## 
@@ -528,25 +541,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>must consider only the standard deviation of x and y from their respective groups, even though <span class="math inline">\(\beta\)</span> is derived from the entire dataset.</p>
 <p>Finally, near the top is the global goodness-of-fit test based on Fisher’s <em>C</em>. In this case, global constraints have been added as offset to the tests of directed separation.</p>
 <p>For comparison’s sake, let’s look at the output from the <em>lavaan</em> multigroup model and the <em>piecewiseSEM</em> one:</p>
-<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb265-1"><a href="multigroup-analysis.html#cb265-1"></a><span class="kw">standardizedSolution</span>(multigroup3)</span></code></pre></div>
-<pre><code>##    lhs op rhs group est.std    se      z pvalue ci.lower ci.upper
-## 1    y  ~   x     1   0.556 0.090  6.197  0.000    0.380    0.732
-## 2    z  ~   y     1   0.728 0.054 13.556  0.000    0.623    0.833
-## 3    y ~~   y     1   0.690 0.100  6.912  0.000    0.495    0.886
-## 4    z ~~   z     1   0.470 0.078  6.014  0.000    0.317    0.623
-## 5    x ~~   x     1   1.000 0.000     NA     NA    1.000    1.000
-## 6    y ~1         1   2.012 0.406  4.953  0.000    1.216    2.808
-## 7    z ~1         1   1.336 0.259  5.158  0.000    0.828    1.844
-## 8    x ~1         1   1.971 0.000     NA     NA    1.971    1.971
-## 9    y  ~   x     2   0.792 0.044 18.167  0.000    0.707    0.878
-## 10   z  ~   y     2   0.843 0.036 23.508  0.000    0.773    0.913
-## 11   y ~~   y     2   0.372 0.069  5.387  0.000    0.237    0.508
-## 12   z ~~   z     2   0.289 0.060  4.782  0.000    0.171    0.408
-## 13   x ~~   x     2   1.000 0.000     NA     NA    1.000    1.000
-## 14   y ~1         2   0.742 0.213  3.480  0.001    0.324    1.160
-## 15   z ~1         2   1.045 0.210  4.976  0.000    0.633    1.456
-## 16   x ~1         2   1.650 0.000     NA     NA    1.650    1.650</code></pre>
-<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb267-1"><a href="multigroup-analysis.html#cb267-1"></a>pmultigroup<span class="op">$</span>group.coefs</span></code></pre></div>
+<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb264-1"><a href="multigroup-analysis.html#cb264-1" aria-hidden="true" tabindex="-1"></a><span class="fu">standardizedSolution</span>(multigroup3)</span></code></pre></div>
+<pre><code>##    lhs op rhs group label est.std    se      z pvalue ci.lower ci.upper
+## 1    y  ~   x     1         0.556 0.090  6.197  0.000    0.380    0.732
+## 2    z  ~   y     1    b2   0.728 0.054 13.556  0.000    0.623    0.833
+## 3    y ~~   y     1         0.690 0.100  6.912  0.000    0.495    0.886
+## 4    z ~~   z     1         0.470 0.078  6.014  0.000    0.317    0.623
+## 5    x ~~   x     1         1.000 0.000     NA     NA    1.000    1.000
+## 6    y ~1         1         2.012 0.406  4.953  0.000    1.216    2.808
+## 7    z ~1         1         1.336 0.259  5.158  0.000    0.828    1.844
+## 8    x ~1         1         1.971 0.000     NA     NA    1.971    1.971
+## 9    y  ~   x     2         0.792 0.044 18.167  0.000    0.707    0.878
+## 10   z  ~   y     2    b2   0.843 0.036 23.508  0.000    0.773    0.913
+## 11   y ~~   y     2         0.372 0.069  5.387  0.000    0.237    0.508
+## 12   z ~~   z     2         0.289 0.060  4.782  0.000    0.171    0.408
+## 13   x ~~   x     2         1.000 0.000     NA     NA    1.000    1.000
+## 14   y ~1         2         0.742 0.213  3.480  0.001    0.324    1.160
+## 15   z ~1         2         1.045 0.210  4.976  0.000    0.633    1.456
+## 16   x ~1         2         1.650 0.000     NA     NA    1.650    1.650</code></pre>
+<div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb266-1"><a href="multigroup-analysis.html#cb266-1" aria-hidden="true" tabindex="-1"></a>pmultigroup<span class="sc">$</span>group.coefs</span></code></pre></div>
 <pre><code>## $a
 ##   Response Predictor Estimate Std.Error DF Crit.Value P.Value Std.Estimate    
 ## 1        y         x   0.7712    0.1662 48     4.6387       0       0.5563 ***
@@ -564,28 +577,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 2 c</code></pre>
 <p>You’ll note that the outputs are roughly equivalent (owing to slight differences in the estimation procedures for each package). Critically, the coefficient for the path from <span class="math inline">\(z -&gt; y\)</span> is the same in both groups.</p>
 </div>
-<div id="grace-jutila-1999-a-worked-example" class="section level2">
+<div id="grace-jutila-1999-a-worked-example" class="section level2" number="6.4">
 <h2><span class="header-section-number">6.4</span> Grace &amp; Jutila (1999): A Worked Example</h2>
 <p>Let’s now turn to a real example from Grace &amp; Jutila (1999). While the original paper fit a far more complicated model than we will, the following simplified model demonstrates the approach well.</p>
 <p>In their study, the authors were interested in the controls of on plant species density in Finnish meadows. In this worked example, we will consider only elevation and total biomass in their effects on density, plus an effect of elevation on biomass:</p>
 <p><img src="https://raw.githubusercontent.com/jslefche/sem_book/master/img/multigroup_jutila_sem.png" /></p>
 <p>Moreover, they repeated their observations in two treatments: grazed and ungrazed meadows. Grazing will serve as the grouping variable for our multigroup analysis.</p>
 <p>The data are included in <em>piecewiseSEM</em> so let’s load it:</p>
-<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb269-1"><a href="multigroup-analysis.html#cb269-1"></a><span class="kw">data</span>(meadows)</span></code></pre></div>
+<div class="sourceCode" id="cb268"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb268-1"><a href="multigroup-analysis.html#cb268-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(meadows)</span></code></pre></div>
 <p>First, let’s construct the “free” model in <em>lavaan</em>:</p>
-<div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb270-1"><a href="multigroup-analysis.html#cb270-1"></a>jutila_model &lt;-<span class="st"> &#39;</span></span>
-<span id="cb270-2"><a href="multigroup-analysis.html#cb270-2"></a><span class="st">rich ~ elev + mass</span></span>
-<span id="cb270-3"><a href="multigroup-analysis.html#cb270-3"></a><span class="st">mass ~ elev</span></span>
-<span id="cb270-4"><a href="multigroup-analysis.html#cb270-4"></a><span class="st">&#39;</span></span>
-<span id="cb270-5"><a href="multigroup-analysis.html#cb270-5"></a></span>
-<span id="cb270-6"><a href="multigroup-analysis.html#cb270-6"></a>jutila_lavaan_free &lt;-<span class="st"> </span><span class="kw">sem</span>(jutila_model, meadows, <span class="dt">group =</span> <span class="st">&quot;grazed&quot;</span>)</span>
-<span id="cb270-7"><a href="multigroup-analysis.html#cb270-7"></a></span>
-<span id="cb270-8"><a href="multigroup-analysis.html#cb270-8"></a><span class="kw">summary</span>(jutila_lavaan_free)</span></code></pre></div>
-<pre><code>## lavaan 0.6-7 ended normally after 53 iterations
+<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb269-1"><a href="multigroup-analysis.html#cb269-1" aria-hidden="true" tabindex="-1"></a>jutila_model <span class="ot">&lt;-</span> <span class="st">&#39;</span></span>
+<span id="cb269-2"><a href="multigroup-analysis.html#cb269-2" aria-hidden="true" tabindex="-1"></a><span class="st">rich ~ elev + mass</span></span>
+<span id="cb269-3"><a href="multigroup-analysis.html#cb269-3" aria-hidden="true" tabindex="-1"></a><span class="st">mass ~ elev</span></span>
+<span id="cb269-4"><a href="multigroup-analysis.html#cb269-4" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;</span></span>
+<span id="cb269-5"><a href="multigroup-analysis.html#cb269-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb269-6"><a href="multigroup-analysis.html#cb269-6" aria-hidden="true" tabindex="-1"></a>jutila_lavaan_free <span class="ot">&lt;-</span> <span class="fu">sem</span>(jutila_model, meadows, <span class="at">group =</span> <span class="st">&quot;grazed&quot;</span>)</span>
+<span id="cb269-7"><a href="multigroup-analysis.html#cb269-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb269-8"><a href="multigroup-analysis.html#cb269-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(jutila_lavaan_free)</span></code></pre></div>
+<pre><code>## lavaan 0.6-9 ended normally after 53 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                         14
+##   Number of model parameters                        14
 ##                                                       
 ##   Number of observations per group:                   
 ##     1                                              165
@@ -649,9 +662,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>In this example, the model goodness-of-fit fit can’t be determined because the model is saturated (df = 0). This is key moving forward because constraining paths will free up degrees of freedom with which to obtain a test statistic.</p>
 <p>Also note the warning message above variances being a factor 1000 times larger than others. This can be problematic for the estimation of the variance-covariance matrix. The simple solution is the use the function <code>scale</code> or add/subtract a constant to reduce these values before fitting the model.</p>
 <p>Let’s begin by constraining all paths:</p>
-<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb272-1"><a href="multigroup-analysis.html#cb272-1"></a>jutila_lavaan_constrained &lt;-<span class="st"> </span><span class="kw">sem</span>(jutila_model, meadows, <span class="dt">group =</span> <span class="st">&quot;grazed&quot;</span>, <span class="dt">group.equal =</span> <span class="kw">c</span>(<span class="st">&quot;intercepts&quot;</span>, <span class="st">&quot;regressions&quot;</span>))</span>
-<span id="cb272-2"><a href="multigroup-analysis.html#cb272-2"></a></span>
-<span id="cb272-3"><a href="multigroup-analysis.html#cb272-3"></a><span class="kw">anova</span>(jutila_lavaan_free, jutila_lavaan_constrained)</span></code></pre></div>
+<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb271-1"><a href="multigroup-analysis.html#cb271-1" aria-hidden="true" tabindex="-1"></a>jutila_lavaan_constrained <span class="ot">&lt;-</span> <span class="fu">sem</span>(jutila_model, meadows, <span class="at">group =</span> <span class="st">&quot;grazed&quot;</span>, <span class="at">group.equal =</span> <span class="fu">c</span>(<span class="st">&quot;intercepts&quot;</span>, <span class="st">&quot;regressions&quot;</span>))</span>
+<span id="cb271-2"><a href="multigroup-analysis.html#cb271-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb271-3"><a href="multigroup-analysis.html#cb271-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(jutila_lavaan_free, jutila_lavaan_constrained)</span></code></pre></div>
 <pre><code>## Chi-Squared Difference Test
 ## 
 ##                           Df    AIC    BIC  Chisq Chisq diff Df diff Pr(&gt;Chisq)
@@ -664,14 +677,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>The model is significantly different from the unconstrained model we fit previously (<em>P</em> &lt; 0.001), implying that some paths could be constrained. Note that, by constraining all the coefficients, we now have 5 degrees of freedom to evaluate model fit. (However, if we were to examine it, we would find that it is a poor fit, implying that some path coefficients must vary among groups.)</p>
 <p>The next step is to sequentially relax and constrain paths:</p>
-<div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb274-1"><a href="multigroup-analysis.html#cb274-1"></a>jutila_model2 &lt;-<span class="st"> &#39;</span></span>
-<span id="cb274-2"><a href="multigroup-analysis.html#cb274-2"></a><span class="st">rich ~ elev + mass</span></span>
-<span id="cb274-3"><a href="multigroup-analysis.html#cb274-3"></a><span class="st">mass ~ c(&quot;b1&quot;, &quot;b1&quot;) * elev</span></span>
-<span id="cb274-4"><a href="multigroup-analysis.html#cb274-4"></a><span class="st">&#39;</span></span>
-<span id="cb274-5"><a href="multigroup-analysis.html#cb274-5"></a></span>
-<span id="cb274-6"><a href="multigroup-analysis.html#cb274-6"></a>jutila_lavaan2 &lt;-<span class="st"> </span><span class="kw">sem</span>(jutila_model2, meadows, <span class="dt">group =</span> <span class="st">&quot;grazed&quot;</span>)</span>
-<span id="cb274-7"><a href="multigroup-analysis.html#cb274-7"></a></span>
-<span id="cb274-8"><a href="multigroup-analysis.html#cb274-8"></a><span class="kw">anova</span>(jutila_lavaan_free, jutila_lavaan2)</span></code></pre></div>
+<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb273-1"><a href="multigroup-analysis.html#cb273-1" aria-hidden="true" tabindex="-1"></a>jutila_model2 <span class="ot">&lt;-</span> <span class="st">&#39;</span></span>
+<span id="cb273-2"><a href="multigroup-analysis.html#cb273-2" aria-hidden="true" tabindex="-1"></a><span class="st">rich ~ elev + mass</span></span>
+<span id="cb273-3"><a href="multigroup-analysis.html#cb273-3" aria-hidden="true" tabindex="-1"></a><span class="st">mass ~ c(&quot;b1&quot;, &quot;b1&quot;) * elev</span></span>
+<span id="cb273-4"><a href="multigroup-analysis.html#cb273-4" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;</span></span>
+<span id="cb273-5"><a href="multigroup-analysis.html#cb273-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb273-6"><a href="multigroup-analysis.html#cb273-6" aria-hidden="true" tabindex="-1"></a>jutila_lavaan2 <span class="ot">&lt;-</span> <span class="fu">sem</span>(jutila_model2, meadows, <span class="at">group =</span> <span class="st">&quot;grazed&quot;</span>)</span>
+<span id="cb273-7"><a href="multigroup-analysis.html#cb273-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb273-8"><a href="multigroup-analysis.html#cb273-8" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(jutila_lavaan_free, jutila_lavaan2)</span></code></pre></div>
 <pre><code>## Chi-Squared Difference Test
 ## 
 ##                    Df    AIC    BIC  Chisq Chisq diff Df diff Pr(&gt;Chisq)   
@@ -681,29 +694,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>The model is still a poor fit, and it is significantly different from the “free” model (<em>P</em> = 0.005). In this case, we would conclude that the <span class="math inline">\(elev -&gt; mass\)</span> path should <em>not</em> be constrained.</p>
 <p>Let’s repeat for the next two paths:</p>
-<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb276-1"><a href="multigroup-analysis.html#cb276-1"></a><span class="co"># elev -&gt; rich</span></span>
-<span id="cb276-2"><a href="multigroup-analysis.html#cb276-2"></a>jutila_model3 &lt;-<span class="st"> &#39;</span></span>
-<span id="cb276-3"><a href="multigroup-analysis.html#cb276-3"></a><span class="st">rich ~ c(&quot;b2&quot;, &quot;b2&quot;) * elev + mass</span></span>
-<span id="cb276-4"><a href="multigroup-analysis.html#cb276-4"></a><span class="st">mass ~ elev</span></span>
-<span id="cb276-5"><a href="multigroup-analysis.html#cb276-5"></a><span class="st">&#39;</span></span>
-<span id="cb276-6"><a href="multigroup-analysis.html#cb276-6"></a></span>
-<span id="cb276-7"><a href="multigroup-analysis.html#cb276-7"></a>jutila_lavaan3 &lt;-<span class="st"> </span><span class="kw">sem</span>(jutila_model3, meadows, <span class="dt">group =</span> <span class="st">&quot;grazed&quot;</span>)</span>
-<span id="cb276-8"><a href="multigroup-analysis.html#cb276-8"></a></span>
-<span id="cb276-9"><a href="multigroup-analysis.html#cb276-9"></a><span class="kw">anova</span>(jutila_lavaan_free, jutila_lavaan3)</span></code></pre></div>
+<div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb275-1"><a href="multigroup-analysis.html#cb275-1" aria-hidden="true" tabindex="-1"></a><span class="co"># elev -&gt; rich</span></span>
+<span id="cb275-2"><a href="multigroup-analysis.html#cb275-2" aria-hidden="true" tabindex="-1"></a>jutila_model3 <span class="ot">&lt;-</span> <span class="st">&#39;</span></span>
+<span id="cb275-3"><a href="multigroup-analysis.html#cb275-3" aria-hidden="true" tabindex="-1"></a><span class="st">rich ~ c(&quot;b2&quot;, &quot;b2&quot;) * elev + mass</span></span>
+<span id="cb275-4"><a href="multigroup-analysis.html#cb275-4" aria-hidden="true" tabindex="-1"></a><span class="st">mass ~ elev</span></span>
+<span id="cb275-5"><a href="multigroup-analysis.html#cb275-5" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;</span></span>
+<span id="cb275-6"><a href="multigroup-analysis.html#cb275-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb275-7"><a href="multigroup-analysis.html#cb275-7" aria-hidden="true" tabindex="-1"></a>jutila_lavaan3 <span class="ot">&lt;-</span> <span class="fu">sem</span>(jutila_model3, meadows, <span class="at">group =</span> <span class="st">&quot;grazed&quot;</span>)</span>
+<span id="cb275-8"><a href="multigroup-analysis.html#cb275-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb275-9"><a href="multigroup-analysis.html#cb275-9" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(jutila_lavaan_free, jutila_lavaan3)</span></code></pre></div>
 <pre><code>## Chi-Squared Difference Test
 ## 
 ##                    Df    AIC    BIC  Chisq Chisq diff Df diff Pr(&gt;Chisq)
 ## jutila_lavaan_free  0 6666.2 6720.3 0.0000                              
 ## jutila_lavaan3      1 6665.1 6715.4 0.9477    0.94767       1     0.3303</code></pre>
-<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb278-1"><a href="multigroup-analysis.html#cb278-1"></a><span class="co"># mass -&gt; rich</span></span>
-<span id="cb278-2"><a href="multigroup-analysis.html#cb278-2"></a>jutila_model4 &lt;-<span class="st"> &#39;</span></span>
-<span id="cb278-3"><a href="multigroup-analysis.html#cb278-3"></a><span class="st">rich ~ elev + c(&quot;b3&quot;, &quot;b3&quot;) * mass</span></span>
-<span id="cb278-4"><a href="multigroup-analysis.html#cb278-4"></a><span class="st">mass ~ elev</span></span>
-<span id="cb278-5"><a href="multigroup-analysis.html#cb278-5"></a><span class="st">&#39;</span></span>
-<span id="cb278-6"><a href="multigroup-analysis.html#cb278-6"></a></span>
-<span id="cb278-7"><a href="multigroup-analysis.html#cb278-7"></a>jutila_lavaan4 &lt;-<span class="st"> </span><span class="kw">sem</span>(jutila_model4, meadows, <span class="dt">group =</span> <span class="st">&quot;grazed&quot;</span>)</span>
-<span id="cb278-8"><a href="multigroup-analysis.html#cb278-8"></a></span>
-<span id="cb278-9"><a href="multigroup-analysis.html#cb278-9"></a><span class="kw">anova</span>(jutila_lavaan_free, jutila_lavaan4)</span></code></pre></div>
+<div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb277-1"><a href="multigroup-analysis.html#cb277-1" aria-hidden="true" tabindex="-1"></a><span class="co"># mass -&gt; rich</span></span>
+<span id="cb277-2"><a href="multigroup-analysis.html#cb277-2" aria-hidden="true" tabindex="-1"></a>jutila_model4 <span class="ot">&lt;-</span> <span class="st">&#39;</span></span>
+<span id="cb277-3"><a href="multigroup-analysis.html#cb277-3" aria-hidden="true" tabindex="-1"></a><span class="st">rich ~ elev + c(&quot;b3&quot;, &quot;b3&quot;) * mass</span></span>
+<span id="cb277-4"><a href="multigroup-analysis.html#cb277-4" aria-hidden="true" tabindex="-1"></a><span class="st">mass ~ elev</span></span>
+<span id="cb277-5"><a href="multigroup-analysis.html#cb277-5" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;</span></span>
+<span id="cb277-6"><a href="multigroup-analysis.html#cb277-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb277-7"><a href="multigroup-analysis.html#cb277-7" aria-hidden="true" tabindex="-1"></a>jutila_lavaan4 <span class="ot">&lt;-</span> <span class="fu">sem</span>(jutila_model4, meadows, <span class="at">group =</span> <span class="st">&quot;grazed&quot;</span>)</span>
+<span id="cb277-8"><a href="multigroup-analysis.html#cb277-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb277-9"><a href="multigroup-analysis.html#cb277-9" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(jutila_lavaan_free, jutila_lavaan4)</span></code></pre></div>
 <pre><code>## Chi-Squared Difference Test
 ## 
 ##                    Df    AIC    BIC  Chisq Chisq diff Df diff Pr(&gt;Chisq)   
@@ -713,12 +726,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>Of these two paths, it seems the first: <span class="math inline">\(elev -&gt; rich\)</span>, is not significantly different from the “free” model, implying that this path could be constrained. Oppositely, the significant difference between the “free” model and one in which the <span class="math inline">\(mass -&gt; rich\)</span> path is constrained suggests that constraining this path is not supported.</p>
 <p>Let’s check the fit of the model with the one constrait on <span class="math inline">\(elev -&gt; rich\)</span>:</p>
-<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb280-1"><a href="multigroup-analysis.html#cb280-1"></a><span class="kw">summary</span>(jutila_lavaan3)</span></code></pre></div>
-<pre><code>## lavaan 0.6-7 ended normally after 53 iterations
+<div class="sourceCode" id="cb279"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb279-1"><a href="multigroup-analysis.html#cb279-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(jutila_lavaan3)</span></code></pre></div>
+<pre><code>## lavaan 0.6-9 ended normally after 53 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                         14
+##   Number of model parameters                        14
 ##   Number of equality constraints                     1
 ##                                                       
 ##   Number of observations per group:                   
@@ -780,15 +793,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Variances:
 ##                    Estimate   Std.Err  z-value  P(&gt;|z|)
 ##    .rich              14.423    1.484    9.721    0.000
-##    .mass           43567.993       NA</code></pre>
+##    .mass           43567.993</code></pre>
 <p>Now the model fits the data well (<em>P</em> = 0.330), and we have, through an iterative procedure of imposing and relaxing constraints, determined which paths differ among groups (<span class="math inline">\(elev -&gt; mass\)</span>, <span class="math inline">\(mass -&gt; rich\)</span>) and which do <em>not</em> (<span class="math inline">\(elev -&gt; rich\)</span>).</p>
 <p>Now let’s confirm this by fitting the model in <em>piecewiseSEM</em>:</p>
-<div class="sourceCode" id="cb282"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb282-1"><a href="multigroup-analysis.html#cb282-1"></a>jutila_psem &lt;-<span class="st"> </span><span class="kw">psem</span>(</span>
-<span id="cb282-2"><a href="multigroup-analysis.html#cb282-2"></a>  <span class="kw">lm</span>(rich <span class="op">~</span><span class="st"> </span>elev <span class="op">+</span><span class="st"> </span>mass, meadows),</span>
-<span id="cb282-3"><a href="multigroup-analysis.html#cb282-3"></a>  <span class="kw">lm</span>(mass <span class="op">~</span><span class="st"> </span>elev, meadows)</span>
-<span id="cb282-4"><a href="multigroup-analysis.html#cb282-4"></a>)</span>
-<span id="cb282-5"><a href="multigroup-analysis.html#cb282-5"></a></span>
-<span id="cb282-6"><a href="multigroup-analysis.html#cb282-6"></a><span class="kw">multigroup</span>(jutila_psem, <span class="dt">group =</span> <span class="st">&quot;grazed&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb281-1"><a href="multigroup-analysis.html#cb281-1" aria-hidden="true" tabindex="-1"></a>jutila_psem <span class="ot">&lt;-</span> <span class="fu">psem</span>(</span>
+<span id="cb281-2"><a href="multigroup-analysis.html#cb281-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(rich <span class="sc">~</span> elev <span class="sc">+</span> mass, meadows),</span>
+<span id="cb281-3"><a href="multigroup-analysis.html#cb281-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(mass <span class="sc">~</span> elev, meadows)</span>
+<span id="cb281-4"><a href="multigroup-analysis.html#cb281-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb281-5"><a href="multigroup-analysis.html#cb281-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb281-6"><a href="multigroup-analysis.html#cb281-6" aria-hidden="true" tabindex="-1"></a><span class="fu">multigroup</span>(jutila_psem, <span class="at">group =</span> <span class="st">&quot;grazed&quot;</span>)</span></code></pre></div>
 <pre><code>## 
 ## Structural Equation Model of jutila_psem 
 ## 
@@ -840,7 +853,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>You’ll note that the <em>piecewiseSEM</em> output does not return a goodness-of-fit test because the model is saturated (i.e., no missing paths). While constraints are incorporated in terms of offsets (i.e., fixing model coefficients), unlike global estimation, this procedure does not provide new information with which to test goodness-of-fit. This is a limitation of local estimation that extends beyond multigroup modeling to any piecewise model.</p>
 <p>To draw inference about the study system, we would say that two paths differ among groups and one path does not. We would then report the two path models parameterized using the coefficient output (with the <span class="math inline">\(elev -&gt; rich\)</span> path having the same coefficient in both groups). We would conclude that richness is affected by elevation and biomass under ungrazed conditions, but not under grazed conditions, where only elevation directly influences richness.</p>
 </div>
-<div id="references-4" class="section level2">
+<div id="references-4" class="section level2" number="6.5">
 <h2><span class="header-section-number">6.5</span> References</h2>
 <p>Grace, J. B., &amp; Jutila, H. (1999). The relationship between species density and community biomass in grazed and ungrazed coastal meadows. Oikos, 398-408.</p>
 
@@ -875,6 +888,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {

@@ -408,7 +408,7 @@ Now consider another equation, in addition to the first:
   
 With this equation, we now have enough information to uniquely solve for $a$ and $b$:
 
-  $$(2b) + b = 8$$
+  $$(3b) + b = 8$$
   $$ 4b = 8$$
   $$b = 8 / 4 = 2$$
   

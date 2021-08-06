@@ -225,11 +225,11 @@ summary(latent_model1, standardize = T, rsq = T)
 ```
 
 ```
-## lavaan 0.6-7 ended normally after 22 iterations
+## lavaan 0.6-9 ended normally after 22 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                          3
+##   Number of model parameters                         3
 ##                                                       
 ##   Number of observations                            50
 ##                                                       
@@ -317,11 +317,11 @@ summary(latent_model2, standardize = T, rsq = T)
 ```
 
 ```
-## lavaan 0.6-7 ended normally after 11 iterations
+## lavaan 0.6-9 ended normally after 11 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                          3
+##   Number of model parameters                         3
 ##                                                       
 ##   Number of observations                            50
 ##                                                       
@@ -382,10 +382,10 @@ This approach also provides a conceptual advantage: we often choose a single ind
 
 Multiple indicators raises a new problem, though: identifiability. Remember from the chapter on global estimation that we must have enough known pieces of information to estimate all the unknown quantities implied by the model. Latent variable models must also follow the "t-rule."
 
-Consider an exogenous latent variable indicated by two variables, $x1$ and $x1$. We can break this latent variable into two equations:
+Consider an exogenous latent variable indicated by two variables, $x1$ and $x2$. We can break this latent variable into two equations:
 
   $$x1 = \lambda_{1}\xi + \delta_{x1}$$
-  $$x2 = \lambda_{2}\xi + \delta_{x1}$$
+  $$x2 = \lambda_{2}\xi + \delta_{x2}$$
 
 We know the values of $x1$ and $x2$ and the correlation between them. To estimate values for the latent construct $\xi$ we need to estimate $\lambda_{1}$, $\lambda_{2}$, $\delta_{x1}$ and $\delta_{x2}$. This model fails the t-rule, which, if you recall, is:
 
@@ -472,11 +472,11 @@ summary(travis_latent_model1)
 ```
 
 ```
-## lavaan 0.6-7 ended normally after 82 iterations
+## lavaan 0.6-9 ended normally after 82 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                         10
+##   Number of model parameters                        10
 ##                                                       
 ##   Number of observations                            23
 ##                                                       
@@ -551,11 +551,11 @@ summary(travis_latent_model2)
 ```
 
 ```
-## lavaan 0.6-7 ended normally after 81 iterations
+## lavaan 0.6-9 ended normally after 81 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                         11
+##   Number of model parameters                        11
 ##                                                       
 ##   Number of observations                            23
 ##                                                       
@@ -622,11 +622,11 @@ summary(travis_path_model1)
 ```
 
 ```
-## lavaan 0.6-7 ended normally after 107 iterations
+## lavaan 0.6-9 ended normally after 107 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                         12
+##   Number of model parameters                        12
 ##                                                       
 ##   Number of observations                            23
 ##                                                       
